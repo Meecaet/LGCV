@@ -52,7 +52,11 @@
     <Compile Include="Domain\Langes.cs" />
     <Compile Include="Domain\Mandat.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="XmlEntities\XmlParagraph.cs" />
+    <Compile Include="XmlEntities\CVSection.cs" />
+    <Compile Include="XmlEntities\XmlDocNode.cs" />
+    <Compile Include="XmlEntities\XmlDocParagraph.cs" />
+    <Compile Include="XmlEntities\XmlDocTable.cs" />
+    <Compile Include="XmlIdentification\CompostTextToken.cs" />
     <Compile Include="XmlIdentification\FormatationToken.cs" />
     <Compile Include="XmlIdentification\IXmlToken.cs" />
     <Compile Include="XmlIdentification\TextToken.cs" />

@@ -7,8 +7,8 @@ using System.Xml;
 
 namespace CVModel.XmlIdentification
 {
-    interface IXmlToken
+    public interface IXmlToken
     {
-        bool Match(XmlNode node);
+        bool Match(XmlNode node, out string identificant);
     }
 }

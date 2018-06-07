@@ -1,6 +1,9 @@
 ﻿using CVModel.Domain;
+using CVModel.XmlEntities;
+using CVModel.XmlIdentification;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,11 +18,85 @@ namespace ApplicationDeConversion
         static StringBuilder stringBuilder;
         static XmlNode aNode;
 
+        static List<CVSection> Sections;
+
         static void Main(string[] args)
-        {
-            //ProcessCVFile();
+        {            
+            #region Get XML Nodes
 
+            System.Xml.XmlDocument doc = new System.Xml.XmlDocument();
+            doc.Load(@"C:\Docs to zip\Caetano Mateus - CV (2018-05-28)\word\document.xml");
 
+            XmlNode rootNnode = doc.LastChild.LastChild;
+            XmlNamespaceManager namespaceManager = new XmlNamespaceManager(doc.NameTable);
+            namespaceManager.AddNamespace("w10", "urn:schemas-microsoft-com:office:word");
+            namespaceManager.AddNamespace("w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main");
+
+            List<XmlNode> nodes = new List<XmlNode>();
+            foreach (XmlNode item in rootNnode.ChildNodes)
+            {
+                if (item.Name.Contains("w:p") && string.IsNullOrEmpty(item.InnerText))
+                    continue;
+
+                nodes.Add(item);
+            }
+
+            #endregion
+            
+            XmlNode first = null;
+            string currentIdent = string.Empty;
+
+            Sections = new List<CVSection>();
+            List<IXmlToken> validationTokens = new List<IXmlToken>();
+
+            validationTokens.Add(new TextToken());
+            validationTokens.Add(new FormatationToken(doc.NameTable));
+            CVSection currentCVSection = new CVSection();
+            currentCVSection.Identifiant = "IDENTIFICATION";
+
+            while (nodes.Count > 0)
+            {
+                first = nodes.First();
+                nodes.Remove(first);
+
+                if (validationTokens.Any(x => x.Match(first, out currentIdent)))
+                {
+                    Sections.Add(currentCVSection);
+
+                    currentCVSection = new CVSection();
+                    currentCVSection.Identifiant = currentIdent;
+                    currentCVSection.AddNode(first);
+                    
+                    currentIdent = string.Empty;
+                }
+                else
+                {
+                    currentCVSection.AddNode(first);
+                }
+            }
+
+            Sections.Add(currentCVSection);
+
+            //using (StreamWriter sw = new StreamWriter(@"C:\\Docs to zip\\Sections.txt", false))
+            //{
+            //    foreach (var item in Sections)
+            //    {
+            //        sw.WriteLine("IDENTIFIANT -> " + item.Identifiant);
+            //        foreach (var item2 in item.Nodes)
+            //        {
+            //            sw.WriteLine(item2.InnerText);
+            //        }
+
+            //        sw.WriteLine(string.Empty);
+            //        sw.WriteLine("==================================================");
+            //        sw.WriteLine(string.Empty);
+            //    }
+            //}
+
+            CV nouveauCV = new CV();
+            nouveauCV.AssemblerCV(Sections);
+
+            Console.ReadKey();
         }
 
         private static void ProcessCVFile()
@@ -173,7 +250,7 @@ namespace ApplicationDeConversion
                 emp.Nom = aNode.InnerText;
 
                 nodes.Remove(aNode);
-                Client cli;
+                Client cli = null;
 
                 do
                 {
