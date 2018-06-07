@@ -13,10 +13,17 @@ namespace ApplicationDeConversion
     {
         static XDocument xmlDocument, xmlFirstNode;
         static StringBuilder stringBuilder;
+        static XmlNode aNode;
 
         static void Main(string[] args)
         {
+            //ProcessCVFile();
 
+
+        }
+
+        private static void ProcessCVFile()
+        {
             System.Xml.XmlDocument doc = new System.Xml.XmlDocument();
             doc.Load(@"C:\Docs to zip\Caetano Mateus - CV (2018-05-28)\word\document.xml");
 
@@ -27,7 +34,13 @@ namespace ApplicationDeConversion
 
             List<XmlNode> nodes = new List<XmlNode>();
             foreach (XmlNode item in rootNnode.ChildNodes)
+            {
+                if (item.Name.Contains("w:p") && string.IsNullOrEmpty(item.InnerText))
+                    continue;
+
                 nodes.Add(item);
+            }
+
 
             CV newCV = new CV();
             stringBuilder = new StringBuilder();
@@ -57,10 +70,10 @@ namespace ApplicationDeConversion
                 var descData = item.SelectNodes(".//w:t", namespaceManager);
                 for (int i = 0; i < descData.Count; i++)
                 {
-                    if(descData.Item(i).ParentNode.SelectNodes(".//w:sz[@w:val = \"22\"]", namespaceManager).Count == 0)
+                    if (descData.Item(i).ParentNode.SelectNodes(".//w:sz[@w:val = \"22\"]", namespaceManager).Count == 0)
                         stringBuilder.Append(descData.Item(i).InnerText);
                 }
-                
+
             }
 
             newCV.Description = stringBuilder.ToString();
@@ -82,6 +95,8 @@ namespace ApplicationDeConversion
             //end
 
             nodes.Remove(domaines);
+
+            //Add Formation Academique
 
             newCV.FormationAcademique = new FormationAcademique();
             newCV.FormationAcademique.Itens = new List<FormationAcademiqueItem>();
@@ -109,7 +124,137 @@ namespace ApplicationDeConversion
                     newCV.FormationAcademique.Itens.Add(formItem);
             }
 
+            //Add certifications
+
+            newCV.Certifications = new List<string>();
+            var certificationsData = formations.SelectNodes(".//w:tr/w:tc[2]", namespaceManager);
+            foreach (XmlNode item in certificationsData)
+            {
+                var descData = item.SelectNodes(".//w:p", namespaceManager);
+                for (int i = 0; i < descData.Count; i++)
+                {
+                    if (!descData.Item(i).InnerText.Contains("CERTIFICATIONS") && !string.IsNullOrEmpty(descData.Item(i).InnerText))
+                        newCV.Certifications.Add(descData.Item(i).InnerText);
+                }
+            }
+
+            //end
+
+            nodes.Remove(formations);
+
+            //TODO - add Resume d`interventions
+
+            aNode = nodes.First();
+            nodes.Remove(aNode);
+
+            aNode = nodes.First(x => x.Name == "w:tbl");
+            nodes.Remove(aNode);
+
+            //end TODO
+
+            //Add Employeur
+
+            bool hasTitre1 = true, hasClient = true;
+            newCV.Employeurs = new List<Employeur>();
+
+            do
+            {
+                aNode = nodes.First();
+                foreach (XmlAttribute item in aNode.FirstChild.FirstChild.Attributes)
+                {
+                    if (item.Value != "Titre1")
+                    {
+                        hasTitre1 = false;
+                        break;
+                    }
+                }
+
+                Employeur emp = new Employeur();
+                emp.Nom = aNode.InnerText;
+
+                nodes.Remove(aNode);
+                Client cli;
+
+                do
+                {
+                    aNode = nodes.First();
+
+                    if (aNode.Name == "w:p")
+                    {
+                        cli = new Client();
+                        cli.Nom = aNode.InnerText;
+
+                        nodes.Remove(aNode);
+                    }
+                    else
+                    {
+
+                    }
+
+
+                    if (aNode.Name != "w:tbl")
+                        hasClient = false;
+
+                    cli.Mandats = new List<Mandat>();
+                    Mandat aMandat = new Mandat();
+
+                    var clientData = aNode.SelectNodes(".//w:tr/w:tc[2]/w:p");
+                    foreach (XmlNode item in clientData)
+                    {
+                        if (string.IsNullOrEmpty(aMandat.Projet))
+                            aMandat.Numero = item.InnerText;
+                        else if (string.IsNullOrEmpty(aMandat.Projet))
+                            aMandat.Projet = item.InnerText;
+                        else if (string.IsNullOrEmpty(aMandat.Envenrgure))
+                            aMandat.Envenrgure = item.InnerText;
+                        else if (string.IsNullOrEmpty(aMandat.Fonction))
+                            aMandat.Fonction = item.InnerText;
+                        else if (string.IsNullOrEmpty(aMandat.Periode))
+                            aMandat.Periode = item.InnerText;
+                        else if (string.IsNullOrEmpty(aMandat.Efforts))
+                            aMandat.Efforts = item.InnerText;
+                        else if (string.IsNullOrEmpty(aMandat.Reference))
+                            aMandat.Reference = item.InnerText;
+                    }
+
+                    //TODO - Séparer les données de la descrition
+
+                    nodes.Remove(aNode);
+                    stringBuilder.Clear();
+
+                    var descriptionData = nodes.TakeWhile(x => x.Name == "w:p");
+                    foreach (XmlNode item in descriptionData)
+                        stringBuilder.AppendLine(item.InnerText);
+
+                    aMandat.Description = stringBuilder.ToString();
+                    stringBuilder.Clear();
+
+                    cli.Mandats.Add(aMandat);
+                    emp.Clients.Add(cli);
+
+                } while (hasTitre1 && hasClient);
+
+
+
+                while (true)
+                {
+
+                }
+
+
+
+
+
+            } while (hasTitre1);
+
+            {
+
+            }
+
+            //end
+
             Console.ReadKey();
         }
+
     }
 }
