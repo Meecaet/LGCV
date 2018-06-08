@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CVMod√®le", "CVModel\CVMod√
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApplicationDeConversion", "ApplicationDeConversion\ApplicationDeConversion.csproj", "{DCB5C3E5-478F-4445-B355-2638A2583760}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LGCV_Test", "LGCV_Test\LGCV_Test.csproj", "{CE296147-B227-4EA0-8F8E-DE58870CF0A4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{DCB5C3E5-478F-4445-B355-2638A2583760}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DCB5C3E5-478F-4445-B355-2638A2583760}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DCB5C3E5-478F-4445-B355-2638A2583760}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE296147-B227-4EA0-8F8E-DE58870CF0A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE296147-B227-4EA0-8F8E-DE58870CF0A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE296147-B227-4EA0-8F8E-DE58870CF0A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE296147-B227-4EA0-8F8E-DE58870CF0A4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
