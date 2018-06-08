@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using System.Xml.Serialization;
 
 namespace CVModel.Domain
 {
@@ -15,14 +16,19 @@ namespace CVModel.Domain
         public string Titre { get; set; }
         public string Description { get; set; }
 
+        [XmlArrayItem(ElementName = "Domaine")]
         public List<string> DomaineDIntervention { get; set; }
         public List<FormationAcademique> FormationsAcademique { get; set; }
+        [XmlArrayItem(ElementName = "Certification")]
         public List<string> Certifications { get; set; }
 
         public List<Employeur> Employeurs { get; set; }
         public List<Perfectionnement> Perfectionnements { get; set; }
+        [XmlArrayItem(ElementName = "Conference")]
         public List<string> Conferences { get; set; }
+        [XmlArrayItem(ElementName = "Association")]
         public List<string> Associations { get; set; }
+        [XmlArrayItem(ElementName = "Publication")]
         public List<string> Publications { get; set; }
         public List<Langue> Langues { get; set; }
 
@@ -52,8 +58,11 @@ namespace CVModel.Domain
 
             aSection = sections.DefaultIfEmpty(null).FirstOrDefault(x => x.Identifiant == "FORMATION ACADÉMIQUE");
             if (aSection != null)
+            {
                 FormationsAcademique.AddRange(FormationAcademique.AssamblerFormationEtCertifications(aSection));
-
+                AssemblerCertifications(aSection);
+            }
+                        
             sections.Where(x => x.Identifiant == "Titre1").ToList().ForEach(x => 
             {
                 Employeur emp = new Employeur();
@@ -86,7 +95,7 @@ namespace CVModel.Domain
         private void AssemberDomainesDIntervetion(CVSection sectionDomaines)
         {
             XmlDocTable domainesTable = sectionDomaines.Nodes.Skip(1).Cast<XmlDocTable>().First();
-            List<XmlDocParagraph> domainesParagraphs = domainesTable.GetParagraphsFromColumn(1);
+            List<XmlDocParagraph> domainesParagraphs = domainesTable.GetParagraphsFromColumns();
 
             domainesParagraphs.ForEach(x => 
             {
@@ -129,8 +138,16 @@ namespace CVModel.Domain
 
         private void AssemblerConferences(CVSection sectionConferences)
         {
-            List<XmlDocParagraph> conferencesParagraphs = sectionConferences.Nodes.Skip(1).Cast<XmlDocParagraph>().ToList();
-            conferencesParagraphs.ForEach(x => Conferences.Add(x.GetParagraphText()));
+            if (sectionConferences.Nodes.Any(x => x is XmlDocTable))
+            {
+                List<string> conferences = ((XmlDocTable)sectionConferences.Nodes.First(x => x is XmlDocTable)).GetAllLines();
+                conferences.ForEach(x => Conferences.Add(x));
+            }
+            else
+            {
+                List<XmlDocParagraph> conferencesParagraphs = sectionConferences.Nodes.Skip(1).Cast<XmlDocParagraph>().ToList();
+                conferencesParagraphs.ForEach(x => Conferences.Add(x.GetParagraphText()));
+            }
         }
 
         private void AssemblerAssociations(CVSection sectionAssociations)

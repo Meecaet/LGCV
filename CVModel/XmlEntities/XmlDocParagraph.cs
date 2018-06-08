@@ -16,7 +16,7 @@ namespace CVModel.XmlEntities
 
         public string GetParagraphText()
         {
-            return xmlNode.InnerText;
+            return xmlNode.InnerText.Trim();
         }
 
         public string[] GetLinesText()
@@ -42,12 +42,16 @@ namespace CVModel.XmlEntities
                     currentLine = string.Concat(currentLine, node.InnerText);
                 else if(node.Name == "w:tab")
                 {
-                    lines.Add(currentLine);
+                    if(!string.IsNullOrEmpty(currentLine))
+                        lines.Add(currentLine);
+
                     currentLine = string.Empty;
                 }                   
             }
 
-            lines.Add(currentLine);
+            if (!string.IsNullOrEmpty(currentLine))
+                lines.Add(currentLine);
+
             return lines.ToArray();
 
         }

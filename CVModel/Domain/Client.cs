@@ -20,10 +20,14 @@ namespace CVModel.Domain
 
         internal void AssemblerClient(CVSection clientSection)
         {
-            XmlDocParagraph emplDesc = (XmlDocParagraph)clientSection.Nodes.First(x => x is XmlDocParagraph);
-            string[] info = emplDesc.GetLinesWithTab();
+            XmlDocParagraph emplDesc = (XmlDocParagraph)clientSection.Nodes.DefaultIfEmpty(null).FirstOrDefault(x => x is XmlDocParagraph);
 
-            Nom = string.Join(" ", info);
+            if (emplDesc != null)
+            {
+                string[] info = emplDesc.GetLinesWithTab();
+                Nom = string.Join(" ", info);
+            }
+            
             AssemblerMandats(clientSection);
         }
 

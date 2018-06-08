@@ -13,6 +13,7 @@ namespace CVModel.Domain
     {
         public string Nom { get; set; }
         public string Periode { get; set; }
+        public string DescriptionDuTravail { get; set; }
         public List<Client> Clients { get; set; }
 
         public Employeur()
@@ -23,10 +24,37 @@ namespace CVModel.Domain
         internal void AssemblerEmployeur(CVSection employeurSection)
         {
             XmlDocParagraph emplDesc = (XmlDocParagraph)employeurSection.Nodes.First(x => x is XmlDocParagraph);
+            List<XmlDocParagraph> jobDescription = new List<XmlDocParagraph>();
+
             string[] info = emplDesc.GetLinesWithTab();
 
-            Periode = info[0];
-            Nom = info[1];
+            if (info.Length > 1)
+            {
+                Periode = info[0];
+                Nom = info[1];
+            }
+            else
+            {
+                Nom = info[0];
+            }
+
+            jobDescription.AddRange(employeurSection.Nodes.Skip(1).TakeWhile(x => x is XmlDocParagraph).Cast<XmlDocParagraph>());
+            if (jobDescription.Count > 0)
+            {
+                jobDescription.RemoveAt(jobDescription.Count - 1);
+                employeurSection.Nodes.Remove(emplDesc);
+                employeurSection.Nodes.RemoveAll(x => jobDescription.Contains(x));
+
+                if (jobDescription.Count > 0)
+                {
+                    jobDescription.ForEach(x =>
+                    {
+                        DescriptionDuTravail += x.GetParagraphText();
+                    });
+                }
+            }
+            else
+                DescriptionDuTravail = string.Empty;
 
             AssemblerClients(employeurSection);
         }
@@ -45,7 +73,7 @@ namespace CVModel.Domain
 
             clientSection.Identifiant = "Titre2";
 
-            empNodes = employeurSection.Nodes.Skip(1).ToList();
+            empNodes = employeurSection.Nodes.ToList();
             while (empNodes.Count > 0)
             {
                 first = empNodes.First();

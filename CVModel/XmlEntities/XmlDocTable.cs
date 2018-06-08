@@ -8,9 +8,7 @@ using System.Xml;
 namespace CVModel.XmlEntities
 {
     public class XmlDocTable : XmlDocNode
-    {
-        
-
+    {        
         public XmlDocTable(XmlNode xmlNode) : base(xmlNode)
         {        }
 
@@ -23,6 +21,38 @@ namespace CVModel.XmlEntities
                 listOfParagraphs.Add(new XmlDocParagraph(node));
 
             return listOfParagraphs;
+        }
+
+        public List<XmlDocParagraph> GetParagraphsFromColumns()
+        {
+            List<XmlDocParagraph> listOfParagraphs = new List<XmlDocParagraph>();
+            var paragraphs = this.xmlNode.SelectNodes($".//w:tr/w:tc/w:p", namespaceManager);
+
+            foreach (XmlNode node in paragraphs)
+                listOfParagraphs.Add(new XmlDocParagraph(node));
+
+            return listOfParagraphs;
+        }
+
+        public List<string> GetAllLines()
+        {
+            List<string> listLines = new List<string>();
+            var paragraphs = this.xmlNode.SelectNodes($".//w:tr", namespaceManager);
+
+            string currentLine = string.Empty;
+            foreach (XmlNode trNode in paragraphs)
+            {
+                foreach (XmlNode prNode in trNode.SelectNodes(".//w:p", namespaceManager))
+                {
+                    currentLine += prNode.InnerText;
+                    currentLine += " ";
+                }
+
+                listLines.Add(currentLine.Trim());
+                currentLine = string.Empty;
+            }
+
+            return listLines;
         }
     }
 }
