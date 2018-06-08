@@ -47,10 +47,9 @@
     <Compile Include="Domain\DomaineDInterventionItem.cs" />
     <Compile Include="Domain\Employeur.cs" />
     <Compile Include="Domain\FormationAcademique.cs" />
-    <Compile Include="Domain\FormationAcademiqueItem.cs" />
-    <Compile Include="Domain\Lange.cs" />
-    <Compile Include="Domain\Langes.cs" />
+    <Compile Include="Domain\Langue.cs" />
     <Compile Include="Domain\Mandat.cs" />
+    <Compile Include="Domain\Perfectionnement.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="XmlEntities\CVSection.cs" />
     <Compile Include="XmlEntities\XmlDocNode.cs" />
@@ -59,6 +58,7 @@
     <Compile Include="XmlIdentification\CompostTextToken.cs" />
     <Compile Include="XmlIdentification\FormatationToken.cs" />
     <Compile Include="XmlIdentification\IXmlToken.cs" />
+    <Compile Include="XmlIdentification\ChildNodeToken.cs" />
     <Compile Include="XmlIdentification\TextToken.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

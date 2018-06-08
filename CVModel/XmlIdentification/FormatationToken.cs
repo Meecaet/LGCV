@@ -24,6 +24,13 @@ namespace CVModel.XmlIdentification
             namespaceManager.AddNamespace("w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main");
         }
 
+        public void SetStyleParameter(params KeyValuePair<string, string>[] stylesKeys)
+        {
+            styles.Clear();
+            foreach (KeyValuePair<string, string> item in stylesKeys)
+                styles.Add(item.Key, item.Value);
+        }
+
         public bool Match(XmlNode node, out string identificant)
         {
             identificant = string.Empty;

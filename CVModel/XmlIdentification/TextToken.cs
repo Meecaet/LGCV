@@ -20,7 +20,9 @@ namespace CVModel.XmlIdentification
                 "FORMATION ACADÉMIQUE",
                 "RÉSUMÉ DES INTERVENTIONS",
                 "PERFECTIONNEMENT",
-                "CONFÉRENCES SUIVIES",
+                "CONFÉRENCES",
+                "PUBLICATIONS",
+                "ASSOCIATIONS",
                 "LANGUES PARLÉES, ÉCRITES"
             };
         }

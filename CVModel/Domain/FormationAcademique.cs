@@ -7,31 +7,33 @@ using System.Threading.Tasks;
 
 namespace CVModel.Domain
 {
+    [Serializable]
     public class FormationAcademique
     {
-        public List<FormationAcademiqueItem> Itens { get; set; }
+        public string Titre { get; set; }
+        public string Instituition { get; set; }
 
-        public FormationAcademique()
+        internal static List<FormationAcademique> AssamblerFormationEtCertifications(CVSection sectionFormation)
         {
-            Itens = new List<FormationAcademiqueItem>();
-        }
-
-        internal void AssamblerFormationEtCertifications(CVSection sectionFormation)
-        {
+            List<FormationAcademique> formations = new List<FormationAcademique>();
             XmlDocTable tableFormation = (XmlDocTable)sectionFormation.Nodes.First(x => x is XmlDocTable);
             List<XmlDocParagraph> formationParagraphs = tableFormation.GetParagraphsFromColumn(1).Skip(1).ToList();
+            formationParagraphs.RemoveAll(x => string.IsNullOrEmpty(x.GetParagraphText()));
 
-            for (int i = 0; i < formationParagraphs.Count; i = i+2)
+            for (int i = 0; i < formationParagraphs.Count; i = i + 2)
             {
-                FormationAcademiqueItem item = new FormationAcademiqueItem();
+                FormationAcademique item = new FormationAcademique();
                 item.Titre = formationParagraphs[i].GetParagraphText();
-                item.Instituition = formationParagraphs[i+1].GetParagraphText();
+                item.Instituition = formationParagraphs[i + 1].GetParagraphText();
 
                 if (string.IsNullOrEmpty(item.Titre) || string.IsNullOrEmpty(item.Instituition))
                     continue;
 
-                Itens.Add(item);
+                formations.Add(item);
             }
+
+            return formations;
         }
     }
+
 }

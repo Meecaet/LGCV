@@ -12,6 +12,8 @@ namespace CVModel.XmlEntities
         protected XmlNode xmlNode;
         protected XmlNamespaceManager namespaceManager;
 
+        public XmlNode OriginalNode { get { return xmlNode; } }
+
         public XmlDocNode(XmlNode xmlNode)
         {
             this.xmlNode = xmlNode;

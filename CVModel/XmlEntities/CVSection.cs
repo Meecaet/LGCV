@@ -11,6 +11,16 @@ namespace CVModel.XmlEntities
     {
         public string Identifiant { get; set; }
         public List<XmlDocNode> Nodes { get; }
+        public XmlNameTable NameTable
+        {
+            get
+            {
+                if (Nodes.Count == 0)
+                    return null;
+                else
+                    return Nodes.First().OriginalNode.OwnerDocument.NameTable;
+            }
+        }
 
         public CVSection()
         {
