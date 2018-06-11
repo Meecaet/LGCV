@@ -1,4 +1,4 @@
-﻿using CVModel.XmlEntities;
+﻿using XmlHandler.XmlEntities;
 using System;
 using System.Collections.Generic;
 using System.Linq;

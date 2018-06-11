@@ -14,14 +14,22 @@ namespace LGCV_Test
         {
             try
             {
+                DirectoryInfo extractedDirectory;
                 Stream stream;
                 CVGenerator generator = new CVGenerator();
+
+                extractedDirectory = new DirectoryInfo(@"..\\..\\Gabarits\\Modele_a_generer");
+                if (extractedDirectory.Exists)
+                    extractedDirectory.Delete(true);
+
+                extractedDirectory = null;
+
                 generator.ProcessCV(@"..\\..\\Gabarits");
 
                 var md5 = System.Security.Cryptography.MD5.Create();
                 byte[] byteMd5Modele, byteMd5Essay;
 
-                string hashModele = string.Empty, hashEssay = string.Empty;
+                string hashModele = string.Empty, hashEssay = string.Empty;                
 
                 using (stream = new FileStream(@"..\\..\\Gabarits\\Modele_de_CV.xml", FileMode.Open, FileAccess.Read, FileShare.None))
                 {

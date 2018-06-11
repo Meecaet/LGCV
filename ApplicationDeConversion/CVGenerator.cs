@@ -1,6 +1,4 @@
 ﻿using CVModel.Domain;
-using CVModel.XmlEntities;
-using CVModel.XmlIdentification;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,6 +8,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
+using XmlHandler.Services;
+using XmlHandler.XmlEntities;
+using XmlHandler.XmlIdentification;
 
 namespace ApplicationDeConversion
 {
@@ -84,39 +85,39 @@ namespace ApplicationDeConversion
             }
         }
 
+        /// <summary>
+        /// Fait l'extraction et la conversion d'un CV LGS vers un fichier en format xml depuis un dossier avec des fichiers docx
+        /// </summary>
+        /// <param name="path">Chemin du dossier où sont les fichiers de CV en format docx</param>
         public void ProcessCV(string path)
         {
-            DirectoryInfo directoryInfo, extractedDirectoryInfo;
-            string currentExtractFolder;
+            string extractedXmlText, currentExtractFolder;
 
+            DirectoryInfo directoryInfo;
             FileInfo[] filesInDirectory;
-            Dictionary<string, string> generatedFolders;
-
-            FileInfo xmlDocumetFile;
+            DocxExtractor docxExtractor = new DocxExtractor();
 
             directoryInfo = new DirectoryInfo(path);
 
             if (directoryInfo.Exists)
             {
+                //Prendre seulement les fichiers docx
                 filesInDirectory = directoryInfo.GetFiles("*.docx", SearchOption.TopDirectoryOnly);
 
                 if (filesInDirectory.Length > 0)
                 {
-                    generatedFolders = new Dictionary<string, string>();
+                    foreach (FileInfo file in filesInDirectory)
+                    {                        
+                        //Nous avons besoin d'un ficher dont le contenu est le text du docx (.\\word\\document.xml)
+                        extractedXmlText = docxExtractor.ExtractDocxTextXml(file);
 
-                    foreach (var item in filesInDirectory)
-                    {
-                        currentExtractFolder = string.Format(@"{0}\{1}", directoryInfo.FullName, item.Name.Replace(".docx", ""));
-                        generatedFolders.Add(item.FullName, currentExtractFolder);
+                        //Fait la génération d'un xml plus structuré
+                        GenerateCVXml(extractedXmlText, file.FullName.Replace(file.Extension, ".xml"));
 
-                        ZipFile.ExtractToDirectory(item.FullName, currentExtractFolder);
-
-                        extractedDirectoryInfo = new DirectoryInfo(string.Format(@"{0}\word", currentExtractFolder));
-                        xmlDocumetFile = extractedDirectoryInfo.GetFiles("document.xml", SearchOption.TopDirectoryOnly).DefaultIfEmpty(null).FirstOrDefault();
-                        GenerateCVXml(xmlDocumetFile.FullName, item.FullName.Replace(".docx", ".xml"));
-
-                        xmlDocumetFile = null;
-                        extractedDirectoryInfo.Parent.Delete(true);
+                        //Efface le dossier généré par l'extraction
+                        currentExtractFolder = file.FullName.Replace(file.Extension, "");
+                        DirectoryInfo extractionFolder = new DirectoryInfo(currentExtractFolder);
+                        extractionFolder.Delete(true);                  
                     }
                 }
             }

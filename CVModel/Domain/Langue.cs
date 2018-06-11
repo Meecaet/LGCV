@@ -1,6 +1,6 @@
 ﻿using System.Linq;
-using CVModel.XmlEntities;
-using CVModel.XmlIdentification;
+using XmlHandler.XmlEntities;
+using XmlHandler.XmlIdentification;
 using System.Collections.Generic;
 using System;
 

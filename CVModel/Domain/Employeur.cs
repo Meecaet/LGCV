@@ -1,5 +1,5 @@
-﻿using CVModel.XmlEntities;
-using CVModel.XmlIdentification;
+﻿using XmlHandler.XmlEntities;
+using XmlHandler.XmlIdentification;
 using System;
 using System.Collections.Generic;
 using System.Linq;

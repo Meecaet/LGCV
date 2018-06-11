@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 
-namespace CVModel.XmlEntities
+namespace XmlHandler.XmlEntities
 {
     public class CVSection
     {

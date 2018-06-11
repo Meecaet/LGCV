@@ -1,6 +1,4 @@
 ﻿using CVModel.Domain;
-using CVModel.XmlEntities;
-using CVModel.XmlIdentification;
 using System;
 using System.Collections.Generic;
 using System.IO;

@@ -56,6 +56,10 @@
       <Project>{01ca1cee-0fba-4a01-8e3e-d071a613faea}</Project>
       <Name>CVModèle</Name>
     </ProjectReference>
+    <ProjectReference Include="..\XmlHandler\XmlHandler.csproj">
+      <Project>{04405539-D50A-423D-8B55-AA41B523629E}</Project>
+      <Name>XmlHandler</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

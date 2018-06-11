@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{01CA1CEE-0FBA-4A01-8E3E-D071A613FAEA}</ProjectGuid>
+    <ProjectGuid>{04405539-D50A-423D-8B55-AA41B523629E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CVModel</RootNamespace>
-    <AssemblyName>CVModel</AssemblyName>
+    <RootNamespace>XmlHandler</RootNamespace>
+    <AssemblyName>XmlHandler</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -32,6 +32,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -40,23 +41,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Domain\Certification.cs" />
-    <Compile Include="Domain\Client.cs" />
-    <Compile Include="Domain\CV.cs" />
-    <Compile Include="Domain\DomaineDIntervention.cs" />
-    <Compile Include="Domain\DomaineDInterventionItem.cs" />
-    <Compile Include="Domain\Employeur.cs" />
-    <Compile Include="Domain\FormationAcademique.cs" />
-    <Compile Include="Domain\Langue.cs" />
-    <Compile Include="Domain\Mandat.cs" />
-    <Compile Include="Domain\Perfectionnement.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\XmlHandler\XmlHandler.csproj">
-      <Project>{04405539-d50a-423d-8b55-aa41b523629e}</Project>
-      <Name>XmlHandler</Name>
-    </ProjectReference>
+    <Compile Include="Services\DocxExtractor.cs" />
+    <Compile Include="XmlEntities\CVSection.cs" />
+    <Compile Include="XmlEntities\XmlDocNode.cs" />
+    <Compile Include="XmlEntities\XmlDocParagraph.cs" />
+    <Compile Include="XmlEntities\XmlDocTable.cs" />
+    <Compile Include="XmlIdentification\ChildNodeToken.cs" />
+    <Compile Include="XmlIdentification\CompostTextToken.cs" />
+    <Compile Include="XmlIdentification\FormatationToken.cs" />
+    <Compile Include="XmlIdentification\IXmlToken.cs" />
+    <Compile Include="XmlIdentification\TextToken.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
