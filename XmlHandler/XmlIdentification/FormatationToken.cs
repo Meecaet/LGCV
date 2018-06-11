@@ -12,13 +12,20 @@ namespace XmlHandler.XmlIdentification
         private Dictionary<string, string> styles;
         private XmlNamespaceManager namespaceManager;
 
+        public FormatationToken()
+        {
+            styles = new Dictionary<string, string>();
+            namespaceManager = null;
+        }
+
         public FormatationToken(XmlNameTable nametable)
         {
-            styles = new Dictionary<string, string>()
-            {
-                { "w:val", "Titre1" }
-            };
+            styles = new Dictionary<string, string>();
+            AddNamespaceManager(nametable);
+        }       
 
+        private void AddNamespaceManager(XmlNameTable nametable)
+        {
             namespaceManager = new XmlNamespaceManager(nametable);
             namespaceManager.AddNamespace("w10", "urn:schemas-microsoft-com:office:word");
             namespaceManager.AddNamespace("w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main");
@@ -34,6 +41,10 @@ namespace XmlHandler.XmlIdentification
         public bool Match(XmlNode node, out string identificant)
         {
             identificant = string.Empty;
+
+            if (namespaceManager == null)
+                AddNamespaceManager(node.OwnerDocument.NameTable);
+
             XmlNodeList styleNodes = node.SelectNodes(".//w:pPr/w:pStyle", namespaceManager);
             foreach (XmlNode styleItem in styleNodes)
             {

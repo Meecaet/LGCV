@@ -42,7 +42,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\CVFactory.cs" />
     <Compile Include="Services\DocxExtractor.cs" />
+    <Compile Include="Services\SectionsExtractor.cs" />
     <Compile Include="XmlEntities\CVSection.cs" />
     <Compile Include="XmlEntities\XmlDocNode.cs" />
     <Compile Include="XmlEntities\XmlDocParagraph.cs" />
@@ -52,6 +54,12 @@
     <Compile Include="XmlIdentification\FormatationToken.cs" />
     <Compile Include="XmlIdentification\IXmlToken.cs" />
     <Compile Include="XmlIdentification\TextToken.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CVModel\CVModèle.csproj">
+      <Project>{01ca1cee-0fba-4a01-8e3e-d071a613faea}</Project>
+      <Name>CVModèle</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

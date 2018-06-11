@@ -52,11 +52,5 @@
     <Compile Include="Domain\Perfectionnement.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\XmlHandler\XmlHandler.csproj">
-      <Project>{04405539-d50a-423d-8b55-aa41b523629e}</Project>
-      <Name>XmlHandler</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -18,70 +18,18 @@ namespace ApplicationDeConversion
     {
         private void GenerateCVXml(string documentXmlPath, string outputPath)
         {
-            List<CVSection> Sections;
-
-            #region Get XML Nodes
-
-            System.Xml.XmlDocument doc = new System.Xml.XmlDocument();
-            doc.Load(documentXmlPath);
-
-            XmlNode rootNnode = doc.LastChild.LastChild;
-            XmlNamespaceManager namespaceManager = new XmlNamespaceManager(doc.NameTable);
-            namespaceManager.AddNamespace("w10", "urn:schemas-microsoft-com:office:word");
-            namespaceManager.AddNamespace("w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main");
-
-            List<XmlNode> nodes = new List<XmlNode>();
-            foreach (XmlNode item in rootNnode.ChildNodes)
-            {
-                if (item.Name.Contains("w:p") && string.IsNullOrEmpty(item.InnerText))
-                    continue;
-
-                nodes.Add(item);
-            }
-
-            #endregion
-
-            XmlNode first = null;
             string currentIdent = string.Empty;
 
-            Sections = new List<CVSection>();
-            List<IXmlToken> validationTokens = new List<IXmlToken>();
+            SectionsExtractor CvSectionsExtractor = new SectionsExtractor();          
+            List<XmlNode> nodes = CvSectionsExtractor.GetCVNodes(documentXmlPath);
 
-            validationTokens.Add(new TextToken());
-            validationTokens.Add(new FormatationToken(doc.NameTable));
-            CVSection currentCVSection = new CVSection();
-            currentCVSection.Identifiant = "IDENTIFICATION";
-
-            while (nodes.Count > 0)
-            {
-                first = nodes.First();
-                nodes.Remove(first);
-
-                if (validationTokens.Any(x => x.Match(first, out currentIdent)))
-                {
-                    Sections.Add(currentCVSection);
-
-                    currentCVSection = new CVSection();
-                    currentCVSection.Identifiant = currentIdent;
-                    currentCVSection.AddNode(first);
-
-                    currentIdent = string.Empty;
-                }
-                else
-                {
-                    currentCVSection.AddNode(first);
-                }
-            }
-
-            Sections.Add(currentCVSection);
-
-            CV nouveauCV = new CV();
-            nouveauCV.AssemblerCV(Sections);
+            CVFactory cVFactory = new CVFactory();
+            CV newCv = cVFactory.CreateCV(nodes);
 
             XmlSerializer xmlSerializer = new XmlSerializer(typeof(CV));
             using (Stream fileStream = new FileStream(outputPath, FileMode.Create, FileAccess.Write, FileShare.None))
             {
-                xmlSerializer.Serialize(fileStream, nouveauCV);
+                xmlSerializer.Serialize(fileStream, newCv);
             }
         }
 

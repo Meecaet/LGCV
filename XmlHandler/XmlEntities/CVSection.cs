@@ -22,6 +22,17 @@ namespace XmlHandler.XmlEntities
             }
         }
 
+        internal List<XmlNode> GetOriginalNodes
+        {
+            get
+            {
+                if (Nodes != null)
+                    return Nodes.Select(x => x.OriginalNode).ToList();
+                else
+                    return null;
+            }
+        }
+
         public CVSection()
         {
             Nodes = new List<XmlDocNode>();
