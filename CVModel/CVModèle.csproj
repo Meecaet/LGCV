@@ -40,16 +40,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Domain\Association.cs" />
     <Compile Include="Domain\Certification.cs" />
     <Compile Include="Domain\Client.cs" />
+    <Compile Include="Domain\Conference.cs" />
     <Compile Include="Domain\CV.cs" />
     <Compile Include="Domain\DomaineDIntervention.cs" />
-    <Compile Include="Domain\DomaineDInterventionItem.cs" />
     <Compile Include="Domain\Employeur.cs" />
     <Compile Include="Domain\FormationAcademique.cs" />
     <Compile Include="Domain\Langue.cs" />
     <Compile Include="Domain\Mandat.cs" />
     <Compile Include="Domain\Perfectionnement.cs" />
+    <Compile Include="Domain\Publication.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -12,17 +12,19 @@ namespace XmlHandler.XmlIdentification
         private Dictionary<string, string> styles;
         private XmlNamespaceManager namespaceManager;
 
-        public FormatationToken()
+        private FormatationToken()
         {
             styles = new Dictionary<string, string>();
             namespaceManager = null;
-        }
-
-        public FormatationToken(XmlNameTable nametable)
-        {
-            styles = new Dictionary<string, string>();
-            AddNamespaceManager(nametable);
         }       
+
+        public static FormatationToken CreateFormatationToken(params KeyValuePair<string, string>[] stylesKeys)
+        {
+            FormatationToken formToken = new FormatationToken();
+            formToken.SetStyleParameter(stylesKeys);
+
+            return formToken;
+        }
 
         private void AddNamespaceManager(XmlNameTable nametable)
         {
@@ -31,7 +33,7 @@ namespace XmlHandler.XmlIdentification
             namespaceManager.AddNamespace("w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main");
         }
 
-        public void SetStyleParameter(params KeyValuePair<string, string>[] stylesKeys)
+        public void SetStyleParameter(KeyValuePair<string, string>[] stylesKeys)
         {
             styles.Clear();
             foreach (KeyValuePair<string, string> item in stylesKeys)

@@ -6,7 +6,20 @@ using System.Threading.Tasks;
 
 namespace CVModel.Domain
 {
-    class Certification
+    [Serializable]
+    public class Certification
     {
+        public string Description { get; set; }
+
+        private Certification()
+        { }
+
+        public static Certification CreateCertification(string certification)
+        {
+            Certification cert = new Certification();
+            cert.Description = certification;
+
+            return cert;
+        }
     }
 }

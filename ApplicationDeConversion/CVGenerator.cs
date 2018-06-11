@@ -16,23 +16,6 @@ namespace ApplicationDeConversion
 {
     public class CVGenerator
     {
-        private void GenerateCVXml(string documentXmlPath, string outputPath)
-        {
-            string currentIdent = string.Empty;
-
-            SectionsExtractor CvSectionsExtractor = new SectionsExtractor();          
-            List<XmlNode> nodes = CvSectionsExtractor.GetCVNodes(documentXmlPath);
-
-            CVFactory cVFactory = new CVFactory();
-            CV newCv = cVFactory.CreateCV(nodes);
-
-            XmlSerializer xmlSerializer = new XmlSerializer(typeof(CV));
-            using (Stream fileStream = new FileStream(outputPath, FileMode.Create, FileAccess.Write, FileShare.None))
-            {
-                xmlSerializer.Serialize(fileStream, newCv);
-            }
-        }
-
         /// <summary>
         /// Fait l'extraction et la conversion d'un CV LGS vers un fichier en format xml depuis un dossier avec des fichiers docx
         /// </summary>
@@ -55,7 +38,7 @@ namespace ApplicationDeConversion
                 if (filesInDirectory.Length > 0)
                 {
                     foreach (FileInfo file in filesInDirectory)
-                    {                        
+                    {
                         //Nous avons besoin d'un ficher dont le contenu est le text du docx (.\\word\\document.xml)
                         extractedXmlText = docxExtractor.ExtractDocxTextXml(file);
 
@@ -65,11 +48,30 @@ namespace ApplicationDeConversion
                         //Efface le dossier généré par l'extraction
                         currentExtractFolder = file.FullName.Replace(file.Extension, "");
                         DirectoryInfo extractionFolder = new DirectoryInfo(currentExtractFolder);
-                        extractionFolder.Delete(true);                  
+                        extractionFolder.Delete(true);
                     }
                 }
             }
         }
+
+        private void GenerateCVXml(string documentXmlPath, string outputPath)
+        {
+            string currentIdent = string.Empty;
+
+            SectionsExtractor CvSectionsExtractor = new SectionsExtractor();          
+            List<XmlNode> nodes = CvSectionsExtractor.GetCVNodes(documentXmlPath);
+
+            CVFactory cVFactory = new CVFactory();
+            CV newCv = cVFactory.CreateCV(nodes);
+
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(CV));
+            using (Stream fileStream = new FileStream(outputPath, FileMode.Create, FileAccess.Write, FileShare.None))
+            {
+                xmlSerializer.Serialize(fileStream, newCv);
+            }
+        }
+
+        
 
     }
 }

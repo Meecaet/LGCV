@@ -12,9 +12,8 @@ namespace XmlHandler.XmlIdentification
     {
 
         private Dictionary<string, string[]> textTokens;
-        
 
-        public TextToken()
+        private TextToken()
         {
             textTokens = new Dictionary<string, string[]>
             {
@@ -27,6 +26,11 @@ namespace XmlHandler.XmlIdentification
                 { "ASSOCIATIONS", new string[] { "ASSOCIATIONS" } },
                 { "LANGUES PARLÉES, ÉCRITES", new string[] { "LANGUES PARLÉES, ÉCRITES" } }
             };
+        }
+
+        public static TextToken CreateTextToken()
+        {
+            return new TextToken();
         }
 
         public bool Match(XmlNode node, out string identificant)

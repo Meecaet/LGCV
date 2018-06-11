@@ -11,7 +11,6 @@ namespace XmlHandler.Services
 {
     public class SectionsExtractor
     {
-
         public List<XmlNode> GetCVNodes(string xmlFilePath, bool keepWhiteSpaces = false)
         {
             System.Xml.XmlDocument doc = new System.Xml.XmlDocument();
@@ -56,7 +55,7 @@ namespace XmlHandler.Services
             XmlNode First;
             List<CVSection> Sections = new List<CVSection>();                        
             CVSection currentCVSection = new CVSection();
-            currentCVSection.Identifiant = firstIdentifier; //"IDENTIFICATION";
+            currentCVSection.Identifiant = firstIdentifier;
 
             if (skipFirstNode)
             {

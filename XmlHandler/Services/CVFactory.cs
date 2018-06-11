@@ -16,16 +16,11 @@ namespace XmlHandler.Services
 
         public CV CreateCV(List<XmlNode> Nodes)
         {
-            string currentIdent = string.Empty;
             SectionsExtractor CvSectionsExtractor = new SectionsExtractor();
+            List<IXmlToken> matchTokens = new List<IXmlToken>();            
 
-            List<IXmlToken> matchTokens = new List<IXmlToken>();
-            matchTokens.Add(new TextToken());
-
-            FormatationToken formToken = new FormatationToken();
-            formToken.SetStyleParameter(new KeyValuePair<string, string>("w:val", "Titre1"));
-
-            matchTokens.Add(formToken);
+            matchTokens.Add(TextToken.CreateTextToken());
+            matchTokens.Add(FormatationToken.CreateFormatationToken(new KeyValuePair<string, string>("w:val", "Titre1")));
 
             List<CVSection> Sections = CvSectionsExtractor.GetCVSections(Nodes, matchTokens, "IDENTIFICATION");
             currentCV = new CV();
@@ -35,7 +30,6 @@ namespace XmlHandler.Services
             return currentCV;
             
         }
-
 
         private void AssemblerCV(List<CVSection> sections)
         {
@@ -50,19 +44,15 @@ namespace XmlHandler.Services
             aSection = sections.DefaultIfEmpty(null).FirstOrDefault(x => x.Identifiant == "FORMATION ACADÉMIQUE");
             if (aSection != null)
             {
-                currentCV.FormationsAcademique.AddRange(AssamblerFormationEtCertifications(aSection));
+                AssamblerFormations(aSection);
                 AssemblerCertifications(aSection);
             }
 
-            sections.Where(x => x.Identifiant == "Titre1").ToList().ForEach(x =>
-            {
-                Employeur emp = AssemblerEmployeur(x);
-                currentCV.Employeurs.Add(emp);
-            });
+            sections.Where(x => x.Identifiant == "Titre1").ToList().ForEach(x => AssemblerEmployeur(x));
 
             aSection = sections.DefaultIfEmpty(null).FirstOrDefault(x => x.Identifiant == "PERFECTIONNEMENT");
             if (aSection != null)
-                currentCV.Perfectionnements.AddRange(AssemblerPerfectionnement(aSection));
+                AssemblerPerfectionnement(aSection);
 
             aSection = sections.DefaultIfEmpty(null).FirstOrDefault(x => x.Identifiant == "CONFÉRENCES");
             if (aSection != null)
@@ -78,10 +68,8 @@ namespace XmlHandler.Services
 
             aSection = sections.DefaultIfEmpty(null).FirstOrDefault(x => x.Identifiant == "LANGUES PARLÉES, ÉCRITES");
             if (aSection != null)
-                currentCV.Langues.AddRange(AssemblerLangues(aSection));
+                AssemblerLangues(aSection);
         }
-
-
 
         private void AssemblerBio(CVSection sectionIdentification)
         {
@@ -103,7 +91,6 @@ namespace XmlHandler.Services
             currentCV.Description = description;
         }
 
-
         private void AssemberDomainesDIntervetion(CVSection sectionDomaines)
         {
             XmlDocTable domainesTable = sectionDomaines.Nodes.Skip(1).Cast<XmlDocTable>().First();
@@ -111,13 +98,12 @@ namespace XmlHandler.Services
 
             domainesParagraphs.ForEach(x =>
             {
-                currentCV.DomaineDIntervention.Add(x.GetParagraphText());
+                currentCV.DomainesDIntervention.Add(DomaineDIntervention.CreateDomaineDIntervetion(x.GetParagraphText()));
             });
         }
 
         private void AssemblerCertifications(CVSection sectionFormation)
         {
-            List<string> certifications = new List<string>();
             XmlDocTable tableFormation = (XmlDocTable)sectionFormation.Nodes.First(x => x is XmlDocTable);
             List<XmlDocParagraph> formationParagraphs = tableFormation.GetParagraphsFromColumn(2).Skip(1).ToList();
             formationParagraphs.ForEach(x =>
@@ -125,10 +111,8 @@ namespace XmlHandler.Services
                 string text = x.GetParagraphText();
 
                 if (!string.IsNullOrEmpty(text))
-                    certifications.Add(text);
+                    currentCV.Certifications.Add(Certification.CreateCertification(text));
             });
-
-            currentCV.AssemblerCertifications(certifications);
         }
 
         private void AssemblerConferences(CVSection sectionConferences)
@@ -136,30 +120,29 @@ namespace XmlHandler.Services
             if (sectionConferences.Nodes.Any(x => x is XmlDocTable))
             {
                 List<string> conferences = ((XmlDocTable)sectionConferences.Nodes.First(x => x is XmlDocTable)).GetAllLines();
-                conferences.ForEach(x => currentCV.Conferences.Add(x));
+                conferences.ForEach(x => currentCV.Conferences.Add(Conference.CreateConference(x)));
             }
             else
             {
                 List<XmlDocParagraph> conferencesParagraphs = sectionConferences.Nodes.Skip(1).Cast<XmlDocParagraph>().ToList();
-                conferencesParagraphs.ForEach(x => currentCV.Conferences.Add(x.GetParagraphText()));
+                conferencesParagraphs.ForEach(x => currentCV.Conferences.Add(Conference.CreateConference(x.GetParagraphText())));
             }
         }
 
         private void AssemblerAssociations(CVSection sectionAssociations)
         {
             List<XmlDocParagraph> associationsParagraphs = sectionAssociations.Nodes.Skip(1).Cast<XmlDocParagraph>().ToList();
-            associationsParagraphs.ForEach(x => currentCV.Associations.Add(x.GetParagraphText()));
+            associationsParagraphs.ForEach(x => currentCV.Associations.Add(Association.CreateAssociation(x.GetParagraphText())));
         }
 
         private void AssemblerPublications(CVSection sectionPublications)
         {
             List<XmlDocParagraph> publicationsParagraphs = sectionPublications.Nodes.Skip(1).Cast<XmlDocParagraph>().ToList();
-            publicationsParagraphs.ForEach(x => currentCV.Publications.Add(x.GetParagraphText()));
+            publicationsParagraphs.ForEach(x => currentCV.Publications.Add(Publication.CreatePublication(x.GetParagraphText())));
         }
 
-        private List<FormationAcademique> AssamblerFormationEtCertifications(CVSection sectionFormation)
+        private void AssamblerFormations(CVSection sectionFormation)
         {
-            List<FormationAcademique> formations = new List<FormationAcademique>();
             XmlDocTable tableFormation = (XmlDocTable)sectionFormation.Nodes.First(x => x is XmlDocTable);
             List<XmlDocParagraph> formationParagraphs = tableFormation.GetParagraphsFromColumn(1).Skip(1).ToList();
             formationParagraphs.RemoveAll(x => string.IsNullOrEmpty(x.GetParagraphText()));
@@ -173,13 +156,11 @@ namespace XmlHandler.Services
                 if (string.IsNullOrEmpty(item.Titre) || string.IsNullOrEmpty(item.Instituition))
                     continue;
 
-                formations.Add(item);
+                currentCV.FormationsAcademique.Add(item);
             }
-
-            return formations;
         }
 
-        private Employeur AssemblerEmployeur(CVSection employeurSection)
+        private void AssemblerEmployeur(CVSection employeurSection)
         {
             XmlDocParagraph emplDesc = (XmlDocParagraph)employeurSection.Nodes.First(x => x is XmlDocParagraph);
             List<XmlDocParagraph> jobDescription = new List<XmlDocParagraph>();
@@ -217,7 +198,7 @@ namespace XmlHandler.Services
                 emp.DescriptionDuTravail = string.Empty;
 
             emp.Clients.AddRange(AssemblerClients(employeurSection));
-            return emp;
+            currentCV.Employeurs.Add(emp);
         }
 
         private List<Client> AssemblerClients(CVSection employeurSection)
@@ -227,16 +208,15 @@ namespace XmlHandler.Services
             List<XmlDocNode> empNodes = new List<XmlDocNode>();
             SectionsExtractor sectionsExtractor = new SectionsExtractor();
 
-            IXmlToken styleToken = new FormatationToken(employeurSection.Nodes.First().OriginalNode.OwnerDocument.NameTable);
-            ((FormatationToken)styleToken).SetStyleParameter(new KeyValuePair<string, string>("w:val", "Titre2"));
-            clientSections.AddRange(sectionsExtractor.GetCVSections(employeurSection.GetOriginalNodes, new List<IXmlToken>() { styleToken }, "Titre2", true));
+            clientSections.AddRange(sectionsExtractor.GetCVSections(employeurSection.GetOriginalNodes, 
+                new List<IXmlToken>() { FormatationToken.CreateFormatationToken(new KeyValuePair<string, string>("w:val", "Titre2")) }, "Titre2", true));
 
             clientSections.ForEach(x =>
             {
                 Client client = AssemblerClient(x);
                 clients.Add(client);
             });
-
+            
             return clients;
         }
 
@@ -322,7 +302,7 @@ namespace XmlHandler.Services
             return mandat;
         }
 
-        private List<Perfectionnement> AssemblerPerfectionnement(CVSection sectionPerfectionnement)
+        private void AssemblerPerfectionnement(CVSection sectionPerfectionnement)
         {
             List<Perfectionnement> perfectionnements = new List<Perfectionnement>();
             XmlDocTable perfcTable = (XmlDocTable)sectionPerfectionnement.Nodes.First(x => x is XmlDocTable);
@@ -340,18 +320,17 @@ namespace XmlHandler.Services
                 perfectionnements.Add(Perfc);
             }
 
-            return perfectionnements;
+            currentCV.Perfectionnements.AddRange(perfectionnements);
         }
 
-        private List<Langue> AssemblerLangues(CVSection langueSection)
+        private void AssemblerLangues(CVSection langueSection)
         {
             List<Langue> langues = new List<Langue>();
             List<CVSection> langueSections;
-            IXmlToken formatationToken = new FormatationToken(langueSection.NameTable);
-            ((FormatationToken)formatationToken).SetStyleParameter(new KeyValuePair<string, string>("w:val", "Puce1"));
-
+            
             SectionsExtractor extractor = new SectionsExtractor();
-            langueSections = extractor.GetCVSections(langueSection.GetOriginalNodes.Skip(1).ToList(), new List<IXmlToken>() { formatationToken }, "w:b", true);
+            langueSections = extractor.GetCVSections(langueSection.GetOriginalNodes.Skip(1).ToList(), 
+                new List<IXmlToken>() { FormatationToken.CreateFormatationToken(new KeyValuePair<string, string>("w:val", "Puce1")) }, "w:b", true);
 
             foreach (CVSection section in langueSections)
             {
@@ -384,7 +363,7 @@ namespace XmlHandler.Services
                 langues.Add(curLangue);
             }
 
-            return langues;
+            currentCV.Langues.AddRange(langues);
         }
     }
 }
