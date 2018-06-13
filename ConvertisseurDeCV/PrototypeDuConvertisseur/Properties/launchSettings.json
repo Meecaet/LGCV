@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "PrototypeDuConvertisseur": {
+      "commandName": "Project",
+      "commandLineArgs": "\"C:\\Docs to zip\""
+    }
+  }
+}
