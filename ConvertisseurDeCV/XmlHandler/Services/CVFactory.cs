@@ -10,6 +10,9 @@ using XmlHandler.XmlIdentification;
 
 namespace XmlHandler.Services
 {
+    /// <summary>
+    /// Fait l'assemblage d'un objet CV depuis une liste de nœuds
+    /// </summary>
     public class CVFactory
     {
         private CV currentCV;

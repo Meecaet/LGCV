@@ -8,6 +8,10 @@ using System.Threading.Tasks;
 
 namespace XmlHandler.Services
 {
+
+    /// <summary>
+    /// Cette classe utilise la bibliothèque System.IO.Compression pour décompresser le fichier .docx (un zip caché)
+    /// </summary>
     public class DocxExtractor
     {
 

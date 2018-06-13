@@ -7,6 +7,9 @@ using System.Xml;
 
 namespace XmlHandler.XmlIdentification
 {
+    /// <summary>
+    /// Cette IXmlToken vérifie le format d'un paragraphe (taille du lettre, couler ou style) et, si la collection de clé et valuer trouvée dans le paragraphe est la même defini dans une liste, ça retourne un Match vrai
+    /// </summary>
     public class FormatationToken : IXmlToken
     {
         private Dictionary<string, string> styles;
@@ -26,6 +29,7 @@ namespace XmlHandler.XmlIdentification
             return formToken;
         }
 
+        //Cette XmlToken utilise des expressions XPath pour rechercher nœuds. Pour ça, on a besoin d'un XmlNameTable
         private void AddNamespaceManager(XmlNameTable nametable)
         {
             namespaceManager = new XmlNamespaceManager(nametable);
@@ -47,6 +51,7 @@ namespace XmlHandler.XmlIdentification
             if (namespaceManager == null)
                 AddNamespaceManager(node.OwnerDocument.NameTable);
 
+            //On a apperçu que le format est defini dans le nœud w:pStyle, dans le nœud w:pPr
             XmlNodeList styleNodes = node.SelectNodes(".//w:pPr/w:pStyle", namespaceManager);
             foreach (XmlNode styleItem in styleNodes)
             {

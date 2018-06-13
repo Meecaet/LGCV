@@ -8,13 +8,16 @@ using System.Xml;
 
 namespace XmlHandler.XmlIdentification
 {
+    /// <summary>
+    /// Cette IXmlToken vérifie le text d'un paragraphe et, s'il est exactement le même qu'une string dans une liste, ça retourne un Match vrai
+    /// </summary>
     public class TextToken : IXmlToken
     {
-
         private Dictionary<string, string[]> textTokens;
 
         private TextToken()
         {
+            //Le dictionaire contient l'identifiant et la liste des textes qui seront utilisés pour la vérification. Cette liste ici c'est la liste standard
             textTokens = new Dictionary<string, string[]>
             {
                 { "PRINCIPAUX DOMAINES D’INTERVENTION", new string[] { "PRINCIPAUX DOMAINES D’INTERVENTION" } },
@@ -41,6 +44,7 @@ namespace XmlHandler.XmlIdentification
             if (string.IsNullOrEmpty(node.InnerText))
                 return false;
 
+            //Vérifie le texte dans un paragraphe
             if (node.Name == "w:p")
             {
                 innerText = node.InnerText.Trim();
@@ -53,7 +57,7 @@ namespace XmlHandler.XmlIdentification
                     }
                 }
             }
-            else
+            else //Ou dans le paragraphes dans une tableau
             {
                 XmlDocTable table = new XmlDocTable(node);
                 List<XmlDocParagraph> paragraphs = table.GetParagraphsFromColumns();

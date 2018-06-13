@@ -11,6 +11,12 @@ namespace XmlHandler.Services
 {
     public class SectionsExtractor
     {
+        /// <summary>
+        /// Fait la extraction des nœuds xml depuis un fichier
+        /// </summary>
+        /// <param name="xmlFilePath">Chemin du fichier xml</param>
+        /// <param name="keepWhiteSpaces">Option pour préserver les paragraphes vides</param>
+        /// <returns>Liste de nœuds</returns>
         public List<XmlNode> GetCVNodes(string xmlFilePath, bool keepWhiteSpaces = false)
         {
             System.Xml.XmlDocument doc = new System.Xml.XmlDocument();
@@ -48,6 +54,14 @@ namespace XmlHandler.Services
             return nodes;
         }
 
+        /// <summary>
+        /// Depuis une liste de IXmlTokens, ce méthode lit le document xml de haut en bàs. À chaque "match", il commence une nouvelle section
+        /// </summary>
+        /// <param name="Nodes">Liste des nœud xml</param>
+        /// <param name="matchTokens">Liste des IXmlTokens qui vérifieront le texte ou le format</param>
+        /// <param name="firstIdentifier">L'identifiant pour la première section</param>
+        /// <param name="skipFirstNode">Parfois, le premièr nœud retourne un "match". Cette option evite ça</param>
+        /// <returns>Liste des sections du fichier xml</returns>
         public List<CVSection> GetCVSections(List<XmlNode> Nodes, List<IXmlToken> matchTokens, string firstIdentifier, bool skipFirstNode = false)
         {
             string currentIdent = string.Empty;
