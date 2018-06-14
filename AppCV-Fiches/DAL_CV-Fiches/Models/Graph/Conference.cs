@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 namespace DAL_CV_Fiches.Models.Graph
 {
     [Serializable]
-    public class Conference
+    public class Conference : GraphObject
     {
         public string Description { get; set; }
 
-        private Conference()
+        public Conference()
         { }
 
         public static Conference CreateConference(string conference)

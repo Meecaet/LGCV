@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 namespace DAL_CV_Fiches.Models.Graph
 {
     [Serializable]
-    public class DomaineDIntervention
+    public class DomaineDIntervention : GraphObject
     {
         public string Description { get; set; }
 
-        private DomaineDIntervention()
+        public DomaineDIntervention()
         { }
 
         public static DomaineDIntervention CreateDomaineDIntervetion(string domaineDIntervention)

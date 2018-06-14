@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 namespace DAL_CV_Fiches.Models.Graph
 {
     [Serializable]
-    public class Certification
+    public class Certification : GraphObject
     {
         public string Description { get; set; }
 
-        private Certification()
+        public Certification()
         { }
 
         public static Certification CreateCertification(string certification)

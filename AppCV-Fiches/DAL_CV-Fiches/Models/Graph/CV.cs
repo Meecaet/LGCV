@@ -10,20 +10,34 @@ using System.Xml.Serialization;
 namespace DAL_CV_Fiches.Models.Graph
 {
     [Serializable]
-    public class CV
+    public class CV : GraphObject
     {
         public string Nom { get; set; }
         public string Titre { get; set; }
         public string Description { get; set; }
 
+        [Edge("Has")]
         public List<DomaineDIntervention> DomainesDIntervention { get; set; }
+
+        [Edge("Graduated")]
         public List<FormationAcademique> FormationsAcademique { get; set; }
+
+        [Edge("Certifieded")]
         public List<Certification> Certifications { get; set; }
 
+        [Edge("WorkedFor")]
         public List<Employeur> Employeurs { get; set; }
+
+        [Edge("Learned")]
         public List<Perfectionnement> Perfectionnements { get; set; }
+
+        [Edge("Attended")]
         public List<Conference> Conferences { get; set; }
+
+        [Edge("IsPartOf")]
         public List<Association> Associations { get; set; }
+
+        [Edge("Publicated")]
         public List<Publication> Publications { get; set; }
 
         [Edge("Knows")]

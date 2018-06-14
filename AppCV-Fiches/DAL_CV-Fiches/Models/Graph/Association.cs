@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 namespace DAL_CV_Fiches.Models.Graph
 {
     [Serializable]
-    public class Association
+    public class Association : GraphObject
     {
         public string Description { get; set; }
 
-        private Association()
+        public Association()
         { }
 
         public static Association CreateAssociation(string association)

@@ -1,10 +1,10 @@
 ﻿namespace DAL_CV_Fiches.Models.Graph
 {
-    public class Publication
+    public class Publication : GraphObject
     {
         public string Description { get; set; }
 
-        private Publication()
+        public Publication()
         { }
 
         public static Publication CreatePublication(string publication)

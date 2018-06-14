@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace DAL_CV_Fiches.Models.Graph
 {
     [Serializable]
-    public class Employeur
+    public class Employeur : GraphObject
     {
         public string Nom { get; set; }
         public string Periode { get; set; }
