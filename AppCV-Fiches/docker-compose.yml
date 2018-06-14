@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  webcv-fiches:
+    image: ${DOCKER_REGISTRY}webcvfiches
+    build:
+      context: .
+      dockerfile: WebCV-Fiches\Dockerfile
