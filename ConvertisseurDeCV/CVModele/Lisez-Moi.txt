@@ -1,9 +1,0 @@
-﻿1.Construction du modèle
-
-Le modèle a été crée afin de représenter les champs qui font la composition du CV LGS. 
-La structure du document .docx n'est pas hiérarchique et ça tourne la lecture du fichier plus difficile. 
-En construisent un objet depuis la lecture du fichier .docx, la manipulation des données devient plus facile.
-
-Pour atteindre le modèle écrit, nous avons lu les documents et fait l'abstraction d'une classe depuis les informations trouvées dans plusieurs fichiers.
-Chaque classe a un attribute [Serializable] pour devenir capable d'être transformée en un format flexible à la persistance dans une base des données basée sur documents ou graphes
-
