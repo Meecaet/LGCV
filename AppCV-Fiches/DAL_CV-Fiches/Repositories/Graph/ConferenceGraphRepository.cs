@@ -7,7 +7,7 @@ using System.Text;
 
 namespace DAL_CV_Fiches.Repositories.Graph
 {
-    class ConferenceGraphRepository : GraphRepositoy<Conference>
+    public class ConferenceGraphRepository : GraphRepositoy<Conference>
     {
         public ConferenceGraphRepository(DocumentClient documentClient, DocumentCollection documentCollection) : base(documentClient, documentCollection)
         {

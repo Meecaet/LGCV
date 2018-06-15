@@ -7,7 +7,7 @@ using System.Text;
 
 namespace DAL_CV_Fiches.Repositories.Graph
 {
-    class CertificationGraphRepository : GraphRepositoy<Certification>
+    public class CertificationGraphRepository : GraphRepositoy<Certification>
     {
         public CertificationGraphRepository(DocumentClient documentClient, DocumentCollection documentCollection) : base(documentClient, documentCollection)
         {

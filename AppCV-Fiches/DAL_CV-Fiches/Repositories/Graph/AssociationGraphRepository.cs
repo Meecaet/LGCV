@@ -7,7 +7,7 @@ using System.Text;
 
 namespace DAL_CV_Fiches.Repositories.Graph
 {
-    class AssociationGraphRepository : GraphRepositoy<Association>
+    public class AssociationGraphRepository : GraphRepositoy<Association>
     {
         public AssociationGraphRepository(DocumentClient documentClient, DocumentCollection documentCollection) : base(documentClient, documentCollection)
         {

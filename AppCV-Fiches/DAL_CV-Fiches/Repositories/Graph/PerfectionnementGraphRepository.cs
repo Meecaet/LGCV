@@ -7,7 +7,7 @@ using System.Text;
 
 namespace DAL_CV_Fiches.Repositories.Graph
 {
-    class PerfectionnementGraphRepository : GraphRepositoy<Perfectionnement>
+    public class PerfectionnementGraphRepository : GraphRepositoy<Perfectionnement>
     {
         public PerfectionnementGraphRepository(DocumentClient documentClient, DocumentCollection documentCollection) : base(documentClient, documentCollection)
         {

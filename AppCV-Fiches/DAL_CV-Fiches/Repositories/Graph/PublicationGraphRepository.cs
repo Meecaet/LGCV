@@ -7,7 +7,7 @@ using System.Text;
 
 namespace DAL_CV_Fiches.Repositories.Graph
 {
-    class PublicationGraphRepository : GraphRepositoy<Publication>
+    public class PublicationGraphRepository : GraphRepositoy<Publication>
     {
         public PublicationGraphRepository(string Database, string Graph) : base(Database, Graph)
         {

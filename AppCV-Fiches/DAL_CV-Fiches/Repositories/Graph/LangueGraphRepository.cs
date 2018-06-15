@@ -7,7 +7,7 @@ using System.Text;
 
 namespace DAL_CV_Fiches.Repositories.Graph
 {
-    class LangueGraphRepository : GraphRepositoy<Langue>
+    public class LangueGraphRepository : GraphRepositoy<Langue>
     {
         public LangueGraphRepository(DocumentClient documentClient, DocumentCollection documentCollection) : base(documentClient, documentCollection)
         {

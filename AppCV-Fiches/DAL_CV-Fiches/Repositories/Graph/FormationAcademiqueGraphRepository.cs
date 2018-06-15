@@ -7,7 +7,7 @@ using System.Text;
 
 namespace DAL_CV_Fiches.Repositories.Graph
 {
-    class FormationAcademiqueGraphRepository : GraphRepositoy<FormationAcademique>
+    public class FormationAcademiqueGraphRepository : GraphRepositoy<FormationAcademique>
     {
         public FormationAcademiqueGraphRepository(DocumentClient documentClient, DocumentCollection documentCollection) : base(documentClient, documentCollection)
         {

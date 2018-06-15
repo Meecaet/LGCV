@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DAL_CV_Fiches.Repositories.Graph.Attributes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,8 @@ namespace DAL_CV_Fiches.Models.Graph
         public string Nom { get; set; }
         public string Periode { get; set; }
         public string DescriptionDuTravail { get; set; }
+
+        [Edge("Consults")]
         public List<Client> Clients { get; set; }
 
         public Employeur()

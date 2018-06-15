@@ -7,7 +7,7 @@ using System.Text;
 
 namespace DAL_CV_Fiches.Repositories.Graph
 {
-    class CVGraphRepository : GraphRepositoy<CV>
+    public class CVGraphRepository : GraphRepositoy<CV>
     {
         public CVGraphRepository(DocumentClient documentClient, DocumentCollection documentCollection) : base(documentClient, documentCollection)
         {
@@ -19,6 +19,12 @@ namespace DAL_CV_Fiches.Repositories.Graph
 
         public CVGraphRepository(string Endpoint, string Key, string Database, string Graph) : base(Endpoint, Key, Database, Graph)
         {
+        }
+
+        public void DeleteAllDocs()
+        {
+            var a = documentClient.DeleteDocumentCollectionAsync(UriFactory.CreateDocumentCollectionUri("Graphe_Essay", "graph_cv")).Result;
+            var b = documentClient.CreateDocumentCollectionAsync(UriFactory.CreateDatabaseUri("Graphe_Essay"), new DocumentCollection { Id = "graph_cv" }).Result;
         }
     }
 }

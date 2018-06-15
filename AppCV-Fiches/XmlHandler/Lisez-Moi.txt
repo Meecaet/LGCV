@@ -1,0 +1,8 @@
+﻿La lecture du fichier .docx demande qu'on sait où chaque morceau du document commence et termine.
+Pour ça, nous avons appelé chaque morceau de section et créé un système capable d'identifier le début et le final de chaqu'un.
+
+Pour faire cette identification, est utilisé une vérification sur le texte du paragraphe où son format (dossier XmlIdentification).
+Afin de faciliter le travail avec les lignes et tableaux du document, quelques classes plus simples que les capsules ont été créés (dossier XmlEntities).
+
+La logique d'extraction des données (en utilisent les mécanismes décrits en dessous), nous avons écrit certaines classes "de service". Ils sont responsables de la décompression du fichier .docx (DocxExtractor), extraction des sections (SectionsExtractor) et assemblage d'objet CV (CVFactory).
+Tout le processus est démarré par la classe CVGenerator, dans le dossier (Generation).

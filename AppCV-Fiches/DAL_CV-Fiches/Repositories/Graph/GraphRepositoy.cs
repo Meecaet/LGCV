@@ -70,7 +70,7 @@ namespace DAL_CV_Fiches.Repositories.Graph
                     for (int i = 0; i < tuple.ListOfVertexes.Count; i++)
                     {
                         item = (GraphObject)tuple.ListOfVertexes[i];
-                        if(string.IsNullOrEmpty(item.graphKey))
+                        if (string.IsNullOrEmpty(item.graphKey))
                             genericRepository.GetType().GetMethod("Add").Invoke(genericRepository, new object[] { item });
 
                         CreateEdge(obj, item, tuple.EdgeAttribute);
@@ -79,6 +79,7 @@ namespace DAL_CV_Fiches.Repositories.Graph
 
                 AddHasEdges = false;
                 posponedCreateEdge.Clear();
+                posponedCreateEdge = null;
             }
         }
 
@@ -131,7 +132,7 @@ namespace DAL_CV_Fiches.Repositories.Graph
                         continue;
 
                     if (value is String)
-                        query += $".property('{item.Name}', '{value}')";
+                        query += $".property(\"{item.Name}\", \"{value.ToString()}\")"; //Ajouter échap pour "
                     else if (value is Int32)
                         query += $".property('{item.Name}', {value})";
                     else if (item.PropertyType.IsGenericType && item.PropertyType.GetGenericTypeDefinition() == typeof(List<>))
@@ -139,19 +140,80 @@ namespace DAL_CV_Fiches.Repositories.Graph
                         Attributes.Edge att = (Attributes.Edge)item.GetCustomAttribute(typeof(Attributes.Edge));
                         if (att != null)
                         {
-                            posponedCreateEdge = new List<PostponedEdgeCreator>();
+                            if (posponedCreateEdge == null)
+                                posponedCreateEdge = new List<PostponedEdgeCreator>();
+
                             posponedCreateEdge.Add(new PostponedEdgeCreator { EdgeAttribute = att, ListOfVertexes = (IList)value, vertexType = item.PropertyType.GetGenericArguments()[0] });
                             AddHasEdges = true;
                         }
                         else
                         {
                             //Embbeded object
-                        }                        
+                        }
                     }
                 }
             }
 
             return query;
+        }
+
+        protected string GetGetAllQuery()
+        {
+            Type thisType = typeof(T);
+            string getAllQuery = $"g.V().hasLabel('{thisType.Name}')";
+
+            return getAllQuery;
+        }
+
+        protected T GetObjectFromVertex(Vertex vertex)
+        {
+            Type thisType = typeof(T),
+                 genericArgumentType = null;
+            T genObj = new T();
+
+            Attribute att;
+            Attributes.Edge attEdge;
+
+            Dictionary<string, object> vertexProperties = new Dictionary<string, object>();
+            foreach (VertexProperty property in vertex.GetVertexProperties())
+                vertexProperties.Add(property.Key, property.Value);
+
+            genObj.graphKey = vertex.Id.ToString();
+            object genericRepository = null;
+
+            foreach (PropertyInfo prop in thisType.GetProperties())
+            {
+                att = prop.GetCustomAttribute(typeof(Attributes.Edge));
+                if (att != null)
+                {
+                    attEdge = (Attributes.Edge)att;
+                    genericArgumentType = prop.PropertyType.GetGenericArguments()[0];
+
+                    genericRepository = GetGenericRepository(genericArgumentType);
+                    prop.SetValue(genObj, genericRepository.GetType().GetMethod("GetElementsFromTransversal").Invoke(genericRepository, new object[] { genObj.graphKey, attEdge.EdgeName }));
+                }
+                else
+                {
+                    if (vertexProperties.ContainsKey(prop.Name))
+                        prop.SetValue(genObj, vertexProperties[prop.Name]);
+                }                    
+            }          
+
+            return genObj;
+        }
+
+        public List<T> GetElementsFromTransversal(string fromId, string edgeName)
+        {
+            List<T> listOfObjects = new List<T>();
+            Type thisType = typeof(T);
+            string transversalQuery = $"g.V('{fromId}').out('{edgeName}').hasLabel('{thisType.Name}')";
+
+            foreach (Vertex vertex in ExecuteCommandQuery(transversalQuery))
+            {
+                listOfObjects.Add(GetObjectFromVertex(vertex));
+            }
+
+            return listOfObjects;
         }
 
         private object GetGenericRepository(Type genericArgument)
@@ -164,7 +226,7 @@ namespace DAL_CV_Fiches.Repositories.Graph
 
             for (int i = 0; i < typelist.Length; i++)
             {
-                currentRepoType = typelist[i];                
+                currentRepoType = typelist[i];
                 interfaceType = currentRepoType.GetInterface("IGraphRepository`1");
 
                 if (interfaceType != null)
@@ -191,27 +253,6 @@ namespace DAL_CV_Fiches.Repositories.Graph
                       .ToArray();
         }
 
-        protected string GetGetAllQuery()
-        {
-            Type thisType = typeof(T);
-            return $"g.V().hasLabel('{thisType.Name}')";
-        }
-
-        protected T GetObjectFromVertex (Vertex vertex)
-        {
-            Type thisType = typeof(T);
-            T genObj = new T();
-
-            foreach (var item in vertex.GetVertexProperties())
-            {
-                PropertyInfo prop = thisType.GetProperty(item.Key);
-
-                if(prop != null)
-                    prop.SetValue(genObj, item.Value);
-            }
-
-            return genObj;
-        }
 
         private string ExecuteCommand(string CommandString)
         {
