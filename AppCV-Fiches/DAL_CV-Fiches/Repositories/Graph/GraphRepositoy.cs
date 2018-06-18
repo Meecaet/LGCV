@@ -86,7 +86,10 @@ namespace DAL_CV_Fiches.Repositories.Graph
 
         public void Delete(T obj)
         {
-            throw new NotImplementedException();
+            Type thisType = obj.GetType();
+            string updateQuery = $"g.V('{obj.graphKey}').drop()";            
+
+            ExecuteCommand(updateQuery);
         }
 
         public List<T> GetAll()
