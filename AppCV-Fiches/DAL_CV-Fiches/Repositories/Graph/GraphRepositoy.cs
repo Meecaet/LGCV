@@ -66,7 +66,7 @@ namespace DAL_CV_Fiches.Repositories.Graph
 
                 foreach (PostponedEdgeCreator tuple in posponedCreateEdge)
                 {
-                    object genericRepository = GetGenericRepository(tuple.vertexType);
+                    object genericRepository = GetGenericRepository(tuple.VertexType);
 
                     for (int i = 0; i < tuple.ListOfVertexes.Count; i++)
                     {
@@ -86,9 +86,7 @@ namespace DAL_CV_Fiches.Repositories.Graph
 
         public void Delete(T obj)
         {
-            Type thisType = obj.GetType();
             string updateQuery = $"g.V('{obj.graphKey}').drop()";            
-
             ExecuteCommand(updateQuery);
         }
 
@@ -200,7 +198,7 @@ namespace DAL_CV_Fiches.Repositories.Graph
                             if (posponedCreateEdge == null)
                                 posponedCreateEdge = new List<PostponedEdgeCreator>();
 
-                            posponedCreateEdge.Add(new PostponedEdgeCreator { EdgeAttribute = att, ListOfVertexes = (IList)value, vertexType = item.PropertyType.GetGenericArguments()[0] });
+                            posponedCreateEdge.Add(new PostponedEdgeCreator { EdgeAttribute = att, ListOfVertexes = (IList)value, VertexType = item.PropertyType.GetGenericArguments()[0] });
                             AddHasEdges = true;
                         }
                         else
@@ -399,7 +397,7 @@ namespace DAL_CV_Fiches.Repositories.Graph
 
     internal struct PostponedEdgeCreator
     {
-        internal Type vertexType { get; set; }
+        internal Type VertexType { get; set; }
         internal Attributes.Edge EdgeAttribute { get; set; }
         internal IList ListOfVertexes { get; set; }
     }
