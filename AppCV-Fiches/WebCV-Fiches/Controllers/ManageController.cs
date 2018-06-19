@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using WebCV_Fiches.Models;
+using WebCV_Fiches.Models.Admin;
 using WebCV_Fiches.Models.ManageViewModels;
 using WebCV_Fiches.Services;
 

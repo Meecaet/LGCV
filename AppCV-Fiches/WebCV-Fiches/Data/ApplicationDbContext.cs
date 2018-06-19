@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using WebCV_Fiches.Models;
+using WebCV_Fiches.Models.Admin;
 
 namespace WebCV_Fiches.Data
 {
@@ -24,5 +24,7 @@ namespace WebCV_Fiches.Data
         {
             base.OnConfiguring(optionsBuilder);
         }        
+
+        public DbSet<WebCV_Fiches.Models.Admin.ApplicationRole> ApplicationRole { get; set; }
     }
 }

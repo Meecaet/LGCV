@@ -11,7 +11,7 @@ namespace WebCV_Fiches.Data.Migrations
 
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            PasswordHasher<Models.ApplicationUser> hasher = new PasswordHasher<Models.ApplicationUser>();
+            PasswordHasher<Models.Admin.ApplicationUser> hasher = new PasswordHasher<Models.Admin.ApplicationUser>();
 
             migrationBuilder.InsertData("AspNetUsers", new string[]
             {
@@ -42,7 +42,7 @@ namespace WebCV_Fiches.Data.Migrations
                 null, //Lockout end:
                 "ADMIN@LGS.COM",
                 "ADMIN@LGS.COM",
-                 hasher.HashPassword(new Models.ApplicationUser(), "Bonjour01#"),
+                 hasher.HashPassword(new Models.Admin.ApplicationUser(), "Bonjour01#"),
                  "",
                  "",
                  Guid.NewGuid().ToString(),
