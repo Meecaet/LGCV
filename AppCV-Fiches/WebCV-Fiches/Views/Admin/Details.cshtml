@@ -1,0 +1,44 @@
+﻿@model WebCV_Fiches.Models.AdminViewModels.RoleAdministrationViewModel
+
+@{
+    ViewData["Title"] = "Détails";
+}
+
+<h2>Détails</h2>
+
+<div>
+    <h4>@Html.DisplayFor(model => model.Role.Name)</h4>
+    <hr />
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Role.Id">Mettre en jour</a> |
+    <a asp-action="Index">Retourner à la liste</a>
+</div>
+<div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    <p>Nom du Utilisateur</p>
+                </th>
+                <th>
+                    <p>Adresse Courriel</p>
+                </th>                
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Users)
+            {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>                
+            </tr>
+}
+        </tbody>
+    </table>
+
+</div>

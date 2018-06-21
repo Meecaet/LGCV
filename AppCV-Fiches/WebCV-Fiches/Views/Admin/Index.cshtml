@@ -1,0 +1,48 @@
+﻿@model WebCV_Fiches.Models.AdminViewModels.AdminViewModel
+
+@{
+    ViewData["Title"] = "Administration des Rôles";
+}
+
+<h2>Administration des Rôles</h2>
+
+<p>
+    <a asp-action="Create">Créer nouveau</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <p>Nom du Rôle</p>
+            </th>
+            <th>
+                <p>Mettre en jour</p>
+            </th>
+            <th>
+                <p>Supprimer</p>
+            </th>
+            <th>
+                <p>Détails</p>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Roles) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Mettre en jour</a>
+            </td>
+            <td>
+                <a asp-action="Delete" asp-route-id="@item.Id">Supprimer</a>
+            </td>
+            <td>                
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
