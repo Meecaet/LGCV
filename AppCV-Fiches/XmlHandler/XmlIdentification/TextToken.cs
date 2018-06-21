@@ -27,6 +27,7 @@ namespace XmlHandler.XmlIdentification
                 { "CONFÉRENCES", new string[] { "CONFÉRENCES", "AUTRES FORMATIONS" } },
                 { "PUBLICATIONS", new string[] { "PUBLICATIONS" } },
                 { "ASSOCIATIONS", new string[] { "ASSOCIATIONS" } },
+                { "TECHNOLOGIES", new string[] { "TECHNOLOGIES" } },
                 { "LANGUES PARLÉES, ÉCRITES", new string[] { "LANGUES PARLÉES, ÉCRITES" } }
             };
         }

@@ -5,7 +5,6 @@ using DAL_CV_Fiches.Repositories.Graph.Attributes;
 
 namespace DAL_CV_Fiches.Models.Graph
 {
-    [Serializable]
     public class Langue : GraphObject
     {
         public string Nom { get; set; }

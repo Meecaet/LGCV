@@ -4,9 +4,8 @@ using System.Text;
 
 namespace DAL_CV_Fiches.Models.Graph
 {
-    [Serializable]
-    public abstract class GraphObject
+    public class Secteur : GraphObject
     {
-        public string GraphKey { get; set; }
+        public string Description { get; set; }
     }
 }

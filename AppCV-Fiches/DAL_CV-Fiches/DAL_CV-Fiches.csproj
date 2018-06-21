@@ -2,7 +2,18 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
+    <RootNamespace>DAL_CV_Fiches</RootNamespace>
+    <AssemblyName>DAL_CV_Fiches</AssemblyName>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Models\Graph\Association.cs" />
+    <Compile Remove="Models\Graph\Certification.cs" />
+    <Compile Remove="Models\Graph\Conference.cs" />
+    <Compile Remove="Models\Graph\FormationAcademique.cs" />
+    <Compile Remove="Models\Graph\Perfectionnement.cs" />
+    <Compile Remove="Models\Graph\Publication.cs" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Azure.Graphs" Version="0.3.1-preview" />

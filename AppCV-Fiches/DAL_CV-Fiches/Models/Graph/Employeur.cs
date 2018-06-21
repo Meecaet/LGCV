@@ -7,20 +7,15 @@ using System.Threading.Tasks;
 
 namespace DAL_CV_Fiches.Models.Graph
 {
-    [Serializable]
     public class Employeur : GraphObject
     {
         public string Nom { get; set; }
-        public string Periode { get; set; }
+
+        [EdgeProperty]
+        public DateTime DateDebut { get; set; }
+        [EdgeProperty]
+        public DateTime DateFin { get; set; }
+        [EdgeProperty]
         public string DescriptionDuTravail { get; set; }
-
-        [Edge("Consults")]
-        public List<Client> Clients { get; set; }
-
-        public Employeur()
-        {
-            Clients = new List<Client>();
-        }        
-
     }
 }

@@ -1,4 +1,4 @@
-﻿using DAL_CV_Fiches.Models;
+﻿using DAL_CV_Fiches.Models.Graph;
 using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
 using System;

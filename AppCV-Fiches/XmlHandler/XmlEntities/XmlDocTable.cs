@@ -34,6 +34,13 @@ namespace XmlHandler.XmlEntities
             return listOfParagraphs;
         }
 
+        public int CountColumns()
+        {
+            List<XmlNode> listOfNodes = new List<XmlNode>();
+            var nodes = this.xmlNode.SelectNodes($".//w:tr[1]/w:tc", namespaceManager);           
+            return nodes.Count;
+        }        
+
         public List<string> GetAllLines()
         {
             List<string> listLines = new List<string>();

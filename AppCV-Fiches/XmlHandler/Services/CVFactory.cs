@@ -1,6 +1,11 @@
 ﻿using DAL_CV_Fiches.Models.Graph;
+using DAL_CV_Fiches.Repositories.Graph;
+using Microsoft.Azure.Documents;
+using Microsoft.Azure.Documents.Client;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,8 +21,37 @@ namespace XmlHandler.Services
     public class CVFactory
     {
         private CV currentCV;
+        private Conseiller conseiller;
 
-        public CV CreateCV(List<XmlNode> Nodes)
+        private Dictionary<string, int> DicMois;
+        private IList list;
+
+        DocumentClient documentClient;
+        DocumentCollection documentCollection;
+
+        public CVFactory()
+        {
+            DicMois = new Dictionary<string, int>()
+            {
+                {"JANVIER", 1 },
+                {"FEVRIER", 2 },
+                {"MARS", 3 },
+                {"AVRIL", 4 },
+                {"MAI", 5 },
+                {"JUIN", 6 },
+                {"JUILLET", 7 },
+                {"AOUT", 8 },
+                {"SEPTEMBRE", 9 },
+                {"OCTOBRE", 10 },
+                {"NOVEMBRE", 11 },
+                {"DECEMBRE", 12 }
+            };
+
+            documentClient = new DocumentClient(new Uri("https://localhost:8081"), "C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==");
+            documentCollection = documentClient.ReadDocumentCollectionAsync(UriFactory.CreateDocumentCollectionUri("Graphe_Essay", "graph_cv"), new RequestOptions { OfferThroughput = 400 }).Result;
+        }
+
+        public Conseiller CreateConseiller(List<XmlNode> Nodes)
         {
             SectionsExtractor CvSectionsExtractor = new SectionsExtractor();
             List<IXmlToken> matchTokens = new List<IXmlToken>();            
@@ -26,15 +60,15 @@ namespace XmlHandler.Services
             matchTokens.Add(FormatationToken.CreateFormatationToken(new KeyValuePair<string, string>("w:val", "Titre1")));
 
             List<CVSection> Sections = CvSectionsExtractor.GetCVSections(Nodes, matchTokens, "IDENTIFICATION");
-            currentCV = new CV();
 
-            AssemblerCV(Sections);
+            conseiller = new Conseiller();
+            AssemblerConseiller(Sections);
 
-            return currentCV;
+            return conseiller;
             
         }
 
-        private void AssemblerCV(List<CVSection> sections)
+        private void AssemblerConseiller(List<CVSection> sections)
         {
             CVSection aSection = sections.DefaultIfEmpty(null).FirstOrDefault(x => x.Identifiant == "IDENTIFICATION");
             if (aSection != null)
@@ -52,6 +86,10 @@ namespace XmlHandler.Services
             }
 
             sections.Where(x => x.Identifiant == "Titre1").ToList().ForEach(x => AssemblerEmployeur(x));
+
+            aSection = sections.DefaultIfEmpty(null).FirstOrDefault(x => x.Identifiant == "TECHNOLOGIES");
+            if (aSection != null)
+                AssamblerTechnologies(aSection);
 
             aSection = sections.DefaultIfEmpty(null).FirstOrDefault(x => x.Identifiant == "PERFECTIONNEMENT");
             if (aSection != null)
@@ -76,32 +114,48 @@ namespace XmlHandler.Services
 
         private void AssemblerBio(CVSection sectionIdentification)
         {
+            FonctionGraphRepository fonctionGraphRepository = new FonctionGraphRepository(documentClient, documentCollection);
             XmlDocNode identification = sectionIdentification.Nodes.First();
+
+            Utilisateur utilisateur = new Utilisateur();
+            Fonction fonction = new Fonction();
+            CV cv = new CV();
 
             if (identification is XmlDocTable)
             {
                 XmlDocParagraph paragraph = ((XmlDocTable)identification).GetParagraphsFromColumn(2).First();
                 string[] identLines = paragraph.GetLinesText();
 
-                currentCV.Nom = identLines[0];
-                currentCV.Titre = identLines[1];
-            }
+                utilisateur.Nom = identLines[0];
+                fonction = fonctionGraphRepository.CreateIfNotExists(new Dictionary<string, object> { { "Description", identLines[1] } });
+            }            
 
             string description = string.Empty;
             List<XmlDocParagraph> descriptionParagraphs = sectionIdentification.Nodes.Skip(2).Cast<XmlDocParagraph>().ToList();
             descriptionParagraphs.ForEach(x => description = string.Concat(description, x.GetParagraphText()));
 
-            currentCV.Description = description;
+            cv.ResumeExperience = description;
+            cv.Status = StatusCV.Nouveau;
+
+            conseiller.Utilisateur = utilisateur;
+            conseiller.Fonction = fonction;
+            conseiller.CVs.Add(cv);
         }
 
         private void AssemberDomainesDIntervetion(CVSection sectionDomaines)
         {
             XmlDocTable domainesTable = sectionDomaines.Nodes.Skip(1).Cast<XmlDocTable>().First();
             List<XmlDocParagraph> domainesParagraphs = domainesTable.GetParagraphsFromColumns();
+            DomaineDInterventionGraphRepository repo = new DomaineDInterventionGraphRepository(documentClient, documentCollection);
+            DomaineDIntervention domaine;
 
             domainesParagraphs.ForEach(x =>
             {
-                currentCV.DomainesDIntervention.Add(DomaineDIntervention.CreateDomaineDIntervetion(x.GetParagraphText()));
+
+                domaine = DomaineDIntervention.CreateDomaineDIntervetion(x.GetParagraphText());
+                domaine = repo.CreateIfNotExists(new Dictionary<string, object>{ { "Description", domaine.Description } });
+
+                conseiller.DomaineDInterventions.Add(domaine);
             });
         }
 
@@ -109,77 +163,211 @@ namespace XmlHandler.Services
         {
             XmlDocTable tableFormation = (XmlDocTable)sectionFormation.Nodes.First(x => x is XmlDocTable);
             List<XmlDocParagraph> formationParagraphs = tableFormation.GetParagraphsFromColumn(2).Skip(1).ToList();
+            FormationGraphRepository formationGraphRepository = new FormationGraphRepository(documentClient, documentCollection);
+            GenreGraphRepository genreGraphRepository = new GenreGraphRepository(documentClient, documentCollection);
+
             formationParagraphs.ForEach(x =>
             {
+                Formation formation;
+                Genre genre = new Genre();
+
+                genre.Descriminator = "Formation";
+                genre.Description = "Certification";
+
+                genre = genreGraphRepository.CreateIfNotExists(new Dictionary<string, object> { { "Description", genre.Description }, { "Descriminator", genre.Descriminator } });
+
                 string text = x.GetParagraphText();
 
                 if (!string.IsNullOrEmpty(text))
-                    currentCV.Certifications.Add(Certification.CreateCertification(text));
+                {
+                    formation = formationGraphRepository.CreateIfNotExists(new Dictionary<string, object> { { "Description", text } });
+                    formation.Type = genre;
+
+                    conseiller.Formations.Add(formation);
+                }
+
             });
         }
 
         private void AssemblerConferences(CVSection sectionConferences)
         {
+            FormationGraphRepository formationGraphRepository = new FormationGraphRepository(documentClient, documentCollection);
+            GenreGraphRepository genreGraphRepository = new GenreGraphRepository(documentClient, documentCollection);
+
+            Genre genre;
+            Formation formation;
+
+            genre = genreGraphRepository.CreateIfNotExists(new Dictionary<string, object> { { "Description", "Conference" }, { "Descriminator", "Formation" } });
+
             if (sectionConferences.Nodes.Any(x => x is XmlDocTable))
             {
                 List<string> conferences = ((XmlDocTable)sectionConferences.Nodes.First(x => x is XmlDocTable)).GetAllLines();
-                conferences.ForEach(x => currentCV.Conferences.Add(Conference.CreateConference(x)));
+                conferences.ForEach(x =>
+                {                    
+                    formation = formationGraphRepository.CreateIfNotExists(new Dictionary<string, object> { { "Description", x } });
+                    formation.Type = genre;
+
+                    conseiller.Formations.Add(formation);
+                });
             }
             else
             {
                 List<XmlDocParagraph> conferencesParagraphs = sectionConferences.Nodes.Skip(1).Cast<XmlDocParagraph>().ToList();
-                conferencesParagraphs.ForEach(x => currentCV.Conferences.Add(Conference.CreateConference(x.GetParagraphText())));
+                conferencesParagraphs.ForEach(x => 
+                {
+                    formation = formationGraphRepository.CreateIfNotExists(new Dictionary<string, object> { { "Description", x.GetParagraphText() } });
+                    formation.Type = genre;
+
+                    conseiller.Formations.Add(formation);
+                });
             }
         }
 
         private void AssemblerAssociations(CVSection sectionAssociations)
         {
+            OrdreProfessionalGraphRepository ordreProfessionalGraphRepository = new OrdreProfessionalGraphRepository(documentClient, documentCollection);
+
             List<XmlDocParagraph> associationsParagraphs = sectionAssociations.Nodes.Skip(1).Cast<XmlDocParagraph>().ToList();
-            associationsParagraphs.ForEach(x => currentCV.Associations.Add(Association.CreateAssociation(x.GetParagraphText())));
+            associationsParagraphs.ForEach(x => 
+            {
+                OrdreProfessional ordre = new OrdreProfessional();
+                ordre.Nom = x.GetParagraphText();
+                ordre = ordreProfessionalGraphRepository.CreateIfNotExists(new Dictionary<string, object> { { "Nom", ordre.Nom } });
+
+                conseiller.Associations.Add(ordre);
+            });
         }
 
         private void AssemblerPublications(CVSection sectionPublications)
         {
+            GenreGraphRepository genreGraphRepository = new GenreGraphRepository(documentClient, documentCollection);
+            FormationGraphRepository formationGraphRepository = new FormationGraphRepository(documentClient, documentCollection);
+
+            Genre genre = new Genre();
+            genre.Descriminator = "Formation";
+            genre.Description = "Publication";
+
+            genre = genreGraphRepository.CreateIfNotExists(new Dictionary<string, object> { { "Description", genre.Description }, { "Descriminator", genre.Descriminator } });
+
             List<XmlDocParagraph> publicationsParagraphs = sectionPublications.Nodes.Skip(1).Cast<XmlDocParagraph>().ToList();
-            publicationsParagraphs.ForEach(x => currentCV.Publications.Add(Publication.CreatePublication(x.GetParagraphText())));
+            publicationsParagraphs.ForEach(x => 
+            {
+                Formation formation;
+                
+                formation = formationGraphRepository.CreateIfNotExists(new Dictionary<string, object> { { "Description", x.GetParagraphText() } });
+                formation.Type = genre;
+
+                conseiller.Formations.Add(formation);
+            });
         }
 
         private void AssamblerFormations(CVSection sectionFormation)
         {
+            FormationScolaireGraphRepository formationScolaireGraphRepository = new FormationScolaireGraphRepository(documentClient, documentCollection);
+            InstituitionGraphRepository instituitionGraphRepository = new InstituitionGraphRepository(documentClient, documentCollection);
+
+            string nomInstituition, nomDiplome;
+
             XmlDocTable tableFormation = (XmlDocTable)sectionFormation.Nodes.First(x => x is XmlDocTable);
             List<XmlDocParagraph> formationParagraphs = tableFormation.GetParagraphsFromColumn(1).Skip(1).ToList();
             formationParagraphs.RemoveAll(x => string.IsNullOrEmpty(x.GetParagraphText()));
 
             for (int i = 0; i < formationParagraphs.Count; i = i + 2)
             {
-                FormationAcademique item = new FormationAcademique();
-                item.Titre = formationParagraphs[i].GetParagraphText();
-                item.Instituition = formationParagraphs[i + 1].GetParagraphText();
+                nomDiplome = formationParagraphs[i].GetParagraphText();
+                nomInstituition = formationParagraphs[i + 1].GetParagraphText();
 
-                if (string.IsNullOrEmpty(item.Titre) || string.IsNullOrEmpty(item.Instituition))
+                if (string.IsNullOrEmpty(nomDiplome) || string.IsNullOrEmpty(nomInstituition))
                     continue;
 
-                currentCV.FormationsAcademique.Add(item);
+                FormationScolaire item;
+                Instituition inst;
+
+                inst = instituitionGraphRepository.CreateIfNotExists(new Dictionary<string, object> { { "Nom", nomInstituition } });               
+
+                item = formationScolaireGraphRepository.CreateIfNotExists(new Dictionary<string, object> { { "Diplome", nomDiplome }, { "Niveau", NiveauScolarite.Nule } });
+                item.Ecole = inst;
+
+                conseiller.FormationsScolaires.Add(item);
             }
+        }
+
+        private void AssamblerTechnologies(CVSection sectionTechnologies)
+        {
+            TechnologieGraphRepository technologieGraphRepository = new TechnologieGraphRepository(documentClient, documentCollection);
+            CategorieDeTechnologieGraphRepository categorieDeTechnologieGraphRepository = new CategorieDeTechnologieGraphRepository(documentClient, documentCollection);
+
+            XmlDocTable tableTechnologies = (XmlDocTable)sectionTechnologies.Nodes.First(x => x is XmlDocTable);
+            List<XmlDocParagraph> lineParagraphsColumn1 = new List<XmlDocParagraph>(), lineParagraphsColumn2 = new List<XmlDocParagraph>();
+            List<KeyValuePair<string, string>> listOfTech = new List<KeyValuePair<string, string>>();
+
+            Technologie technologie;
+            CategorieDeTechnologie categorie = null;
+            string techNom, mois;
+
+            for (int i = 1; i <= tableTechnologies.CountColumns(); i = i + 3)
+            {
+                lineParagraphsColumn1 = tableTechnologies.GetParagraphsFromColumn(i);
+                lineParagraphsColumn2 = tableTechnologies.GetParagraphsFromColumn(i + 1);
+
+                for (int j = 1; j < lineParagraphsColumn1.Count; j++)
+                {
+                    if (string.IsNullOrEmpty(lineParagraphsColumn1[j].GetParagraphText()))
+                        continue;
+
+                    if (string.IsNullOrEmpty(lineParagraphsColumn2[j].GetParagraphText()))
+                    {
+                        categorie = categorieDeTechnologieGraphRepository.CreateIfNotExists(new Dictionary<string, object> { { "Nom", lineParagraphsColumn1[j].GetParagraphText().Replace(":", "").Trim() } });
+                    }
+                    else
+                    {
+                        techNom = lineParagraphsColumn1[j].GetParagraphText();
+                        mois = lineParagraphsColumn2[j].GetParagraphText();
+
+                        technologie = technologieGraphRepository.CreateIfNotExists(new Dictionary<string, object> { { "Nom", techNom } });
+                        technologie.MoisDExperience = Convert.ToInt32(mois);
+
+                        if (categorie != null)
+                            technologie.Categorie = categorie;
+
+                        conseiller.Technologies.Add(technologie);
+                    }
+                }
+            }
+
         }
 
         private void AssemblerEmployeur(CVSection employeurSection)
         {
             XmlDocParagraph emplDesc = (XmlDocParagraph)employeurSection.Nodes.First(x => x is XmlDocParagraph);
             List<XmlDocParagraph> jobDescription = new List<XmlDocParagraph>();
+            EmployeurGraphRepository employeurGraphRepository = new EmployeurGraphRepository(documentClient, documentCollection);
 
             Employeur emp = new Employeur();
-
-            string[] info = emplDesc.GetLinesWithTab();
+            string periode = string.Empty;
+            string[] info = emplDesc.GetLinesWithTab(), periodeSplited;
 
             if (info.Length > 1)
             {
-                emp.Periode = info[0];
-                emp.Nom = info[1];
+                emp = employeurGraphRepository.CreateIfNotExists(new Dictionary<string, object> { { "Nom", info[1] } });
+
+                periode = info[0];
+                periodeSplited = periode.Split("-");
+
+                if (periodeSplited.Length > 1)
+                {
+                    emp.DateDebut = DateTime.Parse($"{periodeSplited[0].Trim()}-01-01");
+                    emp.DateFin = DateTime.Parse($"{periodeSplited[1].Trim()}-12-31");
+                }
+                else
+                {
+                    emp.DateDebut = DateTime.Parse($"{periodeSplited[0].Trim()}-01-01");
+                    emp.DateFin = DateTime.Parse($"{periodeSplited[0].Trim()}-12-31");
+                }
             }
             else
             {
-                emp.Nom = info[0];
+                emp = employeurGraphRepository.CreateIfNotExists(new Dictionary<string, object> { { "Nom", info[0] } });
             }
 
             jobDescription.AddRange(employeurSection.Nodes.Skip(1).TakeWhile(x => x is XmlDocParagraph).Cast<XmlDocParagraph>());
@@ -200,11 +388,12 @@ namespace XmlHandler.Services
             else
                 emp.DescriptionDuTravail = string.Empty;
 
-            emp.Clients.AddRange(AssemblerClients(employeurSection));
-            currentCV.Employeurs.Add(emp);
+            AssemblerClients(employeurSection, emp);
+            
+            conseiller.Employeurs.Add(emp);
         }
 
-        private List<Client> AssemblerClients(CVSection employeurSection)
+        private List<Client> AssemblerClients(CVSection employeurSection, Employeur emp)
         {
             List<Client> clients = new List<Client>();
             List<CVSection> clientSections = new List<CVSection>();
@@ -216,25 +405,38 @@ namespace XmlHandler.Services
 
             clientSections.ForEach(x =>
             {
-                Client client = AssemblerClient(x);
+                Client client = AssemblerClient(x, emp);
                 clients.Add(client);
             });
             
             return clients;
         }
 
-        private Client AssemblerClient(CVSection clientSection)
+        private Client AssemblerClient(CVSection clientSection, Employeur emp)
         {
             Client client = new Client();
+            List<Mandat> mandats = new List<Mandat>();
+
             XmlDocParagraph emplDesc = (XmlDocParagraph)clientSection.Nodes.DefaultIfEmpty(null).FirstOrDefault(x => x is XmlDocParagraph);
+
+            ClientGraphRepository clientGraphRepository = new ClientGraphRepository(documentClient, documentCollection);
 
             if (emplDesc != null)
             {
                 string[] info = emplDesc.GetLinesWithTab();
                 client.Nom = string.Join(" ", info);
+                client = clientGraphRepository.CreateIfNotExists(new Dictionary<string, object> { { "Nom", client.Nom } });
             }
 
-            client.Mandats.AddRange(AssemblerMandats(clientSection));
+            mandats.AddRange(AssemblerMandats(clientSection));
+            mandats.ForEach(x => 
+            {
+                x.Projet.Client = client;
+                x.Projet.SocieteDeConseil = emp;
+            });
+
+            conseiller.Mandats.AddRange(mandats);
+
             return client;
         }
 
@@ -253,6 +455,7 @@ namespace XmlHandler.Services
 
                 mandatsNodes.RemoveAll(x => mandatNodes.Contains(x));
                 Mandat mandat = AssemblerMandat(mandatNodes);
+
                 mandats.Add(mandat);
 
                 mandatNodes.Clear();
@@ -264,7 +467,18 @@ namespace XmlHandler.Services
 
         private Mandat AssemblerMandat(List<XmlDocNode> mandatNodes)
         {
+            ProjetGraphRepository projetGraphRepository = new ProjetGraphRepository(documentClient, documentCollection);
+            FonctionGraphRepository fonctionGraphRepository = new FonctionGraphRepository(documentClient, documentCollection);
+            TechnologieGraphRepository technologieGraphRepository = new TechnologieGraphRepository(documentClient, documentCollection);
+
             Mandat mandat = new Mandat();
+            Projet projet = new Projet();
+            Technologie technologie = null;
+
+            int parseInt = 0, mois, annee;
+            string concatenatedString, envergureText, environnement, tech;
+            string[] periode, debut, fin, splitedString, technologies;
+
             List<XmlDocParagraph> infoParagraphs = new List<XmlDocParagraph>(), infoParagraphsSecondColumn = new List<XmlDocParagraph>();
 
             XmlDocTable infoTable = (XmlDocTable)mandatNodes.First(x => x is XmlDocTable);
@@ -273,41 +487,127 @@ namespace XmlHandler.Services
 
             for (int i = 0; i < infoParagraphs.Count; i++)
             {
+                concatenatedString = string.Empty;
+
                 if (infoParagraphs[i].GetParagraphText().Contains("Projet"))
-                    mandat.Projet = infoParagraphsSecondColumn[i].GetParagraphText();
+                    projet.Nom = infoParagraphsSecondColumn[i].GetParagraphText();
 
                 if (infoParagraphs[i].GetParagraphText().Contains("Mandat"))
                     mandat.Numero = infoParagraphsSecondColumn[i].GetParagraphText();
 
                 if (infoParagraphs[i].GetParagraphText().Contains("Envergure"))
-                    mandat.Envenrgure = infoParagraphsSecondColumn[i].GetParagraphText();
+                {
+                    envergureText = infoParagraphsSecondColumn[i].GetParagraphText().Trim();
+                    if(envergureText.Any(x => char.IsDigit(x)))
+                        projet.Envergure = int.Parse(string.Join("", envergureText.Where(x => char.IsDigit(x)).ToArray()));
+                }
+
+                projet = projetGraphRepository.CreateIfNotExists(new Dictionary<string, object> { { "Nom", projet.Nom }, { "Envergure", projet.Envergure } });
 
                 if (infoParagraphs[i].GetParagraphText().Contains("Fonction"))
-                    mandat.Fonction = infoParagraphsSecondColumn[i].GetParagraphText();
+                {
+                    Fonction fonction;
+                    fonction = fonctionGraphRepository.CreateIfNotExists(new Dictionary<string, object> { { "Description", infoParagraphsSecondColumn[i].GetParagraphText() } });
+
+                    mandat.Fonction = fonction;
+                }
 
                 if (infoParagraphs[i].GetParagraphText().Contains("Période"))
-                    mandat.Periode = infoParagraphsSecondColumn[i].GetParagraphText();
+                {
+                    periode = infoParagraphsSecondColumn[i].GetParagraphText().Split("à");
+                    if (periode.Length > 1)
+                    {
+                        debut = periode[0].Trim().Split(" ").Where(x => !string.IsNullOrEmpty(x)).ToArray();
+                        if (debut.Length > 1)
+                        {
+                            mois = DicMois[RemoveAcentuation(debut[0].Trim().ToUpper())];
+                            annee = int.Parse(debut[1].Trim());
+                            mandat.DateDebut = DateTime.Parse($"{annee}-{mois}-01");
+                        }
+
+                        if (periode[1].Contains("ce jour"))
+                            mandat.DateFin = DateTime.MinValue;
+                        else {
+                            fin = periode[1].Trim().Split(" ").Where(x => !string.IsNullOrEmpty(x)).ToArray();
+                            if (fin.Length > 1)
+                            {
+                                mois = DicMois[RemoveAcentuation(fin[0].Trim().ToUpper())];
+                                annee = int.Parse(fin[1].Trim());
+                                mandat.DateFin = DateTime.Parse($"{annee}-{mois}-01");
+                            }
+                        }                        
+                    }
+                }
 
                 if (infoParagraphs[i].GetParagraphText().Contains("Efforts"))
-                    mandat.Efforts = infoParagraphsSecondColumn[i].GetParagraphText();
+                {
+                    splitedString = infoParagraphsSecondColumn[i].GetParagraphText().Split(" ");
+                    parseInt = 0;
+
+                    if (int.TryParse(splitedString[0], out parseInt))
+                        mandat.Efforts = parseInt;
+                }
+                    
 
                 if (infoParagraphs[i].GetParagraphText().Contains("Référence"))
-                    mandat.Reference = infoParagraphsSecondColumn[i].GetParagraphText();
+                    projet.Reference = infoParagraphsSecondColumn[i].GetParagraphText();
             }
+
 
             infoParagraphsSecondColumn.Clear();
             infoParagraphsSecondColumn = null;
 
             infoParagraphs.Clear();
             infoParagraphs = mandatNodes.SkipWhile(x => x is XmlDocTable).Cast<XmlDocParagraph>().ToList();
-            infoParagraphs.ForEach(x => mandat.Description += x.GetParagraphText());
+            infoParagraphs.ForEach(x =>
+            {
+                if (x.GetParagraphText().ToUpper().Contains("ENVIRONNEMENT TECHNOLOGIQUE"))
+                {
+                    environnement = x.GetParagraphText().ToUpper().Replace("ENVIRONNEMENT TECHNOLOGIQUE", "").Trim();
+
+                    if (environnement.First().Equals(':'))
+                        environnement = environnement.Substring(1);
+
+                    if (environnement.Last().Equals('.'))
+                        environnement = environnement.Substring(0, environnement.Length - 1);
+
+                    technologies = environnement.Split(",");
+
+                    for (int i = 0; i < technologies.Length; i++)
+                    {
+                        tech = technologies[i].Trim();
+                        technologie = technologieGraphRepository.CreateIfNotExists(new Dictionary<string, object> { { "Nom", tech } });
+
+                        if (technologie != null)
+                            projet.Technologies.Add(technologie);
+                    }                  
+                }
+                else
+                {
+                    projet.Description += x.GetParagraphText();
+                }
+
+            });
+
+            mandat.Projet = projet;
 
             return mandat;
         }
 
         private void AssemblerPerfectionnement(CVSection sectionPerfectionnement)
         {
-            List<Perfectionnement> perfectionnements = new List<Perfectionnement>();
+            GenreGraphRepository genreGraphRepository = new GenreGraphRepository(documentClient, documentCollection);
+            FormationGraphRepository formationGraphRepository = new FormationGraphRepository(documentClient, documentCollection);
+
+
+            Genre genre = new Genre();
+            genre.Descriminator = "Formation";
+            genre.Description = "Perfectionnement";
+
+            genre = genreGraphRepository.CreateIfNotExists(new Dictionary<string, object> { { "Description", genre.Description }, { "Descriminator", genre.Descriminator } });
+
+            int annee = 0;
+
             XmlDocTable perfcTable = (XmlDocTable)sectionPerfectionnement.Nodes.First(x => x is XmlDocTable);
             List<XmlDocParagraph> firstColumn = new List<XmlDocParagraph>(), secondColumn = new List<XmlDocParagraph>();
 
@@ -316,18 +616,23 @@ namespace XmlHandler.Services
 
             for (int i = 0; i < firstColumn.Count; i++)
             {
-                Perfectionnement Perfc = new Perfectionnement();
-                Perfc.An = firstColumn[i].GetParagraphText();
-                Perfc.Description = secondColumn[i].GetParagraphText();
+                Formation formation;                
+                formation = formationGraphRepository.CreateIfNotExists(new Dictionary<string, object> { { "Description", secondColumn[i].GetParagraphText() } });
 
-                perfectionnements.Add(Perfc);
+                if (int.TryParse(firstColumn[i].GetParagraphText(), out annee))
+                    formation.AnAcquisition = annee;
+
+                formation.Type = genre;
+
+                conseiller.Formations.Add(formation);
+                
             }
-
-            currentCV.Perfectionnements.AddRange(perfectionnements);
         }
 
         private void AssemblerLangues(CVSection langueSection)
         {
+            LangueGraphRepository langueGraphRepository = new LangueGraphRepository(documentClient, documentCollection);
+
             List<Langue> langues = new List<Langue>();
             List<CVSection> langueSections;
             
@@ -341,6 +646,7 @@ namespace XmlHandler.Services
                 XmlDocParagraph langueNom = (XmlDocParagraph)section.Nodes.First(x => x is XmlDocParagraph);
 
                 curLangue.Nom = langueNom.GetParagraphText();
+                curLangue = langueGraphRepository.CreateIfNotExists(new Dictionary<string, object> { { "Nom", curLangue.Nom } });
 
                 if (section.Nodes.Skip(1).Count() > 0)
                 {
@@ -366,7 +672,24 @@ namespace XmlHandler.Services
                 langues.Add(curLangue);
             }
 
-            currentCV.Langues.AddRange(langues);
+            conseiller.Langues.AddRange(langues);
+        }
+
+        public string RemoveAcentuation(string text)
+        {
+            var normalizedString = text.Normalize(NormalizationForm.FormD);
+            var stringBuilder = new StringBuilder();
+
+            foreach (var c in normalizedString)
+            {
+                var unicodeCategory = CharUnicodeInfo.GetUnicodeCategory(c);
+                if (unicodeCategory != UnicodeCategory.NonSpacingMark)
+                {
+                    stringBuilder.Append(c);
+                }
+            }
+
+            return stringBuilder.ToString().Normalize(NormalizationForm.FormC);
         }
     }
 }

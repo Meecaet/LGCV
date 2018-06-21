@@ -1,4 +1,6 @@
-﻿//using CVModel.Domain;
+﻿#define DEBUG
+
+//using CVModel.Domain;
 using DAL_CV_Fiches.Models.Graph;
 using DAL_CV_Fiches.Repositories.Graph;
 using System;
@@ -18,6 +20,9 @@ namespace XmlHandler.Generation
 {
     public class CVGenerator
     {
+        private ConseillerGraphRepository conseillerRepo;
+
+
         /// <summary>
         /// Fait l'extraction et la conversion d'un CV LGS vers un fichier en format xml depuis un dossier avec des fichiers docx
         /// </summary>
@@ -30,6 +35,8 @@ namespace XmlHandler.Generation
             FileInfo[] filesInDirectory;
             DocxExtractor docxExtractor = new DocxExtractor();
 
+            conseillerRepo = new ConseillerGraphRepository("Graphe_Essay", "graph_cv");
+
             directoryInfo = new DirectoryInfo(path);
 
             if (directoryInfo.Exists)
@@ -39,6 +46,10 @@ namespace XmlHandler.Generation
 
                 if (filesInDirectory.Length > 0)
                 {
+#if DEBUG
+                    conseillerRepo.DeleteAllDocs();
+#endif
+
                     foreach (FileInfo file in filesInDirectory)
                     {
                         //Nous avons besoin d'un ficher dont le contenu est le text du docx (.\\word\\document.xml)
@@ -64,24 +75,20 @@ namespace XmlHandler.Generation
             List<XmlNode> nodes = CvSectionsExtractor.GetCVNodes(documentXmlPath);
 
             CVFactory cVFactory = new CVFactory();
-            CV newCv = cVFactory.CreateCV(nodes);
+            Conseiller newConseiller = cVFactory.CreateConseiller(nodes);
 
-            XmlSerializer xmlSerializer = new XmlSerializer(typeof(CV));
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(Conseiller));
             using (Stream fileStream = new FileStream(outputPath, FileMode.Create, FileAccess.Write, FileShare.None))
             {
-                xmlSerializer.Serialize(fileStream, newCv);
+                xmlSerializer.Serialize(fileStream, newConseiller);
             }
 
-            PersistCV(newCv);
+            PersistCV(newConseiller);
         }
 
-        private void PersistCV(CV cv)
-        {
-            CVGraphRepository cvRepo = new CVGraphRepository("Graphe_Essay", "graph_cv");
-
-            cvRepo.DeleteAllDocs();
-
-            cvRepo.Add(cv);
+        private void PersistCV(Conseiller conseiller)
+        {        
+            conseillerRepo.Add(conseiller);
         }
     }
 }
