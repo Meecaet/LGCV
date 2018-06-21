@@ -33,3 +33,54 @@
         display: none;
     }
 }
+
+.lgs-label {
+    background-color: #6c4796;
+    color: white;
+    font-size: medium;
+    height: 100%;
+    float: left;
+    clear: left;
+    padding: 2px 4px 0px 4px;
+    border-top-right-radius: 10px;
+    overflow: hidden;
+    position: relative;
+}
+.lgs-group {
+    overflow: hidden;
+    width: 100%;
+    padding: 10px;
+}
+
+.lgs-floatRightButtons {
+    float: right;
+}
+.lgs-floatLeftButtons {
+    float: left;
+    overflow: hidden;
+    position: relative;
+}
+    .lgs-floatRightButtons button i, .lgs-floatLeftButtons button i, .lgs-Buttons button i {
+        font-size: 22px;
+        color: #6c4796;
+        margin-bottom: 0px;
+    }
+    .lgs-floatLeftButtons button {
+        margin-bottom: 0px;
+        padding-top: 0px;
+        padding-bottom: 0px;
+        margin-bottom: 0px;
+    }
+.lgs-backgroundColor {
+    background-color: #6c4796;
+    color:white;
+}
+.lgsTextTitle {
+    color: #6c4796;
+    font-size: 18px;
+}
+
+.form-control {
+    margin-top: 10px;
+    margin-right: 10px;
+}
