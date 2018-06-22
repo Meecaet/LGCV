@@ -1,9 +1,660 @@
 <?xml version="1.0"?>
-<CV xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <Nom>PRENON NON </Nom>
-  <Titre>NON</Titre>
-  <Description>Donec ullamcorper imperdiet felis. Etiam id urna tellus. Fusce aliquet est ac quam pharetra vestibulum. Sed aliquam ipsum nec tempus facilisis. Nulla consequat turpis sed nunc mollis, blandit congue libero accumsan. Ut laoreet quis sapien sit amet aliquam. Integer consequat nulla augue, a lobortis elit tempor et. Cras ullamcorper nibh sit amet elit condimentum, in egestas sem semper. Duis nec purus nibh. In eros lacus, scelerisque at nisi eget, maximus mollis justo. Suspendisse rutrum ligula erat, ac feugiat dolor blandit et. Maecenas magna mauris, porta eget neque vitae, ultricies ornare leo. Nulla sit amet odio ac enim tempus ullamcorper eu sit amet eros. Phasellus quis ipsum eros. Praesent lacus libero, rhoncus sit amet luctus id, mattis et urna.In ullamcorper ut neque a tempor. Sed semper urna nec finibus elementum. Donec hendrerit quam vitae lacinia laoreet. Donec erat dolor, lacinia in sodales sit amet, rhoncus ut augue. Nam sed feugiat risus, non ornare massa. Nulla laoreet velit non aliquet semper. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nulla laoreet elit eu gravida cursus. Cras auctor mauris at finibus fermentum. Integer convallis eget lectus eu condimentum. Aliquam eleifend justo quis leo dignissim convallis. Quisque et rutrum nibh, luctus porta ligula.Curabitur suscipit nulla id orci sagittis laoreet. Nunc in risus dolor. Nullam eros purus, laoreet in elit sagittis, facilisis tristique est. Maecenas sollicitudin consectetur nisl, vitae feugiat ante egestas in. Suspendisse potenti. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec ultricies lobortis sagittis. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</Description>
-  <DomainesDIntervention>
+<Conseiller xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Utilisateur>
+    <NumeroEmploye>0</NumeroEmploye>
+    <Nom>PRENON NON NON </Nom>
+  </Utilisateur>
+  <DateEmbauche>0001-01-01T00:00:00</DateEmbauche>
+  <DateDepart>0001-01-01T00:00:00</DateDepart>
+  <FormationsScolaires>
+    <FormationScolaire>
+      <Diplome>Titre (An du titre)</Diplome>
+      <DateConclusion>0001-01-01T00:00:00</DateConclusion>
+      <Niveau>Nule</Niveau>
+      <EstEquivalenceObtenu>false</EstEquivalenceObtenu>
+      <EstPrincipal>false</EstPrincipal>
+      <Ecole>
+        <Nom>Instituition</Nom>
+      </Ecole>
+    </FormationScolaire>
+    <FormationScolaire>
+      <Diplome>Titre (An du titre)</Diplome>
+      <DateConclusion>0001-01-01T00:00:00</DateConclusion>
+      <Niveau>Nule</Niveau>
+      <EstEquivalenceObtenu>false</EstEquivalenceObtenu>
+      <EstPrincipal>false</EstPrincipal>
+      <Ecole>
+        <Nom>Instituition</Nom>
+      </Ecole>
+    </FormationScolaire>
+  </FormationsScolaires>
+  <Associations>
+    <OrdreProfessional>
+      <Nom>Lorem ipsum dolor sit amet, consectetur adipiscing elit</Nom>
+    </OrdreProfessional>
+  </Associations>
+  <Formations>
+    <Formation>
+      <Description>Certifiacation 1</Description>
+      <AnAcquisition>0</AnAcquisition>
+      <Type>
+        <Description>Certification</Description>
+        <Descriminator>Formation</Descriminator>
+      </Type>
+    </Formation>
+    <Formation>
+      <Description>Certification 2</Description>
+      <AnAcquisition>0</AnAcquisition>
+      <Type>
+        <Description>Certification</Description>
+        <Descriminator>Formation</Descriminator>
+      </Type>
+    </Formation>
+    <Formation>
+      <Description>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed convallis iaculis libero eu egestas. Duis consectetur libero fringilla lobortis porttitor. Cras interdum et enim at interdum. Maecenas scelerisque eu arcu eget porta. Integer sollicitudin et metus a dictum. Praesent id lectus vitae neque ullamcorper porta id a nulla.</Description>
+      <AnAcquisition>2017</AnAcquisition>
+      <Type>
+        <Description>Perfectionnement</Description>
+        <Descriminator>Formation</Descriminator>
+      </Type>
+    </Formation>
+    <Formation>
+      <Description>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed convallis iaculis libero eu egestas. Duis consectetur libero fringilla lobortis porttitor. Cras interdum et enim at interdum. Maecenas scelerisque eu arcu eget porta. Integer sollicitudin et metus a dictum. Praesent id lectus vitae neque ullamcorper porta id a nulla.</Description>
+      <AnAcquisition>2016</AnAcquisition>
+      <Type>
+        <Description>Perfectionnement</Description>
+        <Descriminator>Formation</Descriminator>
+      </Type>
+    </Formation>
+    <Formation>
+      <Description>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed convallis iaculis libero eu egestas. Duis consectetur libero fringilla lobortis porttitor. Cras interdum et enim at interdum. Maecenas scelerisque eu arcu eget porta. Integer sollicitudin et metus a dictum. Praesent id lectus vitae neque ullamcorper porta id a nulla.</Description>
+      <AnAcquisition>2016</AnAcquisition>
+      <Type>
+        <Description>Perfectionnement</Description>
+        <Descriminator>Formation</Descriminator>
+      </Type>
+    </Formation>
+    <Formation>
+      <Description>Conf1.</Description>
+      <AnAcquisition>0</AnAcquisition>
+      <Type>
+        <Description>Conference</Description>
+        <Descriminator>Formation</Descriminator>
+      </Type>
+    </Formation>
+    <Formation>
+      <Description>Conf2.</Description>
+      <AnAcquisition>0</AnAcquisition>
+      <Type>
+        <Description>Conference</Description>
+        <Descriminator>Formation</Descriminator>
+      </Type>
+    </Formation>
+    <Formation>
+      <Description>Conf3.</Description>
+      <AnAcquisition>0</AnAcquisition>
+      <Type>
+        <Description>Conference</Description>
+        <Descriminator>Formation</Descriminator>
+      </Type>
+    </Formation>
+    <Formation>
+      <Description>Lorem ipsum dolor sit amet, consectetur adipiscing elit</Description>
+      <AnAcquisition>0</AnAcquisition>
+      <Type>
+        <Description>Publication</Description>
+        <Descriminator>Formation</Descriminator>
+      </Type>
+    </Formation>
+  </Formations>
+  <Fonction>
+    <Description>Titre1 Titre2</Description>
+  </Fonction>
+  <Mandats>
+    <Mandat>
+      <Projet>
+        <SocieteDeConseil>
+          <Nom>employeur1</Nom>
+          <DateDebut>2013-01-01T00:00:00</DateDebut>
+          <DateFin>2018-12-31T00:00:00</DateFin>
+        </SocieteDeConseil>
+        <Client>
+          <Numero>0</Numero>
+          <Nom>Client1</Nom>
+          <Code>0</Code>
+        </Client>
+        <Nom>Nom du projet 1</Nom>
+        <Envergure>9999</Envergure>
+        <Reference>Quelqu’un (999 999-9999)</Reference>
+        <Description>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed convallis iaculis libero eu egestas. Duis consectetur libero fringilla lobortis porttitor. Cras interdum et enim at interdum. Maecenas scelerisque eu arcu eget porta. Integer sollicitudin et metus a dictum. Praesent id lectus vitae neque ullamcorper porta id a nulla. Sed ex augue, venenatis nec dui in, interdum accumsan risus. Duis volutpat, ipsum ut dapibus iaculis, magna mi accumsan ante, venenatis condimentum ante leo non risus. Fusce accumsan nec mauris vitae lobortis.M. Employé a effectué les tâches suivantes :Lorem ipsum dolor sit amet, consectetur adipiscing elit 1.Lorem ipsum dolor sit amet, consectetur adipiscing elit 2.Lorem ipsum dolor sit amet, consectetur adipiscing elit 3.Lorem ipsum dolor sit amet, consectetur adipiscing elit 4.Lorem ipsum dolor sit amet, consectetur adipiscing elit 5.</Description>
+        <DateDebut>0001-01-01T00:00:00</DateDebut>
+        <DateFin>0001-01-01T00:00:00</DateFin>
+        <HeuresParSemaine>0</HeuresParSemaine>
+        <Technologies>
+          <Technologie>
+            <Nom>TECH1</Nom>
+            <MoisDExperience>0</MoisDExperience>
+          </Technologie>
+          <Technologie>
+            <Nom>TECH2</Nom>
+            <MoisDExperience>0</MoisDExperience>
+          </Technologie>
+          <Technologie>
+            <Nom>TECH3</Nom>
+            <MoisDExperience>0</MoisDExperience>
+          </Technologie>
+          <Technologie>
+            <Nom>TECH4</Nom>
+            <MoisDExperience>0</MoisDExperience>
+          </Technologie>
+          <Technologie>
+            <Nom>TECH5</Nom>
+            <MoisDExperience>0</MoisDExperience>
+          </Technologie>
+          <Technologie>
+            <Nom>TECH6</Nom>
+            <MoisDExperience>0</MoisDExperience>
+          </Technologie>
+          <Technologie>
+            <Nom>TECH7</Nom>
+            <MoisDExperience>0</MoisDExperience>
+          </Technologie>
+        </Technologies>
+      </Projet>
+      <Numero>999</Numero>
+      <Fonction>
+        <Description>Fonction</Description>
+      </Fonction>
+      <DateDebut>2017-01-01T00:00:00</DateDebut>
+      <DateFin>2018-12-01T00:00:00</DateFin>
+      <Efforts>9999</Efforts>
+    </Mandat>
+    <Mandat>
+      <Projet>
+        <SocieteDeConseil>
+          <Nom>employeur1</Nom>
+          <DateDebut>2013-01-01T00:00:00</DateDebut>
+          <DateFin>2018-12-31T00:00:00</DateFin>
+        </SocieteDeConseil>
+        <Client>
+          <Numero>0</Numero>
+          <Nom>Client2</Nom>
+          <Code>0</Code>
+        </Client>
+        <Nom>Nom du projet 2</Nom>
+        <Envergure>9999</Envergure>
+        <Reference>Quelqu’un (999 999-9999)</Reference>
+        <Description>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed convallis iaculis libero eu egestas. Duis consectetur libero fringilla lobortis porttitor. Cras interdum et enim at interdum. Maecenas scelerisque eu arcu eget porta. Integer sollicitudin et metus a dictum. Praesent id lectus vitae neque ullamcorper porta id a nulla. Sed ex augue, venenatis nec dui in, interdum accumsan risus. Duis volutpat, ipsum ut dapibus iaculis, magna mi accumsan ante, venenatis condimentum ante leo non risus. Fusce accumsan nec mauris vitae lobortis.M. Employé a effectué les tâches suivantes :Lorem ipsum dolor sit amet, consectetur adipiscing elit 1.Lorem ipsum dolor sit amet, consectetur adipiscing elit 2.Lorem ipsum dolor sit amet, consectetur adipiscing elit 3.Lorem ipsum dolor sit amet, consectetur adipiscing elit 4.Lorem ipsum dolor sit amet, consectetur adipiscing elit 5.</Description>
+        <DateDebut>0001-01-01T00:00:00</DateDebut>
+        <DateFin>0001-01-01T00:00:00</DateFin>
+        <HeuresParSemaine>0</HeuresParSemaine>
+        <Technologies>
+          <Technologie>
+            <Nom>TECH1</Nom>
+            <MoisDExperience>0</MoisDExperience>
+          </Technologie>
+          <Technologie>
+            <Nom>TECH2</Nom>
+            <MoisDExperience>0</MoisDExperience>
+          </Technologie>
+          <Technologie>
+            <Nom>TECH3</Nom>
+            <MoisDExperience>0</MoisDExperience>
+          </Technologie>
+          <Technologie>
+            <Nom>TECH4</Nom>
+            <MoisDExperience>0</MoisDExperience>
+          </Technologie>
+          <Technologie>
+            <Nom>TECH5</Nom>
+            <MoisDExperience>0</MoisDExperience>
+          </Technologie>
+          <Technologie>
+            <Nom>TECH6</Nom>
+            <MoisDExperience>0</MoisDExperience>
+          </Technologie>
+          <Technologie>
+            <Nom>TECH7</Nom>
+            <MoisDExperience>0</MoisDExperience>
+          </Technologie>
+        </Technologies>
+      </Projet>
+      <Numero>998</Numero>
+      <Fonction>
+        <Description>Fonction</Description>
+      </Fonction>
+      <DateDebut>2016-01-01T00:00:00</DateDebut>
+      <DateFin>2017-12-01T00:00:00</DateFin>
+      <Efforts>9999</Efforts>
+    </Mandat>
+    <Mandat>
+      <Projet>
+        <SocieteDeConseil>
+          <Nom>employeur1</Nom>
+          <DateDebut>2013-01-01T00:00:00</DateDebut>
+          <DateFin>2018-12-31T00:00:00</DateFin>
+        </SocieteDeConseil>
+        <Client>
+          <Numero>0</Numero>
+          <Nom>Client3</Nom>
+          <Code>0</Code>
+        </Client>
+        <Nom>Nom du projet 3</Nom>
+        <Envergure>9999</Envergure>
+        <Reference>Quelqu’un (999 999-9999)</Reference>
+        <Description>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed convallis iaculis libero eu egestas. Duis consectetur libero fringilla lobortis porttitor. Cras interdum et enim at interdum. Maecenas scelerisque eu arcu eget porta. Integer sollicitudin et metus a dictum. Praesent id lectus vitae neque ullamcorper porta id a nulla. Sed ex augue, venenatis nec dui in, interdum accumsan risus. Duis volutpat, ipsum ut dapibus iaculis, magna mi accumsan ante, venenatis condimentum ante leo non risus. Fusce accumsan nec mauris vitae lobortis.M. Employé a effectué les tâches suivantes :Lorem ipsum dolor sit amet, consectetur adipiscing elit 1.Lorem ipsum dolor sit amet, consectetur adipiscing elit 2.Lorem ipsum dolor sit amet, consectetur adipiscing elit 3.Lorem ipsum dolor sit amet, consectetur adipiscing elit 4.Lorem ipsum dolor sit amet, consectetur adipiscing elit 5.</Description>
+        <DateDebut>0001-01-01T00:00:00</DateDebut>
+        <DateFin>0001-01-01T00:00:00</DateFin>
+        <HeuresParSemaine>0</HeuresParSemaine>
+        <Technologies>
+          <Technologie>
+            <Nom>TECH1</Nom>
+            <MoisDExperience>0</MoisDExperience>
+          </Technologie>
+          <Technologie>
+            <Nom>TECH2</Nom>
+            <MoisDExperience>0</MoisDExperience>
+          </Technologie>
+          <Technologie>
+            <Nom>TECH3</Nom>
+            <MoisDExperience>0</MoisDExperience>
+          </Technologie>
+          <Technologie>
+            <Nom>TECH4</Nom>
+            <MoisDExperience>0</MoisDExperience>
+          </Technologie>
+          <Technologie>
+            <Nom>TECH5</Nom>
+            <MoisDExperience>0</MoisDExperience>
+          </Technologie>
+          <Technologie>
+            <Nom>TECH6</Nom>
+            <MoisDExperience>0</MoisDExperience>
+          </Technologie>
+          <Technologie>
+            <Nom>TECH7</Nom>
+            <MoisDExperience>0</MoisDExperience>
+          </Technologie>
+        </Technologies>
+      </Projet>
+      <Numero>997</Numero>
+      <Fonction>
+        <Description>Fonction</Description>
+      </Fonction>
+      <DateDebut>2015-01-01T00:00:00</DateDebut>
+      <DateFin>2016-12-01T00:00:00</DateFin>
+      <Efforts>9999</Efforts>
+    </Mandat>
+    <Mandat>
+      <Projet>
+        <SocieteDeConseil>
+          <Nom>employeur1</Nom>
+          <DateDebut>2013-01-01T00:00:00</DateDebut>
+          <DateFin>2018-12-31T00:00:00</DateFin>
+        </SocieteDeConseil>
+        <Client>
+          <Numero>0</Numero>
+          <Nom>Client4</Nom>
+          <Code>0</Code>
+        </Client>
+        <Nom>Nom du projet 4</Nom>
+        <Envergure>9999</Envergure>
+        <Reference>Quelqu’un (999 999-9999)</Reference>
+        <Description>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed convallis iaculis libero eu egestas. Duis consectetur libero fringilla lobortis porttitor. Cras interdum et enim at interdum. Maecenas scelerisque eu arcu eget porta. Integer sollicitudin et metus a dictum. Praesent id lectus vitae neque ullamcorper porta id a nulla. Sed ex augue, venenatis nec dui in, interdum accumsan risus. Duis volutpat, ipsum ut dapibus iaculis, magna mi accumsan ante, venenatis condimentum ante leo non risus. Fusce accumsan nec mauris vitae lobortis.M. Employé a effectué les tâches suivantes :Lorem ipsum dolor sit amet, consectetur adipiscing elit 1.Lorem ipsum dolor sit amet, consectetur adipiscing elit 2.Lorem ipsum dolor sit amet, consectetur adipiscing elit 3.Lorem ipsum dolor sit amet, consectetur adipiscing elit 4.Lorem ipsum dolor sit amet, consectetur adipiscing elit 5.</Description>
+        <DateDebut>0001-01-01T00:00:00</DateDebut>
+        <DateFin>0001-01-01T00:00:00</DateFin>
+        <HeuresParSemaine>0</HeuresParSemaine>
+        <Technologies>
+          <Technologie>
+            <Nom>TECH1</Nom>
+            <MoisDExperience>0</MoisDExperience>
+          </Technologie>
+          <Technologie>
+            <Nom>TECH2</Nom>
+            <MoisDExperience>0</MoisDExperience>
+          </Technologie>
+          <Technologie>
+            <Nom>TECH3</Nom>
+            <MoisDExperience>0</MoisDExperience>
+          </Technologie>
+          <Technologie>
+            <Nom>TECH4</Nom>
+            <MoisDExperience>0</MoisDExperience>
+          </Technologie>
+          <Technologie>
+            <Nom>TECH5</Nom>
+            <MoisDExperience>0</MoisDExperience>
+          </Technologie>
+          <Technologie>
+            <Nom>TECH6</Nom>
+            <MoisDExperience>0</MoisDExperience>
+          </Technologie>
+          <Technologie>
+            <Nom>TECH7</Nom>
+            <MoisDExperience>0</MoisDExperience>
+          </Technologie>
+        </Technologies>
+      </Projet>
+      <Numero>996</Numero>
+      <Fonction>
+        <Description>Fonction</Description>
+      </Fonction>
+      <DateDebut>2014-01-01T00:00:00</DateDebut>
+      <DateFin>2015-12-01T00:00:00</DateFin>
+      <Efforts>9999</Efforts>
+    </Mandat>
+    <Mandat>
+      <Projet>
+        <SocieteDeConseil>
+          <Nom>employeur1</Nom>
+          <DateDebut>2013-01-01T00:00:00</DateDebut>
+          <DateFin>2018-12-31T00:00:00</DateFin>
+        </SocieteDeConseil>
+        <Client>
+          <Numero>0</Numero>
+          <Nom>Client4</Nom>
+          <Code>0</Code>
+        </Client>
+        <Nom>Nom du projet 5</Nom>
+        <Envergure>9999</Envergure>
+        <Reference>Quelqu’un (999 999-9999)</Reference>
+        <Description>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed convallis iaculis libero eu egestas. Duis consectetur libero fringilla lobortis porttitor. Cras interdum et enim at interdum. Maecenas scelerisque eu arcu eget porta. Integer sollicitudin et metus a dictum. Praesent id lectus vitae neque ullamcorper porta id a nulla. Sed ex augue, venenatis nec dui in, interdum accumsan risus. Duis volutpat, ipsum ut dapibus iaculis, magna mi accumsan ante, venenatis condimentum ante leo non risus. Fusce accumsan nec mauris vitae lobortis.M. Employé a effectué les tâches suivantes :Lorem ipsum dolor sit amet, consectetur adipiscing elit 1.Lorem ipsum dolor sit amet, consectetur adipiscing elit 2.Lorem ipsum dolor sit amet, consectetur adipiscing elit 3.Lorem ipsum dolor sit amet, consectetur adipiscing elit 4.Lorem ipsum dolor sit amet, consectetur adipiscing elit 5.</Description>
+        <DateDebut>0001-01-01T00:00:00</DateDebut>
+        <DateFin>0001-01-01T00:00:00</DateFin>
+        <HeuresParSemaine>0</HeuresParSemaine>
+        <Technologies>
+          <Technologie>
+            <Nom>TECH1</Nom>
+            <MoisDExperience>0</MoisDExperience>
+          </Technologie>
+          <Technologie>
+            <Nom>TECH2</Nom>
+            <MoisDExperience>0</MoisDExperience>
+          </Technologie>
+          <Technologie>
+            <Nom>TECH3</Nom>
+            <MoisDExperience>0</MoisDExperience>
+          </Technologie>
+          <Technologie>
+            <Nom>TECH4</Nom>
+            <MoisDExperience>0</MoisDExperience>
+          </Technologie>
+          <Technologie>
+            <Nom>TECH5</Nom>
+            <MoisDExperience>0</MoisDExperience>
+          </Technologie>
+          <Technologie>
+            <Nom>TECH6</Nom>
+            <MoisDExperience>0</MoisDExperience>
+          </Technologie>
+          <Technologie>
+            <Nom>TECH7</Nom>
+            <MoisDExperience>0</MoisDExperience>
+          </Technologie>
+        </Technologies>
+      </Projet>
+      <Numero>995</Numero>
+      <Fonction>
+        <Description>Fonction</Description>
+      </Fonction>
+      <DateDebut>2013-01-01T00:00:00</DateDebut>
+      <DateFin>2014-12-01T00:00:00</DateFin>
+      <Efforts>9999</Efforts>
+    </Mandat>
+    <Mandat>
+      <Projet>
+        <SocieteDeConseil>
+          <Nom>employeur2</Nom>
+          <DateDebut>2009-01-01T00:00:00</DateDebut>
+          <DateFin>2013-12-31T00:00:00</DateFin>
+        </SocieteDeConseil>
+        <Client>
+          <Numero>0</Numero>
+          <Nom>Client1</Nom>
+          <Code>0</Code>
+        </Client>
+        <Nom>Nom du projet 6</Nom>
+        <Envergure>9999</Envergure>
+        <Reference>Quelqu’un (999 999-9999)</Reference>
+        <Description>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed convallis iaculis libero eu egestas. Duis consectetur libero fringilla lobortis porttitor. Cras interdum et enim at interdum. Maecenas scelerisque eu arcu eget porta. Integer sollicitudin et metus a dictum. Praesent id lectus vitae neque ullamcorper porta id a nulla. Sed ex augue, venenatis nec dui in, interdum accumsan risus. Duis volutpat, ipsum ut dapibus iaculis, magna mi accumsan ante, venenatis condimentum ante leo non risus. Fusce accumsan nec mauris vitae lobortis.M. Employé a effectué les tâches suivantes :Lorem ipsum dolor sit amet, consectetur adipiscing elit 1.Lorem ipsum dolor sit amet, consectetur adipiscing elit 2.Lorem ipsum dolor sit amet, consectetur adipiscing elit 3.Lorem ipsum dolor sit amet, consectetur adipiscing elit 4.Lorem ipsum dolor sit amet, consectetur adipiscing elit 5.</Description>
+        <DateDebut>0001-01-01T00:00:00</DateDebut>
+        <DateFin>0001-01-01T00:00:00</DateFin>
+        <HeuresParSemaine>0</HeuresParSemaine>
+        <Technologies>
+          <Technologie>
+            <Nom>TECH1</Nom>
+            <MoisDExperience>0</MoisDExperience>
+          </Technologie>
+          <Technologie>
+            <Nom>TECH2</Nom>
+            <MoisDExperience>0</MoisDExperience>
+          </Technologie>
+          <Technologie>
+            <Nom>TECH3</Nom>
+            <MoisDExperience>0</MoisDExperience>
+          </Technologie>
+          <Technologie>
+            <Nom>TECH4</Nom>
+            <MoisDExperience>0</MoisDExperience>
+          </Technologie>
+          <Technologie>
+            <Nom>TECH5</Nom>
+            <MoisDExperience>0</MoisDExperience>
+          </Technologie>
+          <Technologie>
+            <Nom>TECH6</Nom>
+            <MoisDExperience>0</MoisDExperience>
+          </Technologie>
+          <Technologie>
+            <Nom>TECH7</Nom>
+            <MoisDExperience>0</MoisDExperience>
+          </Technologie>
+        </Technologies>
+      </Projet>
+      <Numero>994</Numero>
+      <Fonction>
+        <Description>Fonction</Description>
+      </Fonction>
+      <DateDebut>2012-01-01T00:00:00</DateDebut>
+      <DateFin>2013-12-01T00:00:00</DateFin>
+      <Efforts>9999</Efforts>
+    </Mandat>
+    <Mandat>
+      <Projet>
+        <SocieteDeConseil>
+          <Nom>employeur2</Nom>
+          <DateDebut>2009-01-01T00:00:00</DateDebut>
+          <DateFin>2013-12-31T00:00:00</DateFin>
+        </SocieteDeConseil>
+        <Client>
+          <Numero>0</Numero>
+          <Nom>Client2</Nom>
+          <Code>0</Code>
+        </Client>
+        <Nom>Nom du projet 7</Nom>
+        <Envergure>9999</Envergure>
+        <Reference>Quelqu’un (999 999-9999)</Reference>
+        <Description>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed convallis iaculis libero eu egestas. Duis consectetur libero fringilla lobortis porttitor. Cras interdum et enim at interdum. Maecenas scelerisque eu arcu eget porta. Integer sollicitudin et metus a dictum. Praesent id lectus vitae neque ullamcorper porta id a nulla. Sed ex augue, venenatis nec dui in, interdum accumsan risus. Duis volutpat, ipsum ut dapibus iaculis, magna mi accumsan ante, venenatis condimentum ante leo non risus. Fusce accumsan nec mauris vitae lobortis.M. Employé a effectué les tâches suivantes :Lorem ipsum dolor sit amet, consectetur adipiscing elit 1.Lorem ipsum dolor sit amet, consectetur adipiscing elit 2.Lorem ipsum dolor sit amet, consectetur adipiscing elit 3.Lorem ipsum dolor sit amet, consectetur adipiscing elit 4.Lorem ipsum dolor sit amet, consectetur adipiscing elit 5.</Description>
+        <DateDebut>0001-01-01T00:00:00</DateDebut>
+        <DateFin>0001-01-01T00:00:00</DateFin>
+        <HeuresParSemaine>0</HeuresParSemaine>
+        <Technologies>
+          <Technologie>
+            <Nom>TECH1</Nom>
+            <MoisDExperience>0</MoisDExperience>
+          </Technologie>
+          <Technologie>
+            <Nom>TECH2</Nom>
+            <MoisDExperience>0</MoisDExperience>
+          </Technologie>
+          <Technologie>
+            <Nom>TECH3</Nom>
+            <MoisDExperience>0</MoisDExperience>
+          </Technologie>
+          <Technologie>
+            <Nom>TECH4</Nom>
+            <MoisDExperience>0</MoisDExperience>
+          </Technologie>
+          <Technologie>
+            <Nom>TECH5</Nom>
+            <MoisDExperience>0</MoisDExperience>
+          </Technologie>
+          <Technologie>
+            <Nom>TECH6</Nom>
+            <MoisDExperience>0</MoisDExperience>
+          </Technologie>
+          <Technologie>
+            <Nom>TECH7</Nom>
+            <MoisDExperience>0</MoisDExperience>
+          </Technologie>
+        </Technologies>
+      </Projet>
+      <Numero>993</Numero>
+      <Fonction>
+        <Description>Fonction</Description>
+      </Fonction>
+      <DateDebut>2011-01-01T00:00:00</DateDebut>
+      <DateFin>2012-12-01T00:00:00</DateFin>
+      <Efforts>9999</Efforts>
+    </Mandat>
+    <Mandat>
+      <Projet>
+        <SocieteDeConseil>
+          <Nom>employeur2</Nom>
+          <DateDebut>2009-01-01T00:00:00</DateDebut>
+          <DateFin>2013-12-31T00:00:00</DateFin>
+        </SocieteDeConseil>
+        <Client>
+          <Numero>0</Numero>
+          <Nom>Client3</Nom>
+          <Code>0</Code>
+        </Client>
+        <Nom>Nom du projet 8</Nom>
+        <Envergure>9999</Envergure>
+        <Reference>Quelqu’un (999 999-9999)</Reference>
+        <Description>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed convallis iaculis libero eu egestas. Duis consectetur libero fringilla lobortis porttitor. Cras interdum et enim at interdum. Maecenas scelerisque eu arcu eget porta. Integer sollicitudin et metus a dictum. Praesent id lectus vitae neque ullamcorper porta id a nulla. Sed ex augue, venenatis nec dui in, interdum accumsan risus. Duis volutpat, ipsum ut dapibus iaculis, magna mi accumsan ante, venenatis condimentum ante leo non risus. Fusce accumsan nec mauris vitae lobortis.M. Employé a effectué les tâches suivantes :Lorem ipsum dolor sit amet, consectetur adipiscing elit 1.Lorem ipsum dolor sit amet, consectetur adipiscing elit 2.Lorem ipsum dolor sit amet, consectetur adipiscing elit 3.Lorem ipsum dolor sit amet, consectetur adipiscing elit 4.Lorem ipsum dolor sit amet, consectetur adipiscing elit 5.</Description>
+        <DateDebut>0001-01-01T00:00:00</DateDebut>
+        <DateFin>0001-01-01T00:00:00</DateFin>
+        <HeuresParSemaine>0</HeuresParSemaine>
+        <Technologies>
+          <Technologie>
+            <Nom>TECH1</Nom>
+            <MoisDExperience>0</MoisDExperience>
+          </Technologie>
+          <Technologie>
+            <Nom>TECH2</Nom>
+            <MoisDExperience>0</MoisDExperience>
+          </Technologie>
+          <Technologie>
+            <Nom>TECH3</Nom>
+            <MoisDExperience>0</MoisDExperience>
+          </Technologie>
+          <Technologie>
+            <Nom>TECH4</Nom>
+            <MoisDExperience>0</MoisDExperience>
+          </Technologie>
+          <Technologie>
+            <Nom>TECH5</Nom>
+            <MoisDExperience>0</MoisDExperience>
+          </Technologie>
+          <Technologie>
+            <Nom>TECH6</Nom>
+            <MoisDExperience>0</MoisDExperience>
+          </Technologie>
+          <Technologie>
+            <Nom>TECH7</Nom>
+            <MoisDExperience>0</MoisDExperience>
+          </Technologie>
+        </Technologies>
+      </Projet>
+      <Numero>992</Numero>
+      <Fonction>
+        <Description>Fonction</Description>
+      </Fonction>
+      <DateDebut>2010-01-01T00:00:00</DateDebut>
+      <DateFin>2011-12-01T00:00:00</DateFin>
+      <Efforts>9999</Efforts>
+    </Mandat>
+    <Mandat>
+      <Projet>
+        <SocieteDeConseil>
+          <Nom>employeur2</Nom>
+          <DateDebut>2009-01-01T00:00:00</DateDebut>
+          <DateFin>2013-12-31T00:00:00</DateFin>
+        </SocieteDeConseil>
+        <Client>
+          <Numero>0</Numero>
+          <Nom>Client4</Nom>
+          <Code>0</Code>
+        </Client>
+        <Nom>Nom du projet 9</Nom>
+        <Envergure>9999</Envergure>
+        <Reference>Quelqu’un (999 999-9999)</Reference>
+        <Description>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed convallis iaculis libero eu egestas. Duis consectetur libero fringilla lobortis porttitor. Cras interdum et enim at interdum. Maecenas scelerisque eu arcu eget porta. Integer sollicitudin et metus a dictum. Praesent id lectus vitae neque ullamcorper porta id a nulla. Sed ex augue, venenatis nec dui in, interdum accumsan risus. Duis volutpat, ipsum ut dapibus iaculis, magna mi accumsan ante, venenatis condimentum ante leo non risus. Fusce accumsan nec mauris vitae lobortis.M. Employé a effectué les tâches suivantes :Lorem ipsum dolor sit amet, consectetur adipiscing elit 1.Lorem ipsum dolor sit amet, consectetur adipiscing elit 2.Lorem ipsum dolor sit amet, consectetur adipiscing elit 3.Lorem ipsum dolor sit amet, consectetur adipiscing elit 4.Lorem ipsum dolor sit amet, consectetur adipiscing elit 5.</Description>
+        <DateDebut>0001-01-01T00:00:00</DateDebut>
+        <DateFin>0001-01-01T00:00:00</DateFin>
+        <HeuresParSemaine>0</HeuresParSemaine>
+        <Technologies>
+          <Technologie>
+            <Nom>TECH1</Nom>
+            <MoisDExperience>0</MoisDExperience>
+          </Technologie>
+          <Technologie>
+            <Nom>TECH2</Nom>
+            <MoisDExperience>0</MoisDExperience>
+          </Technologie>
+          <Technologie>
+            <Nom>TECH3</Nom>
+            <MoisDExperience>0</MoisDExperience>
+          </Technologie>
+          <Technologie>
+            <Nom>TECH4</Nom>
+            <MoisDExperience>0</MoisDExperience>
+          </Technologie>
+          <Technologie>
+            <Nom>TECH5</Nom>
+            <MoisDExperience>0</MoisDExperience>
+          </Technologie>
+          <Technologie>
+            <Nom>TECH6</Nom>
+            <MoisDExperience>0</MoisDExperience>
+          </Technologie>
+          <Technologie>
+            <Nom>TECH7</Nom>
+            <MoisDExperience>0</MoisDExperience>
+          </Technologie>
+        </Technologies>
+      </Projet>
+      <Numero>991</Numero>
+      <Fonction>
+        <Description>Fonction</Description>
+      </Fonction>
+      <DateDebut>2009-01-01T00:00:00</DateDebut>
+      <DateFin>2010-12-01T00:00:00</DateFin>
+      <Efforts>9999</Efforts>
+    </Mandat>
+  </Mandats>
+  <Langues>
+    <Langue>
+      <Nom>Lange 1</Nom>
+      <Parle>Avancé</Parle>
+      <Ecrit>Avancé</Ecrit>
+      <Lu>Avancé</Lu>
+    </Langue>
+    <Langue>
+      <Nom>Lange 2</Nom>
+      <Parle>Avancé</Parle>
+      <Ecrit>Avancé</Ecrit>
+      <Lu>Avancé</Lu>
+    </Langue>
+    <Langue>
+      <Nom>Lange 3</Nom>
+      <Parle>Avancé</Parle>
+      <Ecrit>Avancé</Ecrit>
+      <Lu>Avancé</Lu>
+    </Langue>
+  </Langues>
+  <DomaineDInterventions>
     <DomaineDIntervention>
       <Description>Item1</Description>
     </DomaineDIntervention>
@@ -25,213 +676,317 @@
     <DomaineDIntervention>
       <Description>Item 7</Description>
     </DomaineDIntervention>
-  </DomainesDIntervention>
-  <FormationsAcademique>
-    <FormationAcademique>
-      <Titre>Titre (An du titre)</Titre>
-      <Instituition>Instituition</Instituition>
-    </FormationAcademique>
-    <FormationAcademique>
-      <Titre>Titre (An du titre)</Titre>
-      <Instituition>Instituition</Instituition>
-    </FormationAcademique>
-  </FormationsAcademique>
-  <Certifications>
-    <Certification>
-      <Description>Certifiacation 1</Description>
-    </Certification>
-    <Certification>
-      <Description>Certification 2</Description>
-    </Certification>
-  </Certifications>
+  </DomaineDInterventions>
+  <CVs>
+    <CV>
+      <ResumeExperience>Donec ullamcorper imperdiet felis. Etiam id urna tellus. Fusce aliquet est ac quam pharetra vestibulum. Sed aliquam ipsum nec tempus facilisis. Nulla consequat turpis sed nunc mollis, blandit congue libero accumsan. Ut laoreet quis sapien sit amet aliquam. Integer consequat nulla augue, a lobortis elit tempor et. Cras ullamcorper nibh sit amet elit condimentum, in egestas sem semper. Duis nec purus nibh. In eros lacus, scelerisque at nisi eget, maximus mollis justo. Suspendisse rutrum ligula erat, ac feugiat dolor blandit et. Maecenas magna mauris, porta eget neque vitae, ultricies ornare leo. Nulla sit amet odio ac enim tempus ullamcorper eu sit amet eros. Phasellus quis ipsum eros. Praesent lacus libero, rhoncus sit amet luctus id, mattis et urna.In ullamcorper ut neque a tempor. Sed semper urna nec finibus elementum. Donec hendrerit quam vitae lacinia laoreet. Donec erat dolor, lacinia in sodales sit amet, rhoncus ut augue. Nam sed feugiat risus, non ornare massa. Nulla laoreet velit non aliquet semper. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nulla laoreet elit eu gravida cursus. Cras auctor mauris at finibus fermentum. Integer convallis eget lectus eu condimentum. Aliquam eleifend justo quis leo dignissim convallis. Quisque et rutrum nibh, luctus porta ligula.Curabitur suscipit nulla id orci sagittis laoreet. Nunc in risus dolor. Nullam eros purus, laoreet in elit sagittis, facilisis tristique est. Maecenas sollicitudin consectetur nisl, vitae feugiat ante egestas in. Suspendisse potenti. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec ultricies lobortis sagittis. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</ResumeExperience>
+      <DateCreation>0001-01-01T00:00:00</DateCreation>
+      <Version>0</Version>
+      <Status>Nouveau</Status>
+      <EstPricipal>false</EstPricipal>
+      <DateApprobation>0001-01-01T00:00:00</DateApprobation>
+    </CV>
+  </CVs>
+  <PiecesJointes />
+  <Technologies>
+    <Technologie>
+      <Nom>TECH</Nom>
+      <Categorie>
+        <Nom>Bases de données</Nom>
+      </Categorie>
+      <MoisDExperience>120</MoisDExperience>
+    </Technologie>
+    <Technologie>
+      <Nom>TECH</Nom>
+      <Categorie>
+        <Nom>Bases de données</Nom>
+      </Categorie>
+      <MoisDExperience>36</MoisDExperience>
+    </Technologie>
+    <Technologie>
+      <Nom>TECH</Nom>
+      <Categorie>
+        <Nom>Bases de données</Nom>
+      </Categorie>
+      <MoisDExperience>36</MoisDExperience>
+    </Technologie>
+    <Technologie>
+      <Nom>TECH</Nom>
+      <Categorie>
+        <Nom>Bases de données</Nom>
+      </Categorie>
+      <MoisDExperience>36</MoisDExperience>
+    </Technologie>
+    <Technologie>
+      <Nom>TECH</Nom>
+      <Categorie>
+        <Nom>Bases de données</Nom>
+      </Categorie>
+      <MoisDExperience>36</MoisDExperience>
+    </Technologie>
+    <Technologie>
+      <Nom>TECH</Nom>
+      <Categorie>
+        <Nom>Bases de données</Nom>
+      </Categorie>
+      <MoisDExperience>12</MoisDExperience>
+    </Technologie>
+    <Technologie>
+      <Nom>TECH</Nom>
+      <Categorie>
+        <Nom>Bases de données</Nom>
+      </Categorie>
+      <MoisDExperience>12</MoisDExperience>
+    </Technologie>
+    <Technologie>
+      <Nom>TECH</Nom>
+      <Categorie>
+        <Nom>Logiciels d’exploitation</Nom>
+      </Categorie>
+      <MoisDExperience>84</MoisDExperience>
+    </Technologie>
+    <Technologie>
+      <Nom>TECH</Nom>
+      <Categorie>
+        <Nom>Logiciels d’exploitation</Nom>
+      </Categorie>
+      <MoisDExperience>36</MoisDExperience>
+    </Technologie>
+    <Technologie>
+      <Nom>TECH</Nom>
+      <Categorie>
+        <Nom>Langages de programmation</Nom>
+      </Categorie>
+      <MoisDExperience>48</MoisDExperience>
+    </Technologie>
+    <Technologie>
+      <Nom>TECH</Nom>
+      <Categorie>
+        <Nom>Langages de programmation</Nom>
+      </Categorie>
+      <MoisDExperience>60</MoisDExperience>
+    </Technologie>
+    <Technologie>
+      <Nom>TECH</Nom>
+      <Categorie>
+        <Nom>Langages de programmation</Nom>
+      </Categorie>
+      <MoisDExperience>120</MoisDExperience>
+    </Technologie>
+    <Technologie>
+      <Nom>TECH</Nom>
+      <Categorie>
+        <Nom>Langages de programmation</Nom>
+      </Categorie>
+      <MoisDExperience>48</MoisDExperience>
+    </Technologie>
+    <Technologie>
+      <Nom>TECH</Nom>
+      <Categorie>
+        <Nom>Langages de programmation</Nom>
+      </Categorie>
+      <MoisDExperience>12</MoisDExperience>
+    </Technologie>
+    <Technologie>
+      <Nom>TECH</Nom>
+      <Categorie>
+        <Nom>Langages de programmation</Nom>
+      </Categorie>
+      <MoisDExperience>12</MoisDExperience>
+    </Technologie>
+    <Technologie>
+      <Nom>TECH</Nom>
+      <Categorie>
+        <Nom>Langages de programmation</Nom>
+      </Categorie>
+      <MoisDExperience>12</MoisDExperience>
+    </Technologie>
+    <Technologie>
+      <Nom>TECH</Nom>
+      <Categorie>
+        <Nom>Object-relational mapping</Nom>
+      </Categorie>
+      <MoisDExperience>12</MoisDExperience>
+    </Technologie>
+    <Technologie>
+      <Nom>TECH</Nom>
+      <Categorie>
+        <Nom>Object-relational mapping</Nom>
+      </Categorie>
+      <MoisDExperience>8</MoisDExperience>
+    </Technologie>
+    <Technologie>
+      <Nom>TECH</Nom>
+      <Categorie>
+        <Nom>Object-relational mapping</Nom>
+      </Categorie>
+      <MoisDExperience>3</MoisDExperience>
+    </Technologie>
+    <Technologie>
+      <Nom>TECH</Nom>
+      <Categorie>
+        <Nom>Frameworks</Nom>
+      </Categorie>
+      <MoisDExperience>18</MoisDExperience>
+    </Technologie>
+    <Technologie>
+      <Nom>TECH</Nom>
+      <Categorie>
+        <Nom>Frameworks</Nom>
+      </Categorie>
+      <MoisDExperience>8</MoisDExperience>
+    </Technologie>
+    <Technologie>
+      <Nom>TECH</Nom>
+      <Categorie>
+        <Nom>Frameworks</Nom>
+      </Categorie>
+      <MoisDExperience>4</MoisDExperience>
+    </Technologie>
+    <Technologie>
+      <Nom>TECH</Nom>
+      <Categorie>
+        <Nom>Frameworks</Nom>
+      </Categorie>
+      <MoisDExperience>8</MoisDExperience>
+    </Technologie>
+    <Technologie>
+      <Nom>TECH</Nom>
+      <Categorie>
+        <Nom>Frameworks</Nom>
+      </Categorie>
+      <MoisDExperience>6</MoisDExperience>
+    </Technologie>
+    <Technologie>
+      <Nom>TECH</Nom>
+      <Categorie>
+        <Nom>Frameworks</Nom>
+      </Categorie>
+      <MoisDExperience>21</MoisDExperience>
+    </Technologie>
+    <Technologie>
+      <Nom>TECH</Nom>
+      <Categorie>
+        <Nom>Logiciels de gestion de version</Nom>
+      </Categorie>
+      <MoisDExperience>72</MoisDExperience>
+    </Technologie>
+    <Technologie>
+      <Nom>TECH</Nom>
+      <Categorie>
+        <Nom>Logiciels de gestion de version</Nom>
+      </Categorie>
+      <MoisDExperience>24</MoisDExperience>
+    </Technologie>
+    <Technologie>
+      <Nom>TECH</Nom>
+      <Categorie>
+        <Nom>Logiciels de gestion de version</Nom>
+      </Categorie>
+      <MoisDExperience>24</MoisDExperience>
+    </Technologie>
+    <Technologie>
+      <Nom>TECH</Nom>
+      <Categorie>
+        <Nom>Serveur web</Nom>
+      </Categorie>
+      <MoisDExperience>36</MoisDExperience>
+    </Technologie>
+    <Technologie>
+      <Nom>TECH</Nom>
+      <Categorie>
+        <Nom>Serveur web</Nom>
+      </Categorie>
+      <MoisDExperience>60</MoisDExperience>
+    </Technologie>
+    <Technologie>
+      <Nom>TECH</Nom>
+      <Categorie>
+        <Nom>Serveur web</Nom>
+      </Categorie>
+      <MoisDExperience>12</MoisDExperience>
+    </Technologie>
+    <Technologie>
+      <Nom>TECH</Nom>
+      <Categorie>
+        <Nom>Serveur web</Nom>
+      </Categorie>
+      <MoisDExperience>24</MoisDExperience>
+    </Technologie>
+    <Technologie>
+      <Nom>TECH</Nom>
+      <Categorie>
+        <Nom>IDE</Nom>
+      </Categorie>
+      <MoisDExperience>12</MoisDExperience>
+    </Technologie>
+    <Technologie>
+      <Nom>TECH</Nom>
+      <Categorie>
+        <Nom>IDE</Nom>
+      </Categorie>
+      <MoisDExperience>36</MoisDExperience>
+    </Technologie>
+    <Technologie>
+      <Nom>TECH</Nom>
+      <Categorie>
+        <Nom>IDE</Nom>
+      </Categorie>
+      <MoisDExperience>30</MoisDExperience>
+    </Technologie>
+    <Technologie>
+      <Nom>TECH</Nom>
+      <Categorie>
+        <Nom>IDE</Nom>
+      </Categorie>
+      <MoisDExperience>36</MoisDExperience>
+    </Technologie>
+    <Technologie>
+      <Nom>TECH</Nom>
+      <Categorie>
+        <Nom>Logiciel d'intégration continue</Nom>
+      </Categorie>
+      <MoisDExperience>60</MoisDExperience>
+    </Technologie>
+    <Technologie>
+      <Nom>TECH</Nom>
+      <Categorie>
+        <Nom>Containerization</Nom>
+      </Categorie>
+      <MoisDExperience>24</MoisDExperience>
+    </Technologie>
+    <Technologie>
+      <Nom>TECH</Nom>
+      <Categorie>
+        <Nom>Containerization</Nom>
+      </Categorie>
+      <MoisDExperience>6</MoisDExperience>
+    </Technologie>
+    <Technologie>
+      <Nom>TECH</Nom>
+      <Categorie>
+        <Nom>Méthode Agile</Nom>
+      </Categorie>
+      <MoisDExperience>22</MoisDExperience>
+    </Technologie>
+    <Technologie>
+      <Nom>TECH</Nom>
+      <Categorie>
+        <Nom>Méthode Agile</Nom>
+      </Categorie>
+      <MoisDExperience>30</MoisDExperience>
+    </Technologie>
+  </Technologies>
   <Employeurs>
     <Employeur>
       <Nom>employeur1</Nom>
-      <Periode>Periode</Periode>
-      <Clients>
-        <Client>
-          <Nom>Client1</Nom>
-          <Mandats>
-            <Mandat>
-              <Numero>999</Numero>
-              <Projet>Projet</Projet>
-              <Envenrgure>9999 jours-personnes</Envenrgure>
-              <Fonction>Fonction</Fonction>
-              <Periode>Periode</Periode>
-              <Efforts>Efforts</Efforts>
-              <Reference>Reference</Reference>
-              <Description>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed convallis iaculis libero eu egestas. Duis consectetur libero fringilla lobortis porttitor. Cras interdum et enim at interdum. Maecenas scelerisque eu arcu eget porta. Integer sollicitudin et metus a dictum. Praesent id lectus vitae neque ullamcorper porta id a nulla. Sed ex augue, venenatis nec dui in, interdum accumsan risus. Duis volutpat, ipsum ut dapibus iaculis, magna mi accumsan ante, venenatis condimentum ante leo non risus. Fusce accumsan nec mauris vitae lobortis.M. Employé a effectué les tâches suivantes :Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Environnement technologique : TECH, TECH, TECH, TECH, TECH, TECH¸ TECH.</Description>
-            </Mandat>
-          </Mandats>
-        </Client>
-        <Client>
-          <Nom>Client2</Nom>
-          <Mandats>
-            <Mandat>
-              <Numero>999</Numero>
-              <Projet>Projet</Projet>
-              <Envenrgure>9999 jours-personnes</Envenrgure>
-              <Fonction>Fonction</Fonction>
-              <Periode>Periode</Periode>
-              <Efforts>Efforts</Efforts>
-              <Reference>Reference</Reference>
-              <Description>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed convallis iaculis libero eu egestas. Duis consectetur libero fringilla lobortis porttitor. Cras interdum et enim at interdum. Maecenas scelerisque eu arcu eget porta. Integer sollicitudin et metus a dictum. Praesent id lectus vitae neque ullamcorper porta id a nulla. Sed ex augue, venenatis nec dui in, interdum accumsan risus. Duis volutpat, ipsum ut dapibus iaculis, magna mi accumsan ante, venenatis condimentum ante leo non risus. Fusce accumsan nec mauris vitae lobortis.M. Employé a effectué les tâches suivantes :Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Environnement technologique : TECH, TECH, TECH, TECH, TECH, TECH¸ TECH.</Description>
-            </Mandat>
-          </Mandats>
-        </Client>
-        <Client>
-          <Nom>Client3</Nom>
-          <Mandats>
-            <Mandat>
-              <Numero>999</Numero>
-              <Projet>Projet</Projet>
-              <Envenrgure>9999 jours-personnes</Envenrgure>
-              <Fonction>Fonction</Fonction>
-              <Periode>Periode</Periode>
-              <Efforts>Efforts</Efforts>
-              <Reference>Reference</Reference>
-              <Description>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed convallis iaculis libero eu egestas. Duis consectetur libero fringilla lobortis porttitor. Cras interdum et enim at interdum. Maecenas scelerisque eu arcu eget porta. Integer sollicitudin et metus a dictum. Praesent id lectus vitae neque ullamcorper porta id a nulla. Sed ex augue, venenatis nec dui in, interdum accumsan risus. Duis volutpat, ipsum ut dapibus iaculis, magna mi accumsan ante, venenatis condimentum ante leo non risus. Fusce accumsan nec mauris vitae lobortis.M. Employé a effectué les tâches suivantes :Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Environnement technologique : TECH, TECH, TECH, TECH, TECH, TECH¸ TECH.</Description>
-            </Mandat>
-          </Mandats>
-        </Client>
-        <Client>
-          <Nom>Client4</Nom>
-          <Mandats>
-            <Mandat>
-              <Numero>999</Numero>
-              <Projet>Projet</Projet>
-              <Envenrgure>9999 jours-personnes</Envenrgure>
-              <Fonction>Fonction</Fonction>
-              <Periode>Periode</Periode>
-              <Efforts>Efforts</Efforts>
-              <Reference>Reference</Reference>
-              <Description>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed convallis iaculis libero eu egestas. Duis consectetur libero fringilla lobortis porttitor. Cras interdum et enim at interdum. Maecenas scelerisque eu arcu eget porta. Integer sollicitudin et metus a dictum. Praesent id lectus vitae neque ullamcorper porta id a nulla. Sed ex augue, venenatis nec dui in, interdum accumsan risus. Duis volutpat, ipsum ut dapibus iaculis, magna mi accumsan ante, venenatis condimentum ante leo non risus. Fusce accumsan nec mauris vitae lobortis.M. Employé a effectué les tâches suivantes :Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Environnement technologique : TECH, TECH, TECH, TECH, TECH, TECH¸ TECH.</Description>
-            </Mandat>
-          </Mandats>
-        </Client>
-      </Clients>
+      <DateDebut>2013-01-01T00:00:00</DateDebut>
+      <DateFin>2018-12-31T00:00:00</DateFin>
     </Employeur>
     <Employeur>
       <Nom>employeur2</Nom>
-      <Periode>Periode</Periode>
-      <Clients>
-        <Client>
-          <Nom>Client1</Nom>
-          <Mandats>
-            <Mandat>
-              <Numero>999</Numero>
-              <Projet>Projet</Projet>
-              <Envenrgure>9999 jours-personnes</Envenrgure>
-              <Fonction>Fonction</Fonction>
-              <Periode>Periode</Periode>
-              <Efforts>Efforts</Efforts>
-              <Reference>Reference</Reference>
-              <Description>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed convallis iaculis libero eu egestas. Duis consectetur libero fringilla lobortis porttitor. Cras interdum et enim at interdum. Maecenas scelerisque eu arcu eget porta. Integer sollicitudin et metus a dictum. Praesent id lectus vitae neque ullamcorper porta id a nulla. Sed ex augue, venenatis nec dui in, interdum accumsan risus. Duis volutpat, ipsum ut dapibus iaculis, magna mi accumsan ante, venenatis condimentum ante leo non risus. Fusce accumsan nec mauris vitae lobortis.M. Employé a effectué les tâches suivantes :Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Environnement technologique : TECH, TECH, TECH, TECH, TECH, TECH¸ TECH.</Description>
-            </Mandat>
-          </Mandats>
-        </Client>
-        <Client>
-          <Nom>Client2</Nom>
-          <Mandats>
-            <Mandat>
-              <Numero>999</Numero>
-              <Projet>Projet</Projet>
-              <Envenrgure>9999 jours-personnes</Envenrgure>
-              <Fonction>Fonction</Fonction>
-              <Periode>Periode</Periode>
-              <Efforts>Efforts</Efforts>
-              <Reference>Reference</Reference>
-              <Description>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed convallis iaculis libero eu egestas. Duis consectetur libero fringilla lobortis porttitor. Cras interdum et enim at interdum. Maecenas scelerisque eu arcu eget porta. Integer sollicitudin et metus a dictum. Praesent id lectus vitae neque ullamcorper porta id a nulla. Sed ex augue, venenatis nec dui in, interdum accumsan risus. Duis volutpat, ipsum ut dapibus iaculis, magna mi accumsan ante, venenatis condimentum ante leo non risus. Fusce accumsan nec mauris vitae lobortis.M. Employé a effectué les tâches suivantes :Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Environnement technologique : TECH, TECH, TECH, TECH, TECH, TECH¸ TECH.</Description>
-            </Mandat>
-          </Mandats>
-        </Client>
-        <Client>
-          <Nom>Client3</Nom>
-          <Mandats>
-            <Mandat>
-              <Numero>999</Numero>
-              <Projet>Projet</Projet>
-              <Envenrgure>9999 jours-personnes</Envenrgure>
-              <Fonction>Fonction</Fonction>
-              <Periode>Periode</Periode>
-              <Efforts>Efforts</Efforts>
-              <Reference>Reference</Reference>
-              <Description>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed convallis iaculis libero eu egestas. Duis consectetur libero fringilla lobortis porttitor. Cras interdum et enim at interdum. Maecenas scelerisque eu arcu eget porta. Integer sollicitudin et metus a dictum. Praesent id lectus vitae neque ullamcorper porta id a nulla. Sed ex augue, venenatis nec dui in, interdum accumsan risus. Duis volutpat, ipsum ut dapibus iaculis, magna mi accumsan ante, venenatis condimentum ante leo non risus. Fusce accumsan nec mauris vitae lobortis.M. Employé a effectué les tâches suivantes :Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Environnement technologique : TECH, TECH, TECH, TECH, TECH, TECH¸ TECH.</Description>
-            </Mandat>
-          </Mandats>
-        </Client>
-        <Client>
-          <Nom>Client4</Nom>
-          <Mandats>
-            <Mandat>
-              <Numero>999</Numero>
-              <Projet>Projet</Projet>
-              <Envenrgure>9999 jours-personnes</Envenrgure>
-              <Fonction>Fonction</Fonction>
-              <Periode>Periode</Periode>
-              <Efforts>Efforts</Efforts>
-              <Reference>Reference</Reference>
-              <Description>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed convallis iaculis libero eu egestas. Duis consectetur libero fringilla lobortis porttitor. Cras interdum et enim at interdum. Maecenas scelerisque eu arcu eget porta. Integer sollicitudin et metus a dictum. Praesent id lectus vitae neque ullamcorper porta id a nulla. Sed ex augue, venenatis nec dui in, interdum accumsan risus. Duis volutpat, ipsum ut dapibus iaculis, magna mi accumsan ante, venenatis condimentum ante leo non risus. Fusce accumsan nec mauris vitae lobortis.M. Employé a effectué les tâches suivantes :Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Environnement technologique : TECH, TECH, TECH, TECH, TECH, TECH¸ TECH.</Description>
-            </Mandat>
-            <Mandat />
-          </Mandats>
-        </Client>
-      </Clients>
+      <DateDebut>2009-01-01T00:00:00</DateDebut>
+      <DateFin>2013-12-31T00:00:00</DateFin>
     </Employeur>
   </Employeurs>
-  <Perfectionnements>
-    <Perfectionnement>
-      <An>2017</An>
-      <Description>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed convallis iaculis libero eu egestas. Duis consectetur libero fringilla lobortis porttitor. Cras interdum et enim at interdum. Maecenas scelerisque eu arcu eget porta. Integer sollicitudin et metus a dictum. Praesent id lectus vitae neque ullamcorper porta id a nulla.</Description>
-    </Perfectionnement>
-    <Perfectionnement>
-      <An>2016</An>
-      <Description>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed convallis iaculis libero eu egestas. Duis consectetur libero fringilla lobortis porttitor. Cras interdum et enim at interdum. Maecenas scelerisque eu arcu eget porta. Integer sollicitudin et metus a dictum. Praesent id lectus vitae neque ullamcorper porta id a nulla.</Description>
-    </Perfectionnement>
-    <Perfectionnement>
-      <An>2016</An>
-      <Description>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed convallis iaculis libero eu egestas. Duis consectetur libero fringilla lobortis porttitor. Cras interdum et enim at interdum. Maecenas scelerisque eu arcu eget porta. Integer sollicitudin et metus a dictum. Praesent id lectus vitae neque ullamcorper porta id a nulla.</Description>
-    </Perfectionnement>
-  </Perfectionnements>
-  <Conferences>
-    <Conference>
-      <Description>Conf1.</Description>
-    </Conference>
-    <Conference>
-      <Description>Conf2.</Description>
-    </Conference>
-    <Conference>
-      <Description>Conf3.</Description>
-    </Conference>
-  </Conferences>
-  <Associations>
-    <Association>
-      <Description>Lorem ipsum dolor sit amet, consectetur adipiscing elit</Description>
-    </Association>
-  </Associations>
-  <Publications>
-    <Publication>
-      <Description>Lorem ipsum dolor sit amet, consectetur adipiscing elit</Description>
-    </Publication>
-  </Publications>
-  <Langues>
-    <Langue>
-      <Nom>Lange 1</Nom>
-      <Parle>Avancé</Parle>
-      <Ecrit>Avancé</Ecrit>
-      <Lu>Avancé</Lu>
-    </Langue>
-    <Langue>
-      <Nom>Lange 2</Nom>
-      <Parle>Avancé</Parle>
-      <Ecrit>Avancé</Ecrit>
-      <Lu>Avancé</Lu>
-    </Langue>
-    <Langue>
-      <Nom>Lange 3</Nom>
-      <Parle>Avancé</Parle>
-      <Ecrit>Avancé</Ecrit>
-      <Lu>Avancé</Lu>
-    </Langue>
-  </Langues>
-</CV>
+</Conseiller>

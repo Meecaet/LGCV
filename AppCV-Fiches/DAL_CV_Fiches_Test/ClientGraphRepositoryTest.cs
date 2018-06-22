@@ -5,6 +5,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using DAL_CV_Fiches.Models;
+using DAL_CV_Fiches.Repositories.Graph.Attributes;
 
 namespace DAL_CV_Fiches_Test
 {
@@ -14,27 +15,27 @@ namespace DAL_CV_Fiches_Test
         [TestMethod]
         public void TestAddVertex()
         {
-            try
-            {
-                ClientGraphRepository repo = new ClientGraphRepository("Graphe_Essay", "graph_cv");
-                List<Client> listOfClient;
+            //try
+            //{
+            //    ClientGraphRepository repo = new ClientGraphRepository("Graphe_Essay", "graph_cv");
+            //    List<Client> listOfClient;
 
-                Guid identifier = Guid.NewGuid();
+            //    Guid identifier = Guid.NewGuid();
 
-                Client client = new Client();
-                client.Nom = identifier.ToString();
+            //    Client client = new Client();
+            //    client.Nom = identifier.ToString();
 
-                repo.Add(client);
+            //    repo.Add(client);
 
-                listOfClient = repo.GetAll();
+            //    listOfClient = repo.GetAll();
 
-                Assert.IsTrue(listOfClient.Any(x => x.Nom == identifier.ToString()));
-            }
-            catch (System.Exception e)
-            {
+            //    Assert.IsTrue(listOfClient.Any(x => x.Nom == identifier.ToString()));
+            //}
+            //catch (System.Exception e)
+            //{
 
-                throw;
-            }
+            //    throw;
+            //}
         }
 
         [TestMethod]
@@ -70,6 +71,27 @@ namespace DAL_CV_Fiches_Test
 
                 throw;
             }
+
+
+            ConseillerGraphRepository conseillerGraphRepository = new ConseillerGraphRepository("Graphe_Essay", "graph_cv");
+            TechnologieGraphRepository technologieGraphRepository = new TechnologieGraphRepository("Graphe_Essay", "graph_cv");
+
+            List<Conseiller> conseiller = conseillerGraphRepository.GetAll();
+            List <Technologie> technologie = technologieGraphRepository.GetAll();
+            List<bool> hasEdgesResults = new List<bool>();
+            Edge edge = new Edge("Knows");
+
+            foreach (var item in conseiller)
+            {
+                foreach (var item2 in technologie)
+                {
+                    hasEdgesResults.Add(conseillerGraphRepository.HasEdge(edge, item, item2));
+                }
+            }
+
+
+            Assert.IsTrue(hasEdgesResults.Any(x => x));
+            
         }
 
         [TestMethod]

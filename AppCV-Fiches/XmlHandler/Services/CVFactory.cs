@@ -616,11 +616,12 @@ namespace XmlHandler.Services
 
             for (int i = 0; i < firstColumn.Count; i++)
             {
-                Formation formation;                
-                formation = formationGraphRepository.CreateIfNotExists(new Dictionary<string, object> { { "Description", secondColumn[i].GetParagraphText() } });
+                Formation formation;
 
-                if (int.TryParse(firstColumn[i].GetParagraphText(), out annee))
-                    formation.AnAcquisition = annee;
+                if (!int.TryParse(firstColumn[i].GetParagraphText(), out annee))
+                    annee = 0;
+
+                formation = formationGraphRepository.CreateIfNotExists(new Dictionary<string, object> { { "Description", secondColumn[i].GetParagraphText() }, { "AnAcquisition", annee} });                
 
                 formation.Type = genre;
 
