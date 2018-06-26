@@ -155,10 +155,10 @@ namespace DAL_CV_Fiches.Repositories.Graph
                 currentValue = propInfo.GetValue(searchObject);
                 if (currentValue != null)
                 {
-                    if (propInfo.PropertyType.BaseType == typeof(Enum))
-                        searchQuery += $".has('{propInfo.Name}','{Convert.ToInt32(currentValue)}')";
+                    if (propInfo.PropertyType.BaseType == typeof(Enum) || propInfo.PropertyType.GetType() == typeof(Int32))
+                        searchQuery += $".has(\"{propInfo.Name}\",\"{Convert.ToInt32(currentValue)}\")";
                     else
-                        searchQuery += $".has('{propInfo.Name}','{currentValue.ToString().Replace("'", "’")}')";
+                        searchQuery += $".has(\"{propInfo.Name}\",\"{currentValue.ToString().Replace("'", "’")}\")";
                 }
             }
 

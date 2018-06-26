@@ -12,6 +12,9 @@ namespace Convertisseur_Test
     [TestClass]
     public class EssayGeneral
     {
+        //Cet essai fera la generation d'un fichier xml selon les données d'un CV docx.
+        //Après, il fera une comparaison avec un fichier modèdele dont le contenu a été revisé. De chaque fichier on extrait un hash. L'essai reussi si les hashs sont le même
+
         [TestMethod]
         public void TestDeGeneration()
         {
@@ -58,6 +61,8 @@ namespace Convertisseur_Test
                     fileInfo.Delete();
             }
         }
+
+
 
         [TestMethod]
         public void TestDAssemblageConseiller()

@@ -2,17 +2,38 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DAL_CV_Fiches.Models.Graph;
+using DAL_CV_Fiches.Repositories.Graph;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using WebCV_Fiches.Models.Admin;
 
 namespace WebCV_Fiches.Controllers
 {
     public class CVController : Controller
     {
-        // GET: CV
-        public ActionResult Index()
+        private UserManager<ApplicationUser> userManager;
+        private ApplicationUser UtilisateurActuel;
+        private UtilisateurGraphRepository UtilisateurDepot;
+
+        public CVController(UserManager<ApplicationUser> userManager)
         {
-            return View();
+            this.userManager = userManager;
+        }
+
+        // GET: CV
+        public async Task<ActionResult> Index()
+        {
+            UtilisateurDepot = new UtilisateurGraphRepository("Graph_CV", "CVs");
+            UtilisateurActuel = await userManager.GetUserAsync(User);
+
+            var utilisateur = UtilisateurDepot.Search(new Utilisateur { NomComplet = UtilisateurActuel.NomComplet }).DefaultIfEmpty(null).FirstOrDefault();
+
+            if (utilisateur != null)
+                return RedirectToAction(nameof(Details));
+            else
+                return RedirectToAction(nameof(Create));            
         }
 
         // GET: CV/Details/5

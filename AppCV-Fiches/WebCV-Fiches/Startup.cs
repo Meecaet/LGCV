@@ -11,6 +11,8 @@ using Microsoft.Extensions.DependencyInjection;
 using WebCV_Fiches.Data;
 using WebCV_Fiches.Models.Admin;
 using WebCV_Fiches.Services;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
 namespace WebCV_Fiches
 {
@@ -42,10 +44,16 @@ namespace WebCV_Fiches
                 options.SlidingExpiration = true;
             });
 
+            services.AddMvc(config =>
+            {
+                var policy = new AuthorizationPolicyBuilder()
+                                 .RequireAuthenticatedUser()
+                                 .Build();
+                config.Filters.Add(new AuthorizeFilter(policy));
+            });
+
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
-
-            services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

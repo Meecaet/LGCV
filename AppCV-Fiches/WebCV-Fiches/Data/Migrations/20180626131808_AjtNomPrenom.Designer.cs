@@ -12,9 +12,10 @@ using WebCV_Fiches.Data;
 namespace WebCV_Fiches.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180626131808_AjtNomPrenom")]
+    partial class AjtNomPrenom
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

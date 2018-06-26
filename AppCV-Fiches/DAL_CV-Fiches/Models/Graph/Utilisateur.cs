@@ -9,6 +9,8 @@ namespace DAL_CV_Fiches.Models.Graph
         public int NumeroEmploye { get; set; }
         public string Prenom { get; set; }
         public string Nom { get; set; }
+
+        public string NomComplet { get; set; }
         public string AdresseCourriel { get; set; }
     }
 }
