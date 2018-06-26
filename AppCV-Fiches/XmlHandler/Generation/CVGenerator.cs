@@ -20,7 +20,7 @@ namespace XmlHandler.Generation
 {
     public class CVGenerator
     {
-        private ConseillerGraphRepository conseillerRepo;
+        private UtilisateurGraphRepository utilisateurRepo;
 
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace XmlHandler.Generation
             FileInfo[] filesInDirectory;
             DocxExtractor docxExtractor = new DocxExtractor();
 
-            conseillerRepo = new ConseillerGraphRepository("Graph_CV", "CVs");
+            utilisateurRepo = new UtilisateurGraphRepository("Graph_CV", "CVs");
 
             directoryInfo = new DirectoryInfo(path);
 
@@ -47,7 +47,7 @@ namespace XmlHandler.Generation
                 if (filesInDirectory.Length > 0)
                 {
 #if DEBUG
-                    conseillerRepo.DeleteAllDocs();
+                    utilisateurRepo.DeleteAllDocs();
 #endif
 
                     foreach (FileInfo file in filesInDirectory)
@@ -75,20 +75,20 @@ namespace XmlHandler.Generation
             List<XmlNode> nodes = CvSectionsExtractor.GetCVNodes(documentXmlPath);
 
             CVFactory cVFactory = new CVFactory();
-            Conseiller newConseiller = cVFactory.CreateConseiller(nodes);
+            Utilisateur newUtilisateur = cVFactory.CreateConseiller(nodes);
 
             XmlSerializer xmlSerializer = new XmlSerializer(typeof(Conseiller));
             using (Stream fileStream = new FileStream(outputPath, FileMode.Create, FileAccess.Write, FileShare.None))
             {
-                xmlSerializer.Serialize(fileStream, newConseiller);
+                xmlSerializer.Serialize(fileStream, newUtilisateur);
             }
 
-            PersistCV(newConseiller);
+            PersistCV(newUtilisateur);
         }
 
-        private void PersistCV(Conseiller conseiller)
-        {        
-            conseillerRepo.Add(conseiller);
+        private void PersistCV(Utilisateur utilisateur)
+        {
+            utilisateurRepo.Add(utilisateur);
         }
     }
 }

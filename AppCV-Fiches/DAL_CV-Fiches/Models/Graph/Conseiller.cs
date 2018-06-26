@@ -8,9 +8,6 @@ namespace DAL_CV_Fiches.Models.Graph
     [Serializable]
     public class Conseiller : GraphObject
     {
-        [Edge("Is")]
-        public Utilisateur Utilisateur { get; set; }
-
         public DateTime DateEmbauche { get; set; }
         public DateTime DateDepart { get; set; }
         public string RaisonDepart { get; set; }

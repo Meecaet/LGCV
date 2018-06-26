@@ -8,6 +8,10 @@ namespace WebCV_Fiches.Models.CVViewModels
     public class MandatViewModel
     {
         public string GraphId { get; set; }
+        public string GraphIdProjet { get; set; }
+        public string GraphIdClient { get; set; }
+        public string GraphIdFonction { get; set; }
+        public string GraphIdSocieteDeConseil { get; set; }
 
         public string NomClient { get; set; }
         public int NumeroMandat { get; set; }

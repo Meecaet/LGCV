@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DAL_CV_Fiches.Repositories.Graph.Attributes;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -12,5 +13,8 @@ namespace DAL_CV_Fiches.Models.Graph
 
         public string NomComplet { get; set; }
         public string AdresseCourriel { get; set; }
+
+        [Edge("Is")]
+        public Conseiller Conseiller { get; set; }
     }
 }

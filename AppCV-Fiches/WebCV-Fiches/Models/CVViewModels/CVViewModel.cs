@@ -9,7 +9,10 @@ namespace WebCV_Fiches.Models.CVViewModels
 {
     public class CVViewModel
     {
-        public string GraphId { get; set; }
+        public string GraphIdConseiller { get; set; }
+        public string GraphIdUtilisateur { get; set; }
+        public string GraphIdFonction { get; set; }
+        public string GraphIdCV { get; set; }
 
         public string Prenom { get; set; }
         public string Nom { get; set; }

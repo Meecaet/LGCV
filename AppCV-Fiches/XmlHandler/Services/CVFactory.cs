@@ -22,6 +22,7 @@ namespace XmlHandler.Services
     {
         private CV currentCV;
         private Conseiller conseiller;
+        private Utilisateur utilisateur;
 
         private Dictionary<string, int> DicMois;
         private IList list;
@@ -51,7 +52,7 @@ namespace XmlHandler.Services
             documentCollection = documentClient.ReadDocumentCollectionAsync(UriFactory.CreateDocumentCollectionUri("Graph_CV", "CVs"), new RequestOptions { OfferThroughput = 400 }).Result;
         }
 
-        public Conseiller CreateConseiller(List<XmlNode> Nodes)
+        public Utilisateur CreateConseiller(List<XmlNode> Nodes)
         {
             SectionsExtractor CvSectionsExtractor = new SectionsExtractor();
             List<IXmlToken> matchTokens = new List<IXmlToken>();            
@@ -64,7 +65,7 @@ namespace XmlHandler.Services
             conseiller = new Conseiller();
             AssemblerConseiller(Sections);
 
-            return conseiller;
+            return utilisateur;
             
         }
 
@@ -117,7 +118,6 @@ namespace XmlHandler.Services
             FonctionGraphRepository fonctionGraphRepository = new FonctionGraphRepository(documentClient, documentCollection);
             XmlDocNode identification = sectionIdentification.Nodes.First();
 
-            Utilisateur utilisateur = new Utilisateur();
             Fonction fonction = new Fonction();
             CV cv = new CV();
 
@@ -126,6 +126,7 @@ namespace XmlHandler.Services
                 XmlDocParagraph paragraph = ((XmlDocTable)identification).GetParagraphsFromColumn(2).First();
                 string[] identLines = paragraph.GetLinesText();
 
+                utilisateur = new Utilisateur();
                 utilisateur.Nom = identLines[0];
                 fonction = fonctionGraphRepository.CreateIfNotExists(new Dictionary<string, object> { { "Description", identLines[1] } });
             }            
@@ -137,7 +138,8 @@ namespace XmlHandler.Services
             cv.ResumeExperience = description;
             cv.Status = StatusCV.Nouveau;
 
-            conseiller.Utilisateur = utilisateur;
+
+            utilisateur.Conseiller = conseiller;
             conseiller.Fonction = fonction;
             conseiller.CVs.Add(cv);
         }

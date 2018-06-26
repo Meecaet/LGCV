@@ -14,11 +14,24 @@ namespace WebCV_Fiches_Test
         public void TestMappintDomainModelToViewModel()
         {
             CVMapper mapper = new CVMapper();
-            Conseiller conseiller = new ConseillerGraphRepository("Graph_CV", "CVs").GetOne("bd7a4b01-51dc-45b7-8868-73901b366338");
-            CVViewModel cVViewModel = mapper.Map(conseiller);
+            Utilisateur utilisateur = new UtilisateurGraphRepository("Graph_CV", "CVs").GetOne("7b495fbb-6346-47e8-84dc-84fd3d2fc354");
+            CVViewModel cVViewModel = mapper.Map(utilisateur);
 
             Assert.IsNotNull(cVViewModel);
-            Assert.AreEqual(conseiller.Fonction.Description, cVViewModel.Fonction);
+            Assert.AreEqual(utilisateur.Conseiller.Fonction.Description, cVViewModel.Fonction);
+        }
+
+        [TestMethod]
+        public void TestMappintViewModelToDomainModel()
+        {
+            CVMapper mapper = new CVMapper();
+            Utilisateur utilisateur = new UtilisateurGraphRepository("Graph_CV", "CVs").GetOne("7b495fbb-6346-47e8-84dc-84fd3d2fc354");
+            CVViewModel cVViewModel = mapper.Map(utilisateur);
+
+            Utilisateur newUtilisateur = mapper.Map(cVViewModel);
+
+            Assert.IsNotNull(newUtilisateur);
+            Assert.AreEqual(newUtilisateur.Conseiller.Fonction.Description, cVViewModel.Fonction);
         }
     }
 }
