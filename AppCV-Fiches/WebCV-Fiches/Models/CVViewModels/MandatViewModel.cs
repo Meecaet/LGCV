@@ -14,8 +14,8 @@ namespace WebCV_Fiches.Models.CVViewModels
         public string NomEntreprise { get; set; }
         public string TitreProjet { get; set; }
         public string TitreMandat { get; set; }
-        public string Envergure { get; set; }
-        public string Efforts { get; set; }
+        public int Envergure { get; set; }
+        public int Efforts { get; set; }
         public string Fonction { get; set; }
         public string ContexteProjet { get; set; }
         public string PorteeDesTravaux { get; set; }
@@ -29,7 +29,13 @@ namespace WebCV_Fiches.Models.CVViewModels
         public string NomReference { get; set; }
         public string FonctionReference { get; set; }
         public string TelephoneReference { get; set; }
-        public string CelluaireReference { get; set; }
+        public string CellulaireReference { get; set; }
         public string CourrielReference { get; set; }
+
+        public MandatViewModel()
+        {
+            Taches = new List<TacheViewModel>();
+            Technologies = new List<TechnologieViewModel>();
+        }
     }
 }

@@ -35,7 +35,7 @@ namespace XmlHandler.Generation
             FileInfo[] filesInDirectory;
             DocxExtractor docxExtractor = new DocxExtractor();
 
-            conseillerRepo = new ConseillerGraphRepository("Graphe_Essay", "graph_cv");
+            conseillerRepo = new ConseillerGraphRepository("Graph_CV", "CVs");
 
             directoryInfo = new DirectoryInfo(path);
 

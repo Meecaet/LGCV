@@ -22,6 +22,17 @@ namespace WebCV_Fiches.Models.CVViewModels
         public List<TechnologieViewModel> Technologies { get; set; }
         public List<PerfectionnementViewModel> Perfectionnements { get; set; }
         public List<LangueViewModel> Langues { get; set; }
+
+        public CVViewModel()
+        {
+            DomainesDIntervention = new List<DomaineDInterventionViewModel>();
+            FormationsAcademique = new List<FormationAcademiqueViewModel>();
+            Certifications = new List<CertificationViewModel>();
+            Mandats = new List<MandatViewModel>();
+            Technologies = new List<TechnologieViewModel>();
+            Perfectionnements = new List<PerfectionnementViewModel>();
+            Langues = new List<LangueViewModel>();
+        }
     }
     
 }

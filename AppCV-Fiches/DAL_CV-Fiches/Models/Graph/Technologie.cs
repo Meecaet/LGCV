@@ -16,6 +16,6 @@ namespace DAL_CV_Fiches.Models.Graph
         public CategorieDeTechnologie Categorie { get; set; }
 
         [EdgeProperty]
-        public int MoisDExperience { get; set; }
+        public double MoisDExperience { get; set; }
     }
 }

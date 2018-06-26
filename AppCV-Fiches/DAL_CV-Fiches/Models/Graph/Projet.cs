@@ -14,9 +14,12 @@ namespace DAL_CV_Fiches.Models.Graph
 
         public string Nom { get; set; }
         public int Envergure { get; set; }
-        public string Reference { get; set; }
+        public string NomReference { get; set; }
         public string Description { get; set; }
-        public string Telephonereference { get; set; }
+        public string TelephoneReference { get; set; }
+        public string CellulaireReference { get; set; }
+        public string CourrielReference { get; set; }
+        public string FonctionReference { get; set; }
         public DateTime DateDebut { get; set; }
         public DateTime DateFin { get; set; }
         public double HeuresParSemaine { get; set; }

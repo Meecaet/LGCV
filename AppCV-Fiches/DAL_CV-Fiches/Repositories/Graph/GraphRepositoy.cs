@@ -128,7 +128,7 @@ namespace DAL_CV_Fiches.Repositories.Graph
         public T GetOne(string id)
         {
             List<T> listOfElements = new List<T>();
-            string getOneQuery = $"g.V('{id}')";
+            string getOneQuery = $"g.V(\"{id}\")";
 
             foreach (Vertex vertex in ExecuteCommandQueryVertex(getOneQuery))
                 return GetObjectFromVertex(vertex);
@@ -195,7 +195,7 @@ namespace DAL_CV_Fiches.Repositories.Graph
                     searchQuery += $".has(\"{property}\",{Convert.ToInt32(property.Value)})";
                 else
                     searchQuery += $".has(\"{property.Key}\",\"{property.Value.ToString().Replace("'", "’")}\")";
-            }          
+            }
 
             foreach (Vertex vertex in ExecuteCommandQueryVertex(searchQuery))
                 listOfElements.Add(GetObjectFromVertex(vertex));
@@ -300,7 +300,7 @@ namespace DAL_CV_Fiches.Repositories.Graph
         protected string GetAddQuery(T obj)
         {
             Type thisType = obj.GetType();
-            string query = $"g.addV('{thisType.Name}')";
+            string query = $"g.addV(\"{thisType.Name}\")";
 
             Object value = null;
             foreach (var item in thisType.GetProperties())
@@ -483,6 +483,8 @@ namespace DAL_CV_Fiches.Repositories.Graph
 
         private void ExecuteCommandEdge(string CommandString)
         {
+            CommandString = CommandString.Replace("$", "\\$");
+
             IDocumentQuery<Microsoft.Azure.Graphs.Elements.Edge> query = documentClient.CreateGremlinQuery<Microsoft.Azure.Graphs.Elements.Edge>(documentCollection, CommandString);
             var feedResponse = query.ExecuteNextAsync<Microsoft.Azure.Graphs.Elements.Edge>().Result;
         }
@@ -494,25 +496,33 @@ namespace DAL_CV_Fiches.Repositories.Graph
             //    sw.WriteLine(CommandString);
             //}
 
-            IDocumentQuery<Vertex> query = documentClient.CreateGremlinQuery<Vertex>(documentCollection, CommandString.Replace("$", "\\$"));
+            CommandString = CommandString.Replace("$", "\\$");
+
+            IDocumentQuery<Vertex> query = documentClient.CreateGremlinQuery<Vertex>(documentCollection, CommandString);
             var feedResponse = query.ExecuteNextAsync<Vertex>().Result;
             return feedResponse.First().Id.ToString();
         }
 
         private FeedResponse<Vertex> ExecuteCommandQueryVertex(string CommandString)
         {
+            CommandString = CommandString.Replace("$", "\\$");
+
             IDocumentQuery<Vertex> query = documentClient.CreateGremlinQuery<Vertex>(documentCollection, CommandString);
             return query.ExecuteNextAsync<Vertex>().Result;
         }
 
         private FeedResponse<Microsoft.Azure.Graphs.Elements.Edge> ExecuteCommandQueryEdge(string CommandString)
         {
+            CommandString = CommandString.Replace("$", "\\$");
+
             IDocumentQuery<Microsoft.Azure.Graphs.Elements.Edge> query = documentClient.CreateGremlinQuery<Microsoft.Azure.Graphs.Elements.Edge>(documentCollection, CommandString);
             return query.ExecuteNextAsync<Microsoft.Azure.Graphs.Elements.Edge>().Result;
         }
 
         private FeedResponse<dynamic> ExecuteCommandQueryDynamic(string CommandString)
         {
+            CommandString = CommandString.Replace("$", "\\$");
+
             IDocumentQuery<dynamic> query = documentClient.CreateGremlinQuery<dynamic>(documentCollection, CommandString);
             return query.ExecuteNextAsync<dynamic>().Result;
         }
@@ -583,8 +593,8 @@ namespace DAL_CV_Fiches.Repositories.Graph
 
         public void DeleteAllDocs()
         {
-            var a = documentClient.DeleteDocumentCollectionAsync(UriFactory.CreateDocumentCollectionUri("Graphe_Essay", "graph_cv")).Result;
-            var b = documentClient.CreateDocumentCollectionAsync(UriFactory.CreateDatabaseUri("Graphe_Essay"), new DocumentCollection { Id = "graph_cv" }).Result;
+            var a = documentClient.DeleteDocumentCollectionAsync(UriFactory.CreateDocumentCollectionUri("Graph_CV", "CVs")).Result;
+            var b = documentClient.CreateDocumentCollectionAsync(UriFactory.CreateDatabaseUri("Graph_CV"), new DocumentCollection { Id = "CVs" }).Result;
         }
     }   
 }

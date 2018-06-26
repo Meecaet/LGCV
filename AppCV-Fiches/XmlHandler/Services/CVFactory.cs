@@ -48,7 +48,7 @@ namespace XmlHandler.Services
             };
 
             documentClient = new DocumentClient(new Uri("https://localhost:8081"), "C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==");
-            documentCollection = documentClient.ReadDocumentCollectionAsync(UriFactory.CreateDocumentCollectionUri("Graphe_Essay", "graph_cv"), new RequestOptions { OfferThroughput = 400 }).Result;
+            documentCollection = documentClient.ReadDocumentCollectionAsync(UriFactory.CreateDocumentCollectionUri("Graph_CV", "CVs"), new RequestOptions { OfferThroughput = 400 }).Result;
         }
 
         public Conseiller CreateConseiller(List<XmlNode> Nodes)
@@ -325,7 +325,7 @@ namespace XmlHandler.Services
                         mois = lineParagraphsColumn2[j].GetParagraphText();
 
                         technologie = technologieGraphRepository.CreateIfNotExists(new Dictionary<string, object> { { "Nom", techNom } });
-                        technologie.MoisDExperience = Convert.ToInt32(mois);
+                        technologie.MoisDExperience = Convert.ToDouble(mois);
 
                         if (categorie != null)
                             technologie.Categorie = categorie;
@@ -550,7 +550,7 @@ namespace XmlHandler.Services
                     
 
                 if (infoParagraphs[i].GetParagraphText().Contains("Référence"))
-                    projet.Reference = infoParagraphsSecondColumn[i].GetParagraphText();
+                    projet.NomReference = infoParagraphsSecondColumn[i].GetParagraphText();
             }
 
 

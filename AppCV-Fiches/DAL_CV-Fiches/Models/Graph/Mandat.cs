@@ -19,6 +19,8 @@ namespace DAL_CV_Fiches.Models.Graph
         public DateTime DateDebut { get; set; }
         public DateTime DateFin { get; set; }
         public int Efforts { get; set; }
+        public string Titre { get; set; }
+        public string Description { get; set; }
 
         [Edge("Performed")]
         public List<Tache> Taches { get; set; }

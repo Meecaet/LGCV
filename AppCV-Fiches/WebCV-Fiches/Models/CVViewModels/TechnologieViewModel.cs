@@ -9,6 +9,6 @@ namespace WebCV_Fiches.Models.CVViewModels
     {
         public string GraphId { get; set; }
         public string Description { get; set; }
-        public int Mois { get; set; }
+        public double Mois { get; set; }
     }
 }

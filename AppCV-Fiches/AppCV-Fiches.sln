@@ -11,13 +11,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DAL_CV-Fiches", "DAL_CV-Fic
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DAL_CV_Fiches_Test", "DAL_CV_Fiches_Test\DAL_CV_Fiches_Test.csproj", "{259DBA48-F65B-40BD-83BD-7CD319588210}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrototypeDuConvertisseur", "PrototypeDuConvertisseur\PrototypeDuConvertisseur.csproj", "{259E26F7-97A9-4FBE-983B-1DA88A5F2AEB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PrototypeDuConvertisseur", "PrototypeDuConvertisseur\PrototypeDuConvertisseur.csproj", "{259E26F7-97A9-4FBE-983B-1DA88A5F2AEB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XmlHandler", "XmlHandler\XmlHandler.csproj", "{9535E410-BFF9-40DD-B9EE-13C2737FC31F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XmlHandler_Test", "XmlHandler_Test\XmlHandler_Test.csproj", "{01FEEB54-A35E-4773-8820-D5A32A7A67A6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XmlHandler_Test", "XmlHandler_Test\XmlHandler_Test.csproj", "{01FEEB54-A35E-4773-8820-D5A32A7A67A6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Convertisseur_Test", "Convertisseur_Test\Convertisseur_Test.csproj", "{321297BC-AEE8-43D5-B5EE-804F081B391C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Convertisseur_Test", "Convertisseur_Test\Convertisseur_Test.csproj", "{321297BC-AEE8-43D5-B5EE-804F081B391C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebCV-Fiches_Test", "..\WebCV-Fiches_Test\WebCV-Fiches_Test.csproj", "{BAE3C16D-417E-4FDF-9A5A-94F22163C065}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,6 +59,10 @@ Global
 		{321297BC-AEE8-43D5-B5EE-804F081B391C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{321297BC-AEE8-43D5-B5EE-804F081B391C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{321297BC-AEE8-43D5-B5EE-804F081B391C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BAE3C16D-417E-4FDF-9A5A-94F22163C065}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BAE3C16D-417E-4FDF-9A5A-94F22163C065}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BAE3C16D-417E-4FDF-9A5A-94F22163C065}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BAE3C16D-417E-4FDF-9A5A-94F22163C065}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
