@@ -77,7 +77,7 @@ namespace XmlHandler.Generation
             CVFactory cVFactory = new CVFactory();
             Utilisateur newUtilisateur = cVFactory.CreateConseiller(nodes);
 
-            XmlSerializer xmlSerializer = new XmlSerializer(typeof(Conseiller));
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(Utilisateur));
             using (Stream fileStream = new FileStream(outputPath, FileMode.Create, FileAccess.Write, FileShare.None))
             {
                 xmlSerializer.Serialize(fileStream, newUtilisateur);

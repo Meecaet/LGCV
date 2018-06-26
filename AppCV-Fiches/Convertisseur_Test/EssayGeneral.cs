@@ -67,8 +67,9 @@ namespace Convertisseur_Test
         [TestMethod]
         public void TestDAssemblageConseiller()
         {
-            ConseillerGraphRepository conseillerGraphRepository;
+            UtilisateurGraphRepository utulisateurGraphRepository;
             Conseiller conseiller;
+            Utilisateur utilisateur;
 
             DirectoryInfo extractedDirectory;
             string gabaritDirectoryPath = @"..\\..\\..\\Gabarits";
@@ -76,7 +77,7 @@ namespace Convertisseur_Test
             try
             {
                 CVGenerator generator = new CVGenerator();
-                conseillerGraphRepository = new ConseillerGraphRepository("Graphe_Essay", "graph_cv");
+                utulisateurGraphRepository = new UtilisateurGraphRepository("Graphe_Essay", "graph_cv");
 
                 extractedDirectory = new DirectoryInfo($"{gabaritDirectoryPath}\\Modele_a_generer");
                 if (extractedDirectory.Exists)
@@ -84,12 +85,13 @@ namespace Convertisseur_Test
 
                 extractedDirectory = null;
 
-                conseillerGraphRepository.DeleteAllDocs();
+                utulisateurGraphRepository.DeleteAllDocs();
                 generator.ProcessCV(gabaritDirectoryPath);
 
-                conseiller = conseillerGraphRepository.GetAll().First();
+                utilisateur = utulisateurGraphRepository.GetAll().First();
+                conseiller = utilisateur.Conseiller;
 
-                Assert.IsNotNull(conseiller.Utilisateur);
+                Assert.IsNotNull(utilisateur);
 
                 Assert.AreEqual(2, conseiller.FormationsScolaires.Count);
 

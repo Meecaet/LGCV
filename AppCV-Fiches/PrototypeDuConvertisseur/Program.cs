@@ -8,7 +8,7 @@ namespace PrototypeDuConvertisseur
         static void Main(string[] args)
         {
             Console.WriteLine("Appuyer sur un bouton pour demarrer");
-            Console.ReadKey();
+           // Console.ReadKey();
 
             CVGenerator generator = new CVGenerator();
             generator.ProcessCV(args[0]);

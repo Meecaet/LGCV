@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using DAL_CV_Fiches.Models.Graph;
 using DAL_CV_Fiches.Repositories.Graph;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using WebCV_Fiches.Helpers;
 using WebCV_Fiches.Models.Admin;
+using WebCV_Fiches.Models.CVViewModels;
 
 namespace WebCV_Fiches.Controllers
 {
@@ -16,30 +16,34 @@ namespace WebCV_Fiches.Controllers
         private UserManager<ApplicationUser> userManager;
         private ApplicationUser UtilisateurActuel;
         private UtilisateurGraphRepository UtilisateurDepot;
+        private object mapper;
 
         public CVController(UserManager<ApplicationUser> userManager)
         {
             this.userManager = userManager;
+            UtilisateurDepot = new UtilisateurGraphRepository("Graph_CV", "CVs");
         }
 
         // GET: CV
         public async Task<ActionResult> Index()
         {
-            UtilisateurDepot = new UtilisateurGraphRepository("Graph_CV", "CVs");
             UtilisateurActuel = await userManager.GetUserAsync(User);
 
             var utilisateur = UtilisateurDepot.Search(new Utilisateur { NomComplet = UtilisateurActuel.NomComplet }).DefaultIfEmpty(null).FirstOrDefault();
 
             if (utilisateur != null)
-                return RedirectToAction(nameof(Details));
+                return RedirectToAction(nameof(Details), new { id= utilisateur.GraphKey});
             else
                 return RedirectToAction(nameof(Create));            
         }
 
         // GET: CV/Details/5
-        public ActionResult Details(int id)
+        public ActionResult Details(string id)
         {
-            return View();
+            var utilisateur = UtilisateurDepot.GetOne(id);
+            CVMapper mapper = new CVMapper();
+            CVViewModel cVViewModel = mapper.Map(utilisateur);
+            return View(cVViewModel);
         }
 
         // GET: CV/Create
