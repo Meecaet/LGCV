@@ -29,18 +29,36 @@ namespace WebCV_Fiches.Controllers
         {
             UtilisateurActuel = await userManager.GetUserAsync(User);
 
-            var utilisateur = UtilisateurDepot.Search(new Utilisateur { NomComplet = UtilisateurActuel.NomComplet }).DefaultIfEmpty(null).FirstOrDefault();
+            Utilisateur utilisateur;
+
+            if (HttpContext.Session.Get<Utilisateur>("Utilisateur") != null)
+                utilisateur = HttpContext.Session.Get<Utilisateur>("Utilisateur");
+            else
+            {
+                utilisateur = UtilisateurDepot.Search(new Utilisateur { Nom = UtilisateurActuel.NomComplet }).DefaultIfEmpty(null).FirstOrDefault();
+                HttpContext.Session.Set<Utilisateur>("Utilisateur", utilisateur);
+            }
+
 
             if (utilisateur != null)
-                return RedirectToAction(nameof(Details), new { id= utilisateur.GraphKey});
+                return RedirectToAction(nameof(Details), new { id = utilisateur.GraphKey });
             else
-                return RedirectToAction(nameof(Create));            
+                return RedirectToAction(nameof(Create));
         }
 
         // GET: CV/Details/5
         public ActionResult Details(string id)
         {
-            var utilisateur = UtilisateurDepot.GetOne(id);
+            Utilisateur utilisateur;
+
+            if (HttpContext.Session.Get<Utilisateur>("Utilisateur") != null)
+                utilisateur = HttpContext.Session.Get<Utilisateur>("Utilisateur");
+            else
+            {
+                utilisateur = UtilisateurDepot.GetOne(id);
+                HttpContext.Session.Set<Utilisateur>("Utilisateur", utilisateur);
+            }
+
             CVMapper mapper = new CVMapper();
             CVViewModel cVViewModel = mapper.Map(utilisateur);
             return View(cVViewModel);

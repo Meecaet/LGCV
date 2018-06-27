@@ -53,6 +53,7 @@ namespace WebCV_Fiches.Helpers
                 mandatViewModel.GraphIdProjet = mandat.Projet.GraphKey;
                 mandatViewModel.GraphIdClient = mandat.Projet.Client.GraphKey;
                 mandatViewModel.GraphIdSocieteDeConseil = mandat.Projet.SocieteDeConseil.GraphKey;
+                mandatViewModel.GraphIdFonction = mandat.Fonction.GraphKey;
 
                 mandatViewModel.NomClient = mandat.Projet.Client.Nom;
 
@@ -79,18 +80,19 @@ namespace WebCV_Fiches.Helpers
                 mandatViewModel.FonctionReference = mandat.Projet.FonctionReference;
 
                 foreach (Technologie technologie in mandat.Projet.Technologies)
-                    mandatViewModel.Technologies.Add(new TechnologieViewModel { GraphId = technologie.GraphKey, Description = technologie.Description });
+                    mandatViewModel.Technologies.Add(new TechnologieViewModel { GraphId = technologie.GraphKey, Description = technologie.Nom });
 
                 foreach (Tache tache in mandat.Taches)
                     mandatViewModel.Taches.Add(new TacheViewModel{ GraphId = tache.GraphKey, Description = tache.Description });
 
+                cVViewModel.Mandats.Add(mandatViewModel);
             }
 
             foreach (Technologie technologie in utilisateur.Conseiller.Technologies)
                 cVViewModel.Technologies.Add(new TechnologieViewModel { GraphId = technologie.GraphKey, Description = technologie.Nom, Mois = technologie.MoisDExperience });
 
             foreach (Formation certification in utilisateur.Conseiller.Formations.Where(form => form.Type.Descriminator == "Formation" && form.Type.Description == "Perfectionnement"))
-                cVViewModel.Perfectionnements.Add(new PerfectionnementViewModel { GraphId = certification.GraphKey, Description = certification.Description });
+                cVViewModel.Perfectionnements.Add(new PerfectionnementViewModel { GraphId = certification.GraphKey, Description = certification.Description, GraphIdGenre = certification.Type.GraphKey });
 
             foreach (Langue langue in utilisateur.Conseiller.Langues)
             {

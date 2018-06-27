@@ -155,8 +155,8 @@ namespace DAL_CV_Fiches.Repositories.Graph
                 currentValue = propInfo.GetValue(searchObject);
                 if (currentValue != null)
                 {
-                    if (propInfo.PropertyType.BaseType == typeof(Enum) || propInfo.PropertyType.GetType() == typeof(Int32))
-                        searchQuery += $".has(\"{propInfo.Name}\",\"{Convert.ToInt32(currentValue)}\")";
+                    if (propInfo.PropertyType.BaseType == typeof(Enum) || propInfo.PropertyType.UnderlyingSystemType == typeof(Int32))
+                            searchQuery += $".has(\"{propInfo.Name}\",{Convert.ToInt32(currentValue)})";
                     else
                         searchQuery += $".has(\"{propInfo.Name}\",\"{currentValue.ToString().Replace("'", "’")}\")";
                 }
@@ -414,10 +414,15 @@ namespace DAL_CV_Fiches.Repositories.Graph
                         getEdgeQuery = $"g.V('{fromId}').outE('{edgeName}').where(inV().has('id', '{embeddedObject.GraphKey}'))";
                         foreach (Microsoft.Azure.Graphs.Elements.Edge edge in ExecuteCommandQueryEdge(getEdgeQuery))
                         {
-                            if (edge.GetProperties().GetEnumerator().Current == null)
+                            try
+                            {
+                                edgeProperties = edge.GetProperties().ToList();
+                            }
+                            catch (NullReferenceException)
+                            {
                                 continue;
+                            }
 
-                            edgeProperties = edge.GetProperties().ToList();
                             if (edgeProperties.Any(x => x.Key == propInfo.Name))
                             {
                                 edgePropertyValue = edgeProperties.First(x => x.Key == propInfo.Name).Value;
