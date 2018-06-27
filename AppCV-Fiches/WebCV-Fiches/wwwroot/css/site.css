@@ -51,6 +51,9 @@
     width: 100%;
     padding: 10px;
 }
+.lgs-group b{
+    font-size: medium
+}
 
 .lgs-floatRightButtons {
     float: right;
@@ -83,4 +86,8 @@
 .form-control {
     margin-top: 10px;
     margin-right: 10px;
+}
+
+.mandat-fiche {
+    margin-top:20px;
 }
