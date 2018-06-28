@@ -1,28 +1,283 @@
-﻿@model WebCV_Fiches.Models.CVViewModel
+﻿@using DAL_CV_Fiches.Models.Graph
+@model WebCV_Fiches.Models.CVViewModels.CVViewModel
 
 @{
     ViewData["Title"] = "Create";
 }
 
-<h2>Create</h2>
+@section Scripts
+{
+    <script type="text/javascript">
 
-<h4>CVViewModel</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-default" />
-            </div>
-        </form>
-    </div>
-</div>
+        $('#tableMandats').on('click', '.btnAddTask', function () {
+            var element = $(this);
+            var index = element.attr('index');
+            var siblingsCollection = element.parent().siblings();
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+            var tableTache = findElementsInCollectionByClassName(siblingsCollection, "tableTache")[0];
+            var j = findElementsInCollectionByClassName(tableTache.children(), "TacheItem").length;            
+            
+            $.ajax({
+                url: 'ObtenirNouvelleTache?idMandat=' + index + '&idTache=' + j,
+                success: function (data) {
+                    tableTache.append(data);
+                },
+                error: function (d, e, f) {
+                    console.log(d, e, f);
+                }
+            });
+        });        
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+        $('#tableMandats').on('click', '.btnAddTech', function () {
+            var element = $(this);
+            var index = element.attr('index');
+            var siblingsCollection = element.parent().siblings();
+
+            var tableTech = findElementsInCollectionByClassName(siblingsCollection, "tableTechnologie")[0];
+            var j = findElementsInCollectionByClassName(tableTech.children(), "TechItem").length;
+
+            $.ajax({
+                url: 'ObtenirNouvelleTechnologie?idMandat=' + index + '&idTech=' + j,
+                success: function (data) {
+                    tableTech.append(data);
+                },
+                error: function (d, e, f) {
+                    console.log(d, e, f);
+                }
+            });
+        });
+
+        function findElementsInCollectionByClassName(collection, className) { 
+            var elements = new Array;
+            collection.each(function () {
+                if ($(this).attr("class")) {
+                    if ($(this).attr("class").search(className) >= 0) {
+                        elements.push($(this));
+                    }
+                }
+            });
+
+            return elements;
+        }
+
+        $('#btnAddDomaine').click(function () {
+            var i = $(".thingRow").length;
+            $.ajax({
+                url: 'ObtenirNouveauDomaine?Index=' + i,
+                success: function (data) {
+                    $('#Table > tbody').append(data);
+                },
+                error: function (a, b, c) {
+                    console.log(a, b, c);
+                }
+            });
+        });
+
+        $('#btnAddFormationAcademic').click(function () {
+            var i = $(".FormationsAcademiqueItem").length;
+            $.ajax({
+                url: 'ObtenirNouvelleFormationAcademique?Index=' + i,
+                success: function (data) {
+                    $('#tableFormationAcademic').append(data);
+                },
+                error: function (a, b, c) {
+                    console.log(a, b, c);
+                }
+            });
+        });
+
+        $('#btnAddCertification').click(function () {
+            var i = $(".CertificationItem").length;
+            $.ajax({
+                url: 'ObtenirNouvelleCertification?Index=' + i,
+                success: function (data) {
+                    $('#tableCertification').append(data);
+                },
+                error: function (a, b, c) {
+                    console.log(a, b, c);
+                }
+            });
+        });
+
+
+        $('#btnAddMandat').click(function () {
+            var i = $(".MandatItem").length;
+            $.ajax({
+                url: 'ObtenirNouveauMandat?Index=' + i,
+                success: function (data) {
+                    $('#tableMandats').append(data);
+                },
+                error: function (a, b, c) {
+                    console.log(a, b, c);
+                }
+            });
+        });
+
+        $('#btnAddTechConseiller').click(function () {
+            var i = $(".TechConseillerItem").length;
+            $.ajax({
+                url: 'ObtenirNouvelleTechnologieConseiller?Index=' + i,
+                success: function (data) {
+                    $('#tableTechConseiller').append(data);
+                },
+                error: function (a, b, c) {
+                    console.log(a, b, c);
+                }
+            });
+        });
+
+        $('#btnAddLangue').click(function () {
+            var i = $(".LangueItem").length;
+            $.ajax({
+                url: 'ObtenirNouvelleLangue?Index=' + i,
+                success: function (data) {
+                    $('#tableLangue').append(data);
+                },
+                error: function (a, b, c) {
+                    console.log(a, b, c);
+                }
+            });
+        });        
+
+        $('#btnAddPerfectionnement').click(function () {
+            var i = $(".PerfectionnementItem").length;
+            $.ajax({
+                url: 'ObtenirNouveauPerfectionnement?Index=' + i,
+                success: function (data) {
+                    $('#tablePerfectionnement').append(data);
+                },
+                error: function (a, b, c) {
+                    console.log(a, b, c);
+                }
+            });
+        });         
+
+    </script>
 }
+
+
+
+<div class="container-fluid" style="padding-top:30px">
+    @using (Html.BeginForm("Create", "CV", FormMethod.Post, new { @class = "" }))
+    {
+        <div class="form-group">
+            <div class="form-inline">
+                <div class="lgs-label">Identification</div>
+                <div class="table-bordered lgs-group">
+                    <input class="form-control" type="text" placeholder="Prénom" name="prenom" asp-for="Prenom">
+                    <input class="form-control" type="text" placeholder="Nom" name="nom" asp-for="Nom">
+                    <br />
+                    <select id="GraphIdFonction" class="form-control form-control-sm">
+                        @foreach (Fonction fonction in (List<Fonction>)ViewData["Fonctions"])
+                        {
+                            <option id="@fonction.GraphKey">@fonction.Description</option>
+                        }
+                    </select>
+                </div>
+            </div>
+
+            <div class="table-bordered lgs-group">
+                <textarea class="lgs-textarea form-control" style="width:100%" placeholder="Biographie" asp-for="Biographie"></textarea>
+            </div>
+
+            <div>
+                <div class="lgs-label">
+                    Principaux domaines d'intervention
+                </div>
+                <table id="Table">
+                    <tbody></tbody>
+                </table>
+                <div class="lgs-floatRightButtons">
+                    <button type="button" class="btn btn-link" id="btnAddDomaine" name="btnAddDomaine"><i class="fas fa-plus"></i></button>
+                </div>
+            </div>
+
+            <div style="clear:both">
+                <div class="form-group row">
+                    <div class="col-lg-4">
+
+                        <div>
+                            <div class="lgs-label">Formation Académique</div>
+                            <div class="lgs-floatLeftButtons">
+                                <button type="button" class="btn btn-link" id="btnAddFormationAcademic"><i class="fas fa-plus"></i></button>
+                            </div>
+                            <div id="tableFormationAcademic" class="lgs-group table-bordered">                                
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-lg-4">
+
+                        <div>
+                            <div class="lgs-label">Certifications</div>
+                            <div class="lgs-floatLeftButtons">
+                                <button type="button" id="btnAddCertification" class="btn btn-link"><i class="fas fa-plus"></i></button>
+                            </div>
+                            <div id="tableCertification" class="lgs-group table-bordered">                                
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-lg-12"> 
+                <div class="lgs-label">Mandats</div>
+                <div class="lgs-floatLeftButtons">
+                    <button type="button" id="btnAddMandat" class="btn btn-link"><i class="fas fa-plus"></i></button>
+                </div>
+                <div id="tableMandats" class="lgs-group table-bordered">
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <div class="form-group row">
+                <div class="col-lg-4">
+                    <div class="lgs-label">
+                        Expériences Technologiques
+                    </div>
+                    <div class="lgs-floatLeftButtons">
+                        <button id="btnAddTechConseiller" type="button" class="btn btn-link"><i class="fas fa-plus"></i></button>
+                    </div>
+                    <div id="tableTechConseiller"  class="lgs-group table-bordered">                        
+                    </div>
+
+                </div>
+                <div class="col-lg-4">
+
+                    <div>
+                        <div class="lgs-label">Langues</div>
+                        <div class="lgs-floatLeftButtons">
+                            <button id="btnAddLangue" type="button" class="btn btn-link"><i class="fas fa-plus"></i></button>
+                        </div>
+                        <div id="tableLangue" class="lgs-group table-bordered">                            
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-lg-4">
+
+                    <div>
+
+                        <div class="lgs-label">Perfectionnements </div>
+                        <div class="lgs-floatLeftButtons">
+                            <button id="btnAddPerfectionnement" type="button" class="btn btn-link"><i class="fas fa-plus"></i></button>
+                        </div>
+                        <div id="tablePerfectionnement" class="lgs-group table-bordered">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <input type="submit" name="btnSubmit" value="Enregistrer" />
+
+    }
+
+</div>

@@ -1,0 +1,11 @@
+﻿@using DAL_CV_Fiches.Models.Graph
+@model int
+
+<label>Langue: </label>
+<select class="LangueItem" name="Langues[@(Model)].GraphId">
+    @foreach (Langue lang in (List<Langue>)ViewData["Langues"])
+    {
+        <option value="@lang.GraphKey">@lang.Nom</option>
+    }
+</select>
+<br />

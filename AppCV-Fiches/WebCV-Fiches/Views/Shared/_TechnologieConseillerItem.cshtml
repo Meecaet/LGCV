@@ -1,0 +1,20 @@
+﻿@using DAL_CV_Fiches.Models.Graph
+@model int
+
+<div class="lgs-group table-bordered">
+    <table>
+        <tr>
+            <td>
+                <select class="TechConseillerItem" name="Technologies[@(Model)].GraphId" style="width:200px">
+                    @foreach (Technologie tech in (List<Technologie>)ViewData["Technologies"])
+                    {
+                        <option value="@tech.GraphKey">@tech.Nom</option>
+                    }
+                </select>
+            </td>
+            <td>
+                <input type="number" name="Technologies[@(Model)].Mois" placeholder="0.0"/>
+            </td>
+        </tr>
+    </table>
+</div>

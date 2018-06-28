@@ -30,6 +30,7 @@ namespace WebCV_Fiches.Models.CVViewModels
         public DateTime DebutMandat { get; set; }
         public DateTime FinMandat { get; set; }
 
+        
         public string NomReference { get; set; }
         public string FonctionReference { get; set; }
         public string TelephoneReference { get; set; }

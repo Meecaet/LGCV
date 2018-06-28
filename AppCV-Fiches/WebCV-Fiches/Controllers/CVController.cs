@@ -18,12 +18,19 @@ namespace WebCV_Fiches.Controllers
         private UserManager<ApplicationUser> userManager;
         private ApplicationUser UtilisateurActuel;
         private UtilisateurGraphRepository UtilisateurDepot;
-        private object mapper;
+        private TechnologieGraphRepository TechnologieDepot;
+        private LangueGraphRepository LangueDepot;
+        private FonctionGraphRepository fonctionGraphRepository;
+        private CVMapper mapper;
 
         public CVController(UserManager<ApplicationUser> userManager)
         {
             this.userManager = userManager;
             UtilisateurDepot = new UtilisateurGraphRepository("Graph_CV", "CVs");
+            TechnologieDepot = new TechnologieGraphRepository("Graph_CV", "CVs");
+            LangueDepot = new LangueGraphRepository("Graph_CV", "CVs");
+            fonctionGraphRepository = new FonctionGraphRepository("Graph_CV", "CVs");
+            mapper = new CVMapper();
         }
 
         private CVViewModel CreateDummyCVViewModel()
@@ -236,10 +243,10 @@ namespace WebCV_Fiches.Controllers
         public ActionResult Details(string id)
         {
 
-            var cv = CreateDummyCVViewModel();
-            return View(cv);
+            //var cv = CreateDummyCVViewModel();
+            //return View(cv);
 
-            /*Utilisateur utilisateur;
+            Utilisateur utilisateur;
 
             if (HttpContext.Session.Get<Utilisateur>("Utilisateur") != null)
                 utilisateur = HttpContext.Session.Get<Utilisateur>("Utilisateur");
@@ -251,28 +258,37 @@ namespace WebCV_Fiches.Controllers
 
             CVMapper mapper = new CVMapper();
             CVViewModel cVViewModel = mapper.Map(utilisateur);
-            return View(cVViewModel);*/
+            return View(cVViewModel);
         }
 
         // GET: CV/Create
         public ActionResult Create()
         {
-            return View();
+            CVViewModel nouveauCv = new CVViewModel();
+            ViewData["Fonctions"] = fonctionGraphRepository.GetAll();
+            
+            return View(nouveauCv);
         }
 
         // POST: CV/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(CVViewModel nouveauCv)
         {
             try
             {
                 // TODO: Add insert logic here
 
-                return RedirectToAction(nameof(Index));
+                Utilisateur nouveauUtilisateur = mapper.Map(nouveauCv);
+                UtilisateurDepot.Add(nouveauUtilisateur);
+
+                return RedirectToAction(nameof(Details), "CV", new { id = nouveauUtilisateur.GraphKey });
+
+                //return RedirectToAction(nameof(Index));
             }
             catch
             {
+                ViewData["Fonctions"] = fonctionGraphRepository.GetAll();
                 return View();
             }
         }
@@ -304,6 +320,58 @@ namespace WebCV_Fiches.Controllers
         public ActionResult Delete(int id)
         {
             return View();
+        }
+
+        public ActionResult ObtenirNouveauDomaine(int Index)
+        {
+            return PartialView("_DomaineDInterventionItem", Index);
+        }
+
+        public ActionResult ObtenirNouvelleFormationAcademique(int Index)
+        {
+            return PartialView("_FormationAcademiqueItem", Index);
+        }
+
+        public ActionResult ObtenirNouvelleCertification(int Index)
+        {
+            return PartialView("_CertificationItem", Index);
+        }
+
+        public ActionResult ObtenirNouveauMandat(int Index)
+        {
+            ViewData["Fonctions"] = fonctionGraphRepository.GetAll();
+            return PartialView("_MandatItem", Index);
+        }
+
+        public ActionResult ObtenirNouvelleTache(int idMandat, int idTache)
+        {
+            Tuple<int, int> tuple = new Tuple<int, int>(idMandat, idTache);
+            return PartialView("_TacheItem", tuple);
+        }
+
+        public ActionResult ObtenirNouvelleTechnologie(int idMandat, int idTech)
+        {
+            Tuple<int, int> tuple = new Tuple<int, int>(idMandat, idTech);
+            ViewData["Technologies"] = TechnologieDepot.GetAll();
+
+            return PartialView("_TechnologieItem", tuple);
+        }
+
+        public ActionResult ObtenirNouvelleTechnologieConseiller(int Index)
+        {            
+            ViewData["Technologies"] = TechnologieDepot.GetAll();
+            return PartialView("_TechnologieConseillerItem", Index);
+        }
+
+        public ActionResult ObtenirNouvelleLangue(int Index)
+        {
+            ViewData["Langues"] = LangueDepot.GetAll();
+            return PartialView("_LangueItem", Index);
+        }
+
+        public ActionResult ObtenirNouveauPerfectionnement(int Index)
+        {
+            return PartialView("_PerfectionnementItem", Index);
         }
 
         // POST: CV/Delete/5

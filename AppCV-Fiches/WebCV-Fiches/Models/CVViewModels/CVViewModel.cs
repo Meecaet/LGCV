@@ -1,5 +1,6 @@
 ﻿using DAL_CV_Fiches.Models;
 using DAL_CV_Fiches.Models.Graph;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,6 +36,7 @@ namespace WebCV_Fiches.Models.CVViewModels
             Technologies = new List<TechnologieViewModel>();
             Perfectionnements = new List<PerfectionnementViewModel>();
             Langues = new List<LangueViewModel>();
+
         }
     }
     

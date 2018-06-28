@@ -198,10 +198,21 @@ namespace WebCV_Fiches.Helpers
                 Langue langue = new Langue();
                 langue.GraphKey = langueViewModel.GraphId;
                 langue.Nom = langueViewModel.Nom;
-                langue.Parle = (Niveau)System.Enum.Parse(typeof(Niveau),langueViewModel.NiveauParle);
-                langue.Ecrit = (Niveau)System.Enum.Parse(typeof(Niveau), langueViewModel.NiveauEcrit);
-                langue.Lu = (Niveau)System.Enum.Parse(typeof(Niveau), langueViewModel.NiveauLu);
 
+                if (langueViewModel.NiveauParle == null)
+                    langue.Parle = Niveau.Avancé;
+                else
+                    langue.Parle = (Niveau)System.Enum.Parse(typeof(Niveau),langueViewModel.NiveauParle);
+
+                if (langueViewModel.NiveauEcrit == null)
+                    langue.Ecrit = Niveau.Avancé;
+                else
+                    langue.Ecrit = (Niveau)System.Enum.Parse(typeof(Niveau), langueViewModel.NiveauEcrit);
+
+                if (langueViewModel.NiveauLu == null)
+                    langue.Lu = Niveau.Avancé;
+                else
+                    langue.Lu = (Niveau)System.Enum.Parse(typeof(Niveau), langueViewModel.NiveauLu);                
 
                 utilisateur.Conseiller.Langues.Add(langue);
             }

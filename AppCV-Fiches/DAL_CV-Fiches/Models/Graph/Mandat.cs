@@ -25,5 +25,10 @@ namespace DAL_CV_Fiches.Models.Graph
         [Edge("Performed")]
         public List<Tache> Taches { get; set; }
 
+        public Mandat()
+        {
+            Taches = new List<Tache>();
+        }
+
     }
 }

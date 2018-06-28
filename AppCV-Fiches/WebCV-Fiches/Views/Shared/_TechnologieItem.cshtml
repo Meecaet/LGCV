@@ -1,0 +1,11 @@
+﻿@using DAL_CV_Fiches.Models.Graph
+@model Tuple<int, int>
+
+<label>Technologie: </label>
+<select class="TechItem" name="Mandats[@(Model.Item1)].Technologies[@(Model.Item2)].GraphId">
+    @foreach (Technologie tech in (List<Technologie>)ViewData["Technologies"])
+    {
+        <option value="@tech.GraphKey">@tech.Nom</option>
+    }
+</select>
+<br />
