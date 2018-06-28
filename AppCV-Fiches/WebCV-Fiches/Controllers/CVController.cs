@@ -162,7 +162,7 @@ namespace WebCV_Fiches.Controllers
                         NomEntreprise = "Umbrella Corporation",
                         NomReference = "James Markus",
                         TelephoneReference = "418 631 6523",
-                        NumeroMandat = 12,
+                        NumeroMandat = 2,
                         TitreMandat = "Inventoire des armes biologiques B.O.W",
                         TitreProjet = "Inventoire des armes biologiques B.O.W",
                         PorteeDesTravaux = "",
@@ -199,6 +199,64 @@ namespace WebCV_Fiches.Controllers
                             new TechnologieViewModel
                             {
                                 Description = "Phyton",
+                                Mois = 15
+                            }
+                        }
+                    },
+                    new MandatViewModel
+                    {
+                        CellulaireReference = "418 261 3369",
+                        ContexteProjet = "Le projet UNIDOS, mis sur pied par le gouvernement de la Colombie, a pour but d’éradiquer la pauvreté extrême dans le pays. Ce mandat a consisté à concevoir et mettre en œuvre un système informatique de gestion des interventions dans le cadre d’un programme gouvernemental d’aide aux familles vulnérables visant à améliorer la situation économique, sociale, éducative et même résoudre des problèmes de violence intrafamiliale. Ce système permettait aux agents du gouvernement (intervenants sociaux) qui rendaient visite aux familles d’enregistrer les données recueillies et ensuite, de les traiter pour réaliser une stratégie d’aide individuelle et personnalisée pour chaque famille.",
+                        CourrielReference = "unidos@umbrella.com",
+                        DebutMandat = DateTime.Now.AddDays(-1000),
+                        FinMandat = DateTime.Now.AddDays(-500),
+                        DebutProjet = DateTime.Now.AddDays(-1000),
+                        FinProjet = DateTime.Now.AddDays(-500),
+                        Efforts = 50,
+                        Envergure = 1500,
+                        Fonction = "Analyste devéloppeur .Net",
+                        FonctionReference = "Architect",
+                        NomClient = "Walmart",
+                        NomEntreprise = "Walmart",
+                        NomReference = "James Markus",
+                        TelephoneReference = "418 631 6523",
+                        NumeroMandat = 1,
+                        TitreMandat = "Securité",
+                        TitreProjet = "Systéme de securité biometrique",
+                        PorteeDesTravaux = "",
+                        Taches = {
+                            new TacheViewModel
+                            {
+                                Description = "Conseil auprès de l’équipe d’implantation"
+                            },
+                            new TacheViewModel
+                            {
+                                Description = "Définition de la solution cible"
+                            },
+                            new TacheViewModel
+                            {
+                                Description = "Présentation du modèle de livraison par phases"
+                            },
+                            new TacheViewModel
+                            {
+                                Description = "Élaboration d'un plan d'évolution des infrastructures technologiques"
+                            }
+                        },
+                        Technologies =
+                        {
+                            new TechnologieViewModel
+                            {
+                                Description = "Visual basic .net",
+                                Mois = 15
+                            },
+                            new TechnologieViewModel
+                            {
+                                Description = "Azure",
+                                Mois = 20
+                            },
+                            new TechnologieViewModel
+                            {
+                                Description = "Linux",
                                 Mois = 15
                             }
                         }
