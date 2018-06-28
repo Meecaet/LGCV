@@ -168,10 +168,11 @@
                     <input class="form-control" type="text" placeholder="Prénom" name="prenom" asp-for="Prenom">
                     <input class="form-control" type="text" placeholder="Nom" name="nom" asp-for="Nom">
                     <br />
-                    <select id="GraphIdFonction" class="form-control form-control-sm">
+                    <select name="GraphIdFonction" class="form-control form-control-sm">
+                        <option></option>
                         @foreach (Fonction fonction in (List<Fonction>)ViewData["Fonctions"])
                         {
-                            <option id="@fonction.GraphKey">@fonction.Description</option>
+                            <option value="@fonction.GraphKey">@fonction.Description</option>
                         }
                     </select>
                 </div>

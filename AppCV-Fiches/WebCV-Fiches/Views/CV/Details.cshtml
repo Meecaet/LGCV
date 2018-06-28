@@ -14,9 +14,7 @@
                     <input class="form-control" type="text" placeholder="Prénom" name="prenom" asp-for="Prenom">
                     <input class="form-control" type="text" placeholder="Nom" name="nom" asp-for="Nom">
                     <br />
-                    <select class="form-control form-control-sm" asp-for="Fonction" asp-items='@new SelectList(@ViewBag.ConseillerFonctions, "Key", "Value")'>
-                        <option></option>
-                    </select>
+                    <label>@Model.Fonction</label>                    
                 </div>
             </div>
 

@@ -20,9 +20,10 @@
                 <div>
                     <input type="text" class="form-control" name="Mandats[@(Model)].Envergure" style="width:90px" placeholder="Envergure" />
                     <select name="Mandats[@(Model)].GraphIdFonction" class="form-control form-control-sm">
+                        <option ></option>
                         @foreach (Fonction fonction in (List<Fonction>)ViewData["Fonctions"])
                         {
-                            <option id="@fonction.GraphKey">@fonction.Description</option>
+                            <option value="@fonction.GraphKey">@fonction.Description</option>
                         }
                     </select>
                 </div>

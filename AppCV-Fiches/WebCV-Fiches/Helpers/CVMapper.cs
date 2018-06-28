@@ -22,9 +22,6 @@ namespace WebCV_Fiches.Helpers
             cVViewModel.Prenom = utilisateur.Prenom;
             cVViewModel.Nom = utilisateur.Nom;
             
-            if(string.IsNullOrEmpty(cVViewModel.Prenom) && string.IsNullOrEmpty(cVViewModel.Nom))
-                cVViewModel.Nom = utilisateur.NomComplet;
-
             cVViewModel.Fonction = utilisateur.Conseiller.Fonction.Description;
             cVViewModel.Biographie = utilisateur.Conseiller.CVs.First().ResumeExperience;
 
@@ -119,7 +116,6 @@ namespace WebCV_Fiches.Helpers
 
             utilisateur.Conseiller = new Conseiller { GraphKey = cVViewModel.GraphIdConseiller };
 
-
             utilisateur.Conseiller.Fonction = new Fonction();
             utilisateur.Conseiller.Fonction.GraphKey = cVViewModel.GraphIdFonction;
             utilisateur.Conseiller.Fonction.Description = cVViewModel.Fonction;
@@ -184,6 +180,8 @@ namespace WebCV_Fiches.Helpers
 
                 foreach (TacheViewModel tache in mandatViewModel.Taches)
                     mandat.Taches.Add(new Tache { GraphKey = tache.GraphId, Description = tache.Description });
+
+                utilisateur.Conseiller.Mandats.Add(mandat);
             }
 
             foreach (TechnologieViewModel technologie in cVViewModel.Technologies)

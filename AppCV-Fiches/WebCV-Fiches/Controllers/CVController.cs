@@ -286,7 +286,11 @@ namespace WebCV_Fiches.Controllers
                 utilisateur = HttpContext.Session.Get<Utilisateur>("Utilisateur");
             else
             {
-                utilisateur = UtilisateurDepot.Search(new Utilisateur { Nom = UtilisateurActuel.NomComplet }).DefaultIfEmpty(null).FirstOrDefault();
+                utilisateur = UtilisateurDepot.Search(new Dictionary<string, object> { { "AdresseCourriel", UtilisateurActuel.Email } }).DefaultIfEmpty(null).FirstOrDefault();
+
+                if(utilisateur == null)
+                    utilisateur = UtilisateurDepot.Search(new Dictionary<string, object> { { "Nom", UtilisateurActuel.NomComplet } }).DefaultIfEmpty(null).FirstOrDefault();
+
                 HttpContext.Session.Set<Utilisateur>("Utilisateur", utilisateur);
             }
 
@@ -324,20 +328,24 @@ namespace WebCV_Fiches.Controllers
         {
             CVViewModel nouveauCv = new CVViewModel();
             ViewData["Fonctions"] = fonctionGraphRepository.GetAll();
-            
+
             return View(nouveauCv);
         }
 
         // POST: CV/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(CVViewModel nouveauCv)
+        public async Task<ActionResult> Create(CVViewModel nouveauCv)
         {
             try
             {
                 // TODO: Add insert logic here
 
+                UtilisateurActuel = await userManager.GetUserAsync(User);
+
                 Utilisateur nouveauUtilisateur = mapper.Map(nouveauCv);
+                nouveauUtilisateur.AdresseCourriel = UtilisateurActuel.Email;
+
                 UtilisateurDepot.Add(nouveauUtilisateur);
 
                 return RedirectToAction(nameof(Details), "CV", new { id = nouveauUtilisateur.GraphKey });

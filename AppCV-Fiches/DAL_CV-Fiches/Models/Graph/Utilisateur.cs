@@ -11,7 +11,6 @@ namespace DAL_CV_Fiches.Models.Graph
         public string Prenom { get; set; }
         public string Nom { get; set; }
 
-        public string NomComplet { get; set; }
         public string AdresseCourriel { get; set; }
 
         [Edge("Is")]
