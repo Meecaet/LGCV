@@ -41,7 +41,7 @@ namespace WebCV_Fiches.Helpers
             }
 
             foreach (Formation certification in utilisateur.Conseiller.Formations.Where(form => form.Type.Descriminator == "Formation" && form.Type.Description == "Certification"))
-                cVViewModel.Certifications.Add(new CertificationViewModel { GraphId = certification.GraphKey, Description = certification.Description, GraphIdGenre = certification.Type.GraphKey });
+                cVViewModel.Certifications.Add(new CertificationViewModel { GraphId = certification.GraphKey, Description = certification.Description, Annee = certification.AnAcquisition, GraphIdGenre = certification.Type.GraphKey });
 
             foreach (Mandat mandat in utilisateur.Conseiller.Mandats)
             {
@@ -89,7 +89,7 @@ namespace WebCV_Fiches.Helpers
                 cVViewModel.Technologies.Add(new TechnologieViewModel { GraphId = technologie.GraphKey, Description = technologie.Nom, Mois = technologie.MoisDExperience });
 
             foreach (Formation certification in utilisateur.Conseiller.Formations.Where(form => form.Type.Descriminator == "Formation" && form.Type.Description == "Perfectionnement"))
-                cVViewModel.Perfectionnements.Add(new PerfectionnementViewModel { GraphId = certification.GraphKey, Description = certification.Description, GraphIdGenre = certification.Type.GraphKey });
+                cVViewModel.Perfectionnements.Add(new PerfectionnementViewModel { GraphId = certification.GraphKey, Description = certification.Description, Annee = certification.AnAcquisition, GraphIdGenre = certification.Type.GraphKey });
 
             foreach (Langue langue in utilisateur.Conseiller.Langues)
             {
@@ -141,7 +141,7 @@ namespace WebCV_Fiches.Helpers
             }
 
             foreach (CertificationViewModel certification in cVViewModel.Certifications)
-                utilisateur.Conseiller.Formations.Add(new Formation { GraphKey = certification.GraphId, Description = certification.Description, Type = new Genre { GraphKey = certification.GraphIdGenre, Descriminator = "Formation", Description = "Certification" }});
+                utilisateur.Conseiller.Formations.Add(new Formation { GraphKey = certification.GraphId, Description = certification.Description, AnAcquisition = certification.Annee, Type = new Genre { GraphKey = certification.GraphIdGenre, Descriminator = "Formation", Description = "Certification" }});
 
             foreach (MandatViewModel mandatViewModel in cVViewModel.Mandats)
             {
@@ -188,7 +188,7 @@ namespace WebCV_Fiches.Helpers
                 utilisateur.Conseiller.Technologies.Add(new Technologie { GraphKey = technologie.GraphId, Nom = technologie.Description, MoisDExperience = technologie.Mois});
 
             foreach (PerfectionnementViewModel perfeccionnement in cVViewModel.Perfectionnements)
-                utilisateur.Conseiller.Formations.Add(new Formation { GraphKey = perfeccionnement.GraphId, Description = perfeccionnement.Description, Type = new Genre { GraphKey = perfeccionnement.GraphIdGenre, Descriminator = "Formation", Description = "Perfectionnement" } });
+                utilisateur.Conseiller.Formations.Add(new Formation { GraphKey = perfeccionnement.GraphId, Description = perfeccionnement.Description, AnAcquisition = perfeccionnement.Annee, Type = new Genre { GraphKey = perfeccionnement.GraphIdGenre, Descriminator = "Formation", Description = "Perfectionnement" } });
 
 
             foreach (LangueViewModel langueViewModel in cVViewModel.Langues)

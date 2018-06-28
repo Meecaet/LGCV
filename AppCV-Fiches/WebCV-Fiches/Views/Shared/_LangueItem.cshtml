@@ -1,11 +1,34 @@
 ﻿@using DAL_CV_Fiches.Models.Graph
 @model int
 
-<label>Langue: </label>
-<select class="LangueItem" name="Langues[@(Model)].GraphId">
-    @foreach (Langue lang in (List<Langue>)ViewData["Langues"])
-    {
-        <option value="@lang.GraphKey">@lang.Nom</option>
-    }
-</select>
-<br />
+<tr>
+    <td>
+        <select class="LangueItem" name="Langues[@(Model)].GraphId">
+            @foreach (Langue lang in (List<Langue>)ViewData["Langues"])
+            {
+                <option value="@lang.GraphKey">@lang.Nom</option>
+            }
+        </select>
+    </td>
+    <td>
+        <select name="Langues[@(Model)].NiveauParle">
+            <option value="Avancé">Avancé</option>
+            <option value="Intermédiaire">Intermédiaire</option>
+            <option value="Basique">Basique</option>
+        </select>
+    </td>
+    <td>
+        <select name="Langues[@(Model)].NiveauEcrit">
+            <option value="Avancé">Avancé</option>
+            <option value="Intermédiaire">Intermédiaire</option>
+            <option value="Basique">Basique</option>
+        </select>
+    </td>
+    <td>
+        <select name="Langues[@(Model)].NiveauLu">
+            <option value="Avancé">Avancé</option>
+            <option value="Intermédiaire">Intermédiaire</option>
+            <option value="Basique">Basique</option>
+        </select>
+    </td>
+</tr>

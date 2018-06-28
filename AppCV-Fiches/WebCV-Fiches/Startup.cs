@@ -13,6 +13,9 @@ using WebCV_Fiches.Models.Admin;
 using WebCV_Fiches.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.Extensions.Caching.Memory;
+using DAL_CV_Fiches.Repositories.Graph;
+using DAL_CV_Fiches.Models.Graph;
 
 namespace WebCV_Fiches
 {
@@ -67,7 +70,7 @@ namespace WebCV_Fiches
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IMemoryCache cache)
         {
             if (env.IsDevelopment())
             {
@@ -95,7 +98,20 @@ namespace WebCV_Fiches
                 routes.MapRoute(
                     name: "deleteUserFromRole",
                     template: "{controller=Admin}/{action}/{roleId}/User/{userId}");
-            });           
+            });
+
+            LoadDataInCache(cache);
+        }
+
+        private  void LoadDataInCache(IMemoryCache cache)
+        {
+            TechnologieGraphRepository technologieGraphRepository = new TechnologieGraphRepository("Graph_CV", "CVs");
+            LangueGraphRepository langueGraphRepository = new LangueGraphRepository("Graph_CV", "CVs");
+            FonctionGraphRepository fonctionGraphRepository = new FonctionGraphRepository("Graph_CV", "CVs");
+
+            cache.Set("Technologies", technologieGraphRepository.GetAll());
+            cache.Set("Langues", langueGraphRepository.GetAll());
+            cache.Set("Fonctions", fonctionGraphRepository.GetAll());
         }
     }
 }

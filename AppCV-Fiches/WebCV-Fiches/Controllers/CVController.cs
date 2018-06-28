@@ -7,6 +7,7 @@ using DAL_CV_Fiches.Repositories.Graph;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using WebCV_Fiches.Helpers;
 using WebCV_Fiches.Models.Admin;
 using WebCV_Fiches.Models.CVViewModels;
@@ -18,19 +19,16 @@ namespace WebCV_Fiches.Controllers
         private UserManager<ApplicationUser> userManager;
         private ApplicationUser UtilisateurActuel;
         private UtilisateurGraphRepository UtilisateurDepot;
-        private TechnologieGraphRepository TechnologieDepot;
-        private LangueGraphRepository LangueDepot;
-        private FonctionGraphRepository fonctionGraphRepository;
         private CVMapper mapper;
+        private IMemoryCache cache;
 
-        public CVController(UserManager<ApplicationUser> userManager)
+        public CVController(UserManager<ApplicationUser> userManager, IMemoryCache cache)
         {
             this.userManager = userManager;
-            UtilisateurDepot = new UtilisateurGraphRepository("Graph_CV", "CVs");
-            TechnologieDepot = new TechnologieGraphRepository("Graph_CV", "CVs");
-            LangueDepot = new LangueGraphRepository("Graph_CV", "CVs");
-            fonctionGraphRepository = new FonctionGraphRepository("Graph_CV", "CVs");
+            UtilisateurDepot = new UtilisateurGraphRepository("Graph_CV", "CVs");            
             mapper = new CVMapper();
+
+            this.cache = cache;
         }
 
         private CVViewModel CreateDummyCVViewModel()
@@ -327,7 +325,7 @@ namespace WebCV_Fiches.Controllers
         public ActionResult Create()
         {
             CVViewModel nouveauCv = new CVViewModel();
-            ViewData["Fonctions"] = fonctionGraphRepository.GetAll();
+            ViewData["Fonctions"] = (List<Fonction>)cache.Get("Fonctions");
 
             return View(nouveauCv);
         }
@@ -347,14 +345,13 @@ namespace WebCV_Fiches.Controllers
                 nouveauUtilisateur.AdresseCourriel = UtilisateurActuel.Email;
 
                 UtilisateurDepot.Add(nouveauUtilisateur);
-
                 return RedirectToAction(nameof(Details), "CV", new { id = nouveauUtilisateur.GraphKey });
 
                 //return RedirectToAction(nameof(Index));
             }
             catch
             {
-                ViewData["Fonctions"] = fonctionGraphRepository.GetAll();
+                ViewData["Fonctions"] = (List<Fonction>)cache.Get("Fonctions");
                 return View();
             }
         }
@@ -388,6 +385,8 @@ namespace WebCV_Fiches.Controllers
             return View();
         }
 
+        #region Partial View Actions
+
         public ActionResult ObtenirNouveauDomaine(int Index)
         {
             return PartialView("_DomaineDInterventionItem", Index);
@@ -405,7 +404,7 @@ namespace WebCV_Fiches.Controllers
 
         public ActionResult ObtenirNouveauMandat(int Index)
         {
-            ViewData["Fonctions"] = fonctionGraphRepository.GetAll();
+            ViewData["Fonctions"] = (List<Fonction>)cache.Get("Fonctions");
             return PartialView("_MandatItem", Index);
         }
 
@@ -418,20 +417,20 @@ namespace WebCV_Fiches.Controllers
         public ActionResult ObtenirNouvelleTechnologie(int idMandat, int idTech)
         {
             Tuple<int, int> tuple = new Tuple<int, int>(idMandat, idTech);
-            ViewData["Technologies"] = TechnologieDepot.GetAll();
+            ViewData["Technologies"] = (List<Technologie>)cache.Get("Technologies");
 
             return PartialView("_TechnologieItem", tuple);
         }
 
         public ActionResult ObtenirNouvelleTechnologieConseiller(int Index)
-        {            
-            ViewData["Technologies"] = TechnologieDepot.GetAll();
+        {
+            ViewData["Technologies"] = (List<Technologie>)cache.Get("Technologies");
             return PartialView("_TechnologieConseillerItem", Index);
         }
 
         public ActionResult ObtenirNouvelleLangue(int Index)
         {
-            ViewData["Langues"] = LangueDepot.GetAll();
+            ViewData["Langues"] = (List<Langue>)cache.Get("Langues");
             return PartialView("_LangueItem", Index);
         }
 
@@ -439,6 +438,8 @@ namespace WebCV_Fiches.Controllers
         {
             return PartialView("_PerfectionnementItem", Index);
         }
+
+        #endregion
 
         // POST: CV/Delete/5
         [HttpPost]
