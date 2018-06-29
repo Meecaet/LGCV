@@ -11,28 +11,24 @@
             <div class="form-inline">
                 <div class="lgs-label">Identification</div>
                 <div class="table-bordered lgs-group">
-                    <input class="form-control" type="text" placeholder="Prénom" name="prenom" asp-for="Prenom">
-                    <input class="form-control" type="text" placeholder="Nom" name="nom" asp-for="Nom">
-                    <br />
-                    <label>@Model.Fonction</label>                    
+                    <div>
+                        <h2>
+                            @Model.Nom @Model.Prenom
+                        </h2>
+                        <b>@Model.Fonction</b>
+                    </div>
+                    <p style="margin-top:25px">@Model.Biographie</p>
                 </div>
             </div>
 
-            <div class="table-bordered lgs-group">
-                <textarea class="lgs-textarea form-control autoExpand" style="width:100%" placeholder="Biographie" asp-for="Biographie"></textarea>
-            </div>
-
-            <div>
+            <div class="lgs-section">
                 <div class="lgs-label">
                     Principaux domaines d'intervention
                 </div>
-                <div class="lgs-floatRightButtons">
-                    <button type="button" class="btn btn-link"></button>
-                </div>
+                <div class="lgs-group">--domaines--</div>
             </div>
 
-
-            <div style="clear:both">
+            <div style="clear:both" class="lgs-section">
                 <div class="form-group row">
                     <div class="col-lg-4">
 
@@ -68,8 +64,8 @@
                 </div>
             </div>
 
-            <div>
-                <div class="lgsTextTitle">RESUME DES INTERVENTIONS</div>
+            <div class="lgs-section">
+                <div class="lgsTextTitle">RÉSUME DES INTERVENTIONS</div>
                 <div>
                     <table class="table table-hover">
                         <thead>
@@ -124,38 +120,42 @@
             </div>
         </div>
 
-        @foreach (var mandat in Model.Mandats)
-        {
-            @Html.Partial("Mandat", mandat);
-        }
 
-        <div>
+        <div class="lgs-section">
+            @foreach (var mandat in Model.Mandats)
+            {
+                @Html.Partial("Mandat", mandat);
+            }
+        </div>
+
+        <div class="lgs-section">
             <div class="form-group row">
                 <div class="col-lg-4">
-                    <div class="lgs-label">
-                        Expériences Technologiques
-                    </div>
-                    <div class="lgs-floatLeftButtons">
-                        <button type="button" class="btn btn-link"></button>
-                    </div>
-                    <table class="table table-hover small">
-                        <thead>
-                            <tr class="lgs-backgroundColor">
-                                <th scope="col">Sous-catégorie</th>
-                                <th scope="col">Mois</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var tech in Model.Technologies)
-                            {
-                                <tr>
-                                    <td>@tech.Description</td>
-                                    <td>@tech.Mois</td>
+                    <div>
+                        <div class="lgs-label">
+                            Expériences Technologiques
+                        </div>
+                        <div class="lgs-floatLeftButtons">
+                            <button type="button" class="btn btn-link"></button>
+                        </div>
+                        <table class="table table-hover small">
+                            <thead>
+                                <tr class="lgs-backgroundColor">
+                                    <th scope="col">Sous-catégorie</th>
+                                    <th scope="col">Mois</th>
                                 </tr>
-                            }
-                        </tbody>
-                    </table>
-
+                            </thead>
+                            <tbody>
+                                @foreach (var tech in Model.Technologies)
+                                {
+                                    <tr>
+                                        <td>@tech.Description</td>
+                                        <td>@tech.Mois</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
                 <div class="col-lg-4">
 

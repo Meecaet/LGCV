@@ -1,13 +1,16 @@
 ﻿body {
-    padding-top: 50px;
+    line-height: normal;
     padding-bottom: 20px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
 }
 
-/* Wrapping element */
-/* Set some basic padding to keep content from hitting the edges */
+    /* Wrapping element */
+    /* Set some basic padding to keep content from hitting the edges */
 .body-content {
     padding-left: 15px;
     padding-right: 15px;
+    padding-top:20px;
 }
 
 /* Carousel */
@@ -51,6 +54,11 @@
     width: 100%;
     padding: 10px;
 }
+.lgs-section {
+    margin-top:20px;
+    clear:both
+}
+
 .lgs-group b{
     font-size: medium
 }
@@ -78,16 +86,14 @@
     background-color: #6c4796;
     color:white;
 }
+.lgs-champLabel{
+    margin-right:8px;
+}
 .lgsTextTitle {
     color: #6c4796;
     font-size: 18px;
 }
 
 .form-control {
-    margin-top: 10px;
     margin-right: 10px;
-}
-
-.mandat-fiche {
-    margin-top:20px;
 }
