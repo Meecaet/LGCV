@@ -9,6 +9,10 @@ namespace DAL_CV_Fiches.Repositories.Graph
 {
     public class MandatGraphRepository : GraphRepositoy<Mandat>
     {
+        public MandatGraphRepository()
+        {
+        }
+
         public MandatGraphRepository(string Database, string Graph) : base(Database, Graph)
         {
         }

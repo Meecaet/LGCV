@@ -9,6 +9,10 @@ namespace DAL_CV_Fiches.Repositories.Graph
 {
     public class LangueGraphRepository : GraphRepositoy<Langue>
     {
+        public LangueGraphRepository()
+        {
+        }
+
         public LangueGraphRepository(DocumentClient documentClient, DocumentCollection documentCollection) : base(documentClient, documentCollection)
         {
         }

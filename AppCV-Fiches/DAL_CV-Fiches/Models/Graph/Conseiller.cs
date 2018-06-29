@@ -14,49 +14,49 @@ namespace DAL_CV_Fiches.Models.Graph
         public string Logo { get; set; }
 
         [Edge("Studied")]
-        public List<FormationScolaire> FormationsScolaires { get; set; }
+        public List<FormationScolaire> FormationsScolaires { get => (List<FormationScolaire>)LoadProperty("FormationsScolaires"); set => SetProperty("FormationsScolaires", value); }
 
         [Edge("IsMemberOf")]
-        public List<OrdreProfessional> Associations { get; set; }
+        public List<OrdreProfessional> Associations { get => (List<OrdreProfessional>)LoadProperty("Associations"); set => SetProperty("Associations", value); }
 
         [Edge("Obtained")]
-        public List<Formation> Formations { get; set; }
+        public List<Formation> Formations { get => (List<Formation>)LoadProperty("Formations"); set => SetProperty("Formations", value); }
 
         [Edge("IsPartOf")]
-        public Secteur Secteur { get; set; }
+        public Secteur Secteur { get => (Secteur)LoadProperty("Secteur"); set => SetProperty("Secteur", value); }
 
         [Edge("OfType")]
-        public Genre Type { get; set; }
+        public Genre Type { get => (Genre)LoadProperty("Type"); set => SetProperty("Type", value); }
 
         [Edge("Currently")]
-        public Status Status { get; set; }        
+        public Status Status { get => (Status)LoadProperty("Status"); set => SetProperty("Status", value); }
 
         [Edge("WorkAs")]
-        public Fonction Fonction { get; set; }
+        public Fonction Fonction { get => (Fonction)LoadProperty("Fonction"); set => SetProperty("Fonction", value); }
 
         [Edge("WorkedIn")]
-        public List<Mandat> Mandats { get; set; }
+        public List<Mandat> Mandats { get => (List<Mandat>)LoadProperty("Mandats"); set => SetProperty("Mandats", value); }
 
         [Edge("Knows")]
-        public List<Langue> Langues { get; set; }
+        public List<Langue> Langues { get => (List<Langue>)LoadProperty("Langues"); set => SetProperty("Langues", value); }
 
         [Edge("Has")]
-        public List<DomaineDIntervention> DomaineDInterventions { get; set; }
+        public List<DomaineDIntervention> DomaineDInterventions { get => (List<DomaineDIntervention>)LoadProperty("DomaineDInterventions"); set => SetProperty("DomaineDInterventions", value); }
 
         [Edge("Has", true)]
-        public List<CV> CVs { get; set; }
+        public List<CV> CVs { get => (List<CV>)LoadProperty("CVs"); set => SetProperty("CVs", value); }
 
         [Edge("PointTo")]
-        public List<PieceJointe> PiecesJointes { get; set; }
+        public List<PieceJointe> PiecesJointes { get => (List<PieceJointe>)LoadProperty("PiecesJointes"); set => SetProperty("PiecesJointes", value); }
 
-        [Edge("Knows")]
-        public List<Technologie> Technologies { get; set; }
+        [Edge("Knows", lazyLoad:true)]
+        public List<Technologie> Technologies { get => (List<Technologie>)LoadProperty("Technologies"); set => SetProperty("Technologies", value); }
 
         [Edge("WorkedFor")]
-        public List<Employeur> Employeurs { get; set; }
+        public List<Employeur> Employeurs { get => (List<Employeur>)LoadProperty("Employeurs"); set => SetProperty("Employeurs", value); }
 
-        [Edge("Was")]
-        public Conseiller VersionPrecedent { get; set; }
+        //[Edge("Was")]
+        //public Conseiller VersionPrecedent { get => (Conseiller)LoadProperty("VersionPrecedent"); set => SetProperty("VersionPrecedent", value); }
 
         public Conseiller()
         {

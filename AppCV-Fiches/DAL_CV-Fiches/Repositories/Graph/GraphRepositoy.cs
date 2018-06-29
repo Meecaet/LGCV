@@ -40,8 +40,11 @@ namespace DAL_CV_Fiches.Repositories.Graph
             this.database = Database;
             this.graph = Graph;
 
-            documentClient = new DocumentClient(new Uri(Endpoint), Key);
-            documentCollection = documentClient.ReadDocumentCollectionAsync(UriFactory.CreateDocumentCollectionUri(Database, Graph), new RequestOptions { OfferThroughput = 400 }).Result;
+            documentClient = GraphConfig.DocumentClient;
+            documentCollection = GraphConfig.DocumentCollection;
+
+            //documentClient = new DocumentClient(new Uri(Endpoint), Key);
+            //documentCollection = documentClient.ReadDocumentCollectionAsync(UriFactory.CreateDocumentCollectionUri(Database, Graph), new RequestOptions { OfferThroughput = 400 }).Result;
         }
 
         public GraphRepositoy(string Database, string Graph)
@@ -51,6 +54,12 @@ namespace DAL_CV_Fiches.Repositories.Graph
 
             documentClient = new DocumentClient(new Uri(this.endpoint), this.primarykey);
             documentCollection = documentClient.ReadDocumentCollectionAsync(UriFactory.CreateDocumentCollectionUri(Database, Graph), new RequestOptions { OfferThroughput = 400 }).Result;
+        }
+
+        public GraphRepositoy()
+        {
+            documentClient = GraphConfig.DocumentClient;
+            documentCollection = GraphConfig.DocumentCollection;
         }
 
         public void Add(T obj)
@@ -364,6 +373,8 @@ namespace DAL_CV_Fiches.Repositories.Graph
                 if (att != null)
                 {
                     attEdge = (Attributes.Edge)att;
+                    if (attEdge.LazyLoad)
+                        continue;
 
                     interfaceType = prop.PropertyType.GetInterface("IList`1");
                     if (interfaceType != null)
@@ -449,9 +460,9 @@ namespace DAL_CV_Fiches.Repositories.Graph
             return GetElementsFromTransversal(fromId, edgeName).DefaultIfEmpty(null).FirstOrDefault();
         }
 
-        private object GetGenericRepository(Type genericArgument)
+        public static object GetGenericRepository(Type genericArgument)
         {
-            Type thisType = this.GetType(), currentRepoType = null, interfaceType = null;
+            Type thisType = typeof(GraphRepositoy<T>), currentRepoType = null, interfaceType = null;
             Type[] typelist = GetTypesInNamespace(thisType.Assembly, thisType.Namespace),
                 genericArguments = null;
 
@@ -469,7 +480,7 @@ namespace DAL_CV_Fiches.Repositories.Graph
                     {
                         if (genericArgument == genericArguments[0])
                         {
-                            genericRepository = Activator.CreateInstance(currentRepoType, documentClient, documentCollection);
+                            genericRepository = Activator.CreateInstance(currentRepoType);
                         }
                     }
                 }
@@ -478,7 +489,7 @@ namespace DAL_CV_Fiches.Repositories.Graph
             return genericRepository;
         }
 
-        private Type[] GetTypesInNamespace(Assembly assembly, string nameSpace)
+        private static Type[] GetTypesInNamespace(Assembly assembly, string nameSpace)
         {
             return
               assembly.GetTypes()
@@ -601,5 +612,45 @@ namespace DAL_CV_Fiches.Repositories.Graph
             var a = documentClient.DeleteDocumentCollectionAsync(UriFactory.CreateDocumentCollectionUri("Graph_CV", "CVs")).Result;
             var b = documentClient.CreateDocumentCollectionAsync(UriFactory.CreateDatabaseUri("Graph_CV"), new DocumentCollection { Id = "CVs" }).Result;
         }
-    }   
+    }
+
+    public sealed class GraphRepositoy
+    {
+        public static object GetGenericRepository(Type genericArgument)
+        {
+            Type thisType = typeof(GraphRepositoy), currentRepoType = null, interfaceType = null;
+            Type[] typelist = GetTypesInNamespace(thisType.Assembly, thisType.Namespace),
+                genericArguments = null;
+
+            object genericRepository = null;
+
+            for (int i = 0; i < typelist.Length; i++)
+            {
+                currentRepoType = typelist[i];
+                interfaceType = currentRepoType.GetInterface("IGraphRepository`1");
+
+                if (interfaceType != null)
+                {
+                    genericArguments = interfaceType.GetGenericArguments();
+                    if (genericArguments != null && genericArguments.Length > 0)
+                    {
+                        if (genericArgument == genericArguments[0])
+                        {
+                            genericRepository = Activator.CreateInstance(currentRepoType);
+                        }
+                    }
+                }
+            }
+
+            return genericRepository;
+        }
+
+        private static Type[] GetTypesInNamespace(Assembly assembly, string nameSpace)
+        {
+            return
+              assembly.GetTypes()
+                      .Where(t => String.Equals(t.Namespace, nameSpace, StringComparison.Ordinal))
+                      .ToArray();
+        }
+    }
 }

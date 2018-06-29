@@ -9,6 +9,10 @@ namespace DAL_CV_Fiches.Repositories.Graph
 {
     public class CVGraphRepository : GraphRepositoy<CV>
     {
+        public CVGraphRepository()
+        {
+        }
+
         public CVGraphRepository(DocumentClient documentClient, DocumentCollection documentCollection) : base(documentClient, documentCollection)
         {
         }

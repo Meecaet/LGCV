@@ -9,6 +9,10 @@ namespace DAL_CV_Fiches.Repositories.Graph
 {
     public class PaysGraphRepository : GraphRepositoy<Pays>
     {
+        public PaysGraphRepository()
+        {
+        }
+
         public PaysGraphRepository(DocumentClient documentClient, DocumentCollection documentCollection) : base(documentClient, documentCollection)
         {
         }

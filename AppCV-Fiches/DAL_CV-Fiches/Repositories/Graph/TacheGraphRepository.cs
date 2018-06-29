@@ -9,6 +9,10 @@ namespace DAL_CV_Fiches.Repositories.Graph
 {
     public class TacheGraphRepository : GraphRepositoy<Tache>
     {
+        public TacheGraphRepository()
+        {
+        }
+
         public TacheGraphRepository(DocumentClient documentClient, DocumentCollection documentCollection) : base(documentClient, documentCollection)
         {
         }

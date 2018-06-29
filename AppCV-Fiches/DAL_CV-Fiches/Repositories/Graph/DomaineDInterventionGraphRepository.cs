@@ -9,6 +9,10 @@ namespace DAL_CV_Fiches.Repositories.Graph
 {
     public class DomaineDInterventionGraphRepository : GraphRepositoy<DomaineDIntervention>
     {
+        public DomaineDInterventionGraphRepository()
+        {
+        }
+
         public DomaineDInterventionGraphRepository(DocumentClient documentClient, DocumentCollection documentCollection) : base(documentClient, documentCollection)
         {
         }

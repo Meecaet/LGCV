@@ -25,7 +25,7 @@ namespace WebCV_Fiches.Controllers
         public CVController(UserManager<ApplicationUser> userManager, IMemoryCache cache)
         {
             this.userManager = userManager;
-            UtilisateurDepot = new UtilisateurGraphRepository("Graph_CV", "CVs");            
+            UtilisateurDepot = new UtilisateurGraphRepository();            
             mapper = new CVMapper();
 
             this.cache = cache;

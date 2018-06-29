@@ -9,6 +9,10 @@ namespace DAL_CV_Fiches.Repositories.Graph
 {
     public class ClientGraphRepository : GraphRepositoy<Client>
     {
+        public ClientGraphRepository()
+        {
+        }
+
         public ClientGraphRepository(string Database, string Graph) : base(Database, Graph)
         {
         }

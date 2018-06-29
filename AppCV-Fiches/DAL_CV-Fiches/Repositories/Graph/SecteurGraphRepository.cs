@@ -9,6 +9,10 @@ namespace DAL_CV_Fiches.Repositories.Graph
 {
     public class SecteurGraphRepository : GraphRepositoy<Secteur>
     {
+        public SecteurGraphRepository()
+        {
+        }
+
         public SecteurGraphRepository(DocumentClient documentClient, DocumentCollection documentCollection) : base(documentClient, documentCollection)
         {
         }

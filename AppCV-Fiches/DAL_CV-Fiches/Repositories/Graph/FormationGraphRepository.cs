@@ -9,6 +9,10 @@ namespace DAL_CV_Fiches.Repositories.Graph
 {
     public class FormationGraphRepository : GraphRepositoy<Formation>
     {
+        public FormationGraphRepository()
+        {
+        }
+
         public FormationGraphRepository(DocumentClient documentClient, DocumentCollection documentCollection) : base(documentClient, documentCollection)
         {
         }

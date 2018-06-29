@@ -9,6 +9,10 @@ namespace DAL_CV_Fiches.Repositories.Graph
 {
     public class ConseillerGraphRepository : GraphRepositoy<Conseiller>
     {
+        public ConseillerGraphRepository()
+        {
+        }
+
         public ConseillerGraphRepository(DocumentClient documentClient, DocumentCollection documentCollection) : base(documentClient, documentCollection)
         {
         }

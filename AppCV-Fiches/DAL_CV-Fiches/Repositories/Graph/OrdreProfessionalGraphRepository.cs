@@ -9,6 +9,10 @@ namespace DAL_CV_Fiches.Repositories.Graph
 {
     public class OrdreProfessionalGraphRepository : GraphRepositoy<OrdreProfessional>
     {
+        public OrdreProfessionalGraphRepository()
+        {
+        }
+
         public OrdreProfessionalGraphRepository(DocumentClient documentClient, DocumentCollection documentCollection) : base(documentClient, documentCollection)
         {
         }

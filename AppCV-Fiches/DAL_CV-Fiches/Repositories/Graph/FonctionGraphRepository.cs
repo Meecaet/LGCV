@@ -9,6 +9,10 @@ namespace DAL_CV_Fiches.Repositories.Graph
 {
     public class FonctionGraphRepository : GraphRepositoy<Fonction>
     {
+        public FonctionGraphRepository()
+        {
+        }
+
         public FonctionGraphRepository(DocumentClient documentClient, DocumentCollection documentCollection) : base(documentClient, documentCollection)
         {
         }

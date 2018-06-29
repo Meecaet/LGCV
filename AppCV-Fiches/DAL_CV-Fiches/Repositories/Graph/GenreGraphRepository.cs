@@ -9,6 +9,10 @@ namespace DAL_CV_Fiches.Repositories.Graph
 {
     public class GenreGraphRepository : GraphRepositoy<Genre>
     {
+        public GenreGraphRepository()
+        {
+        }
+
         public GenreGraphRepository(DocumentClient documentClient, DocumentCollection documentCollection) : base(documentClient, documentCollection)
         {
         }

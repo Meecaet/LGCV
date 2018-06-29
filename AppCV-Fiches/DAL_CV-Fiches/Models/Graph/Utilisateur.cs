@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 
 namespace DAL_CV_Fiches.Models.Graph
 {
@@ -13,7 +14,8 @@ namespace DAL_CV_Fiches.Models.Graph
 
         public string AdresseCourriel { get; set; }
 
-        [Edge("Is")]
-        public Conseiller Conseiller { get; set; }
+
+        [Edge("Is", lazyLoad:true)]
+        public Conseiller Conseiller { get => (Conseiller)LoadProperty("Conseiller"); set => SetProperty("Conseiller", value); }
     }
 }

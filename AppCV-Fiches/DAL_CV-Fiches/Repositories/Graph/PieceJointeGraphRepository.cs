@@ -9,6 +9,10 @@ namespace DAL_CV_Fiches.Repositories.Graph
 {
     public class PieceJointeGraphRepository : GraphRepositoy<PieceJointe>
     {
+        public PieceJointeGraphRepository()
+        {
+        }
+
         public PieceJointeGraphRepository(DocumentClient documentClient, DocumentCollection documentCollection) : base(documentClient, documentCollection)
         {
         }

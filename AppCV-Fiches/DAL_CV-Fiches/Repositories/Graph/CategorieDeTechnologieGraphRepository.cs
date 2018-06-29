@@ -9,6 +9,10 @@ namespace DAL_CV_Fiches.Repositories.Graph
 {
     public class CategorieDeTechnologieGraphRepository : GraphRepositoy<CategorieDeTechnologie>
     {
+        public CategorieDeTechnologieGraphRepository()
+        {
+        }
+
         public CategorieDeTechnologieGraphRepository(DocumentClient documentClient, DocumentCollection documentCollection) : base(documentClient, documentCollection)
         {
         }

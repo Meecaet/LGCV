@@ -9,6 +9,10 @@ namespace DAL_CV_Fiches.Repositories.Graph
 {
     public class StatusGraphRepository : GraphRepositoy<Status>
     {
+        public StatusGraphRepository()
+        {
+        }
+
         public StatusGraphRepository(DocumentClient documentClient, DocumentCollection documentCollection) : base(documentClient, documentCollection)
         {
         }

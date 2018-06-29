@@ -9,6 +9,10 @@ namespace DAL_CV_Fiches.Repositories.Graph
 {
     public class UtilisateurGraphRepository : GraphRepositoy<Utilisateur>
     {
+        public UtilisateurGraphRepository()
+        {
+        }
+
         public UtilisateurGraphRepository(DocumentClient documentClient, DocumentCollection documentCollection) : base(documentClient, documentCollection)
         {
         }

@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Caching.Memory;
 using DAL_CV_Fiches.Repositories.Graph;
 using DAL_CV_Fiches.Models.Graph;
+using DAL_CV_Fiches;
 
 namespace WebCV_Fiches
 {
@@ -28,11 +29,20 @@ namespace WebCV_Fiches
 
         public IConfiguration Configuration { get; }
 
+        private string endpoint, primaryKey, database, collection;
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            endpoint = Configuration.GetSection("GraphConnectionEndPoint").Value;
+            primaryKey = Configuration.GetSection("GraphConnectionPrimaryKey").Value;
+            database = Configuration.GetSection("GraphConnectionDatabase").Value;
+            collection = Configuration.GetSection("GraphConnectionCollection").Value;
+
+            GraphConfig.SetGraphDataBaseConnection(endpoint, primaryKey, database, collection);
 
             services.AddIdentity<ApplicationUser, ApplicationRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -105,9 +115,9 @@ namespace WebCV_Fiches
 
         private  void LoadDataInCache(IMemoryCache cache)
         {
-            TechnologieGraphRepository technologieGraphRepository = new TechnologieGraphRepository("Graph_CV", "CVs");
-            LangueGraphRepository langueGraphRepository = new LangueGraphRepository("Graph_CV", "CVs");
-            FonctionGraphRepository fonctionGraphRepository = new FonctionGraphRepository("Graph_CV", "CVs");
+            TechnologieGraphRepository technologieGraphRepository = new TechnologieGraphRepository();
+            LangueGraphRepository langueGraphRepository = new LangueGraphRepository();
+            FonctionGraphRepository fonctionGraphRepository = new FonctionGraphRepository();
 
             cache.Set("Technologies", technologieGraphRepository.GetAll());
             cache.Set("Langues", langueGraphRepository.GetAll());

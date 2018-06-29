@@ -9,6 +9,10 @@ namespace DAL_CV_Fiches.Repositories.Graph
 {
     public class ApprobateurGraphRepository : GraphRepositoy<Approbateur>
     {
+        public ApprobateurGraphRepository()
+        {
+        }
+
         public ApprobateurGraphRepository(DocumentClient documentClient, DocumentCollection documentCollection) : base(documentClient, documentCollection)
         {
         }
