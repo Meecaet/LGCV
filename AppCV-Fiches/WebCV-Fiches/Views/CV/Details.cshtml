@@ -5,10 +5,49 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container-fluid" style="padding-top:30px">
+<style>
+    #details {
+        display: none
+    }
+    .selectedItem {
+        background-color:blue;
+    }
+    table.table tbody tr{
+        cursor:pointer
+    }
+    .mandat-fiche:not(:first-of-type) {
+        display: none
+    }
+</style>
+
+@section Scripts {
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $("#details").fadeIn("slow");
+
+        $("table.table tbody tr").click(function () {
+            $("table.table tbody tr").removeClass("bg-secondary text-white");
+            $(this).addClass("bg-secondary text-white");
+
+            var mandatNumber = $(this).children('th[scope="row"]').first().text()
+            if (mandatNumber) {
+                $('[mandat-number]').fadeOut("fast");
+                $(`[mandat-number=${mandatNumber}]`).fadeIn("slow");
+            }
+            
+        });
+
+
+    });
+</script>
+
+}
+
+<div id="details" class="container-fluid" style="padding-top:30px">
     <form asp-action="Index">
         <div class="form-group">
-            <div class="form-inline">
+            <div id="identification" class="form-inline">
                 <div class="lgs-label">Identification</div>
                 <div class="table-bordered lgs-group">
                     <div>
@@ -84,7 +123,7 @@
                                 <td colspan="7"><b>PRODIGIUS LATAM.</b></td>
                             </tr>
                             <tr>
-                                <th scope="row">12</th>
+                                <th scope="row">2</th>
                                 <td>Jacob</td>
                                 <td>Thornton</td>
                                 <td>ddd</td>
@@ -93,7 +132,7 @@
                                 <td>9</td>
                             </tr>
                             <tr>
-                                <th scope="row">11</th>
+                                <th scope="row">1</th>
                                 <td>Larry the Bird</td>
                                 <td>ddd</td>
                                 <td>Jacob</td>
@@ -120,8 +159,9 @@
             </div>
         </div>
 
-
         <div class="lgs-section">
+            
+
             @foreach (var mandat in Model.Mandats)
             {
                 @Html.Partial("Mandat", mandat);
