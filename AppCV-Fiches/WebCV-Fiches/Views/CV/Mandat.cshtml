@@ -1,7 +1,23 @@
 ﻿@model WebCV_Fiches.Models.CVViewModels.MandatViewModel
 
-<div class="card border-dark mb-3 mandat-fiche">
-    <div class="card-header lgs-backgroundColor"><h3> @Model.NumeroMandat - @Model.TitreMandat</h3></div>
+<div class="card border-dark mb-3 mandat-fiche" mandat-number="@Model.NumeroMandat">
+    <div class="card-header lgs-backgroundColor" style="">
+
+        <div id="next" style="float: left;position: relative">
+            <button class="btn btn-link">
+                <b class="text-white"><i class="fas fa-chevron-left"></i></b>
+            </button>
+        </div>
+
+        <div id="next" style="float: right;position: relative">
+            <button class="btn btn-link">
+                <b class="text-white"><i class="fas fa-chevron-right"></i></b>
+            </button>
+        </div>
+
+        <h3 style="margin-left:20px"> @Model.NumeroMandat - @Model.TitreMandat</h3>
+    </div>
+    
     <div class="card-body text-dark">
         <div class="lgs-group">
             <div style="clear:both" class="form-inline">
@@ -20,7 +36,7 @@
                     <label class="lgs-champLabel">Envergure:</label><b>@Model.Envergure</b>
                 </div>
                 <div>
-                    <label class="lgs-champLabel">Fonctions du conseiller sur le mandat:</label> 
+                    <label class="lgs-champLabel">Fonctions du conseiller sur le mandat:</label>
                     <b>Analyste Devéloppeur</b>
                 </div>
 
@@ -58,8 +74,10 @@
                             </div>
                             <div class="lgs-group table-bordered">
                                 <ul>
-                                    <li>Codifier de nouvelles fonctionnalités</li>
-                                    <li>Déployer l’environnement de production</li>
+                                    @foreach (var tache in Model.Taches)
+                                    {
+                                        <li>@tache.Description</li>
+                                    }
                                 </ul>
                             </div>
                         </div>
@@ -74,9 +92,10 @@
                             </div>
                             <div class="lgs-group table-bordered">
                                 <ul>
-                                    <li>C#</li>
-                                    <li>ASP .NET MVC</li>
-                                    <li>Angular</li>
+                                    @foreach (var techno in Model.Technologies)
+                                    {
+                                        <li>@techno.Description</li>
+                                    }
                                 </ul>
                             </div>
                         </div>
