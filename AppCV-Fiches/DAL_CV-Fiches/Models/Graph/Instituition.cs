@@ -9,7 +9,7 @@ namespace DAL_CV_Fiches.Models.Graph
     {
         public string Nom { get; set; }
 
-        [Edge("LiesIn")]
+        [Edge("SeTrouveEn")]
         public Pays Pays { get; set; }
     }
 }

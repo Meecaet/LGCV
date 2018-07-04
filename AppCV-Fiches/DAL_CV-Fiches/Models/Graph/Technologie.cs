@@ -12,7 +12,7 @@ namespace DAL_CV_Fiches.Models.Graph
         public string Version { get; set; }
         public string Description { get; set; }
 
-        [Edge("OfCategory")]
+        [Edge("EstPartieDe")]
         public CategorieDeTechnologie Categorie { get; set; }
 
         [EdgeProperty]

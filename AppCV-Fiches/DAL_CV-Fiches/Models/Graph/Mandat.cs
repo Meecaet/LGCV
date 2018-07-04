@@ -9,7 +9,7 @@ namespace DAL_CV_Fiches.Models.Graph
 {
     public class Mandat : GraphObject
     {
-        [Edge("ToWorkIn")]
+        [Edge("PourTravaillerDans")]
         public Projet Projet { get; set; }
 
         public string Numero { get; set; }   

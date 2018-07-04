@@ -16,7 +16,7 @@ namespace DAL_CV_Fiches.Models.Graph
         [EdgeProperty]
         public bool EstPrincipal { get; set; }
 
-        [Edge("IssuedBy")]
+        [Edge("DelivrePar")]
         public Instituition Ecole { get; set; }
     }
 

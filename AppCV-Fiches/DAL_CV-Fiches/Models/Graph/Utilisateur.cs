@@ -15,7 +15,7 @@ namespace DAL_CV_Fiches.Models.Graph
         public string AdresseCourriel { get; set; }
 
 
-        [Edge("Is", lazyLoad:true)]
+        [Edge("Est", lazyLoad:true)]
         public Conseiller Conseiller { get => (Conseiller)LoadProperty("Conseiller"); set => SetProperty("Conseiller", value); }
     }
 }
