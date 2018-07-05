@@ -1,0 +1,232 @@
+<style>
+    .selectedItem {
+        background-color: blue;
+    }
+    
+    table.table tbody tr {
+        cursor: pointer
+    }
+    
+    .mandat-fiche:not(:first-of-type) {
+        display: none
+    }
+</style>
+
+<div id="" class="container-fluid" style="padding-top:30px">
+    <form>
+        <div class="form-group">
+            <div id="identification" class="form-inline">
+                <div class="lgs-label">Identification</div>
+                <div class="table-bordered lgs-group">
+                    <div>
+                        <h2>
+                            {{cvDetails.prenom}} {{cvDetails.nom}}
+                        </h2>
+                        <b>{{cvDetails.fonction}}</b>
+                    </div>
+                    <p style="margin-top:25px">
+                        {{cvDetails.biographie}}
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="lgs-section">
+            <div class="lgs-label">
+                Principaux domaines d'intervention
+            </div>
+            <div class="lgs-group">--domaines--</div>
+        </div>
+
+        <div style="clear:both" class="lgs-section">
+            <div class="form-group row">
+                <div class="col-lg-4">
+
+                    <div>
+                        <div class="lgs-label">Formation Adémique</div>
+                        <div class="lgs-floatLeftButtons">
+                            <button type="button" class="btn btn-link"></button>
+                        </div>
+                        <div class="lgs-group table-bordered">
+                            <b>Ingénieur Informaticien - 2014</b>
+                            <BR>Université Laval
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-lg-4">
+
+                    <div>
+                        <div class="lgs-label">Certifications</div>
+                        <div class="lgs-floatLeftButtons">
+                            <button type="button" class="btn btn-link"></button>
+                        </div>
+                        <div class="lgs-group table-bordered">
+                            <ul>
+                                <li>Microsoft Azure</li>
+                                <li>Oracle</li>
+                                <li>Scrum</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="lgs-section">
+            <div class="lgsTextTitle">RÉSUME DES INTERVENTIONS</div>
+            <div>
+                <table class="table table-hover">
+                    <thead>
+                        <tr class="lgs-backgroundColor">
+                            <th scope="col">#</th>
+                            <th scope="col">CLIENT</th>
+                            <th scope="col">PROJET</th>
+                            <th scope="col">ENVERGURE <br />(J - P)</th>
+                            <th scope="col">FONCTION</th>
+                            <th scope="col">ANNÉE</th>
+                            <th scope="col">EFFORTS (MOIS)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="7"><b>PRODIGIUS LATAM.</b></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">2</th>
+                            <td>Jacob</td>
+                            <td>Thornton</td>
+                            <td>ddd</td>
+                            <td>Jacob</td>
+                            <td>Thornton</td>
+                            <td>9</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">1</th>
+                            <td>Larry the Bird</td>
+                            <td>ddd</td>
+                            <td>Jacob</td>
+                            <td>Thornton</td>
+                            <td>ddd</td>
+                            <td>8</td>
+                        </tr>
+                        <tr>
+                            <td colspan="7"><b>IBM</b></td>
+                        </tr>
+                        <tr>
+                            <tr>
+                                <th scope="row">10</th>
+                                <td>Larry the Bird</td>
+                                <td>ddd</td>
+                                <td>Jacob</td>
+                                <td>Thornton</td>
+                                <td>ddd</td>
+                                <td>6</td>
+                            </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="lgs-section">
+
+            MANDATS
+            <!--@foreach (var mandat in Model.Mandats)
+            {
+                @Html.Partial("Mandat", mandat);
+            }-->
+        </div>
+
+
+        <div class="lgs-section">
+            <div class="form-group row">
+                <div class="col-lg-4">
+                    <div>
+                        <div class="lgs-label">
+                            Expériences Technologiques
+                        </div>
+                        <div class="lgs-floatLeftButtons">
+                            <button type="button" class="btn btn-link"></button>
+                        </div>
+                        <table class="table table-hover small">
+                            <thead>
+                                <tr class="lgs-backgroundColor">
+                                    <th scope="col">Sous-catégorie</th>
+                                    <th scope="col">Mois</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let tech of cvDetails.technologies">
+                                    <td>{{tech.description}}</td>
+                                    <td>{{tech.mois}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+
+                    <div>
+                        <div class="lgs-label">Langues</div>
+                        <div class="lgs-floatLeftButtons">
+                            <button type="button" class="btn btn-link"></button>
+                        </div>
+
+                        <table class="table table-hover small">
+                            <thead>
+                                <tr class="lgs-backgroundColor">
+                                    <th scope="col">Langue</th>
+                                    <th scope="col">N. Écrit</th>
+                                    <th scope="col">N. Lu</th>
+                                    <th scope="col">N. Parlé</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let langue of cvDetails.langues">
+                                    <td>{{langue.nom}}</td>
+                                    <td>{{langue.niveauEcrit}}</td>
+                                    <td>{{langue.niveauLu}}</td>
+                                    <td>{{langue.niveauParle}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+                <div class="col-lg-4">
+
+                    <div>
+
+                        <div class="lgs-label">Perfectionnements </div>
+                        <div class="lgs-floatLeftButtons">
+                            <button type="button" class="btn btn-link"></button>
+                        </div>
+
+
+                        <table class="table table-hover small">
+                            <thead>
+                                <tr class="lgs-backgroundColor">
+                                    <th scope="col">Sous-catégorie</th>
+                                    <th scope="col">Mois</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let perfectionement of cvDetails.perfectionnements">
+                                    <td>{{perfectionement.description}}</td>
+                                    <td>?</td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+
+    </form>
+</div>
