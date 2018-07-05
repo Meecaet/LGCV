@@ -294,26 +294,7 @@ namespace XmlHandler.Services
             List<WordLine> Lines = new List<WordLine>();
 
             for (int i = 0; i < formationParagraphs.Count; i++)
-            {
                 Lines.AddRange(formationParagraphs[i].GetLines());
-
-
-                //nomDiplome = formationParagraphs[i].GetParagraphText();
-                //nomInstituition = formationParagraphs[i + 1].GetParagraphText();
-
-                //if (string.IsNullOrEmpty(nomDiplome) || string.IsNullOrEmpty(nomInstituition))
-                //    continue;
-
-                //FormationScolaire item;
-                //Instituition inst;
-
-                //inst = instituitionGraphRepository.CreateIfNotExists(new Dictionary<string, object> { { "Nom", nomInstituition } });               
-
-                //item = formationScolaireGraphRepository.CreateIfNotExists(new Dictionary<string, object> { { "Diplome", nomDiplome }, { "Niveau", NiveauScolarite.Nule } });
-                //item.Ecole = inst;
-
-                //conseiller.FormationsScolaires.Add(item);
-            }
 
             StringBuilder sb = new StringBuilder();
             WordLine currentLine;
@@ -373,21 +354,6 @@ namespace XmlHandler.Services
 
                 conseiller.FormationsScolaires.Add(item);
             }
-
-            //foreach (WordLine line in Lines)
-            //{
-            //    if (line.IsBold())
-            //        sb.Append(line.GetText());
-            //    else
-            //    {
-            //        nomDiplome = sb.ToString();
-            //        sb.Clear();
-
-            //        FormationScolaire item = formationScolaireGraphRepository.CreateIfNotExists(new Dictionary<string, object> { { "Diplome", nomDiplome }, { "Niveau", NiveauScolarite.Nule } });
-            //    }
-
-            //}
-
         }
 
         private void AssamblerTechnologies(CVSection sectionTechnologies)
@@ -420,7 +386,9 @@ namespace XmlHandler.Services
                     else
                     {
                         techNom = lineParagraphsColumn1[j].GetParagraphText();
-                        mois = lineParagraphsColumn2[j].GetParagraphText();
+
+                        //Il faut que les point pour les numéros décimals soient converti pour virgule
+                        mois = lineParagraphsColumn2[j].GetParagraphText().Replace(".",",");
 
                         technologie = technologieGraphRepository.CreateIfNotExists(new Dictionary<string, object> { { "Nom", techNom } });
                         technologie.MoisDExperience = Convert.ToDouble(mois);
@@ -787,18 +755,18 @@ namespace XmlHandler.Services
                         string[] niveau = langueNiveau.GetParagraphText().Split(':');
 
                         if (niveau[0].Contains("Parlé"))
-                            curLangue.Parle = (Niveau)System.Enum.Parse(typeof(Niveau), niveau[1].Trim());
+                            curLangue.Parle = (Niveau)System.Enum.Parse(typeof(Niveau), niveau[1].Trim().ToLower());
 
                         if (niveau[0].Contains("Écrit"))
-                            curLangue.Ecrit = (Niveau)System.Enum.Parse(typeof(Niveau), niveau[1].Trim());
+                            curLangue.Ecrit = (Niveau)System.Enum.Parse(typeof(Niveau), niveau[1].Trim().ToLower());
 
                         if (niveau[0].Contains("Lu"))
-                            curLangue.Lu = (Niveau)System.Enum.Parse(typeof(Niveau), niveau[1].Trim());
+                            curLangue.Lu = (Niveau)System.Enum.Parse(typeof(Niveau), niveau[1].Trim().ToLower());
                     }
                 }
                 else
                 {
-                    curLangue.Parle = curLangue.Ecrit = curLangue.Lu = Niveau.Avancé;
+                    curLangue.Parle = curLangue.Ecrit = curLangue.Lu = Niveau.avancé;
                 }
 
                 langues.Add(curLangue);

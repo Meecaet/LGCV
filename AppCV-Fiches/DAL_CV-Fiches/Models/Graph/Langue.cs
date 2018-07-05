@@ -18,14 +18,15 @@ namespace DAL_CV_Fiches.Models.Graph
 
         public Langue()
         {
-            Parle = Ecrit = Lu = Niveau.Avancé;
+            Parle = Ecrit = Lu = Niveau.avancé;
         }
     }
 
     public enum Niveau
     {
-        Basique = 0,
-        Intermédiaire = 1,
-        Avancé = 2
+        basique = 0,
+        débutant = 0,
+        intermédiaire = 1,
+        avancé = 2
     }
 }

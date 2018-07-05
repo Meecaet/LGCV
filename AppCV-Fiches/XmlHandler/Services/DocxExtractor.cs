@@ -37,9 +37,24 @@ namespace XmlHandler.Services
         public string ExtractDocxTextXml(FileInfo File)
         {
             string outputDirectory = File.FullName.Replace(File.Extension, "");
+            if (VerififyFoldExistence(outputDirectory))
+                DeleteExtractedDirectory(outputDirectory);
+
             ExtractDocx(File, outputDirectory);
 
             return $"{outputDirectory}\\word\\document.xml";
+        }
+
+        private bool VerififyFoldExistence(string directoryPath)
+        {
+            DirectoryInfo directoryInfo = new DirectoryInfo(directoryPath);
+            return directoryInfo.Exists;
+        }
+
+        public void DeleteExtractedDirectory(string directoryPath)
+        {
+            DirectoryInfo directoryInfo = new DirectoryInfo(directoryPath);
+            directoryInfo.Delete(true);
         }
 
         public Dictionary<string, string> ExtractDocxBatch(string DirectoryPath, string OutputPath)

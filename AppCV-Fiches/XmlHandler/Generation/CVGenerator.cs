@@ -60,8 +60,7 @@ namespace XmlHandler.Generation
 
                         //Efface le dossier généré par l'extraction
                         currentExtractFolder = file.FullName.Replace(file.Extension, "");
-                        DirectoryInfo extractionFolder = new DirectoryInfo(currentExtractFolder);
-                        extractionFolder.Delete(true);
+                        docxExtractor.DeleteExtractedDirectory(currentExtractFolder);                        
                     }
                 }
             }
@@ -76,7 +75,7 @@ namespace XmlHandler.Generation
             List<XmlNode> nodes = CvSectionsExtractor.GetCVNodes(documentXmlPath);
 
             CVFactory cVFactory = new CVFactory(documentXmlPath);
-
+            Console.WriteLine($"Fichier actuel: {documentXmlPath}");
             try
             {
                 newUtilisateur = cVFactory.CreateConseiller(nodes);
@@ -95,11 +94,14 @@ namespace XmlHandler.Generation
             }
             finally
             {
+                FileInfo fileInfo = new FileInfo(outputPath);
+                if (fileInfo.Exists)
+                    fileInfo.Delete();
+
                 XmlSerializer xmlSerializer = new XmlSerializer(typeof(Utilisateur));
                 using (Stream fileStream = new FileStream(outputPath, FileMode.Create, FileAccess.Write, FileShare.None))
                 {
-                    var langues = newUtilisateur.Conseiller.Langues;
-                   xmlSerializer.Serialize(fileStream, newUtilisateur);
+                    xmlSerializer.Serialize(fileStream, newUtilisateur);
                 }
             }            
         }
