@@ -14,7 +14,7 @@ namespace DAL_CV_Fiches.Models.Graph
 
         public string Numero { get; set; }   
         
-        [Edge("WorkedAs")]
+        [Edge("PourTravailleComme")]
         public Fonction Fonction { get; set; }
         public DateTime DateDebut { get; set; }
         public DateTime DateFin { get; set; }
@@ -22,7 +22,7 @@ namespace DAL_CV_Fiches.Models.Graph
         public string Titre { get; set; }
         public string Description { get; set; }
 
-        [Edge("Performed")]
+        [Edge("PourRealiser")]
         public List<Tache> Taches { get; set; }
 
         public Mandat()

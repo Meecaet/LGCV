@@ -6,6 +6,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,17 +21,17 @@ namespace XmlHandler.Services
     /// </summary>
     public class CVFactory
     {
-        private CV currentCV;
+        //private CV currentCV;
+        string cvFileName;
         private Conseiller conseiller;
         private Utilisateur utilisateur;
 
+        private CVSection aSection;
+
         private Dictionary<string, int> DicMois;
-        private IList list;
+        //private IList list;
 
-        DocumentClient documentClient;
-        DocumentCollection documentCollection;
-
-        public CVFactory()
+        public CVFactory(string fileName)
         {
             DicMois = new Dictionary<string, int>()
             {
@@ -47,9 +48,7 @@ namespace XmlHandler.Services
                 {"NOVEMBRE", 11 },
                 {"DECEMBRE", 12 }
             };
-
-            documentClient = new DocumentClient(new Uri("https://localhost:8081"), "C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==");
-            documentCollection = documentClient.ReadDocumentCollectionAsync(UriFactory.CreateDocumentCollectionUri("Graph_CV", "CVs"), new RequestOptions { OfferThroughput = 400 }).Result;
+            cvFileName = fileName;
         }
 
         public Utilisateur CreateConseiller(List<XmlNode> Nodes)
@@ -60,62 +59,80 @@ namespace XmlHandler.Services
             matchTokens.Add(TextToken.CreateTextToken());
             matchTokens.Add(FormatationToken.CreateFormatationToken(new KeyValuePair<string, string>("w:val", "Titre1")));
 
-            List<CVSection> Sections = CvSectionsExtractor.GetCVSections(Nodes, matchTokens, "IDENTIFICATION");
+            List<CVSection> Sections = null;
 
-            conseiller = new Conseiller();
-            AssemblerConseiller(Sections);
+            try
+            {
+                Sections = CvSectionsExtractor.GetCVSections(Nodes, matchTokens, "IDENTIFICATION");
+                conseiller = new Conseiller();
+                AssemblerConseiller(Sections);
+            }
+            catch (Exception ex)
+            {
+                WriteToErrorLog(ex);
+            }            
 
             return utilisateur;
             
         }
 
+        private void Assemblage(List<CVSection> sections, string sectionName, List<Action<CVSection>> actions)
+        {
+            try
+            {
+                aSection = sections.DefaultIfEmpty(null).FirstOrDefault(x => x.Identifiant == sectionName);
+                if (aSection != null)
+                {
+                    foreach (var action in actions)
+                    {
+                        try
+                        {
+                            action.Invoke(aSection);
+                        }
+                        catch (Exception ex)
+                        {
+
+                            WriteToErrorLog(ex);
+                        }
+                    }                    
+                }
+            }
+            catch (Exception ex)
+            {
+                WriteToErrorLog(ex);
+            }
+        }
+
         private void AssemblerConseiller(List<CVSection> sections)
         {
-            CVSection aSection = sections.DefaultIfEmpty(null).FirstOrDefault(x => x.Identifiant == "IDENTIFICATION");
-            if (aSection != null)
-                AssemblerBio(aSection);
 
-            aSection = sections.DefaultIfEmpty(null).FirstOrDefault(x => x.Identifiant == "PRINCIPAUX DOMAINES D’INTERVENTION");
-            if (aSection != null)
-                AssemberDomainesDIntervetion(aSection);
+            Assemblage(sections, "IDENTIFICATION", new List<Action<CVSection>> { AssemblerBio });
+            Assemblage(sections, "PRINCIPAUX DOMAINES D’INTERVENTION", new List<Action<CVSection>> { AssemberDomainesDIntervetion });
+            Assemblage(sections, "FORMATION ACADÉMIQUE", new List<Action<CVSection>> { AssamblerFormations, AssemblerCertifications });
+            Assemblage(sections, "TECHNOLOGIES", new List<Action<CVSection>> { AssamblerTechnologies });
+            Assemblage(sections, "PERFECTIONNEMENT", new List<Action<CVSection>> { AssemblerPerfectionnement });
+            Assemblage(sections, "CONFÉRENCES", new List<Action<CVSection>> { AssemblerConferences });
+            Assemblage(sections, "PUBLICATIONS", new List<Action<CVSection>> { AssemblerPublications });
+            Assemblage(sections, "ASSOCIATIONS", new List<Action<CVSection>> { AssemblerAssociations });
+            Assemblage(sections, "LANGUES PARLÉES, ÉCRITES", new List<Action<CVSection>> { AssemblerLangues });
 
-            aSection = sections.DefaultIfEmpty(null).FirstOrDefault(x => x.Identifiant == "FORMATION ACADÉMIQUE");
-            if (aSection != null)
+
+            sections.Where(x => x.Identifiant == "Titre1").ToList().ForEach(x => 
             {
-                AssamblerFormations(aSection);
-                AssemblerCertifications(aSection);
-            }
-
-            sections.Where(x => x.Identifiant == "Titre1").ToList().ForEach(x => AssemblerEmployeur(x));
-
-            aSection = sections.DefaultIfEmpty(null).FirstOrDefault(x => x.Identifiant == "TECHNOLOGIES");
-            if (aSection != null)
-                AssamblerTechnologies(aSection);
-
-            aSection = sections.DefaultIfEmpty(null).FirstOrDefault(x => x.Identifiant == "PERFECTIONNEMENT");
-            if (aSection != null)
-                AssemblerPerfectionnement(aSection);
-
-            aSection = sections.DefaultIfEmpty(null).FirstOrDefault(x => x.Identifiant == "CONFÉRENCES");
-            if (aSection != null)
-                AssemblerConferences(aSection);
-
-            aSection = sections.DefaultIfEmpty(null).FirstOrDefault(x => x.Identifiant == "PUBLICATIONS");
-            if (aSection != null)
-                AssemblerPublications(aSection);
-
-            aSection = sections.DefaultIfEmpty(null).FirstOrDefault(x => x.Identifiant == "ASSOCIATIONS");
-            if (aSection != null)
-                AssemblerAssociations(aSection);
-
-            aSection = sections.DefaultIfEmpty(null).FirstOrDefault(x => x.Identifiant == "LANGUES PARLÉES, ÉCRITES");
-            if (aSection != null)
-                AssemblerLangues(aSection);
+                try
+                {
+                    AssemblerEmployeur(x);
+                }
+                catch (Exception ex)
+                {
+                    WriteToErrorLog(ex);
+                }                
+            });           
         }
 
         private void AssemblerBio(CVSection sectionIdentification)
         {
-            FonctionGraphRepository fonctionGraphRepository = new FonctionGraphRepository(documentClient, documentCollection);
+            FonctionGraphRepository fonctionGraphRepository = new FonctionGraphRepository();
             XmlDocNode identification = sectionIdentification.Nodes.First();
 
             Fonction fonction = new Fonction();
@@ -148,7 +165,7 @@ namespace XmlHandler.Services
         {
             XmlDocTable domainesTable = sectionDomaines.Nodes.Skip(1).Cast<XmlDocTable>().First();
             List<XmlDocParagraph> domainesParagraphs = domainesTable.GetParagraphsFromColumns();
-            DomaineDInterventionGraphRepository repo = new DomaineDInterventionGraphRepository(documentClient, documentCollection);
+            DomaineDInterventionGraphRepository repo = new DomaineDInterventionGraphRepository();
             DomaineDIntervention domaine;
 
             domainesParagraphs.ForEach(x =>
@@ -165,8 +182,8 @@ namespace XmlHandler.Services
         {
             XmlDocTable tableFormation = (XmlDocTable)sectionFormation.Nodes.First(x => x is XmlDocTable);
             List<XmlDocParagraph> formationParagraphs = tableFormation.GetParagraphsFromColumn(2).Skip(1).ToList();
-            FormationGraphRepository formationGraphRepository = new FormationGraphRepository(documentClient, documentCollection);
-            GenreGraphRepository genreGraphRepository = new GenreGraphRepository(documentClient, documentCollection);
+            FormationGraphRepository formationGraphRepository = new FormationGraphRepository();
+            GenreGraphRepository genreGraphRepository = new GenreGraphRepository();
 
             formationParagraphs.ForEach(x =>
             {
@@ -193,8 +210,8 @@ namespace XmlHandler.Services
 
         private void AssemblerConferences(CVSection sectionConferences)
         {
-            FormationGraphRepository formationGraphRepository = new FormationGraphRepository(documentClient, documentCollection);
-            GenreGraphRepository genreGraphRepository = new GenreGraphRepository(documentClient, documentCollection);
+            FormationGraphRepository formationGraphRepository = new FormationGraphRepository();
+            GenreGraphRepository genreGraphRepository = new GenreGraphRepository();
 
             Genre genre;
             Formation formation;
@@ -227,7 +244,7 @@ namespace XmlHandler.Services
 
         private void AssemblerAssociations(CVSection sectionAssociations)
         {
-            OrdreProfessionalGraphRepository ordreProfessionalGraphRepository = new OrdreProfessionalGraphRepository(documentClient, documentCollection);
+            OrdreProfessionalGraphRepository ordreProfessionalGraphRepository = new OrdreProfessionalGraphRepository();
 
             List<XmlDocParagraph> associationsParagraphs = sectionAssociations.Nodes.Skip(1).Cast<XmlDocParagraph>().ToList();
             associationsParagraphs.ForEach(x => 
@@ -242,8 +259,8 @@ namespace XmlHandler.Services
 
         private void AssemblerPublications(CVSection sectionPublications)
         {
-            GenreGraphRepository genreGraphRepository = new GenreGraphRepository(documentClient, documentCollection);
-            FormationGraphRepository formationGraphRepository = new FormationGraphRepository(documentClient, documentCollection);
+            GenreGraphRepository genreGraphRepository = new GenreGraphRepository();
+            FormationGraphRepository formationGraphRepository = new FormationGraphRepository();
 
             Genre genre = new Genre();
             genre.Descriminator = "Formation";
@@ -265,39 +282,118 @@ namespace XmlHandler.Services
 
         private void AssamblerFormations(CVSection sectionFormation)
         {
-            FormationScolaireGraphRepository formationScolaireGraphRepository = new FormationScolaireGraphRepository(documentClient, documentCollection);
-            InstituitionGraphRepository instituitionGraphRepository = new InstituitionGraphRepository(documentClient, documentCollection);
+            FormationScolaireGraphRepository formationScolaireGraphRepository = new FormationScolaireGraphRepository();
+            InstituitionGraphRepository instituitionGraphRepository = new InstituitionGraphRepository();
 
-            string nomInstituition, nomDiplome;
+            string nomInstituition = string.Empty, nomDiplome = string.Empty;
 
             XmlDocTable tableFormation = (XmlDocTable)sectionFormation.Nodes.First(x => x is XmlDocTable);
             List<XmlDocParagraph> formationParagraphs = tableFormation.GetParagraphsFromColumn(1).Skip(1).ToList();
             formationParagraphs.RemoveAll(x => string.IsNullOrEmpty(x.GetParagraphText()));
 
-            for (int i = 0; i < formationParagraphs.Count; i = i + 2)
-            {
-                nomDiplome = formationParagraphs[i].GetParagraphText();
-                nomInstituition = formationParagraphs[i + 1].GetParagraphText();
+            List<WordLine> Lines = new List<WordLine>();
 
-                if (string.IsNullOrEmpty(nomDiplome) || string.IsNullOrEmpty(nomInstituition))
-                    continue;
+            for (int i = 0; i < formationParagraphs.Count; i++)
+            {
+                Lines.AddRange(formationParagraphs[i].GetLines());
+
+
+                //nomDiplome = formationParagraphs[i].GetParagraphText();
+                //nomInstituition = formationParagraphs[i + 1].GetParagraphText();
+
+                //if (string.IsNullOrEmpty(nomDiplome) || string.IsNullOrEmpty(nomInstituition))
+                //    continue;
+
+                //FormationScolaire item;
+                //Instituition inst;
+
+                //inst = instituitionGraphRepository.CreateIfNotExists(new Dictionary<string, object> { { "Nom", nomInstituition } });               
+
+                //item = formationScolaireGraphRepository.CreateIfNotExists(new Dictionary<string, object> { { "Diplome", nomDiplome }, { "Niveau", NiveauScolarite.Nule } });
+                //item.Ecole = inst;
+
+                //conseiller.FormationsScolaires.Add(item);
+            }
+
+            StringBuilder sb = new StringBuilder();
+            WordLine currentLine;
+
+            while (Lines.Count > 0)
+            {
+                currentLine = Lines.First();
+
+                if (currentLine.IsBold())
+                {
+                    if (!string.IsNullOrEmpty(nomDiplome))
+                    {
+                        nomInstituition = sb.ToString();
+
+                        FormationScolaire item;
+                        Instituition inst;
+
+                        inst = instituitionGraphRepository.CreateIfNotExists(new Dictionary<string, object> { { "Nom", nomInstituition } });               
+
+                        item = formationScolaireGraphRepository.CreateIfNotExists(new Dictionary<string, object> { { "Diplome", nomDiplome }, { "Niveau", NiveauScolarite.Nule } });
+                        item.Ecole = inst;
+
+                        conseiller.FormationsScolaires.Add(item);
+
+                        nomDiplome = string.Empty;
+                        nomInstituition = string.Empty;
+                        sb.Clear();
+                    }
+
+                    sb.Append(currentLine.GetText());
+                    Lines.Remove(currentLine);
+                }
+                else
+                {
+                    if (string.IsNullOrEmpty(nomDiplome))
+                    {
+                        nomDiplome = sb.ToString();
+                        sb.Clear();
+                    }
+
+                    sb.Append(currentLine.GetText());
+                    Lines.Remove(currentLine);
+                }
+            }
+
+            if (!string.IsNullOrEmpty(nomDiplome) && !string.IsNullOrEmpty(sb.ToString()))
+            {
+                nomInstituition = sb.ToString();
 
                 FormationScolaire item;
                 Instituition inst;
 
-                inst = instituitionGraphRepository.CreateIfNotExists(new Dictionary<string, object> { { "Nom", nomInstituition } });               
+                inst = instituitionGraphRepository.CreateIfNotExists(new Dictionary<string, object> { { "Nom", nomInstituition } });
 
                 item = formationScolaireGraphRepository.CreateIfNotExists(new Dictionary<string, object> { { "Diplome", nomDiplome }, { "Niveau", NiveauScolarite.Nule } });
                 item.Ecole = inst;
 
                 conseiller.FormationsScolaires.Add(item);
             }
+
+            //foreach (WordLine line in Lines)
+            //{
+            //    if (line.IsBold())
+            //        sb.Append(line.GetText());
+            //    else
+            //    {
+            //        nomDiplome = sb.ToString();
+            //        sb.Clear();
+
+            //        FormationScolaire item = formationScolaireGraphRepository.CreateIfNotExists(new Dictionary<string, object> { { "Diplome", nomDiplome }, { "Niveau", NiveauScolarite.Nule } });
+            //    }
+
+            //}
+
         }
 
         private void AssamblerTechnologies(CVSection sectionTechnologies)
         {
-            TechnologieGraphRepository technologieGraphRepository = new TechnologieGraphRepository(documentClient, documentCollection);
-            CategorieDeTechnologieGraphRepository categorieDeTechnologieGraphRepository = new CategorieDeTechnologieGraphRepository(documentClient, documentCollection);
+            TechnologieGraphRepository technologieGraphRepository = new TechnologieGraphRepository();
+            CategorieDeTechnologieGraphRepository categorieDeTechnologieGraphRepository = new CategorieDeTechnologieGraphRepository();
 
             XmlDocTable tableTechnologies = (XmlDocTable)sectionTechnologies.Nodes.First(x => x is XmlDocTable);
             List<XmlDocParagraph> lineParagraphsColumn1 = new List<XmlDocParagraph>(), lineParagraphsColumn2 = new List<XmlDocParagraph>();
@@ -343,7 +439,7 @@ namespace XmlHandler.Services
         {
             XmlDocParagraph emplDesc = (XmlDocParagraph)employeurSection.Nodes.First(x => x is XmlDocParagraph);
             List<XmlDocParagraph> jobDescription = new List<XmlDocParagraph>();
-            EmployeurGraphRepository employeurGraphRepository = new EmployeurGraphRepository(documentClient, documentCollection);
+            EmployeurGraphRepository employeurGraphRepository = new EmployeurGraphRepository();
 
             Employeur emp = new Employeur();
             string periode = string.Empty;
@@ -407,8 +503,15 @@ namespace XmlHandler.Services
 
             clientSections.ForEach(x =>
             {
-                Client client = AssemblerClient(x, emp);
-                clients.Add(client);
+                try
+                {
+                    Client client = AssemblerClient(x, emp);
+                    clients.Add(client);
+                }
+                catch (Exception ex)
+                {
+                    WriteToErrorLog(ex);
+                }
             });
             
             return clients;
@@ -421,14 +524,14 @@ namespace XmlHandler.Services
 
             XmlDocParagraph emplDesc = (XmlDocParagraph)clientSection.Nodes.DefaultIfEmpty(null).FirstOrDefault(x => x is XmlDocParagraph);
 
-            ClientGraphRepository clientGraphRepository = new ClientGraphRepository(documentClient, documentCollection);
+            ClientGraphRepository clientGraphRepository = new ClientGraphRepository();
 
             if (emplDesc != null)
             {
                 string[] info = emplDesc.GetLinesWithTab();
                 client.Nom = string.Join(" ", info);
                 client = clientGraphRepository.CreateIfNotExists(new Dictionary<string, object> { { "Nom", client.Nom } });
-            }
+            }            
 
             mandats.AddRange(AssemblerMandats(clientSection));
             mandats.ForEach(x => 
@@ -444,34 +547,52 @@ namespace XmlHandler.Services
 
         private List<Mandat> AssemblerMandats(CVSection clientSection)
         {
-            List<Mandat> mandats = new List<Mandat>();
-            List<XmlDocNode> mandatsNodes = new List<XmlDocNode>(),
-            mandatNodes = new List<XmlDocNode>();
+            List<Mandat> mandats = null;
 
-            mandatsNodes.AddRange(clientSection.Nodes.SkipWhile(x => x is XmlDocParagraph));
-
-            do
+            try
             {
-                mandatNodes.Add(mandatsNodes.First(x => x is XmlDocTable));
-                mandatNodes.AddRange(mandatsNodes.SkipWhile(x => x is XmlDocTable).TakeWhile(x => x is XmlDocParagraph));
+                mandats = new List<Mandat>();
+                List<XmlDocNode> mandatsNodes = new List<XmlDocNode>(),
+                mandatNodes = new List<XmlDocNode>();
 
-                mandatsNodes.RemoveAll(x => mandatNodes.Contains(x));
-                Mandat mandat = AssemblerMandat(mandatNodes);
+                mandatsNodes.AddRange(clientSection.Nodes.SkipWhile(x => x is XmlDocParagraph));
 
-                mandats.Add(mandat);
+                do
+                {
+                    try
+                    {
+                        mandatNodes.Add(mandatsNodes.First(x => x is XmlDocTable));
+                        mandatNodes.AddRange(mandatsNodes.SkipWhile(x => x is XmlDocTable).TakeWhile(x => x is XmlDocParagraph));
 
-                mandatNodes.Clear();
+                        mandatsNodes.RemoveAll(x => mandatNodes.Contains(x));
+                        Mandat mandat = AssemblerMandat(mandatNodes);
 
-            } while (mandatsNodes.Count > 0);
+                        mandats.Add(mandat);
+
+                        mandatNodes.Clear();
+                    }
+                    catch (Exception ex)
+                    {
+                        WriteToErrorLog(ex);
+                        mandatNodes.Clear();
+                    }
+
+                } while (mandatsNodes.Count > 0);
+
+            }
+            catch ( Exception ex)
+            {
+                WriteToErrorLog(ex);
+            }
 
             return mandats;
         }
 
         private Mandat AssemblerMandat(List<XmlDocNode> mandatNodes)
         {
-            ProjetGraphRepository projetGraphRepository = new ProjetGraphRepository(documentClient, documentCollection);
-            FonctionGraphRepository fonctionGraphRepository = new FonctionGraphRepository(documentClient, documentCollection);
-            TechnologieGraphRepository technologieGraphRepository = new TechnologieGraphRepository(documentClient, documentCollection);
+            ProjetGraphRepository projetGraphRepository = new ProjetGraphRepository();
+            FonctionGraphRepository fonctionGraphRepository = new FonctionGraphRepository();
+            TechnologieGraphRepository technologieGraphRepository = new TechnologieGraphRepository();
 
             Mandat mandat = new Mandat();
             Projet projet = new Projet();
@@ -561,17 +682,26 @@ namespace XmlHandler.Services
 
             infoParagraphs.Clear();
             infoParagraphs = mandatNodes.SkipWhile(x => x is XmlDocTable).Cast<XmlDocParagraph>().ToList();
-            infoParagraphs.ForEach(x =>
+            foreach (var x in infoParagraphs)
             {
-                if (x.GetParagraphText().ToUpper().Contains("ENVIRONNEMENT TECHNOLOGIQUE"))
+                if (x.GetParagraphText().ToUpper().StartsWith("ENVIRONNEMENT TECHNOLOGIQUE"))
                 {
                     environnement = x.GetParagraphText().ToUpper().Replace("ENVIRONNEMENT TECHNOLOGIQUE", "").Trim();
+
+                    if (environnement.Count() == 0)
+                        continue;
 
                     if (environnement.First().Equals(':'))
                         environnement = environnement.Substring(1);
 
+                    if (environnement.Count() == 0)
+                        continue;
+
                     if (environnement.Last().Equals('.'))
                         environnement = environnement.Substring(0, environnement.Length - 1);
+
+                    if (environnement.Count() == 0)
+                        continue;
 
                     technologies = environnement.Split(",");
 
@@ -582,14 +712,13 @@ namespace XmlHandler.Services
 
                         if (technologie != null)
                             projet.Technologies.Add(technologie);
-                    }                  
+                    }
                 }
                 else
                 {
                     projet.Description += x.GetParagraphText();
                 }
-
-            });
+            }
 
             mandat.Projet = projet;
 
@@ -598,8 +727,8 @@ namespace XmlHandler.Services
 
         private void AssemblerPerfectionnement(CVSection sectionPerfectionnement)
         {
-            GenreGraphRepository genreGraphRepository = new GenreGraphRepository(documentClient, documentCollection);
-            FormationGraphRepository formationGraphRepository = new FormationGraphRepository(documentClient, documentCollection);
+            GenreGraphRepository genreGraphRepository = new GenreGraphRepository();
+            FormationGraphRepository formationGraphRepository = new FormationGraphRepository();
 
 
             Genre genre = new Genre();
@@ -634,7 +763,7 @@ namespace XmlHandler.Services
 
         private void AssemblerLangues(CVSection langueSection)
         {
-            LangueGraphRepository langueGraphRepository = new LangueGraphRepository(documentClient, documentCollection);
+            LangueGraphRepository langueGraphRepository = new LangueGraphRepository();
 
             List<Langue> langues = new List<Langue>();
             List<CVSection> langueSections;
@@ -693,6 +822,18 @@ namespace XmlHandler.Services
             }
 
             return stringBuilder.ToString().Normalize(NormalizationForm.FormC);
+        }
+
+        private void WriteToErrorLog(Exception ex)
+        {
+            using (StreamWriter sw = new StreamWriter("Errors.log", true))
+            {
+                sw.WriteLine(cvFileName);
+                sw.WriteLine(ex.Message);
+                sw.WriteLine(ex.StackTrace);
+                sw.WriteLine("=========================X=========================");
+                sw.WriteLine(string.Empty);
+            }
         }
     }
 }

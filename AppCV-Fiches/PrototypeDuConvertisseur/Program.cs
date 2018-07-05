@@ -11,7 +11,7 @@ namespace PrototypeDuConvertisseur
         static void Main(string[] args)
         {
             Console.WriteLine("Appuyer sur un bouton pour demarrer");
-            Console.ReadKey();
+            //Console.ReadKey();
 
             IConfiguration config = new ConfigurationBuilder().AddJsonFile("appsettings.json", true, true).Build();
             var endpoint = config["GraphConnectionEndPoint"];
