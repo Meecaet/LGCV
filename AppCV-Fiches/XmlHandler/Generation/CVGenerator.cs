@@ -35,7 +35,7 @@ namespace XmlHandler.Generation
             FileInfo[] filesInDirectory;
             DocxExtractor docxExtractor = new DocxExtractor();
 
-            utilisateurRepo = new UtilisateurGraphRepository("Graph_CV", "CVs");
+            utilisateurRepo = new UtilisateurGraphRepository();
 
             directoryInfo = new DirectoryInfo(path);
 
@@ -70,20 +70,38 @@ namespace XmlHandler.Generation
         private void GenerateCVXml(string documentXmlPath, string outputPath)
         {
             string currentIdent = string.Empty;
+            Utilisateur newUtilisateur = null;
 
             SectionsExtractor CvSectionsExtractor = new SectionsExtractor();          
             List<XmlNode> nodes = CvSectionsExtractor.GetCVNodes(documentXmlPath);
 
-            CVFactory cVFactory = new CVFactory();
-            Utilisateur newUtilisateur = cVFactory.CreateConseiller(nodes);
+            CVFactory cVFactory = new CVFactory(documentXmlPath);
 
-            XmlSerializer xmlSerializer = new XmlSerializer(typeof(Utilisateur));
-            using (Stream fileStream = new FileStream(outputPath, FileMode.Create, FileAccess.Write, FileShare.None))
+            try
             {
-                xmlSerializer.Serialize(fileStream, newUtilisateur);
+                newUtilisateur = cVFactory.CreateConseiller(nodes);
+                PersistCV(newUtilisateur);
             }
-
-            PersistCV(newUtilisateur);
+            catch (Exception ex)
+            {
+                using (StreamWriter sw = new StreamWriter("Error.log", true))
+                {
+                    sw.WriteLine(documentXmlPath);
+                    sw.WriteLine(ex.Message);
+                    sw.WriteLine(ex.StackTrace);
+                    sw.WriteLine("=============================X==============================");
+                    sw.WriteLine(string.Empty);
+                }
+            }
+            finally
+            {
+                XmlSerializer xmlSerializer = new XmlSerializer(typeof(Utilisateur));
+                using (Stream fileStream = new FileStream(outputPath, FileMode.Create, FileAccess.Write, FileShare.None))
+                {
+                    var langues = newUtilisateur.Conseiller.Langues;
+                   xmlSerializer.Serialize(fileStream, newUtilisateur);
+                }
+            }            
         }
 
         private void PersistCV(Utilisateur utilisateur)

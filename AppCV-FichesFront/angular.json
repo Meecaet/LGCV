@@ -29,7 +29,6 @@
                         "scripts": [
                             "src/assets/jquery/dist/jquery.min.js",
                             "src/assets/bootstrap/dist/js/bootstrap.min.js"
-
                         ]
                     },
                     "configurations": {

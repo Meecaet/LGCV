@@ -13,7 +13,7 @@ export class CvDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
-        this.cv.GetCV().subscribe(data => {
+    this.cv.GetCV().subscribe(data => {
       this.cvDetails = data;
     });
   }

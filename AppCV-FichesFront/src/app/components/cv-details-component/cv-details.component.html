@@ -77,7 +77,7 @@
         <div class="lgs-section">
             <div class="lgsTextTitle">RÉSUME DES INTERVENTIONS</div>
             <div>
-                <table class="table table-hover">
+                <table class="table table-hover small">
                     <thead>
                         <tr class="lgs-backgroundColor">
                             <th scope="col">#</th>
@@ -89,55 +89,28 @@
                             <th scope="col">EFFORTS (MOIS)</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td colspan="7"><b>PRODIGIUS LATAM.</b></td>
+
+                    <tbody *ngFor="let intervention of cvDetails.mandats; let i = index">
+                        <tr *ngIf="i == 0 || (i>0 && cvDetails.mandats[i-1].nomEntreprise != intervention.nomEntreprise)">
+                            <td colspan="7"><b>{{intervention.nomEntreprise}}</b></td>
                         </tr>
                         <tr>
-                            <th scope="row">2</th>
-                            <td>Jacob</td>
-                            <td>Thornton</td>
-                            <td>ddd</td>
-                            <td>Jacob</td>
-                            <td>Thornton</td>
-                            <td>9</td>
+                            <th scope="row">{{intervention.numeroMandat}}</th>
+                            <td>{{intervention.nomClient}}</td>
+                            <td>{{intervention.titreProjet}}</td>
+                            <td>{{intervention.envergure}}</td>
+                            <td>{{intervention.fonction}}</td>
+                            <td>{{intervention.debutMandat | date:'yyyy'}}</td>
+                            <td>{{intervention.efforts}}</td>
                         </tr>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Larry the Bird</td>
-                            <td>ddd</td>
-                            <td>Jacob</td>
-                            <td>Thornton</td>
-                            <td>ddd</td>
-                            <td>8</td>
-                        </tr>
-                        <tr>
-                            <td colspan="7"><b>IBM</b></td>
-                        </tr>
-                        <tr>
-                            <tr>
-                                <th scope="row">10</th>
-                                <td>Larry the Bird</td>
-                                <td>ddd</td>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>ddd</td>
-                                <td>6</td>
-                            </tr>
                     </tbody>
                 </table>
             </div>
         </div>
 
         <div class="lgs-section">
-
-            MANDATS
-            <!--@foreach (var mandat in Model.Mandats)
-            {
-                @Html.Partial("Mandat", mandat);
-            }-->
+            <app-mandat *ngFor="let mandat of cvDetails.mandats" [mandat]="mandat"></app-mandat>
         </div>
-
 
         <div class="lgs-section">
             <div class="form-group row">

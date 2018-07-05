@@ -37,6 +37,9 @@ namespace DAL_CV_Fiches.Models.Graph
 
         protected object LoadProperty(string propertyName)
         {
+            if (InternalPropertyDictionary.ContainsKey(propertyName))
+                return InternalPropertyDictionary[propertyName];
+
             Type propertyType, genericArgument;
             object genericRepository, propertyValue;
 
@@ -44,9 +47,7 @@ namespace DAL_CV_Fiches.Models.Graph
             Edge edgeAttr = propertyInfo.GetCustomAttribute<Edge>();
 
             propertyValue = null;
-            if (InternalPropertyDictionary.ContainsKey(propertyName))
-                return InternalPropertyDictionary[propertyName];
-            
+           
             if (edgeAttr != null)
             {
                 propertyType = propertyInfo.PropertyType.UnderlyingSystemType;
@@ -72,19 +73,7 @@ namespace DAL_CV_Fiches.Models.Graph
         }
 
         protected void SetProperty(string propertyName, object value)
-        {
-            if (value == null)
-            {
-                return;
-            }
-            else
-            {
-                Type valueType = value.GetType();
-                if (valueType.IsGenericType && valueType.GetGenericTypeDefinition() == typeof(List<>))
-                    if (((IList)value).Count == 0)
-                        return;
-            }                
-
+        {            
             if (InternalPropertyDictionary.ContainsKey(propertyName))
                 InternalPropertyDictionary[propertyName] = value;
             else

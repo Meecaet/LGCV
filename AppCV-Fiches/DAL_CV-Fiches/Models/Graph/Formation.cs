@@ -10,7 +10,7 @@ namespace DAL_CV_Fiches.Models.Graph
         public string Description { get; set; }
         public int AnAcquisition { get; set; }
 
-        [Edge("OfType")]
+        [Edge("DuType")]
         public Genre Type { get; set; }
     }
 }

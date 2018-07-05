@@ -56,6 +56,31 @@ namespace XmlHandler.XmlEntities
 
         }
 
-      
+        public List<WordLine> GetLines()
+        {
+            List<WordLine> Lines = new List<WordLine>();
+            WordLine currentLine = new WordLine();
+            XmlDocRow currentRow;
+
+            var nodeRows = xmlNode.SelectNodes(".//w:r", this.namespaceManager);
+            foreach (XmlNode node in nodeRows)
+            {
+                if (node.SelectNodes(".//w:br", this.namespaceManager).Count > 0)
+                {
+                    Lines.Add(currentLine);
+
+                    currentLine = new WordLine();
+                    currentRow = null;
+                }
+                else
+                {
+                    currentRow = new XmlDocRow(node);
+                    currentLine.AddRow(currentRow);
+                }
+            }
+
+            Lines.Add(currentLine);
+            return Lines;
+        }
     }
 }

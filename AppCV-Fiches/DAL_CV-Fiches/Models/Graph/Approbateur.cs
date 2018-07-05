@@ -7,9 +7,9 @@ namespace DAL_CV_Fiches.Models.Graph
 {
     public class Approbateur : GraphObject
     {
-        [Edge("Is")]
+        [Edge("Est")]
         public Utilisateur Utilisateur { get; set; }
-        [Edge("Approuved")]
+        [Edge("Approuve")]
         public List<CV> CVsApprouves { get; set; }
     }
 }

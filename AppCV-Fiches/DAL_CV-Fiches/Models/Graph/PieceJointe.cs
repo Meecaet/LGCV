@@ -9,7 +9,7 @@ namespace DAL_CV_Fiches.Models.Graph
     {
         public string NomduFichier { get; set; }
 
-        [Edge("OfType")]
+        [Edge("DuType")]
         public Genre Type { get; set; }
 
         public string MimeType { get; set; }

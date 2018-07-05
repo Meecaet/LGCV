@@ -7,9 +7,9 @@ namespace DAL_CV_Fiches.Models.Graph
 {
     public class Projet : GraphObject
     {
-        [Edge("Advised", true)]
+        [Edge("EteConseillePar", true)]
         public Employeur SocieteDeConseil { get; set; }
-        [Edge("RequestedBy")]
+        [Edge("DemandePar")]
         public Client Client { get; set; }
 
         public string Nom { get; set; }
@@ -24,7 +24,7 @@ namespace DAL_CV_Fiches.Models.Graph
         public DateTime DateFin { get; set; }
         public double HeuresParSemaine { get; set; }
 
-        [Edge("Used", true)]
+        [Edge("AUtilise", true)]
         public List<Technologie> Technologies { get; set; }
 
         public Projet()

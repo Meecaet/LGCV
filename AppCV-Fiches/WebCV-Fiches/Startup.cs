@@ -57,6 +57,8 @@ namespace WebCV_Fiches
                 options.SlidingExpiration = true;
             });
 
+            services.AddCors();
+
             services.AddMvc(config =>
             {
                 var policy = new AuthorizationPolicyBuilder()
@@ -98,7 +100,7 @@ namespace WebCV_Fiches
             app.UseAuthentication();
 
             app.UseSession();
-
+            app.UseCors(p => p.WithOrigins("http://localhost:4200"));
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
