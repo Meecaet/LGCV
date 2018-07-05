@@ -98,7 +98,6 @@ namespace XmlHandler.Generation
                 XmlSerializer xmlSerializer = new XmlSerializer(typeof(Utilisateur));
                 using (Stream fileStream = new FileStream(outputPath, FileMode.Create, FileAccess.Write, FileShare.None))
                 {
-                    var langues = newUtilisateur.Conseiller.Langues;
                    xmlSerializer.Serialize(fileStream, newUtilisateur);
                 }
             }            

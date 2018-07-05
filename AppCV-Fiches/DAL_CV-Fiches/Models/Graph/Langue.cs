@@ -25,7 +25,10 @@ namespace DAL_CV_Fiches.Models.Graph
     public enum Niveau
     {
         Basique = 0,
+        Débutant = 0,
         Intermédiaire = 1,
-        Avancé = 2
+        Baseintermédiaire,
+        Avancé = 2,
+        Bon = 2
     }
 }

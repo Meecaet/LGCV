@@ -30,6 +30,9 @@ namespace XmlHandler.Services
         {
             if (File.Exists && File.Extension == ".docx")
             {
+                if (Directory.Exists(OutputPath))
+                    Directory.Delete(OutputPath, true);
+
                 ZipFile.ExtractToDirectory(File.FullName, OutputPath);
             }
         }
