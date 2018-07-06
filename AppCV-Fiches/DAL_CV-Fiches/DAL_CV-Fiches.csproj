@@ -16,6 +16,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Models\Graph\Langue.cs.orig" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.Azure.Graphs" Version="0.3.1-preview" />
   </ItemGroup>
 

@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Services\CVFactory.cs.orig" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\DAL_CV-Fiches\DAL_CV-Fiches.csproj" />
   </ItemGroup>
 

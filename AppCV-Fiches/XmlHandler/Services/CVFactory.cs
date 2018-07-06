@@ -697,11 +697,17 @@ namespace XmlHandler.Services
                 }
                 else
                 {
-                    projet.Description += x.GetParagraphText();
+                    mandat.Description += x.GetParagraphText();
                 }
             }
 
+            projet.Description = mandat.Description;
+
+            mandat.Titre = projet.Nom;
             mandat.Projet = projet;
+
+            projet.DateDebut = mandat.DateDebut;
+            projet.DateFin = mandat.DateFin;
 
             return mandat;
         }

@@ -33,7 +33,6 @@ namespace DAL_CV_Fiches
         public static void SetGraphDataBaseConnection(string connectionString)
         {
             ConnectionString = connectionString;
-            
         }
     }
 }
