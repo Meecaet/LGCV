@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CVService } from '../../Services/cv.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-cv-details',
@@ -8,13 +9,28 @@ import { CVService } from '../../Services/cv.service';
 })
 export class CvDetailsComponent implements OnInit {
   public cvDetails: any = {};
+  private loading = false;
 
-  constructor(private cv: CVService) {
+  constructor(
+    private cv: CVService,
+    private route: ActivatedRoute) {
   }
 
   ngOnInit() {
-    this.cv.GetCV().subscribe(data => {
-      this.cvDetails = data;
+    this.loading = true;
+    this.route.params.subscribe(params => {
+      const cvId = params['id'];
+
+      console.log(`Parametre ID: ${cvId}`);
+
+      this.cv.GetCV(cvId).subscribe(data => {
+        if (data != null) {
+          this.cvDetails = data;
+        }
+
+        this.loading = false;
+      });
+
     });
   }
 

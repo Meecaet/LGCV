@@ -119,3 +119,18 @@ body {
 .form-control {
     margin-right: 10px;
 }
+
+.loadable.loading,
+.loadable.no-data {
+    display: none
+}
+
+.load-pane,
+.no-data-pane {
+    display: none
+}
+
+.load-pane.loading,
+.no-data-pane.no-data {
+    display: inline-block;
+}

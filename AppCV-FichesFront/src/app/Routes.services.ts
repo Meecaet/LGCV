@@ -7,6 +7,7 @@ import { CvDetailsComponent } from "./components/cv-details-component/cv-details
 import { AuthGuardService as AuthGuard } from "./auth-guard.service";
 import { PageNotFoundComponent } from "./components/page-not-found/page-not-found.component";
 import { ForgotPasswordComponent } from "./components/forgot-password/forgot-password.component";
+import { MandatComponent } from './components/mandat/mandat.component';
 
 const routes: Routes = [
   { path: "Home", component: HomeComponent },
@@ -19,7 +20,7 @@ const routes: Routes = [
         { path: "ForgotPassword", component: ForgotPasswordComponent },
       ]
   },
-  { path: "Details", component: CvDetailsComponent, canActivate: [AuthGuard] },
+  { path: 'Details/:id', component: CvDetailsComponent },
   { path: "", component: HomeComponent },
   { path: "notfound", component: PageNotFoundComponent },
   { path: "**", redirectTo: "notfound" }

@@ -605,7 +605,6 @@ namespace XmlHandler.Services
                         projet.Envergure = int.Parse(string.Join("", envergureText.Where(x => char.IsDigit(x)).ToArray()));
                 }
 
-                projet = projetGraphRepository.CreateIfNotExists(new Dictionary<string, object> { { "Nom", projet.Nom }, { "Envergure", projet.Envergure } });
 
                 if (infoParagraphs[i].GetParagraphText().Contains("Fonction"))
                 {
@@ -700,8 +699,6 @@ namespace XmlHandler.Services
                     mandat.Description += x.GetParagraphText();
                 }
             }
-
-            projet.Description = mandat.Description;
 
             mandat.Titre = projet.Nom;
             mandat.Projet = projet;

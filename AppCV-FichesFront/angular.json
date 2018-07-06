@@ -24,7 +24,9 @@
                         ],
                         "styles": [
                             "src/assets/bootstrap/dist/css/bootstrap.min.css",
-                            "src/styles.css"
+                            "src/styles.css",
+                            "src/assets/fontawesome/css/all.css",
+                            "node_modules/animate.css/animate.css"
                         ],
                         "scripts": [
                             "src/assets/jquery/dist/jquery.min.js",

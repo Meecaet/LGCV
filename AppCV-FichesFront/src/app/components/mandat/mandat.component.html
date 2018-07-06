@@ -73,9 +73,7 @@
                             </div>
                             <div class="lgs-group table-bordered">
                                 <ul>
-                                    <!--@foreach (var tache in Model.Taches) {
-                                    <li>@tache.Description</li>
-                                    }-->
+                                    <li *ngFor="let tache of mandat.taches">{{tache.description}}</li>
                                 </ul>
                             </div>
                         </div>
@@ -90,9 +88,7 @@
                             </div>
                             <div class="lgs-group table-bordered">
                                 <ul>
-                                    <!--@foreach (var techno in Model.Technologies) {
-                                    <li>@techno.Description</li>
-                                    }-->
+                                    <li *ngFor="let techno of mandat.technologies">{{techno.description}}</li>
                                 </ul>
                             </div>
                         </div>
