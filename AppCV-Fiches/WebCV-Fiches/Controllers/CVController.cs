@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using DAL_CV_Fiches.Models.Graph;
 using DAL_CV_Fiches.Repositories.Graph;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -354,6 +355,13 @@ namespace WebCV_Fiches.Controllers
                 ViewData["Fonctions"] = (List<Fonction>)cache.Get("Fonctions");
                 return View();
             }
+        }
+
+        [HttpPut]
+        [AllowAnonymous]
+        public async Task<ActionResult> Save([FromBody]CVViewModel nouveauCv)
+        {
+            return Json(new { nouveauCv.Prenom, nouveauCv.Nom});
         }
 
         // GET: CV/Edit/5

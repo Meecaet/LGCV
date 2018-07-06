@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DAL_CV_Fiches.Models.Graph;
+using DAL_CV_Fiches.Repositories.Graph;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +15,8 @@ namespace WebCV_Fiches.Controllers
 {
     public class CVPocController : Controller
     {
+        private UtilisateurGraphRepository UtilisateurDepot;
+
         private CVViewModel CreateDummyCVViewModel()
         {
             var model = new CVViewModel()
@@ -313,6 +317,11 @@ namespace WebCV_Fiches.Controllers
             return model;
         }
 
+        public CVPocController()
+        {
+            UtilisateurDepot = new UtilisateurGraphRepository();
+        }
+
         // GET: CV
         public ActionResult Index()
         {
@@ -321,10 +330,23 @@ namespace WebCV_Fiches.Controllers
 
         // GET: CV/Details/5
         [AllowAnonymous]
-        public ActionResult Details(int id)
+        public ActionResult Details(string id)
         {
-            var cv = CreateDummyCVViewModel();
-            return Json(cv);
+            if (string.IsNullOrWhiteSpace(id))
+            {
+                return Json(null);
+            }
+
+            // var cVViewModel = CreateDummyCVViewModel();
+            Utilisateur utilisateur = UtilisateurDepot.GetOne(id);
+            if(utilisateur == null)
+            {
+                return Json(null);
+            }
+
+            CVMapper mapper = new CVMapper();
+            CVViewModel cVViewModel = mapper.Map(utilisateur);
+            return Json(cVViewModel);
         }
 
         // GET: CV/Create
