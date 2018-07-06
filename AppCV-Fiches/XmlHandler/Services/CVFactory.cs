@@ -54,7 +54,7 @@ namespace XmlHandler.Services
         public Utilisateur CreateConseiller(List<XmlNode> Nodes)
         {
             SectionsExtractor CvSectionsExtractor = new SectionsExtractor();
-            List<IXmlToken> matchTokens = new List<IXmlToken>();            
+            List<IXmlToken> matchTokens = new List<IXmlToken>();
 
             matchTokens.Add(TextToken.CreateTextToken());
             matchTokens.Add(FormatationToken.CreateFormatationToken(new KeyValuePair<string, string>("w:val", "Titre1")));
@@ -70,10 +70,10 @@ namespace XmlHandler.Services
             catch (Exception ex)
             {
                 WriteToErrorLog(ex);
-            }            
+            }
 
             return utilisateur;
-            
+
         }
 
         private void Assemblage(List<CVSection> sections, string sectionName, List<Action<CVSection>> actions)
@@ -94,7 +94,7 @@ namespace XmlHandler.Services
 
                             WriteToErrorLog(ex);
                         }
-                    }                    
+                    }
                 }
             }
             catch (Exception ex)
@@ -117,7 +117,7 @@ namespace XmlHandler.Services
             Assemblage(sections, "LANGUES PARLÉES, ÉCRITES", new List<Action<CVSection>> { AssemblerLangues });
 
 
-            sections.Where(x => x.Identifiant == "Titre1").ToList().ForEach(x => 
+            sections.Where(x => x.Identifiant == "Titre1").ToList().ForEach(x =>
             {
                 try
                 {
@@ -126,8 +126,8 @@ namespace XmlHandler.Services
                 catch (Exception ex)
                 {
                     WriteToErrorLog(ex);
-                }                
-            });           
+                }
+            });
         }
 
         private void AssemblerBio(CVSection sectionIdentification)
@@ -140,13 +140,27 @@ namespace XmlHandler.Services
 
             if (identification is XmlDocTable)
             {
-                XmlDocParagraph paragraph = ((XmlDocTable)identification).GetParagraphsFromColumn(2).First();
-                string[] identLines = paragraph.GetLinesText();
+                var paragraphs = ((XmlDocTable)identification).GetParagraphsFromColumn(2);
+                List<string> identLines = new List<string>();
+                if (paragraphs.Count() == 1)
+                {
+                    XmlDocParagraph paragraph = paragraphs.First<XmlDocParagraph>();
+                    identLines.AddRange(paragraph.GetLinesText());
+                }
+                else
+                {
+                    foreach (var paragragh in paragraphs)
+                    {
+                        identLines.AddRange(paragragh.GetLinesText());
+                    }
+
+                }
+
 
                 utilisateur = new Utilisateur();
-                utilisateur.Nom = identLines[0];
-                fonction = fonctionGraphRepository.CreateIfNotExists(new Dictionary<string, object> { { "Description", identLines[1] } });
-            }            
+                utilisateur.Nom = identLines.First();
+                fonction = fonctionGraphRepository.CreateIfNotExists(new Dictionary<string, object> { { "Description", identLines.Last() } });
+            }
 
             string description = string.Empty;
             List<XmlDocParagraph> descriptionParagraphs = sectionIdentification.Nodes.Skip(2).Cast<XmlDocParagraph>().ToList();
@@ -172,7 +186,7 @@ namespace XmlHandler.Services
             {
 
                 domaine = DomaineDIntervention.CreateDomaineDIntervetion(x.GetParagraphText());
-                domaine = repo.CreateIfNotExists(new Dictionary<string, object>{ { "Description", domaine.Description } });
+                domaine = repo.CreateIfNotExists(new Dictionary<string, object> { { "Description", domaine.Description } });
 
                 conseiller.DomaineDInterventions.Add(domaine);
             });
@@ -222,7 +236,7 @@ namespace XmlHandler.Services
             {
                 List<string> conferences = ((XmlDocTable)sectionConferences.Nodes.First(x => x is XmlDocTable)).GetAllLines();
                 conferences.ForEach(x =>
-                {                    
+                {
                     formation = formationGraphRepository.CreateIfNotExists(new Dictionary<string, object> { { "Description", x } });
                     formation.Type = genre;
 
@@ -232,7 +246,7 @@ namespace XmlHandler.Services
             else
             {
                 List<XmlDocParagraph> conferencesParagraphs = sectionConferences.Nodes.Skip(1).Cast<XmlDocParagraph>().ToList();
-                conferencesParagraphs.ForEach(x => 
+                conferencesParagraphs.ForEach(x =>
                 {
                     formation = formationGraphRepository.CreateIfNotExists(new Dictionary<string, object> { { "Description", x.GetParagraphText() } });
                     formation.Type = genre;
@@ -247,7 +261,7 @@ namespace XmlHandler.Services
             OrdreProfessionalGraphRepository ordreProfessionalGraphRepository = new OrdreProfessionalGraphRepository();
 
             List<XmlDocParagraph> associationsParagraphs = sectionAssociations.Nodes.Skip(1).Cast<XmlDocParagraph>().ToList();
-            associationsParagraphs.ForEach(x => 
+            associationsParagraphs.ForEach(x =>
             {
                 OrdreProfessional ordre = new OrdreProfessional();
                 ordre.Nom = x.GetParagraphText();
@@ -269,10 +283,10 @@ namespace XmlHandler.Services
             genre = genreGraphRepository.CreateIfNotExists(new Dictionary<string, object> { { "Description", genre.Description }, { "Descriminator", genre.Descriminator } });
 
             List<XmlDocParagraph> publicationsParagraphs = sectionPublications.Nodes.Skip(1).Cast<XmlDocParagraph>().ToList();
-            publicationsParagraphs.ForEach(x => 
+            publicationsParagraphs.ForEach(x =>
             {
                 Formation formation;
-                
+
                 formation = formationGraphRepository.CreateIfNotExists(new Dictionary<string, object> { { "Description", x.GetParagraphText() } });
                 formation.Type = genre;
 
@@ -312,7 +326,7 @@ namespace XmlHandler.Services
                         FormationScolaire item;
                         Instituition inst;
 
-                        inst = instituitionGraphRepository.CreateIfNotExists(new Dictionary<string, object> { { "Nom", nomInstituition } });               
+                        inst = instituitionGraphRepository.CreateIfNotExists(new Dictionary<string, object> { { "Nom", nomInstituition } });
 
                         item = formationScolaireGraphRepository.CreateIfNotExists(new Dictionary<string, object> { { "Diplome", nomDiplome }, { "Niveau", NiveauScolarite.Nule } });
                         item.Ecole = inst;
@@ -386,9 +400,13 @@ namespace XmlHandler.Services
                     else
                     {
                         techNom = lineParagraphsColumn1[j].GetParagraphText();
+<<<<<<< HEAD
 
                         //Il faut que les point pour les numéros décimals soient converti pour virgule
                         mois = lineParagraphsColumn2[j].GetParagraphText().Replace(".",",");
+=======
+                        mois = lineParagraphsColumn2[j].GetParagraphText().Replace('.', ',');
+>>>>>>> 67c0222d48f658fb85a9400f927a853e898d7797
 
                         technologie = technologieGraphRepository.CreateIfNotExists(new Dictionary<string, object> { { "Nom", techNom } });
                         technologie.MoisDExperience = Convert.ToDouble(mois);
@@ -455,7 +473,7 @@ namespace XmlHandler.Services
                 emp.DescriptionDuTravail = string.Empty;
 
             AssemblerClients(employeurSection, emp);
-            
+
             conseiller.Employeurs.Add(emp);
         }
 
@@ -466,7 +484,7 @@ namespace XmlHandler.Services
             List<XmlDocNode> empNodes = new List<XmlDocNode>();
             SectionsExtractor sectionsExtractor = new SectionsExtractor();
 
-            clientSections.AddRange(sectionsExtractor.GetCVSections(employeurSection.GetOriginalNodes, 
+            clientSections.AddRange(sectionsExtractor.GetCVSections(employeurSection.GetOriginalNodes,
                 new List<IXmlToken>() { FormatationToken.CreateFormatationToken(new KeyValuePair<string, string>("w:val", "Titre2")) }, "Titre2", true));
 
             clientSections.ForEach(x =>
@@ -481,7 +499,7 @@ namespace XmlHandler.Services
                     WriteToErrorLog(ex);
                 }
             });
-            
+
             return clients;
         }
 
@@ -499,10 +517,10 @@ namespace XmlHandler.Services
                 string[] info = emplDesc.GetLinesWithTab();
                 client.Nom = string.Join(" ", info);
                 client = clientGraphRepository.CreateIfNotExists(new Dictionary<string, object> { { "Nom", client.Nom } });
-            }            
+            }
 
             mandats.AddRange(AssemblerMandats(clientSection));
-            mandats.ForEach(x => 
+            mandats.ForEach(x =>
             {
                 x.Projet.Client = client;
                 x.Projet.SocieteDeConseil = emp;
@@ -548,7 +566,7 @@ namespace XmlHandler.Services
                 } while (mandatsNodes.Count > 0);
 
             }
-            catch ( Exception ex)
+            catch (Exception ex)
             {
                 WriteToErrorLog(ex);
             }
@@ -589,7 +607,7 @@ namespace XmlHandler.Services
                 if (infoParagraphs[i].GetParagraphText().Contains("Envergure"))
                 {
                     envergureText = infoParagraphsSecondColumn[i].GetParagraphText().Trim();
-                    if(envergureText.Any(x => char.IsDigit(x)))
+                    if (envergureText.Any(x => char.IsDigit(x)))
                         projet.Envergure = int.Parse(string.Join("", envergureText.Where(x => char.IsDigit(x)).ToArray()));
                 }
 
@@ -618,15 +636,16 @@ namespace XmlHandler.Services
 
                         if (periode[1].Contains("ce jour"))
                             mandat.DateFin = DateTime.MinValue;
-                        else {
+                        else
+                        {
                             fin = periode[1].Trim().Split(" ").Where(x => !string.IsNullOrEmpty(x)).ToArray();
                             if (fin.Length > 1)
                             {
                                 mois = DicMois[RemoveAcentuation(fin[0].Trim().ToUpper())];
-                                annee = int.Parse(fin[1].Trim());
+                                annee = int.Parse(fin[1].Sanitize());
                                 mandat.DateFin = DateTime.Parse($"{annee}-{mois}-01");
                             }
-                        }                        
+                        }
                     }
                 }
 
@@ -638,7 +657,7 @@ namespace XmlHandler.Services
                     if (int.TryParse(splitedString[0], out parseInt))
                         mandat.Efforts = parseInt;
                 }
-                    
+
 
                 if (infoParagraphs[i].GetParagraphText().Contains("Référence"))
                     projet.NomReference = infoParagraphsSecondColumn[i].GetParagraphText();
@@ -720,12 +739,12 @@ namespace XmlHandler.Services
                 if (!int.TryParse(firstColumn[i].GetParagraphText(), out annee))
                     annee = 0;
 
-                formation = formationGraphRepository.CreateIfNotExists(new Dictionary<string, object> { { "Description", secondColumn[i].GetParagraphText() }, { "AnAcquisition", annee} });                
+                formation = formationGraphRepository.CreateIfNotExists(new Dictionary<string, object> { { "Description", secondColumn[i].GetParagraphText() }, { "AnAcquisition", annee } });
 
                 formation.Type = genre;
 
                 conseiller.Formations.Add(formation);
-                
+
             }
         }
 
@@ -735,9 +754,9 @@ namespace XmlHandler.Services
 
             List<Langue> langues = new List<Langue>();
             List<CVSection> langueSections;
-            
+
             SectionsExtractor extractor = new SectionsExtractor();
-            langueSections = extractor.GetCVSections(langueSection.GetOriginalNodes.Skip(1).ToList(), 
+            langueSections = extractor.GetCVSections(langueSection.GetOriginalNodes.Skip(1).ToList(),
                 new List<IXmlToken>() { FormatationToken.CreateFormatationToken(new KeyValuePair<string, string>("w:val", "Puce1")) }, "w:b", true);
 
             foreach (CVSection section in langueSections)
@@ -755,6 +774,7 @@ namespace XmlHandler.Services
                         string[] niveau = langueNiveau.GetParagraphText().Split(':');
 
                         if (niveau[0].Contains("Parlé"))
+<<<<<<< HEAD
                             curLangue.Parle = (Niveau)System.Enum.Parse(typeof(Niveau), niveau[1].Trim().ToLower());
 
                         if (niveau[0].Contains("Écrit"))
@@ -762,6 +782,15 @@ namespace XmlHandler.Services
 
                         if (niveau[0].Contains("Lu"))
                             curLangue.Lu = (Niveau)System.Enum.Parse(typeof(Niveau), niveau[1].Trim().ToLower());
+=======
+                            curLangue.Parle = (Niveau)System.Enum.Parse(typeof(Niveau), niveau[1].Trim().Replace("-", "").ToCamelCase());
+
+                        if (niveau[0].Contains("Écrit"))
+                            curLangue.Ecrit = (Niveau)System.Enum.Parse(typeof(Niveau), niveau[1].Trim().Replace("-", "").ToCamelCase());
+
+                        if (niveau[0].Contains("Lu"))
+                            curLangue.Lu = (Niveau)System.Enum.Parse(typeof(Niveau), niveau[1].Trim().Replace("-", "").ToCamelCase());
+>>>>>>> 67c0222d48f658fb85a9400f927a853e898d7797
                     }
                 }
                 else

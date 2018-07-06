@@ -6,19 +6,36 @@ import { CvDetailsComponent } from './components/cv-details-component/cv-details
 import { HttpClientModule } from '@angular/common/http';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { MandatComponent } from './components/mandat/mandat.component';
+import { ServiceRoutingModule } from './Routes.services';
+import { HomeComponent } from './components/home/home.component';
+import { RegisterComponent } from './components/register/register.component';
+import { LoginComponent } from './components/login/login.component';
+import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
+import { FormsModule } from '@angular/forms';
+import { ValidatorService } from './validator.services';
+
 
 @NgModule({
   declarations: [
     AppComponent,
     CvDetailsComponent,
     NavbarComponent,
-    MandatComponent
+    MandatComponent,
+    HomeComponent,
+    RegisterComponent,
+    LoginComponent,
+    PageNotFoundComponent,
+    ForgotPasswordComponent,
   ],
   imports: [
     BrowserModule,
-    HttpClientModule
-  ],
-  providers: [],
+    HttpClientModule,
+    FormsModule,
+    ServiceRoutingModule,
+
+   ],
+  providers: [ValidatorService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

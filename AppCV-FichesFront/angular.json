@@ -27,8 +27,8 @@
                             "src/styles.css"
                         ],
                         "scripts": [
-                            "src/assets/bootstrap/dist/js/bootstrap.min.js",
-                            "src/assets/jquery/dist/jquery.min.js"
+                            "src/assets/jquery/dist/jquery.min.js",
+                            "src/assets/bootstrap/dist/js/bootstrap.min.js"
                         ]
                     },
                     "configurations": {

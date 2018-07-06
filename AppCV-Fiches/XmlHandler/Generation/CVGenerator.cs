@@ -101,7 +101,11 @@ namespace XmlHandler.Generation
                 XmlSerializer xmlSerializer = new XmlSerializer(typeof(Utilisateur));
                 using (Stream fileStream = new FileStream(outputPath, FileMode.Create, FileAccess.Write, FileShare.None))
                 {
+<<<<<<< HEAD
                     xmlSerializer.Serialize(fileStream, newUtilisateur);
+=======
+                   xmlSerializer.Serialize(fileStream, newUtilisateur);
+>>>>>>> 67c0222d48f658fb85a9400f927a853e898d7797
                 }
             }            
         }

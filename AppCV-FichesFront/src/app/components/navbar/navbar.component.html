@@ -3,9 +3,9 @@
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-        <a class="navbar-brand" href="#">LGS</a>
+        <a class="navbar-brand" routerLink="Home">LGS</a>
         <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-            <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+            <li class="nav-item"><a class="nav-link" routerLink="home"    >Home</a></li>
             <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="About">About</a></li>
             <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
         </ul>
@@ -25,8 +25,8 @@
     -->
         <form class="form-inline my-2 my-lg-0">
             <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Account" asp-action="Register">Register</a></li>
-                <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Account" asp-action="Login" style="line-height:0">Log in</a></li>
+                <li class="nav-item"><a class="nav-link" routerLink="/Account/Register">Register</a></li>
+                <li class="nav-item"><a class="nav-link" routerLink="Account/Login" style="line-height:0">Log in</a></li>
             </ul>
         </form>
     </div>
