@@ -400,7 +400,13 @@ namespace XmlHandler.Services
                     else
                     {
                         techNom = lineParagraphsColumn1[j].GetParagraphText();
-                        mois = lineParagraphsColumn2[j].GetParagraphText().Replace(".", ",");
+<<<<<<< HEAD
+
+                        //Il faut que les point pour les numéros décimals soient converti pour virgule
+                        mois = lineParagraphsColumn2[j].GetParagraphText().Replace(".",",");
+=======
+                        mois = lineParagraphsColumn2[j].GetParagraphText().Replace('.', ',');
+>>>>>>> 67c0222d48f658fb85a9400f927a853e898d7797
 
                         technologie = technologieGraphRepository.CreateIfNotExists(new Dictionary<string, object> { { "Nom", techNom } });
                         technologie.MoisDExperience = Convert.ToDouble(mois);
@@ -768,6 +774,15 @@ namespace XmlHandler.Services
                         string[] niveau = langueNiveau.GetParagraphText().Split(':');
 
                         if (niveau[0].Contains("Parlé"))
+<<<<<<< HEAD
+                            curLangue.Parle = (Niveau)System.Enum.Parse(typeof(Niveau), niveau[1].Trim().ToLower());
+
+                        if (niveau[0].Contains("Écrit"))
+                            curLangue.Ecrit = (Niveau)System.Enum.Parse(typeof(Niveau), niveau[1].Trim().ToLower());
+
+                        if (niveau[0].Contains("Lu"))
+                            curLangue.Lu = (Niveau)System.Enum.Parse(typeof(Niveau), niveau[1].Trim().ToLower());
+=======
                             curLangue.Parle = (Niveau)System.Enum.Parse(typeof(Niveau), niveau[1].Trim().Replace("-", "").ToCamelCase());
 
                         if (niveau[0].Contains("Écrit"))
@@ -775,11 +790,12 @@ namespace XmlHandler.Services
 
                         if (niveau[0].Contains("Lu"))
                             curLangue.Lu = (Niveau)System.Enum.Parse(typeof(Niveau), niveau[1].Trim().Replace("-", "").ToCamelCase());
+>>>>>>> 67c0222d48f658fb85a9400f927a853e898d7797
                     }
                 }
                 else
                 {
-                    curLangue.Parle = curLangue.Ecrit = curLangue.Lu = Niveau.Avancé;
+                    curLangue.Parle = curLangue.Ecrit = curLangue.Lu = Niveau.avancé;
                 }
 
                 langues.Add(curLangue);
