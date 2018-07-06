@@ -700,8 +700,6 @@ namespace XmlHandler.Services
                 }
             }
 
-            projet.Description = mandat.Description;
-
             mandat.Titre = projet.Nom;
             mandat.Projet = projet;
 
