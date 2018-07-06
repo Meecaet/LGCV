@@ -66,7 +66,7 @@
             $.ajax({
                 url: 'ObtenirNouveauDomaine?Index=' + i,
                 success: function (data) {
-                    $('#Table > tbody').append(data);
+                    $('#tableDomaines').append(data);
                 },
                 error: function (a, b, c) {
                     console.log(a, b, c);
@@ -166,15 +166,16 @@
                 <div class="lgs-label">Identification</div>
                 <div class="table-bordered lgs-group">
                     <input class="form-control" type="text" placeholder="Prénom" name="prenom" asp-for="Prenom">
-                    <input class="form-control" type="text" placeholder="Nom" name="nom" asp-for="Nom">
-                    <br />
-                    <select name="GraphIdFonction" class="form-control form-control-sm">
-                        <option></option>
-                        @foreach (Fonction fonction in (List<Fonction>)ViewData["Fonctions"])
-                        {
-                            <option value="@fonction.GraphKey">@fonction.Description</option>
-                        }
-                    </select>
+                    <input class="form-control" type="text" placeholder="Nom" name="nom" asp-for="Nom">                    
+                    <div class="form-inline lgs-top-buffer2">
+                        <select name="GraphIdFonction" class="form-control form-control-sm">
+                            <option></option>
+                            @foreach (Fonction fonction in (List<Fonction>)ViewData["Fonctions"])
+                            {
+                                <option value="@fonction.GraphKey">@fonction.Description</option>
+                            }
+                        </select>
+                    </div>
                 </div>
             </div>
 
@@ -182,33 +183,34 @@
                 <textarea class="lgs-textarea form-control" style="width:100%" placeholder="Biographie" asp-for="Biographie"></textarea>
             </div>
 
-            <div>
+            <div class="lgs-top-buffer3">                
                 <div class="lgs-label">
                     Principaux domaines d'intervention
                 </div>
-                <table id="Table">
-                    <tbody></tbody>
-                </table>
-                <div class="lgs-floatRightButtons">
+                <div class="lgs-floatLeftButtons">
                     <button type="button" class="btn btn-link" id="btnAddDomaine" name="btnAddDomaine"><i class="fas fa-plus"></i></button>
+                </div>                
+                <div class="table-bordered lgs-group" style="clear:both">
+                    <div id="tableDomaines">
+                    </div>
                 </div>
             </div>
 
-            <div style="clear:both">
-                <div class="form-group row">
-                    <div class="col-lg-4">
-
+            <div>
+                <div class="form-group row lgs-top-buffer3">
+                    <div class="col-lg-6">
                         <div>
                             <div class="lgs-label">Formation Académique</div>
                             <div class="lgs-floatLeftButtons">
                                 <button type="button" class="btn btn-link" id="btnAddFormationAcademic"><i class="fas fa-plus"></i></button>
                             </div>
-                            <div id="tableFormationAcademic" class="lgs-group table-bordered">                                
+                        </div>
+                        <div>
+                            <div id="tableFormationAcademic" class="lgs-group table-bordered">
                             </div>
                         </div>
-
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col-lg-6">
 
                         <div>
                             <div class="lgs-label">Certifications</div>
@@ -224,7 +226,7 @@
             </div>
         </div>
 
-        <div class="form-group row">
+        <div class="form-group row lgs-top-buffer3">
             <div class="col-lg-12">
                 <div>
                     <div class="lgs-label">Mandats</div>
@@ -238,59 +240,53 @@
         </div>
 
         <div>
-            <div class="form-group row">
-                <div>
-                    <div class="col-lg-4">
+            <div class="form-group row lgs-top-buffer3">
+                <div class="col-lg-6">
+                    <div>
                         <div class="lgs-label">
                             Expériences Technologiques
                         </div>
                         <div class="lgs-floatLeftButtons">
                             <button id="btnAddTechConseiller" type="button" class="btn btn-link"><i class="fas fa-plus"></i></button>
                         </div>
-                        <div id="tableTechConseiller" class="lgs-group table-bordered">
-                        </div>
-
+                    </div>
+                    <div id="tableTechConseiller" class="lgs-group table-bordered">
                     </div>
                 </div>
-                <div class="col-lg-4">
-
+                <div class="col-lg-6">
                     <div>
-                        <div class="lgs-label">Langues</div>
-                        <div class="lgs-floatLeftButtons">
-                            <button id="btnAddLangue" type="button" class="btn btn-link"><i class="fas fa-plus"></i></button>
-                        </div>
-                        <table class="lgs-group table-bordered">
-                            <thead>
-                                <tr>
-                                    <td>Langue</td>
-                                    <td>Parlé</td>
-                                    <td>Écrit</td>
-                                    <td>Lu</td>
-                                </tr>
-                            </thead>
-                            <tbody id="tableLangue">
-                            </tbody>
-                        </table> 
-                    </div>
-                </div>
-
-                <div class="col-lg-4">
-
-                    <div>
-
                         <div class="lgs-label">Perfectionnements </div>
                         <div class="lgs-floatLeftButtons">
                             <button id="btnAddPerfectionnement" type="button" class="btn btn-link"><i class="fas fa-plus"></i></button>
                         </div>
-                        <div id="tablePerfectionnement" class="lgs-group table-bordered">
-                        </div>
                     </div>
-
+                    <div id="tablePerfectionnement" class="lgs-group table-bordered">
+                    </div>
                 </div>
+            </div>
+            <div class="row col-lg-6">
+                <div>
+                    <div class="lgs-label">Langues</div>
+                    <div class="lgs-floatLeftButtons">
+                        <button id="btnAddLangue" type="button" class="btn btn-link"><i class="fas fa-plus"></i></button>
+                    </div>
+                </div>
+                <div class="lgs-group table-bordered">
+                    <div class="form-inline">
+                        <div class="form-inline col-lg-3 table-bordered">Langue</div>
+                        <div class="form-inline col-lg-3 table-bordered">Parlé</div>
+                        <div class="form-inline col-lg-3 table-bordered">Écrit</div>
+                        <div class="form-inline col-lg-3 table-bordered">Lu</div>
+                    </div>
+                    <div id="tableLangue">
+                    </div>
+                </div>                    
             </div>
         </div>
 
-        <input type="submit" name="btnSubmit" value="Enregistrer" />
+        <div class="row col-lg-2 lgs-top-buffer3">
+            <input type="submit" class="form-control" name="btnSubmit" value="Enregistrer" />
+        </div>
 
     }
 

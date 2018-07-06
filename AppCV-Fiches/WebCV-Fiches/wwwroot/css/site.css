@@ -36,7 +36,15 @@
         display: none;
     }
 }
-
+.lgs-top-buffer1 {
+    margin-top: 5px;
+}
+.lgs-top-buffer2 {
+    margin-top: 10px;
+}
+.lgs-top-buffer3 {
+    margin-top:20px;
+}
 .lgs-label {
     background-color: #6c4796;
     color: white;

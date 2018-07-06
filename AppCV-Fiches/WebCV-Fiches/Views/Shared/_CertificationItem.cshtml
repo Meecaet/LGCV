@@ -1,9 +1,7 @@
 ﻿@model int
-<div>
-    <label>Certification: </label>
-    <input class="CertificationItem" name="Certifications[@(Model)].Description" type="text" value="" />
-    <br />
-    <label>Année: </label>
-    <input name="Certifications[@(Model)].Annee" type="number" value="" />
+<div class="lgs-group table-bordered lgs-top-buffer2">
+    <label class="col-form-label">Certification: </label>
+    <input class="CertificationItem form-control" name="Certifications[@(Model)].Description" type="text" value="" />
+    <label class="col-form-label"">Année: </label>
+    <input name="Certifications[@(Model)].Annee" class="form-control" type="number" value="" />
 </div>
-<br/>

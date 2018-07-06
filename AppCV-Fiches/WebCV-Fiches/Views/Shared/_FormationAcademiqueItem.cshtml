@@ -1,21 +1,16 @@
 ﻿@model int
-<div class="lgs-group table-bordered">
-    <table>
-        <tr>
-            <td>
-                <label>Diplome: </label>
-                <input id="FormationsAcademique@(Model)__Diplome" class="FormationsAcademiqueItem" name="FormationsAcademique[@(Model)].Diplome" type="text" value="" />
-            </td>
-            <td>
-                <label>Année: </label><input id="FormationsAcademique@(Model)__Annee" name="FormationsAcademique[@(Model)].Annee" type="text" value="" />
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <label>Établissement: </label><input id="FormationsAcademique@(Model)__Etablissement" name="FormationsAcademique[@(Model)].Etablissement" type="text" value="" />
-            </td>
-        </tr>        
-    </table>
-    <BR>
+<div class="lgs-group table-bordered lgs-top-buffer2">
+    <div class="form-row">
+
+        <label class="form-check-label">Diplome: </label>
+        <input id="FormationsAcademique@(Model)__Diplome" class="FormationsAcademiqueItem form-control" name="FormationsAcademique[@(Model)].Diplome" type="text" value="" />
+
+        <label>Année: </label>
+        <input id="FormationsAcademique@(Model)__Annee" class="form-control" name="FormationsAcademique[@(Model)].Annee" type="text" value="" />
+    </div>
+    <div class="form-row lgs-top-buffer1">
+        <label class="form-check-label">Établissement: </label>
+        <input id="FormationsAcademique@(Model)__Etablissement" class="form-control" name="FormationsAcademique[@(Model)].Etablissement" type="text" value="" />
+    </div>
 </div>
 
