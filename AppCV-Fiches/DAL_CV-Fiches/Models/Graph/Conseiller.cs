@@ -49,7 +49,7 @@ namespace DAL_CV_Fiches.Models.Graph
         [Edge("PointeVers")]
         public List<PieceJointe> PiecesJointes { get => (List<PieceJointe>)LoadProperty("PiecesJointes"); set => SetProperty("PiecesJointes", value); }
 
-        [Edge("Connait", lazyLoad:true)]
+        [Edge("Connait")]
         public List<Technologie> Technologies { get => (List<Technologie>)LoadProperty("Technologies"); set => SetProperty("Technologies", value); }
 
         [Edge("ATravaillePour")]
