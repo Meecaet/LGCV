@@ -12,7 +12,7 @@
         $('#tableMandats').on('click', '.btnAddTask', function () {
             var element = $(this);
             var index = element.attr('index');
-            var siblingsCollection = element.parent().siblings();
+            var siblingsCollection = element.parent().parent().siblings();
 
             var tableTache = findElementsInCollectionByClassName(siblingsCollection, "tableTache")[0];
             var j = findElementsInCollectionByClassName(tableTache.children(), "TacheItem").length;            
@@ -32,7 +32,7 @@
         $('#tableMandats').on('click', '.btnAddTech', function () {
             var element = $(this);
             var index = element.attr('index');
-            var siblingsCollection = element.parent().siblings();
+            var siblingsCollection = element.parent().parent().siblings();
 
             var tableTech = findElementsInCollectionByClassName(siblingsCollection, "tableTechnologie")[0];
             var j = findElementsInCollectionByClassName(tableTech.children(), "TechItem").length;
