@@ -197,13 +197,13 @@
                             <thead>
                                 <tr class="lgs-backgroundColor">
                                     <th scope="col">Sous-catégorie</th>
-                                    <th scope="col">Mois</th>
+                                    <th scope="col">Année</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr *ngFor="let perfectionement of cvDetails.perfectionnements">
                                     <td>{{perfectionement.description}}</td>
-                                    <td>?</td>
+                                    <td>{{perfectionement.annee}}</td>
                                 </tr>
 
                             </tbody>
