@@ -62,7 +62,7 @@ namespace WebCV_Fiches.Controllers
             try
             {
                 role.ConcurrencyStamp = Guid.NewGuid().ToString();
-                roleManager.CreateAsync(role);
+                var result =  roleManager.CreateAsync(role).Result;
 
                 return RedirectToAction(nameof(Index));
             }

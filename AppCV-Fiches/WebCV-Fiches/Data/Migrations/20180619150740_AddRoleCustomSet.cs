@@ -13,6 +13,8 @@ namespace WebCV_Fiches.Data.Migrations
                 table: "AspNetRoles",
                 nullable: false,
                 defaultValue: "");
+
+            migrationBuilder.UpdateData("AspNetRoles", "Discriminator" ,"",   "Discriminator" , "ApplicationRole" );
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
