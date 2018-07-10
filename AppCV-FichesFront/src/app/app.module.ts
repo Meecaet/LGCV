@@ -3,6 +3,8 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { CvDetailsComponent } from './components/cv-details-component/cv-details.component';
+import { MandatComponent } from './components/mandat/mandat.component';
+
 import { HttpClientModule } from '@angular/common/http';
 import { NavbarComponent } from './components/navbar/navbar.component';
 
@@ -15,12 +17,13 @@ import { ForgotPasswordComponent } from './components/forgot-password/forgot-pas
 import { FormsModule } from '@angular/forms';
 import { ValidatorService } from './validator.services';
 
-import {InlineEditorModule} from '@qontu/ngx-inline-editor';
+import {InlineEditorModule} from './qontu/ngx-inline-editor';
 
 @NgModule({
   declarations: [
     AppComponent,
     CvDetailsComponent,
+    MandatComponent,
     NavbarComponent,
     HomeComponent,
     RegisterComponent,
