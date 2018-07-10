@@ -304,22 +304,22 @@ namespace WebCV_Fiches.Controllers
         public ActionResult Details(string id)
         {
 
-            var cv = CreateDummyCVViewModel();
-            return View(cv);
+            //var cv = CreateDummyCVViewModel();
+            //return View(cv);
 
-            //Utilisateur utilisateur;
+            Utilisateur utilisateur;
 
-            //if (HttpContext.Session.Get<Utilisateur>("Utilisateur") != null)
-            //    utilisateur = HttpContext.Session.Get<Utilisateur>("Utilisateur");
-            //else
-            //{
-            //    utilisateur = UtilisateurDepot.GetOne(id);
-            //    HttpContext.Session.Set<Utilisateur>("Utilisateur", utilisateur);
-            //}
+            if (HttpContext.Session.Get<Utilisateur>("Utilisateur") != null)
+                utilisateur = HttpContext.Session.Get<Utilisateur>("Utilisateur");
+            else
+            {
+                utilisateur = UtilisateurDepot.GetOne(id);
+                HttpContext.Session.Set<Utilisateur>("Utilisateur", utilisateur);
+            }
 
-            //CVMapper mapper = new CVMapper();
-            //CVViewModel cVViewModel = mapper.Map(utilisateur);
-            //return View(cVViewModel);
+            CVMapper mapper = new CVMapper();
+            CVViewModel cVViewModel = mapper.Map(utilisateur);
+            return View(cVViewModel);
         }
 
         // GET: CV/Create
