@@ -1,6 +1,9 @@
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { ValidatorService } from "../../validator.services";
+import { LoginModel } from "../../Models/Login-Model";
+import { AuthenticationService } from "src/app/Services/authentication.service";
+import { Credential } from "../../Models/Creadation-model";
 
 @Component({
   selector: "app-login",
@@ -8,38 +11,39 @@ import { ValidatorService } from "../../validator.services";
   styleUrls: ["./login.component.css"]
 })
 export class LoginComponent implements OnInit {
-  constructor(private route: Router, private validator: ValidatorService) {}
-  Email: string = null;
-  PassWord: string = null;
-  RememberMe:boolean=false
+  constructor(
+    private route: Router,
+    private validator: ValidatorService,
+    private auth: AuthenticationService
+  ) {}
+  Model: LoginModel = new LoginModel();
+  MsgError: string="";
   ngOnInit() {}
   IsValid(value, errorEmpty, errorRegex) {
     this.validator.ValidateEmpty(value, errorEmpty);
     this.validator.ValidateEmail(value, errorRegex);
   }
   IsValidPassword(value, errorEmpty, errorRegex) {
-    debugger
     this.validator.ValidateEmpty(value, errorEmpty);
-
     this.validator.ValidadePassword(value, errorRegex);
   }
   Login(): void {
-    // this.service.Login(this.UserId, this.AccessKey).subscribe(
-    //   x => {
-    //     debugger;
-    //    let token = x["token"];
-    //    if(x.authenticated){
-    //      this.MsgError=""
-    //     localStorage.setItem('token',token);
-    //     this.route.navigate(["/pag1"])
-    //    }else{
-    //     localStorage.removeItem('token');
-    //     this.MsgError="User or Password is wrong!!"
-    //    }
-    //   },
-    //   (error: any) => {
-    //     debugger;
-    //   }
-    // );
+    this.auth.Login(this.Model).subscribe(
+      (x: Credential) => {
+        debugger;
+
+        if (x.authenticated) {
+          this.MsgError = "";
+          localStorage.setItem("token", x.token);
+          this.route.navigate(["/Details"]);
+        } else {
+          localStorage.removeItem("token");
+          this.MsgError = "User or Password is wrong!!";
+        }
+      },
+      (error: any) => {
+        debugger;
+      }
+    );
   }
 }

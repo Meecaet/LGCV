@@ -1,5 +1,6 @@
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
+//
 import { HomeComponent } from "./components/home/home.component";
 import { RegisterComponent } from "./components/register/register.component";
 import { LoginComponent } from "./components/login/login.component";
@@ -7,9 +8,10 @@ import { CvDetailsComponent } from "./components/cv-details-component/cv-details
 import { AuthGuardService as AuthGuard } from "./auth-guard.service";
 import { PageNotFoundComponent } from "./components/page-not-found/page-not-found.component";
 import { ForgotPasswordComponent } from "./components/forgot-password/forgot-password.component";
-import { MandatComponent } from './components/mandat/mandat.component';
+
 
 const routes: Routes = [
+  { path: "", component: HomeComponent },
   { path: "Home", component: HomeComponent },
 
   {
@@ -20,8 +22,8 @@ const routes: Routes = [
         { path: "ForgotPassword", component: ForgotPasswordComponent },
       ]
   },
-  { path: 'Details/:id', component: CvDetailsComponent },
-  { path: "", component: HomeComponent },
+  { path: "Details", component: CvDetailsComponent, canActivate: [AuthGuard], },
+
   { path: "notfound", component: PageNotFoundComponent },
   { path: "**", redirectTo: "notfound" }
 ];
