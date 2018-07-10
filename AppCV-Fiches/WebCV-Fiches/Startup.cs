@@ -17,6 +17,10 @@ using Microsoft.Extensions.Caching.Memory;
 using DAL_CV_Fiches.Repositories.Graph;
 using DAL_CV_Fiches.Models.Graph;
 using DAL_CV_Fiches;
+using WebCV_Fiches.Extensions;
+using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using WebCV_Fiches.Models.AccountViewModels;
 
 namespace WebCV_Fiches
 {
@@ -34,6 +38,8 @@ namespace WebCV_Fiches
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
@@ -44,9 +50,14 @@ namespace WebCV_Fiches
 
             GraphConfig.SetGraphDataBaseConnection(endpoint, primaryKey, database, collection);
 
+            services = TokenConfigurations(services);
+
             services.AddIdentity<ApplicationUser, ApplicationRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
+
+
+
 
             services.ConfigureApplicationCookie(options =>
             {
@@ -79,8 +90,61 @@ namespace WebCV_Fiches
                 options.Cookie.HttpOnly = true;
             });
 
-        }
 
+        }
+        private IServiceCollection TokenConfigurations(IServiceCollection services)
+        {
+            services.AddTransient<LoginService>();
+
+            var signingConfigurations = new SigningConfigurationsExtensions();
+            services.AddSingleton(signingConfigurations);
+
+            var tokenConfigurations = new TokenConfigurationExtentions();
+            new ConfigureFromConfigurationOptions<TokenConfigurationExtentions>(
+                Configuration.GetSection("TokenConfigurationExtentions"))
+                    .Configure(tokenConfigurations);
+            services.AddSingleton(tokenConfigurations);
+
+
+            services.AddAuthentication(authOptions =>
+            {
+                authOptions.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                authOptions.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(bearerOptions =>
+            {
+                var paramsValidation = bearerOptions.TokenValidationParameters;
+                paramsValidation.IssuerSigningKey = signingConfigurations.Key;
+                paramsValidation.ValidAudience = tokenConfigurations.Audience;
+                paramsValidation.ValidIssuer = tokenConfigurations.Issuer;
+
+                paramsValidation.ValidateIssuerSigningKey = true;
+
+                paramsValidation.ValidateLifetime = true;
+
+                paramsValidation.ClockSkew = TimeSpan.Zero;
+            });
+
+            // Ativa o uso do token como forma de autorizar o acesso
+            // a recursos deste projeto
+            services.AddAuthorization(auth =>
+            {
+                auth.AddPolicy("Bearer", new AuthorizationPolicyBuilder()
+                    .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+                    .RequireAuthenticatedUser().Build());
+            });
+
+
+            services.AddCors(option => option.AddPolicy("Bearer", build =>
+            {
+                build
+                .AllowAnyOrigin()
+                .AllowCredentials()
+                .AllowAnyMethod()
+                .AllowAnyHeader();
+            }));
+
+            return services;
+        }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, IMemoryCache cache)
         {
@@ -94,6 +158,10 @@ namespace WebCV_Fiches
             {
                 app.UseExceptionHandler("/Home/Error");
             }
+
+
+            app.UseCors("Bearer");
+
 
             app.UseStaticFiles();
 
@@ -113,9 +181,11 @@ namespace WebCV_Fiches
             });
 
             LoadDataInCache(cache);
+
+
         }
 
-        private  void LoadDataInCache(IMemoryCache cache)
+        private void LoadDataInCache(IMemoryCache cache)
         {
             TechnologieGraphRepository technologieGraphRepository = new TechnologieGraphRepository();
             LangueGraphRepository langueGraphRepository = new LangueGraphRepository();

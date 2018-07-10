@@ -350,7 +350,7 @@ namespace WebCV_Fiches.Controllers
 
                 //return RedirectToAction(nameof(Index));
             }
-            catch
+            catch(Exception ex)
             {
                 ViewData["Fonctions"] = (List<Fonction>)cache.Get("Fonctions");
                 return View();

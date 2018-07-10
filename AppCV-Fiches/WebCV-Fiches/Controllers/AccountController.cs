@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using WebCV_Fiches.Models.Admin;
+using System;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using WebCV_Fiches.Models.AccountViewModels;
+using WebCV_Fiches.Models.Admin;
 using WebCV_Fiches.Services;
 
 namespace WebCV_Fiches.Controllers
@@ -29,7 +25,8 @@ namespace WebCV_Fiches.Controllers
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IEmailSender emailSender,
-            ILogger<AccountController> logger)
+            ILogger<AccountController> logger
+            )
         {
             _userManager = userManager;
             _signInManager = signInManager;
