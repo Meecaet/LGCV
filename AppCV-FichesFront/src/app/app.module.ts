@@ -15,6 +15,7 @@ import { ForgotPasswordComponent } from './components/forgot-password/forgot-pas
 import { FormsModule } from '@angular/forms';
 import { ValidatorService } from './validator.services';
 
+import {InlineEditorModule} from '@qontu/ngx-inline-editor';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,7 @@ import { ValidatorService } from './validator.services';
     HttpClientModule,
     FormsModule,
     ServiceRoutingModule,
-
+    InlineEditorModule
    ],
   providers: [ValidatorService],
   bootstrap: [AppComponent]

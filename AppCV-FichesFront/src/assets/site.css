@@ -5,31 +5,43 @@
     font-size: 14px;
 }
 
-    /* Wrapping element */
-    /* Set some basic padding to keep content from hitting the edges */
+
+/* Wrapping element */
+
+
+/* Set some basic padding to keep content from hitting the edges */
+
 .body-content {
     padding-left: 15px;
     padding-right: 15px;
-    padding-top:20px;
+    padding-top: 20px;
 }
 
+
 /* Carousel */
+
 .carousel-caption p {
     font-size: 20px;
     line-height: 1.4;
 }
 
+
 /* Make .svg files in the carousel display properly in older browsers */
+
 .carousel-inner .item img[src$=".svg"] {
     width: 100%;
 }
 
+
 /* QR code generator */
+
 #qrCode {
     margin: 15px;
 }
 
+
 /* Hide/rearrange for smaller screens */
+
 @media screen and (max-width: 767px) {
     /* Hide captions */
     .carousel-caption {
@@ -49,46 +61,56 @@
     overflow: hidden;
     position: relative;
 }
+
 .lgs-group {
     overflow: hidden;
     width: 100%;
     padding: 10px;
 }
+
 .lgs-section {
-    margin-top:20px;
-    clear:both
+    margin-top: 20px;
+    clear: both
 }
 
-.lgs-group b{
+.lgs-group b {
     font-size: medium
 }
 
 .lgs-floatRightButtons {
     float: right;
 }
+
 .lgs-floatLeftButtons {
     float: left;
     overflow: hidden;
     position: relative;
 }
-    .lgs-floatRightButtons button i, .lgs-floatLeftButtons button i, .lgs-Buttons button i {
-        font-size: 22px;
-        color: #6c4796;
-        margin-bottom: 0px;
-    }
-    .lgs-floatLeftButtons button {
-        margin-bottom: 0px;
-        padding-top: 0px;
-        padding-bottom: 0px;
-        margin-bottom: 0px;
-    }
+
+.lgs-floatRightButtons button i,
+.lgs-floatLeftButtons button i,
+.lgs-Buttons button i {
+    font-size: 22px;
+    color: #6c4796;
+    margin-bottom: 0px;
+}
+
+.lgs-floatLeftButtons button {
+    margin-bottom: 0px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    margin-bottom: 0px;
+}
+
 .lgs-backgroundColor {
     background-color: #6c4796;
-    color:white;
+    color: white;
 }
-.lgs-champLabel{
-    margin-right:8px;
+
+.lgs-champLabel {
+    margin-right: 8px;
 }
+
 .lgsTextTitle {
     color: #6c4796;
     font-size: 18px;
@@ -96,4 +118,10 @@
 
 .form-control {
     margin-right: 10px;
+}
+
+.c-inline-editor .form-group,
+inline-editor-textarea,
+inline-editor-textarea textarea {
+    width: 100px;
 }

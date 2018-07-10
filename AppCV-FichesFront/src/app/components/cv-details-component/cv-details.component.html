@@ -12,34 +12,57 @@
     }
 </style>
 
-<div id="" class="container-fluid" style="padding-top:30px">
+<div class="load-pane" [ngClass]="{'loading': loading}" style="text-align: center">
+    <h1><i class='fas fa-sync-alt fa-spin'></i> veuillez patienter.</h1>
+</div>
+<div [ngClass]="{'no-data-pane':true, 'no-data': (!cvDetails.graphIdUtilisateur && !loading)}">
+    <h1><i class="fas fa-exclamation-circle"></i> Il n'y a aucune donnée.</h1>
+</div>
+
+<div id="" class="container-fluid" style="padding-top:30px" [ngClass]="{'loadable':true, 'loading': loading, 'no-data':!cvDetails.graphIdUtilisateur, 'animated fadeIn':cvDetails.graphIdUtilisateur}">
     <form>
         <div class="form-group">
             <div id="identification" class="form-inline">
                 <div class="lgs-label">Identification</div>
                 <div class="table-bordered lgs-group">
-                    <div>
-                        <h2>
-                            {{cvDetails.prenom}} {{cvDetails.nom}}
-                        </h2>
+                    <div style="margin-bottom:25px">
+                        <div>
+                            <h2 class="form-inline">
+                                <!--{{cvDetails.prenom}} {{cvDetails.nom}}-->
+                                <div class="form-inline">
+                                    <div style="margin-right:10px">
+                                        <inline-editor type="text" [(ngModel)]="cvDetails.prenom" name="prenom" [cols]="250"></inline-editor>
+                                    </div>
+                                    <div>
+                                        <inline-editor type="text" [(ngModel)]="cvDetails.nom" name="nom"></inline-editor>
+                                    </div>
+                                </div>
+                            </h2>
+                        </div>
                         <b>{{cvDetails.fonction}}</b>
                     </div>
-                    <p style="margin-top:25px">
-                        {{cvDetails.biographie}}
-                    </p>
+                    <inline-editor type="textarea" [(ngModel)]="cvDetails.biographie" name="biographie" size="100">
+                    </inline-editor>
                 </div>
             </div>
         </div>
 
-        <div class="lgs-section">
-            <div class="lgs-label">
-                Principaux domaines d'intervention
-            </div>
-            <div class="lgs-group">--domaines--</div>
-        </div>
-
         <div style="clear:both" class="lgs-section">
             <div class="form-group row">
+                <div class="col-lg-4">
+                    <div>
+                        <div class="lgs-label">
+                            Principaux domaines d'intervention
+                        </div>
+                        <div class="lgs-group table-bordered">
+
+                            <ul>
+                                <li *ngFor="let domaine of cvDetails.domainesDIntervention">{{domaine.description}}</li>
+                            </ul>
+
+                        </div>
+                    </div>
+                </div>
                 <div class="col-lg-4">
 
                     <div>
@@ -48,8 +71,10 @@
                             <button type="button" class="btn btn-link"></button>
                         </div>
                         <div class="lgs-group table-bordered">
-                            <b>Ingénieur Informaticien - 2014</b>
-                            <BR>Université Laval
+                            <div *ngFor="let formation of cvDetails.formationsAcademique">
+                                <b>{{formation.diplome}} - ({{formation.annee}})</b>
+                                <BR>{{formation.etablissement}}
+                            </div>
                         </div>
                     </div>
 
@@ -63,9 +88,7 @@
                         </div>
                         <div class="lgs-group table-bordered">
                             <ul>
-                                <li>Microsoft Azure</li>
-                                <li>Oracle</li>
-                                <li>Scrum</li>
+                                <li *ngFor="let certification of cvDetails.certifications">{{certification.description}}</li>
                             </ul>
                         </div>
                     </div>
@@ -77,7 +100,7 @@
         <div class="lgs-section">
             <div class="lgsTextTitle">RÉSUME DES INTERVENTIONS</div>
             <div>
-                <table class="table table-hover">
+                <table class="table table-hover small">
                     <thead>
                         <tr class="lgs-backgroundColor">
                             <th scope="col">#</th>
@@ -89,55 +112,29 @@
                             <th scope="col">EFFORTS (MOIS)</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td colspan="7"><b>PRODIGIUS LATAM.</b></td>
+
+                    <tbody *ngFor="let intervention of cvDetails.mandats; let i = index">
+                        <tr *ngIf="i == 0 || (i>0 && cvDetails.mandats[i-1].nomEntreprise != intervention.nomEntreprise)">
+                            <td colspan="7"><b>{{intervention.nomEntreprise}}</b></td>
                         </tr>
                         <tr>
-                            <th scope="row">2</th>
-                            <td>Jacob</td>
-                            <td>Thornton</td>
-                            <td>ddd</td>
-                            <td>Jacob</td>
-                            <td>Thornton</td>
-                            <td>9</td>
+                            <th scope="row">{{intervention.numeroMandat}}</th>
+                            <td>{{intervention.nomClient}}</td>
+                            <td>{{intervention.titreProjet}}</td>
+                            <td>{{intervention.envergure}}</td>
+                            <td>{{intervention.fonction}}</td>
+                            <td>{{intervention.debutMandat | date:'yyyy'}}</td>
+                            <td>{{intervention.efforts}}</td>
                         </tr>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Larry the Bird</td>
-                            <td>ddd</td>
-                            <td>Jacob</td>
-                            <td>Thornton</td>
-                            <td>ddd</td>
-                            <td>8</td>
-                        </tr>
-                        <tr>
-                            <td colspan="7"><b>IBM</b></td>
-                        </tr>
-                        <tr>
-                            <tr>
-                                <th scope="row">10</th>
-                                <td>Larry the Bird</td>
-                                <td>ddd</td>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>ddd</td>
-                                <td>6</td>
-                            </tr>
                     </tbody>
                 </table>
             </div>
         </div>
 
         <div class="lgs-section">
-
-            MANDATS
-            <!--@foreach (var mandat in Model.Mandats)
-            {
-                @Html.Partial("Mandat", mandat);
-            }-->
+            <app-mandat *ngFor="let mandat of cvDetails.mandats" [mandat]="mandat"></app-mandat>
+            <router-outlet></router-outlet>
         </div>
-
 
         <div class="lgs-section">
             <div class="form-group row">
