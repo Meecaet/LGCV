@@ -335,7 +335,7 @@ namespace WebCV_Fiches.Controllers
         [AllowAnonymous]
         public ActionResult Details(string id)
         {
-            return Json(CreateDummyCVViewModel());
+            //return Json(CreateDummyCVViewModel());
 
             if (string.IsNullOrWhiteSpace(id))
             {

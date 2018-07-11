@@ -22,7 +22,7 @@ const routes: Routes = [
         { path: "ForgotPassword", component: ForgotPasswordComponent },
       ]
   },
-  { path: "Details/:id", component: CvDetailsComponent, canActivate: [AuthGuard], },
+  { path: "Details/:id", component: CvDetailsComponent },
 
   { path: "notfound", component: PageNotFoundComponent },
   { path: "**", redirectTo: "notfound" }

@@ -34,7 +34,7 @@ namespace DAL_CV_Fiches.Models.Graph
         [Edge("TravailleComme")]
         public Fonction Fonction { get => (Fonction)LoadProperty("Fonction"); set => SetProperty("Fonction", value); }
 
-        [Edge("ATravailleDans")]
+        [Edge("ATravailleDans", lazyLoad: true)]
         public List<Mandat> Mandats { get => (List<Mandat>)LoadProperty("Mandats"); set => SetProperty("Mandats", value); }
 
         [Edge("Connait")]
