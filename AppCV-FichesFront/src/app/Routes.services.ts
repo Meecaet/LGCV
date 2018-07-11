@@ -8,21 +8,28 @@ import { CvDetailsComponent } from "./components/cv-details-component/cv-details
 import { AuthGuardService as AuthGuard } from "./auth-guard.service";
 import { PageNotFoundComponent } from "./components/page-not-found/page-not-found.component";
 import { ForgotPasswordComponent } from "./components/forgot-password/forgot-password.component";
-
+import { CvCreateComponent } from "./components/cv-create-component/cv-create.component";
 
 const routes: Routes = [
   { path: "", component: HomeComponent },
   { path: "Home", component: HomeComponent },
-
   {
     path: "Account",
     children: [
-        { path: "Login", component: LoginComponent },
-        { path: "Register", component: RegisterComponent },
-        { path: "ForgotPassword", component: ForgotPasswordComponent },
-      ]
+      { path: "Login", component: LoginComponent },
+      { path: "Register", component: RegisterComponent },
+      { path: "ForgotPassword", component: ForgotPasswordComponent }
+    ]
   },
-  { path: "Details/:id", component: CvDetailsComponent, canActivate: [AuthGuard], },
+
+  // { path: 'Details/:id', component: CvDetailsComponent, canActivate: [AuthGuard] , },
+  {
+    path: "CV",
+    children: [
+      { path: "Details/:id", component: CvDetailsComponent },
+      { path: "Create", component: CvCreateComponent },
+    ]
+  },
 
   { path: "notfound", component: PageNotFoundComponent },
   { path: "**", redirectTo: "notfound" }
@@ -39,5 +46,6 @@ export const routedComponents = [
   RegisterComponent,
   LoginComponent,
   PageNotFoundComponent,
-  ForgotPasswordComponent
+  ForgotPasswordComponent,
+  CvCreateComponent
 ];

@@ -13,3 +13,14 @@ table.table tbody tr {
 .mandat-fiche:not(:first-of-type) {
     display: none
 }
+.selectedItem {
+  background-color: blue;
+}
+
+table.table tbody tr {
+  cursor: pointer
+}
+
+.mandat-fiche:not(:first-of-type) {
+  display: none
+}
