@@ -18,6 +18,7 @@ import { FormsModule } from '@angular/forms';
 import { ValidatorService } from './validator.services';
 
 import {InlineEditorModule} from './qontu/ngx-inline-editor';
+import {MatButtonModule, MatCheckboxModule} from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,9 @@ import {InlineEditorModule} from './qontu/ngx-inline-editor';
     HttpClientModule,
     FormsModule,
     ServiceRoutingModule,
-    InlineEditorModule
+    InlineEditorModule,
+    MatButtonModule,
+    MatCheckboxModule
    ],
   providers: [ValidatorService],
   bootstrap: [AppComponent]
