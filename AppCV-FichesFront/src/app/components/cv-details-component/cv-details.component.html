@@ -31,17 +31,17 @@
                                 <!--{{cvDetails.prenom}} {{cvDetails.nom}}-->
                                 <div class="form-inline">
                                     <div style="margin-right:10px">
-                                        <inline-editor type="text" [(ngModel)]="cvDetails.prenom" name="prenom" [cols]="250"></inline-editor>
+                                        <inline-editor type="text" [(ngModel)]="cvDetails.prenom" name="prenom" [cols]="250" (onSave)="saveBio()"></inline-editor>
                                     </div>
                                     <div>
-                                        <inline-editor type="text" [(ngModel)]="cvDetails.nom" name="nom"></inline-editor>
+                                        <inline-editor type="text" [(ngModel)]="cvDetails.nom" name="nom" (onSave)="saveBio()"></inline-editor>
                                     </div>
                                 </div>
                             </h2>
                         </div>
                         <b>{{cvDetails.fonction}}</b>
                     </div>
-                    <inline-editor type="textarea" [(ngModel)]="cvDetails.biographie" name="biographie" size="100">
+                    <inline-editor type="textarea" [(ngModel)]="cvDetails.biographie" name="biographie" size="100" (onSave)="saveBio()">
                     </inline-editor>
                 </div>
             </div>

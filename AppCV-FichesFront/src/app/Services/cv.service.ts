@@ -9,7 +9,6 @@ import { map, take, catchError } from 'rxjs/operators';
 })
 export class CVService {
 
-  private cv: any;
   constructor(private _http: HttpClient) { }
 
   private doRequest(path: string, method: string= 'get', body: any = null) {
@@ -27,6 +26,22 @@ export class CVService {
     }
   }
 
+  private EditActiontUrl(cvId: string, controllerName: string) {
+    return `${controllerName}/${cvId}/Edit`;
+  }
+
+  private AddActionUrl(cvId: string, controllerName: string) {
+    return `${controllerName}/${cvId}/Add`;
+  }
+
+  private DeleteActionUrl(cvId: string, controllerName: string, detailId: string) {
+    return `${controllerName}/${cvId}/Delete/${detailId}`;
+  }
+
+  private DetailActionUrl(cvId: string, controllerName: string, detailId: string) {
+    return `${controllerName}/${cvId}/Detail/${detailId}`;
+  }
+
   public GetCV(id: string) {
     /*let headers = new Headers();
       headers.append('Content-Type', 'application/json');*/
@@ -34,7 +49,12 @@ export class CVService {
     return this.doRequest(`CVPoc/Details/${id}`);
   }
 
-  public SaveCV() {
+  public EditBio(cv: any) {
+    return this.doRequest('CVPoc/Edit', 'post', cv).subscribe(
+      data => console.log(data));
+  }
+
+  public NotifierChangement() {
     return this.doRequest('CV/Save');
   }
 }

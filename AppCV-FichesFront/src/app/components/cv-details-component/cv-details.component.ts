@@ -31,4 +31,8 @@ export class CvDetailsComponent implements OnInit {
     });
   }
 
+  saveBio() {
+    this.cv.EditBio(this.cvDetails);
+  }
+
 }
