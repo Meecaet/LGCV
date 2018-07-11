@@ -10,6 +10,13 @@ import { ActivatedRoute } from '@angular/router';
 export class CvDetailsComponent implements OnInit {
   public cvDetails: any = {};
   private loading = false;
+  private savingBio = false;
+  private savingInterventionDomains = false;
+  private savingFormationAcademique = false;
+  private savingCertifications = false;
+  private savingTechnologies = false;
+  private savingLangues = false;
+  private savingPerfectionnements = false;
 
   constructor(
     private cv: CVService,
@@ -32,7 +39,18 @@ export class CvDetailsComponent implements OnInit {
   }
 
   saveBio() {
-    this.cv.EditBio(this.cvDetails);
-  }
+    this.savingBio = true;
+    const bio = {
+      Nom: this.cvDetails.nom,
+      Prenom: this.cvDetails.Prenom,
+      Biographie: this.cvDetails.Biographie,
+      Fonction: this.cvDetails.Fonction};
 
+    this.cv.EditBio(this.cvDetails)
+    .subscribe(
+      data => {
+        console.log(data);
+        this.savingBio = false;
+      });
+  }
 }

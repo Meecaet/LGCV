@@ -23,7 +23,11 @@
     <form>
         <div class="form-group">
             <div id="identification" class="form-inline">
-                <div class="lgs-label">Identification</div>
+                <div class="lgs-label">
+                    <span class="saving-pane" [ngClass]="{'saving':savingBio}">
+                        <i class="fas fa-spinner fa-spin" ></i>
+                    </span> Identification
+                </div>
                 <div class="table-bordered lgs-group">
                     <div style="margin-bottom:25px">
                         <div>
@@ -52,7 +56,9 @@
                 <div class="col-lg-4">
                     <div>
                         <div class="lgs-label">
-                            Principaux domaines d'intervention
+                            <span class="saving-pane" [ngClass]="{'saving':savingInterventionDomains}">
+                                <i class="fas fa-spinner fa-spin" ></i>
+                            </span> Principaux domaines d'intervention
                         </div>
                         <div class="lgs-group table-bordered">
 
@@ -66,7 +72,11 @@
                 <div class="col-lg-4">
 
                     <div>
-                        <div class="lgs-label">Formation Adémique</div>
+                        <div class="lgs-label">
+                            <span class="saving-pane" [ngClass]="{'saving':savingFormationAcademique}">
+                                <i class="fas fa-spinner fa-spin" ></i>
+                            </span> Formation Adémique
+                        </div>
                         <div class="lgs-floatLeftButtons">
                             <button type="button" class="btn btn-link"></button>
                         </div>
@@ -82,7 +92,11 @@
                 <div class="col-lg-4">
 
                     <div>
-                        <div class="lgs-label">Certifications</div>
+                        <div class="lgs-label">
+                            <span class="saving-pane" [ngClass]="{'saving':savingCertifications}">
+                                <i class="fas fa-spinner fa-spin" ></i>
+                            </span> Certifications
+                        </div>
                         <div class="lgs-floatLeftButtons">
                             <button type="button" class="btn btn-link"></button>
                         </div>
@@ -141,7 +155,9 @@
                 <div class="col-lg-4">
                     <div>
                         <div class="lgs-label">
-                            Expériences Technologiques
+                            <span class="saving-pane" [ngClass]="{'saving':savingTechnologies}">
+                                <i class="fas fa-spinner fa-spin" ></i>
+                            </span> Expériences Technologiques
                         </div>
                         <div class="lgs-floatLeftButtons">
                             <button type="button" class="btn btn-link"></button>
@@ -165,7 +181,11 @@
                 <div class="col-lg-4">
 
                     <div>
-                        <div class="lgs-label">Langues</div>
+                        <div class="lgs-label">
+                            <span class="saving-pane" [ngClass]="{'saving':savingLangues}">
+                                <i class="fas fa-spinner fa-spin" ></i>
+                            </span> Langues
+                        </div>
                         <div class="lgs-floatLeftButtons">
                             <button type="button" class="btn btn-link"></button>
                         </div>
@@ -196,7 +216,11 @@
 
                     <div>
 
-                        <div class="lgs-label">Perfectionnements </div>
+                        <div class="lgs-label">
+                            <span class="saving-pane" [ngClass]="{'saving':savingPerfectionnements}">
+                                <i class="fas fa-spinner fa-spin" ></i>
+                            </span> Perfectionnements
+                        </div>
                         <div class="lgs-floatLeftButtons">
                             <button type="button" class="btn btn-link"></button>
                         </div>

@@ -12,7 +12,7 @@ export class CVService {
   constructor(private _http: HttpClient) { }
 
   private doRequest(path: string, method: string= 'get', body: any = null) {
-    const rootPath = 'https://localhost:44344';
+    const rootPath = 'https://localhost:44344/';
     const url = `${rootPath}/${path}`;
     switch (method) {
       case 'put':
@@ -50,8 +50,8 @@ export class CVService {
   }
 
   public EditBio(cv: any) {
-    return this.doRequest('CVPoc/Edit', 'post', cv).subscribe(
-      data => console.log(data));
+    const url = this.EditActiontUrl(cv.graphIdUtilisateur, 'Bio');
+    return this.doRequest(url, 'post', cv);
   }
 
   public NotifierChangement() {
