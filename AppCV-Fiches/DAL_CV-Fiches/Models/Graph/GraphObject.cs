@@ -30,6 +30,9 @@ namespace DAL_CV_Fiches.Models.Graph
         public string GraphKey { get; set; }
         internal bool IsUpdateable;
 
+        [Edge("EteModifie", lazyLoad: true)]
+        public List<EditionObject> EditionObjects {get => (List<EditionObject>)LoadProperty("EditionObjects"); set => SetProperty("EditionObjects", value); }
+
         public GraphObject GetPreviousVersion()
         {
             return null;

@@ -331,7 +331,7 @@ namespace WebCV_Fiches.Controllers
         }
 
         // GET: CV/Details/5
-        [Route("Details/{cvId}")]
+        [Route("Details/{id}")]
         [AllowAnonymous]
         public ActionResult Details(string id)
         {

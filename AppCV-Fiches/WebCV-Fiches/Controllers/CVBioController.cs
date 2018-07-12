@@ -39,41 +39,42 @@ namespace WebCV_Fiches.Controllers
         public ActionResult Edit(string utilisateurId, [FromBody]BioViewModel bio)
         {
             var utilisateur = utilisateurGraphRepository.GetOne(utilisateurId);
-            List<ProprieteModifiee> proprietesModifiees = new List<ProprieteModifiee>();
+            List<KeyValuePair<string, string>> proprietesModifiees = new List<KeyValuePair<string, string>>();
 
             if (utilisateur.Prenom != bio.Prenom)
-                proprietesModifiees.Add(new ProprieteModifiee() { Nom = "Prenom", valeur = bio.Prenom });
+                proprietesModifiees.Add(new KeyValuePair<string, string>("Prenom", bio.Prenom));
 
             if (utilisateur.Nom != bio.Nom)
-                proprietesModifiees.Add(new ProprieteModifiee() { Nom = "Nom", valeur = bio.Nom });
+                proprietesModifiees.Add(new KeyValuePair<string, string>("Nom", bio.Nom));
 
             if (proprietesModifiees.Count() > 0)
             {
-                var changement = new Changement();
-                changement.NoeudModifie = utilisateur;
-                changement.ProprietesModifiees.AddRange(proprietesModifiees);
-                //changementGraphRepository.Add(changement);
+                if (utilisateur.EditionObjects.Count > 0)
+                {
+                    var changement = (Changement)utilisateur.EditionObjects.First();
+                    changementGraphRepository.Update(changement);
+                }
+                else
+                {
+                    var changement = Changement.Create(proprietesModifiees, utilisateur);
+                    changementGraphRepository.Add(changement);
+                }
                 proprietesModifiees.Clear();
             }
 
             var cv = utilisateur.Conseiller.CVs.First();
             if (cv.ResumeExperience != bio.Biographie)
             {
-                proprietesModifiees.Add(new ProprieteModifiee() { Nom = "ResumeExperience", valeur = bio.Prenom });
-                var changement = new Changement();
-                changement.NoeudModifie = cv;
-                changement.ProprietesModifiees.AddRange(proprietesModifiees);
-                //changementGraphRepository.Add(changement);
+                proprietesModifiees.Add(new KeyValuePair<string, string>("ResumeExperience", bio.Biographie));
+                var changement = Changement.Create(proprietesModifiees, cv);
+                changementGraphRepository.Add(changement);
                 proprietesModifiees.Clear();
             }
 
             var conseiller = utilisateur.Conseiller;
             if (conseiller.Fonction.GraphKey != bio.Fonction)
             {
-                var changement = new ChangementRelation();
-                changement.NoeudModifie = conseiller;
-                changement.ObjetAjouteId = bio.Fonction;
-                changement.ObjetSupprimeId = conseiller.Fonction.GraphKey;
+                var changement = ChangementRelation.Create(bio.Fonction, conseiller.Fonction.GraphKey, conseiller);
                 changementRelationGraphRepository.Add(changement);
             }
 
