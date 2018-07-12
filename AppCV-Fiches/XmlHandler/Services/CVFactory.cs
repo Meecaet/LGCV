@@ -662,42 +662,46 @@ namespace XmlHandler.Services
 
             infoParagraphs.Clear();
             infoParagraphs = mandatNodes.SkipWhile(x => x is XmlDocTable).Cast<XmlDocParagraph>().ToList();
-            foreach (var x in infoParagraphs)
+
+            var sections = new List<CVSection>();
+            SectionsExtractor CvSectionsExtractor = new SectionsExtractor();
+
+            List<XmlNode> Nodes = (List<XmlNode>)infoParagraphs.Select(x => x.OriginalNode).ToList();
+            List<IXmlToken> matchTokens = new List<IXmlToken>();
+            matchTokens.Add(MandatTextToken.CreateTextToken());
+
+            try
             {
-                if (x.GetParagraphText().ToUpper().StartsWith("ENVIRONNEMENT TECHNOLOGIQUE"))
-                {
-                    environnement = x.GetParagraphText().ToUpper().Replace("ENVIRONNEMENT TECHNOLOGIQUE", "").Trim();
+                sections = CvSectionsExtractor.GetCVSections(Nodes, matchTokens, "DESCRIPTION");
 
-                    if (environnement.Count() == 0)
-                        continue;
+                aSection = sections.DefaultIfEmpty(null).FirstOrDefault(x => x.Identifiant == "DESCRIPTION");
+                AssemblerDescription(aSection, projet);
+            }
+            catch (Exception ex)
+            {
+                WriteToErrorLog(ex);
+            }
 
-                    if (environnement.First().Equals(':'))
-                        environnement = environnement.Substring(1);
+            try
+            {
+                aSection = sections.DefaultIfEmpty(null).FirstOrDefault(x => x.Identifiant == "ENVIRONNEMENT TECHNOLOGIQUE");
+                AssemblerEnvironnementTecnologic(aSection, projet);
+            }
+            catch (Exception ex)
+            {
+                WriteToErrorMessageLog("Mandat" + projet.Description);
+                WriteToErrorLog(ex);
+            }
 
-                    if (environnement.Count() == 0)
-                        continue;
-
-                    if (environnement.Last().Equals('.'))
-                        environnement = environnement.Substring(0, environnement.Length - 1);
-
-                    if (environnement.Count() == 0)
-                        continue;
-
-                    technologies = environnement.Split(",");
-
-                    for (int i = 0; i < technologies.Length; i++)
-                    {
-                        tech = technologies[i].Trim();
-                        technologie = technologieGraphRepository.CreateIfNotExists(new Dictionary<string, object> { { "Nom", tech } });
-
-                        if (technologie != null)
-                            projet.Technologies.Add(technologie);
-                    }
-                }
-                else
-                {
-                    mandat.Description += x.GetParagraphText();
-                }
+            try
+            {
+                aSection = sections.DefaultIfEmpty(null).FirstOrDefault(x => x.Identifiant == "LES TÂCHES SUIVANTES");
+                AssemblerTache(aSection, mandat);
+            }
+            catch (Exception ex)
+            {
+                WriteToErrorMessageLog("Mandat:  " + projet.Nom);
+                WriteToErrorLog(ex);
             }
 
             mandat.Titre = projet.Nom;
@@ -707,6 +711,56 @@ namespace XmlHandler.Services
             projet.DateFin = mandat.DateFin;
 
             return mandat;
+        }
+
+        private void AssemblerDescription(CVSection environnementSection, Projet projet)
+        {
+            var paragraphs = environnementSection.Nodes.Cast<XmlDocParagraph>().ToList();
+            var paragraphsText = paragraphs.Select(x => x.GetParagraphText());
+            projet.Description = String.Join("", paragraphsText);
+        }
+
+        private void AssemblerTache(CVSection environnementSection, Mandat mandat)
+        {
+            var taches = environnementSection.Nodes.Cast<XmlDocParagraph>().ToList().Skip(1);
+            var tachesObj = taches.Select(x => new Tache() { Description = x.GetParagraphText() });
+            mandat.Taches.AddRange(tachesObj);
+        }
+
+        private void AssemblerEnvironnementTecnologic(CVSection environnementSection, Projet projet)
+        {
+            var x = (XmlDocParagraph)environnementSection.Nodes.First();
+            if (x.GetParagraphText().ToUpper().StartsWith("ENVIRONNEMENT TECHNOLOGIQUE"))
+            {
+                var environnement = x.GetParagraphText().ToUpper().Replace("ENVIRONNEMENT TECHNOLOGIQUE", "").Trim();
+
+                if (environnement.Count() == 0)
+                    return;
+
+                if (environnement.First().Equals(':'))
+                    environnement = environnement.Substring(1);
+
+                if (environnement.Count() == 0)
+                    return;
+
+                if (environnement.Last().Equals('.'))
+                    environnement = environnement.Substring(0, environnement.Length - 1);
+
+                if (environnement.Count() == 0)
+                    return;
+
+                var technologies = environnement.Split(",");
+
+                TechnologieGraphRepository technologieGraphRepository = new TechnologieGraphRepository();
+                for (int i = 0; i < technologies.Length; i++)
+                {
+                    var tech = technologies[i].Trim();
+                    var technologie = technologieGraphRepository.CreateIfNotExists(new Dictionary<string, object> { { "Nom", tech } });
+
+                    if (technologie != null)
+                        projet.Technologies.Add(technologie);
+                }
+            }
         }
 
         private void AssemblerPerfectionnement(CVSection sectionPerfectionnement)
@@ -816,6 +870,15 @@ namespace XmlHandler.Services
                 sw.WriteLine(ex.Message);
                 sw.WriteLine(ex.StackTrace);
                 sw.WriteLine("=========================X=========================");
+                sw.WriteLine(string.Empty);
+            }
+        }
+
+        private void WriteToErrorMessageLog(string msg)
+        {
+            using (StreamWriter sw = new StreamWriter("Errors.log", true))
+            {
+                sw.WriteLine(msg);
                 sw.WriteLine(string.Empty);
             }
         }

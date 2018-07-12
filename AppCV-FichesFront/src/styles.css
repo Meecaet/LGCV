@@ -128,11 +128,13 @@ body {
 }
 
 .load-pane,
-.no-data-pane {
+.no-data-pane,
+.saving-pane {
     display: none
 }
 
 .load-pane.loading,
-.no-data-pane.no-data {
+.no-data-pane.no-data,
+.saving-pane.saving {
     display: inline-block;
 }

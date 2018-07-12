@@ -13,9 +13,9 @@ namespace XmlHandler.XmlIdentification
     /// </summary>
     public class TextToken : IXmlToken
     {
-        private Dictionary<string, string[]> textTokens;
+        protected Dictionary<string, string[]> textTokens;
 
-        private TextToken()
+        protected TextToken()
         {
             //Le dictionaire contient l'identifiant et la liste des textes qui seront utilisés pour la vérification. Cette liste ici c'est la liste standard
             textTokens = new Dictionary<string, string[]>
@@ -37,6 +37,16 @@ namespace XmlHandler.XmlIdentification
             return new TextToken();
         }
 
+        protected virtual Dictionary<string, string[]> GetTokens()
+        {
+            return textTokens;
+        }
+
+        protected virtual bool Comparaison(KeyValuePair<string, string[]> token, string innerText)
+        {
+            return token.Value.Any(x => innerText.ToUpper().Equals(x));
+        }
+
         public bool Match(XmlNode node, out string identificant)
         {
             string innerText;
@@ -49,9 +59,9 @@ namespace XmlHandler.XmlIdentification
             if (node.Name == "w:p")
             {
                 innerText = node.InnerText.Trim();
-                foreach (KeyValuePair<string, string[]> token in textTokens)
+                foreach (KeyValuePair<string, string[]> token in GetTokens())
                 {
-                    if (token.Value.Any(x => innerText.ToUpper().Equals(x)))
+                    if (Comparaison(token, innerText))
                     {
                         identificant = token.Key;
                         return true;
@@ -66,7 +76,7 @@ namespace XmlHandler.XmlIdentification
                 foreach (XmlDocParagraph paragraph in paragraphs)
                 {
                     innerText = paragraph.GetParagraphText().Trim();
-                    foreach (KeyValuePair<string, string[]> token in textTokens)
+                    foreach (KeyValuePair<string, string[]> token in GetTokens())
                     {
                         if (token.Value.Any(x => innerText.ToUpper().Equals(x)))
                         {
