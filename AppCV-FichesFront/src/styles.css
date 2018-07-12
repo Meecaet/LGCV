@@ -136,3 +136,9 @@ body {
 .saving-pane.saving {
     display: inline-block;
 }
+
+.c-inline-editor.inlineEditForm.form-inline .form-group,
+.c-inline-editor.inlineEditForm.form-inline .form-group inline-editor-textarea,
+.c-inline-editor.inlineEditForm.form-inline .form-group inline-editor-textarea textarea {
+    width: 100%
+}
