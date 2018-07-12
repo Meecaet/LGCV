@@ -14,15 +14,13 @@ namespace WebCV_Fiches.Controllers
     [Route("Bio")]
     public class CVBioController : Controller
     {
-        public ChangementGraphRepository changementGraphRepository;
-        public ChangementRelationGraphRepository changementRelationGraphRepository;
+        public EditionObjectGraphRepository editionObjectGraphRepository;
         public UtilisateurGraphRepository utilisateurGraphRepository;
 
         public CVBioController()
         {
-            changementGraphRepository = new ChangementGraphRepository();
             utilisateurGraphRepository = new UtilisateurGraphRepository();
-            changementRelationGraphRepository = new ChangementRelationGraphRepository();
+            editionObjectGraphRepository = new EditionObjectGraphRepository();
         }
 
         [Route("{cvId}/Detail/{utilisateurId}")]
@@ -51,13 +49,12 @@ namespace WebCV_Fiches.Controllers
             {
                 if (utilisateur.EditionObjects.Count > 0)
                 {
-                    var changement = (Changement)utilisateur.EditionObjects.First();
-                    changementGraphRepository.Update(changement);
+                    var edition = utilisateur.EditionObjects.First();
+                    editionObjectGraphRepository.Update(edition);
                 }
                 else
                 {
-                    var changement = Changement.Create(proprietesModifiees, utilisateur);
-                    changementGraphRepository.Add(changement);
+                    var edition = EditionObject.CreateChangementPropriete(proprietesModifiees, utilisateur);
                 }
                 proprietesModifiees.Clear();
             }
@@ -66,16 +63,14 @@ namespace WebCV_Fiches.Controllers
             if (cv.ResumeExperience != bio.Biographie)
             {
                 proprietesModifiees.Add(new KeyValuePair<string, string>("ResumeExperience", bio.Biographie));
-                var changement = Changement.Create(proprietesModifiees, cv);
-                changementGraphRepository.Add(changement);
+                var changement = EditionObject.CreateChangementPropriete(proprietesModifiees, cv);
                 proprietesModifiees.Clear();
             }
 
             var conseiller = utilisateur.Conseiller;
             if (conseiller.Fonction.GraphKey != bio.Fonction)
             {
-                var changement = ChangementRelation.Create(bio.Fonction, conseiller.Fonction.GraphKey, conseiller);
-                changementRelationGraphRepository.Add(changement);
+                var changement = EditionObject.CreateChangementRelation(bio.Fonction, conseiller.Fonction.GraphKey, conseiller);
             }
 
             return Json(new { Status = "OK", Message = "Biographie modifiée" });

@@ -568,7 +568,7 @@ namespace DAL_CV_Fiches.Repositories.Graph
             return query.ExecuteNextAsync<dynamic>().Result;
         }
 
-        private void CreateEdge(GraphObject from, GraphObject to, Attributes.Edge EdgeAttribute)
+        public void CreateEdge(GraphObject from, GraphObject to, Attributes.Edge EdgeAttribute)
         {
             string addEdge = $"g.V('{from.GraphKey}').addE('{EdgeAttribute.EdgeName}').to(g.V('{to.GraphKey}'))",
                 valueToString = string.Empty;
