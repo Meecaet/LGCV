@@ -3,6 +3,7 @@
     <div class="form-group">
       <div id="identification" class="form-inline">
         <div class="lgs-label">Identification</div>
+
         <div class="table-bordered lgs-group">
           <div style="margin-bottom:25px">
             <div>
@@ -218,20 +219,14 @@
                 </tr>
               </thead>
               <tbody>
-                <!-- <tr *ngFor="let langue of langues"> -->
-                <!-- <tr >
+               <!--   <tr *ngFor="let langue of langues"> -->
+              <tr >
                   <td>
+                    -------------
 
-                      <mat-autocomplete #auto="matAutocomplete">
-                          <mat-optgroup *ngFor="let group of stateGroups | async" [label]="group.name">
-                            <mat-option *ngFor="let option of group.names" [value]="option">
-                              {{option.name}}
-                            </mat-option>
-                          </mat-optgroup>
-                        </mat-autocomplete>
 
                   </td>
-                  <td>
+                  <!-- <td>
                     <inline-editor empty="N. Écrit" [(ngModel)]="langue.NiveauEcrit" [ngModelOptions]="{standalone: true}" [name]="langue.NiveauEcrit"
                       [cols]="250"></inline-editor>
                   </td>
@@ -246,7 +241,7 @@
                   <td (click)="removeLange(langue)" class="XCancel">
                     X
                   </td> -->
-                <!-- </tr> -->
+               </tr>
               </tbody>
             </table>
           </div>

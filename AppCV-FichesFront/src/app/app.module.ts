@@ -38,6 +38,7 @@ import { CvCreateComponent } from './components/cv-create-component/cv-create.co
     CvCreateComponent,
   ],
   imports: [
+
     MatAutocompleteModule,
     BrowserModule,
     BrowserAnimationsModule,
@@ -52,7 +53,7 @@ import { CvCreateComponent } from './components/cv-create-component/cv-create.co
     MatFormFieldModule,
     MatInputModule,
    ],
-  providers: [ValidatorService,FormBuilder],
+  providers: [ValidatorService,FormBuilder, ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
