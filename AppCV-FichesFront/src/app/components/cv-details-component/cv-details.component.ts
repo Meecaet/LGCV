@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CVService } from '../../Services/cv.service';
 import { ActivatedRoute } from '@angular/router';
+/*import {MatPaginator, MatTableDataSource} from '@angular/material';
+import { ResumeInterventionViewModel } from '../../Models/CV/ResumeInterventionViewModel';*/
+
 
 @Component({
   selector: 'app-cv-details',
@@ -8,7 +11,9 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./cv-details.component.css']
 })
 export class CvDetailsComponent implements OnInit {
+
   public cvDetails: any = {};
+
   private loading = false;
   private savingBio = false;
   private savingInterventionDomains = false;
@@ -18,6 +23,9 @@ export class CvDetailsComponent implements OnInit {
   private savingLangues = false;
   private savingPerfectionnements = false;
 
+  /*dataSource = new MatTableDataSource<ResumeInterventionViewModel>();
+  @ViewChild(MatPaginator) paginator: MatPaginator;*/
+
   constructor(
     private cv: CVService,
     private route: ActivatedRoute) {
@@ -26,15 +34,18 @@ export class CvDetailsComponent implements OnInit {
   ngOnInit() {
     this.loading = true;
     this.route.params.subscribe(params => {
-      const cvId = params['id'];
-      this.cv.GetCV(cvId).subscribe(data => {
-        if (data != null) {
-          this.cvDetails = data;
-        }
+      const idUtilisateur = params['id'];
+      this.loadCV(idUtilisateur);
+    });
+  }
 
-        this.loading = false;
-      });
+  loadCV(idUtilisateur: string) {
+    this.cv.GetCV(idUtilisateur).subscribe(data => {
+      if (data != null) {
+        this.cvDetails = data;
+      }
 
+      this.loading = false;
     });
   }
 

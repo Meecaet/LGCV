@@ -19,6 +19,7 @@ import { ValidatorService } from './validator.services';
 
 import {InlineEditorModule} from './qontu/ngx-inline-editor';
 import {MatButtonModule, MatCheckboxModule} from '@angular/material';
+import { ResumeInterventionsComponent } from './components/CV/resume-interventions/resume-interventions.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import {MatButtonModule, MatCheckboxModule} from '@angular/material';
     LoginComponent,
     PageNotFoundComponent,
     ForgotPasswordComponent,
+    ResumeInterventionsComponent,
   ],
   imports: [
     BrowserModule,

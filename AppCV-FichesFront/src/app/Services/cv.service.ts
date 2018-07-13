@@ -3,6 +3,9 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { BehaviorSubject } from 'rxjs';
 import { map, take, catchError } from 'rxjs/operators';
+import { ResumeInterventionViewModel } from '../Models/CV/ResumeInterventionViewModel';
+import { ResumeInterventionsComponent } from '../components/CV/resume-interventions/resume-interventions.component';
+
 
 @Injectable({
   providedIn: 'root'
@@ -52,6 +55,30 @@ export class CVService {
   public EditBio(cv: any) {
     const url = this.EditActiontUrl(cv.graphIdUtilisateur, 'Bio');
     return this.doRequest(url, 'post', cv);
+  }
+
+  public GetCVResumeInterventions(idUtilisateur: string)  {
+    const url = `ResumeIntervention/${idUtilisateur}/All`;
+    return this.doRequest(url).pipe<ResumeInterventionViewModel[]>(
+      map((data: any[]) => {
+        let resumes: ResumeInterventionViewModel[] = [];
+        debugger;
+        for (let d of data)
+        {
+          resumes.push({
+            nombre: d.nombre,
+            entrerise: d.entrerise,
+            client: d.client,
+            projet: d.projet,
+            envergure: d.envergure,
+            fonction: d.fonction,
+            annee: d.annee,
+            efforts: d.efforts,
+            debutMandat: d.debutMandat});
+        }
+
+        return resumes;
+      }));
   }
 
   public NotifierChangement() {
