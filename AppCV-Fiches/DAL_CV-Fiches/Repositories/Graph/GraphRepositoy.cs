@@ -22,7 +22,7 @@ namespace DAL_CV_Fiches.Repositories.Graph
         protected DocumentCollection documentCollection;
 
         protected string endpoint = "https://localhost:8081", primarykey = "C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==", database, graph;
-        
+
         public GraphRepositoy(DocumentClient documentClient, DocumentCollection documentCollection)
         {
             this.documentClient = documentClient;
@@ -81,7 +81,7 @@ namespace DAL_CV_Fiches.Repositories.Graph
                 if (currentPropValue == null)
                     continue;
 
-                if (propInfo.PropertyType.BaseType == typeof(GraphObject))
+                if (propInfo.PropertyType.BaseType == typeof(GraphObject) || propInfo.PropertyType == typeof(GraphObject))
                 {
                     att = (Attributes.Edge)propInfo.GetCustomAttribute(typeof(Attributes.Edge));
 
@@ -103,7 +103,7 @@ namespace DAL_CV_Fiches.Repositories.Graph
                         CreateRelationIfNotExists(obj, att, (GraphObject)graphObject);
                     }
                 }
-            }        
+            }
         }
 
         private void CreateRelationIfNotExists(GraphObject from, Attributes.Edge att, GraphObject to)
@@ -111,7 +111,9 @@ namespace DAL_CV_Fiches.Repositories.Graph
             object genericRepository;
 
             genericRepository = GetGenericRepository(to.GetType());
-            genericRepository.GetType().GetMethod("Add").Invoke(genericRepository, new object[] { to });
+
+            if (to.GraphKey == null)
+                genericRepository.GetType().GetMethod("Add").Invoke(genericRepository, new object[] { to });
 
             if (!HasEdge(att, from, to))
                 CreateEdge(from, to, att);
@@ -119,7 +121,7 @@ namespace DAL_CV_Fiches.Repositories.Graph
 
         public void Delete(T obj)
         {
-            string updateQuery = $"g.V('{obj.GraphKey}').drop()";            
+            string updateQuery = $"g.V('{obj.GraphKey}').drop()";
             ExecuteCommandVertex(updateQuery);
         }
 
@@ -165,7 +167,7 @@ namespace DAL_CV_Fiches.Repositories.Graph
                 if (currentValue != null)
                 {
                     if (propInfo.PropertyType.BaseType == typeof(Enum) || propInfo.PropertyType.UnderlyingSystemType == typeof(Int32))
-                            searchQuery += $".has(\"{propInfo.Name}\",{Convert.ToInt32(currentValue)})";
+                        searchQuery += $".has(\"{propInfo.Name}\",{Convert.ToInt32(currentValue)})";
                     else
                         searchQuery += $".has(\"{propInfo.Name}\",\"{currentValue.ToString().Replace("'", "’")}\")";
                 }
@@ -228,24 +230,58 @@ namespace DAL_CV_Fiches.Repositories.Graph
                         continue;
 
                     thisType.GetProperty(property.Key).SetValue(obj, property.Value);
-                }                    
+                }
 
                 listOfElements.Add(obj);
-            }                
+            }
 
             return listOfElements;
         }
 
         public void Update(T obj)
         {
-            if (obj.IsUpdateable)
-            {
-                //Update stardart
-            }
-            else
-            {
 
+            Type thisType = obj.GetType();
+            string updateQuery = $"g.V('{obj.GraphKey}')";
+            object currentValue;
+
+            foreach (PropertyInfo propInfo in thisType.GetProperties())
+            {
+                if (propInfo.Name == "GraphKey")
+                    continue;
+
+                currentValue = propInfo.GetValue(obj);
+                if (currentValue != null)
+                {
+                    var edgeProperty = (EdgeProperty)thisType.GetCustomAttribute(typeof(EdgeProperty));
+                    if (edgeProperty != null)
+                        continue;
+
+                    if (currentValue is String)
+                        updateQuery += $".property(\"{propInfo.Name}\", \"{currentValue.ToString().Replace("'", "’")}\")";
+                    else if (currentValue is Int32)
+                        updateQuery += $".property(\"{propInfo.Name}\", {currentValue})";
+                    else if (currentValue is Enum)
+                        updateQuery += $".property(\"{propInfo.Name}\", {(int)currentValue})";
+                    else if (currentValue is DateTime)
+                        updateQuery += $".property(\"{propInfo.Name}\", \"{Convert.ToInt32(currentValue)}\")";
+                }
+                else
+                {
+                    updateQuery += $".property('{propInfo.Name}','')";
+                }
             }
+
+            ExecuteCommandVertex(updateQuery);
+
+            //if (obj.IsUpdateable)
+            //{
+            //    //Update stardart
+            //}
+            //else
+            //{
+
+            //}
 
             //Type thisType = obj.GetType();
             //string updateQuery = $"g.V('{obj.GraphKey}')";
@@ -276,7 +312,7 @@ namespace DAL_CV_Fiches.Repositories.Graph
             //                genericRepository.GetType().GetMethod("Add").Invoke(genericRepository, new object[] { currentValue });
             //                CreateEdge(obj, graphObjectCurrentValue, att);
             //            }
-                            
+
             //        }
             //        else
             //            updateQuery += $".property('{propInfo.Name}','{currentValue}')";
@@ -335,9 +371,9 @@ namespace DAL_CV_Fiches.Repositories.Graph
                     else if (value is Enum)
                         query += $".property(\"{item.Name}\", {(int)value})";
                     else if (value is DateTime)
-                        query += $".property(\"{item.Name}\", \"{((DateTime)value).ToString()}\")";                
+                        query += $".property(\"{item.Name}\", \"{((DateTime)value).ToString()}\")";
                 }
-            }            
+            }
 
             return query;
         }
@@ -350,9 +386,9 @@ namespace DAL_CV_Fiches.Repositories.Graph
             return getAllQuery;
         }
 
-        protected T GetObjectFromVertex(Vertex vertex)
+        protected T GetObjectFromVertex(Vertex vertex, Type noeudType = null)
         {
-            Type thisType = typeof(T),
+            Type thisType = noeudType != null ? noeudType : typeof(T),
                  genericArgumentType = null,
                  interfaceType = null;
             T genObj = new T();
@@ -392,12 +428,12 @@ namespace DAL_CV_Fiches.Repositories.Graph
                 else
                 {
                     if (vertexProperties.ContainsKey(prop.Name))
-                        if(prop.PropertyType.BaseType == typeof(Enum))
+                        if (prop.PropertyType.BaseType == typeof(Enum))
                             prop.SetValue(genObj, Convert.ToInt32(vertexProperties[prop.Name]));
                         else
                             prop.SetValue(genObj, Convert.ChangeType(vertexProperties[prop.Name], prop.PropertyType));
-                }                    
-            }          
+                }
+            }
 
             return genObj;
         }
@@ -411,12 +447,20 @@ namespace DAL_CV_Fiches.Repositories.Graph
             object edgePropertyValue;
             List<Property> edgeProperties;
 
-            string transversalQuery = $"g.V('{fromId}').out('{edgeName}').hasLabel('{thisType.Name}')",
-                getEdgeQuery = string.Empty;
+            string transversalQuery = $"g.V('{fromId}').out('{edgeName}')";
+            string getEdgeQuery = string.Empty;
+            Type noeudType = typeof(GraphObject);
+
+            if (typeof(T) != typeof(GraphObject))
+            {
+                transversalQuery = transversalQuery + $".hasLabel('{thisType.Name}')";
+                noeudType = typeof(T);
+            }
 
             foreach (Vertex vertex in ExecuteCommandQueryVertex(transversalQuery))
             {
-                T embeddedObject = GetObjectFromVertex(vertex);
+                T embeddedObject = GetObjectFromVertex(vertex, noeudType);
+
                 foreach (PropertyInfo propInfo in thisType.GetProperties())
                 {
                     att = propInfo.GetCustomAttribute(typeof(EdgeProperty));
@@ -505,7 +549,7 @@ namespace DAL_CV_Fiches.Repositories.Graph
             var feedResponse = query.ExecuteNextAsync<Microsoft.Azure.Graphs.Elements.Edge>().Result;
         }
 
-        private string ExecuteCommandVertex(string CommandString) 
+        private string ExecuteCommandVertex(string CommandString)
         {
             //using (StreamWriter sw = new StreamWriter(@"C:\apache-tinkerpop-gremlin-console-3.3.3\customData\commandLog.log", true))
             //{
@@ -543,7 +587,7 @@ namespace DAL_CV_Fiches.Repositories.Graph
             return query.ExecuteNextAsync<dynamic>().Result;
         }
 
-        private void CreateEdge(GraphObject from, GraphObject to, Attributes.Edge EdgeAttribute)
+        public void CreateEdge(GraphObject from, GraphObject to, Attributes.Edge EdgeAttribute)
         {
             string addEdge = $"g.V('{from.GraphKey}').addE('{EdgeAttribute.EdgeName}').to(g.V('{to.GraphKey}'))",
                 valueToString = string.Empty;
@@ -558,7 +602,7 @@ namespace DAL_CV_Fiches.Repositories.Graph
                     edgeAtt = prop.GetCustomAttribute(typeof(EdgeProperty));
                     if (edgeAtt != null)
                     {
-                        if(prop.PropertyType.BaseType == typeof(Enum))
+                        if (prop.PropertyType.BaseType == typeof(Enum))
                             addEdge += $".property(\"{prop.Name}\", {(int)prop.GetValue(to)})";
                         else if (prop.PropertyType == typeof(Int32))
                             addEdge += $".property(\"{prop.Name}\", {prop.GetValue(to)})";
@@ -577,7 +621,7 @@ namespace DAL_CV_Fiches.Repositories.Graph
 
 
                         }
-                            
+
                     }
                 }
             }
