@@ -304,8 +304,8 @@ namespace WebCV_Fiches.Controllers
         public ActionResult Details(string id)
         {
 
-            //var cv = CreateDummyCVViewModel();
-            //return View(cv);
+            var cv = CreateDummyCVViewModel();
+            return View(cv);
 
             Utilisateur utilisateur;
 

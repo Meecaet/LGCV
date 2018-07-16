@@ -1,5 +1,4 @@
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
-
 body {
     line-height: normal;
     padding-bottom: 20px;
@@ -137,4 +136,10 @@ body {
 .no-data-pane.no-data,
 .saving-pane.saving {
     display: inline-block;
+}
+
+.c-inline-editor.inlineEditForm.form-inline .form-group,
+.c-inline-editor.inlineEditForm.form-inline .form-group inline-editor-textarea,
+.c-inline-editor.inlineEditForm.form-inline .form-group inline-editor-textarea textarea {
+    width: 100%
 }

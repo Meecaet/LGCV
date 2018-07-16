@@ -24,6 +24,7 @@
         <div class="form-group">
             <div id="identification" class="form-inline">
                 <div class="lgs-label">
+                    <!--<i class="fas fa-save animated infinite pulse"></i>-->
                     <span class="saving-pane" [ngClass]="{'saving':savingBio}">
                         <i class="fas fa-spinner fa-spin" ></i>
                     </span> Identification
@@ -45,7 +46,7 @@
                         </div>
                         <b>{{cvDetails.fonction}}</b>
                     </div>
-                    <inline-editor type="textarea" [(ngModel)]="cvDetails.biographie" name="biographie" size="100" (onSave)="saveBio()">
+                    <inline-editor type="textarea" [(ngModel)]="cvDetails.biographie" name="biographie" cols="117" (onSave)="saveBio()">
                     </inline-editor>
                 </div>
             </div>
@@ -112,37 +113,7 @@
         </div>
 
         <div class="lgs-section">
-            <div class="lgsTextTitle">RÉSUME DES INTERVENTIONS</div>
-            <div>
-                <table class="table table-hover small">
-                    <thead>
-                        <tr class="lgs-backgroundColor">
-                            <th scope="col">#</th>
-                            <th scope="col">CLIENT</th>
-                            <th scope="col">PROJET</th>
-                            <th scope="col">ENVERGURE <br />(J - P)</th>
-                            <th scope="col">FONCTION</th>
-                            <th scope="col">ANNÉE</th>
-                            <th scope="col">EFFORTS (MOIS)</th>
-                        </tr>
-                    </thead>
-
-                    <tbody *ngFor="let intervention of cvDetails.mandats; let i = index">
-                        <tr *ngIf="i == 0 || (i>0 && cvDetails.mandats[i-1].nomEntreprise != intervention.nomEntreprise)">
-                            <td colspan="7"><b>{{intervention.nomEntreprise}}</b></td>
-                        </tr>
-                        <tr>
-                            <th scope="row">{{intervention.numeroMandat}}</th>
-                            <td>{{intervention.nomClient}}</td>
-                            <td>{{intervention.titreProjet}}</td>
-                            <td>{{intervention.envergure}}</td>
-                            <td>{{intervention.fonction}}</td>
-                            <td>{{intervention.debutMandat | date:'yyyy'}}</td>
-                            <td>{{intervention.efforts}}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+            <app-resume-interventions [UtilisateurId]="123"></app-resume-interventions>
         </div>
 
         <div class="lgs-section">

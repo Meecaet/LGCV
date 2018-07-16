@@ -1,0 +1,33 @@
+<div class="lgsTextTitle">
+    RÉSUME DES INTERVENTIONS
+</div>
+<div>
+    <table class="table table-hover small">
+        <thead>
+            <tr class="lgs-backgroundColor">
+                <th scope="col">#</th>
+                <th scope="col">CLIENT</th>
+                <th scope="col">PROJET</th>
+                <th scope="col">ENVERGURE <br />(J - P)</th>
+                <th scope="col">FONCTION</th>
+                <th scope="col">ANNÉE</th>
+                <th scope="col">EFFORTS (MOIS)</th>
+            </tr>
+        </thead>
+
+        <tbody *ngFor="let intervention of Interventions; let i = index">
+            <tr *ngIf="i == 0 || (i>0 && Interventions[i-1].nomEntreprise != intervention.Entreprise)">
+                <td colspan="7"><b>{{intervention.entrerise}}</b></td>
+            </tr>
+            <tr>
+                <th scope="row">{{intervention.nombre}}</th>
+                <td>{{intervention.client}}</td>
+                <td>{{intervention.projet}}</td>
+                <td>{{intervention.envergure}}</td>
+                <td>{{intervention.fonction}}</td>
+                <td>{{intervention.debutMandat | date:'yyyy'}}</td>
+                <td>{{intervention.efforts}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
