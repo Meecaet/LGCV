@@ -1,6 +1,9 @@
 import { Component, OnInit, Input } from "@angular/core";
 import { LangueViewModel } from "../../Models/Langue-model";
 import { FormControl } from "../../../../node_modules/@angular/forms";
+import { CVService } from "../../Services/cv.service";
+import { HttpErrorResponse } from "../../../../node_modules/@angular/common/http";
+import { ErrorService } from "../../Services/error.service";
 
 @Component({
   selector: "app-table-langue",
@@ -8,9 +11,23 @@ import { FormControl } from "../../../../node_modules/@angular/forms";
   styleUrls: ["./table-langue.component.css"]
 })
 export class TableLangueComponent implements OnInit {
-  @Input() langues: Array<LangueViewModel>;
-  @Input() languesAutoComplete: Array<LangueViewModel>;
+  langues: Array<LangueViewModel>;
+  languesAutoComplete: Array<LangueViewModel>;
 
+  @Input() IsLoad: boolean = false;
+  @Input() UtilisateurId: string;
+
+  constructor(
+    private cvService: CVService,
+    private errorService: ErrorService
+  ) {}
+
+  ngOnInit() {
+    if (this.IsLoad) {
+      this.UserDataLoad();
+    }
+    this.DataLoad();
+  }
   AddLangue(): void {
     let lan = new LangueViewModel();
     lan.LangueControl = new FormControl();
@@ -28,7 +45,22 @@ export class TableLangueComponent implements OnInit {
       this.langues.splice(index, 1);
     }
   }
-  constructor() {}
 
-  ngOnInit() {}
+  DataLoad() {
+    this.cvService.LoadLangue().subscribe(
+      (data: Array<LangueViewModel>) => {
+        this.languesAutoComplete = data;
+      },
+      (error: HttpErrorResponse) => {
+        this.errorService.ErrorHandle(error.status);
+      }
+    );
+  }
+  UserDataLoad() {
+    this.cvService
+      .UtilizaterLangue()
+      .subscribe((data: Array<LangueViewModel>) => {
+        this.langues = data;
+      });
+  }
 }

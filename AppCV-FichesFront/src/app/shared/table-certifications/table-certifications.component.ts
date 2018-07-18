@@ -9,7 +9,6 @@ import { CertificationViewModel } from '../../Models/Certification-model';
 export class TableCertificationsComponent implements OnInit {
 @Input()  certifications: Array<CertificationViewModel>;
   constructor() { }
-
   ngOnInit() {
   }
   AddCertifications(): void {

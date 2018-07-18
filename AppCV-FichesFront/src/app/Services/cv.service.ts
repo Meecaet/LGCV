@@ -68,7 +68,7 @@ export class CVService {
 
   public GetCVResumeInterventions(idUtilisateur: string) {
     const url = `ResumeIntervention/${idUtilisateur}/All`;
-    return this.doRequest(url)
+    return this.doRequest(url);
 
     // .pipe<ResumeInterventionViewModel[]>(
     //   map((data: any[]) => {
@@ -101,7 +101,11 @@ export class CVService {
   public NotifierChangement() {
     return this.doRequest("CV/Save");
   }
+  public UtilizaterLangue(): Observable<Array<LangueViewModel>> {
 
+
+    return;
+  }
   public LoadLangue(): Observable<Array<LangueViewModel>> {
     const url = this.rootPath + "/api/FrontEndLoadData/GetAllLangues";
     debugger;

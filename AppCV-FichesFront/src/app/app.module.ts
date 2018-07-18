@@ -35,6 +35,7 @@ import { ValidatorService } from "./validator.services";
 import { JwtInterceptor } from "./Services/jwt-interceptor.service";
 import { CVService } from "./Services/cv.service";
 import { NgModule } from "@angular/core";
+import { CvEditComponent } from './components/cv-edit/cv-edit.component';
 
 @NgModule({
   declarations: [
@@ -55,7 +56,8 @@ import { NgModule } from "@angular/core";
     TableCertificationsComponent,
     ChipDomainComponent,
     TableTechnologieComponent,
-    TableMandatComponent
+    TableMandatComponent,
+    CvEditComponent
   ],
   imports: [
     MatAutocompleteModule,
