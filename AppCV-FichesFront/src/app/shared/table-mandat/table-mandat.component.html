@@ -1,0 +1,45 @@
+<div>
+
+
+  <div class="lgs-label">RÉSUME DES INTERVENTION</div>
+  <label (click)="addMandat()">+</label>
+  <div>
+    <table class="table table-hover small">
+      <thead>
+        <tr class="lgs-backgroundColor">
+          <th scope="col">#</th>
+          <th scope="col">CLIENT</th>
+          <th scope="col">PROJET</th>
+          <th scope="col">ENVERGURE
+            <br />(J - P)</th>
+          <th scope="col">FONCTION</th>
+          <th scope="col">ANNÉE</th>
+          <th scope="col">EFFORTS (MOIS)</th>
+          <th scope="col"></th>
+
+        </tr>
+
+      </thead>
+
+      <tbody *ngFor="let intervention of mandats; let i = index">
+        <tr>
+          <td colspan="7">
+            <b>{{intervention.nomEntreprise}}</b>
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">{{intervention.numeroMandat}}</th>
+          <td>{{intervention.nomClient}}</td>
+          <td>{{intervention.titreProjet}}</td>
+          <td>{{intervention.envergure}}</td>
+          <td>{{intervention.fonction}}</td>
+          <td>{{intervention.debutMandat | date:'yyyy'}}</td>
+          <td>{{intervention.efforts}}</td>
+          <td (click)="removeMandat(intervention)" class="XCancel">
+            X
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

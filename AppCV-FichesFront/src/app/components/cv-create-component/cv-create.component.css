@@ -1,9 +1,7 @@
 #details {
   display: none
 }
-.chip-list{
-  width: 100%;
-}
+
 .selectedItem {
   background-color: blue;
 }
@@ -37,8 +35,4 @@ table.table tbody tr {
 .mandat-fiche:not(:first-of-type) {
   display: none
 }
-.XCancel{
-  text-align: end;
-  color: red;
-  width: 10px;
-}
+

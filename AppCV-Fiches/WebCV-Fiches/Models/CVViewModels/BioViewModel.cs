@@ -11,5 +11,9 @@ namespace WebCV_Fiches.Models.CVViewModels
         public string Prenom { get; set; }
         public string Biographie { get; set; }
         public string Fonction { get; set; }
+        public string GraphIdConseiller { get; set; }
+        public string GraphIdUtilisateur { get; set; }
+        public string GraphIdFonction { get; set; }
+        public string GraphIdCV { get; set; }
     }
 }

@@ -2,38 +2,40 @@ import { TacheViewModel } from "./Tache-model";
 import { TechnologieViewModel } from "./Technologie-model";
 
 export class MandatViewModel {
-  GraphId: string;
-  GraphIdProjet: string;
-  GraphIdClient: string;
-  GraphIdFonction: string;
-  GraphIdSocieteDeConseil: string;
+  graphId: string;
+  graphIdProjet: string;
+  graphIdClient: string;
+  graphIdFonction: string;
+  graphIdSocieteDeConseil: string;
 
-  NomClient: string;
-  NumeroMandat: Number;
-  NomEntreprise: string;
-  TitreProjet: string;
-  TitreMandat: string;
-  Envergure: Number;
-  Efforts: Number;
-  Fonction: string;
-  ContexteProjet: string;
-  PorteeDesTravaux: string;
-  Taches: Array<TacheViewModel>;
-  Technologies: Array<TechnologieViewModel>;
+  nomClient: string;
+  numeroMandat: Number;
+  nomEntreprise: string;
+  titreProjet: string;
+  titreMandat: string;
+  envergure: Number;
+  efforts: Number;
+  fonction: string;
+  contexteProjet: string;
+  porteeDesTravaux: string;
 
-  DebutProjet: Date;
-  FinProjet: Date;
-  DebutMandat: Date;
-  FinMandat: Date;
 
-  NomReference: string;
-  FonctionReference: string;
-  TelephoneReference: string;
-  CellulaireReference: string;
-  CourrielReference: string;
+  debutProjet: Date;
+  finProjet: Date;
+  debutMandat: Date;
+  finMandat: Date;
+
+  nomReference: string;
+  fonctionReference: string;
+  telephoneReference: string;
+  cellulaireReference: string;
+  courrielReference: string;
+
+  taches: Array<TacheViewModel>;
+  technologies: Array<TechnologieViewModel>;
 
   constructor() {
-    this.Taches = new Array<TacheViewModel>();
-    this.Technologies = new Array<TechnologieViewModel>();
+    this.taches = new Array<TacheViewModel>();
+    this.technologies = new Array<TechnologieViewModel>();
   }
 }

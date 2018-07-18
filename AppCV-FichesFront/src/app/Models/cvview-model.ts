@@ -7,31 +7,31 @@ import { PerfectionnementViewModel } from "./Perfectionnement-model";
 import { LangueViewModel } from "./Langue-model";
 
 export class CVViewModel {
-  public GraphIdConseiller: string;
-  public GraphIdUtilisateur: string;
-  public GraphIdFonction: string;
-  public GraphIdCV: string;
+  public graphIdConseiller: string;
+  public graphIdUtilisateur: string;
+  public graphIdFonction: string;
+  public graphIdCV: string;
 
-  public Prenom: string;
-  public Nom: string;
-  public Fonction: string;
-  public Biographie: string;
-  public DomainesDIntervention: Array<DomaineDInterventionViewModel>;
-  public FormationsAcademique: Array<FormationAcademiqueViewModel>;
+  public prenom: string;
+  public nom: string;
+  public fonction: string;
+  public biographie: string;
+  public domainesdintervention: Array<DomaineDInterventionViewModel>;
+  public formationsacademique: Array<FormationAcademiqueViewModel>;
 
-  Certifications: Array<CertificationViewModel>;
-  Mandats: Array<MandatViewModel>;
-  Technologies: Array<TechnologieViewModel>;
-  Perfectionnements: Array<PerfectionnementViewModel>;
-  Langues: Array<LangueViewModel>;
+  certifications: Array<CertificationViewModel>;
+  mandats: Array<MandatViewModel>;
+  technologies: Array<TechnologieViewModel>;
+  perfectionnements: Array<PerfectionnementViewModel>;
+  langues: Array<LangueViewModel>;
 
   constructor() {
-    this.DomainesDIntervention = new Array<DomaineDInterventionViewModel>();
-    this.FormationsAcademique = new Array<FormationAcademiqueViewModel>();
-    this.Certifications = new Array<CertificationViewModel>();
-    this.Mandats = new Array<MandatViewModel>();
-    this.Technologies = new Array<TechnologieViewModel>();
-    this.Perfectionnements = new Array<PerfectionnementViewModel>();
-    this.Langues = new Array<LangueViewModel>();
+    this.domainesdintervention = new Array<DomaineDInterventionViewModel>();
+    this.formationsacademique = new Array<FormationAcademiqueViewModel>();
+    this.certifications = new Array<CertificationViewModel>();
+    this.mandats = new Array<MandatViewModel>();
+    this.technologies = new Array<TechnologieViewModel>();
+    this.perfectionnements = new Array<PerfectionnementViewModel>();
+    this.langues = new Array<LangueViewModel>();
   }
 }

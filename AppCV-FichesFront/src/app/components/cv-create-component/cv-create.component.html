@@ -1,9 +1,10 @@
+
+
 <div class="container-fluid" style="padding-top:30px">
   <form>
     <div class="form-group">
       <div id="identification" class="form-inline">
         <div class="lgs-label">Identification</div>
-
         <div class="table-bordered lgs-group">
           <div style="margin-bottom:25px">
             <div>
@@ -11,283 +12,78 @@
                 <!--{{cvModel.prenom}} {{cvModel.nom}}-->
                 <div class="form-inline">
                   <div style="margin-right:10px">
-                    <inline-editor type="text" [(ngModel)]="cvModel.Prenom" name="prenom" [cols]="250"></inline-editor>
+                    <inline-editor type="text" empty="Prenom" (onSave)="saveBio(bio)"  [(ngModel)]="bio.prenom" name="prenom" [cols]="250"></inline-editor>
                   </div>
                   <div>
-                    <inline-editor type="text" [(ngModel)]="cvModel.Nom" name="nom"></inline-editor>
+                    <inline-editor type="text"  (onSave)="saveBio(bio)"  empty="Nom" [(ngModel)]="bio.nom" name="nom"></inline-editor>
                   </div>
                 </div>
               </h2>
             </div>
-            <b>{{cvModel.Fonction}}</b>
+            <b>{{cvModel.fonction}}</b>
           </div>
-          <inline-editor type="textarea" [(ngModel)]="cvModel.Biographie" name="biographie" size="100">
+          <div    class="col-lg-12">
+          <inline-editor type="textarea" (onSave)="saveBio(bio)"  empty="Biographie" [(ngModel)]="bio.biographie" name="biographie"  >
           </inline-editor>
         </div>
+        </div>
       </div>
     </div>
+
+<div [hidden]="hidden">
 
     <div style="clear:both" class="lgs-section">
-      <div class="form-group row">
-        <div class="col-lg-6">
-          <div>
-            <div class="lgs-label">
-              Principaux domaines d'intervention
-            </div>
-            <div class="lgs-group table-bordered">
-              <mat-form-field class="chip-list">
-                <mat-chip-list #chipList>
-                  <mat-chip *ngFor="let domain of domains" [selectable]="selectable" [removable]="removable" (removed)="remove(domain)">
-                    {{domain.Description}}
-                    <mat-icon matChipRemove *ngIf="removable">x</mat-icon>
-                  </mat-chip>
-                  <input placeholder="Principaux domaines d'intervention" [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                    [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="add($event)">
-                </mat-chip-list>
-              </mat-form-field>
+        <div class="form-group row">
+          <div class="col-lg-6">
 
-            </div>
+            <app-chip-domain [domains]="domains"> </app-chip-domain>
+          </div>
+
+          <div class="col-lg-6">
+
+            <app-table-certifications [certifications]="certifications"></app-table-certifications>
           </div>
         </div>
-
-        <div class="col-lg-6">
-
-          <div>
-            <div class="lgs-label">Certifications </div>
-            <label (click)="AddCertifications()">+</label>
-            <div class="lgs-floatLeftButtons">
-              <button type="button" class="btn btn-link"></button>
-            </div>
-            <div class="lgs-group table-bordered">
-              <table class="table table-bordered table-hover">
-                <tbody>
-                  <tr *ngFor=" let certif of certifications; let i = index">
-                    <td>
-                      <inline-editor [(ngModel)]="certif.Description" empty="Description" [ngModelOptions]="{standalone: true}" [name]="certif.Description"
-                        [cols]="250"></inline-editor>
-                    </td>
-                    <td style="width: 20px;">
-                      <inline-editor type="number" empty="Annee" [(ngModel)]="certif.Annee" [ngModelOptions]="{standalone: true}" [name]="certif.Annee"
-                        [cols]="250"></inline-editor>
-                    </td>
-                    <td (click)="removeCertification(certif)" class="XCancel">
-                      X
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+        <div class="form-group row">
+          <div class="col-lg-12">
+            <app-table-formation-academique [formationAcademique]="formationAcademique"></app-table-formation-academique>
+          </div>
+        </div>
+      </div>
+      <div class="lgs-section">
+        <div class="form-group row">
+          <div class="col-lg-12">
+            <app-table-mandat [mandats]="mandats"></app-table-mandat>
           </div>
         </div>
       </div>
 
 
-      <div class="form-group row">
+      <div class="lgs-section">
 
+      </div>
+      <div class="lgs-section">
+        <div class="form-group row">
+          <div class="col-lg-6">
+            <app-table-langue [langues]="langues" [languesAutoComplete]="languesAutoComplete"></app-table-langue>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-lg-6">
 
-        <div class="col-lg-12">
-
-          <div>
-            <div class="lgs-label">Formation Académique</div>
-            <label (click)="AddFormationAcademique()">+</label>
-            <div class="lgs-floatLeftButtons">
-              <button type="button" class="btn btn-link"></button>
-            </div>
-
-            <div class="lgs-group table-bordered">
-              <table class="table table-bordered table-hover">
-                <tbody>
-                  <tr *ngFor=" let format of formationAcademique; let i = index">
-                    <td style="width: 50%;">
-                      <inline-editor [(ngModel)]="format.Diplome" empty="Diplome" [ngModelOptions]="{standalone: true}" [name]="format.Diplome"
-                        [cols]="250"></inline-editor>
-                    </td>
-
-                    <td style="width: 50%;">
-                      <inline-editor empty="Etablissement" [(ngModel)]="format.Etablissement" [ngModelOptions]="{standalone: true}" [name]="format.Etablissement"
-                        [cols]="250"></inline-editor>
-                    </td>
-                    <td style="width: 20px;">
-                      <inline-editor type="number" empty="Annee" [(ngModel)]="format.Annee" [ngModelOptions]="{standalone: true}" [name]="format.Annee"
-                        [cols]="250"></inline-editor>
-                    </td>
-                    <td (click)="removeFormationAcademique(format)" class="XCancel">
-                      X
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+            <app-table-technologie [technologies]="technologies"></app-table-technologie>
+          </div>
+          <div class="col-lg-6">
+            <app-table-perfectionnements [perfectionnement]="perfectionnement"></app-table-perfectionnements>
 
 
           </div>
-
         </div>
 
       </div>
-    </div>
-
-    <div class="lgs-section">
-      <div class="lgsTextTitle">RÉSUME DES INTERVENTIONS</div>
-
-      <div>
-        <table class="table table-hover small">
-          <thead>
-            <tr class="lgs-backgroundColor">
-              <th scope="col">#</th>
-              <th scope="col">CLIENT</th>
-              <th scope="col">PROJET</th>
-              <th scope="col">ENVERGURE
-                <br />(J - P)</th>
-              <th scope="col">FONCTION</th>
-              <th scope="col">ANNÉE</th>
-              <th scope="col">EFFORTS (MOIS)</th>
-
-            </tr>
-
-          </thead>
-
-          <tbody *ngFor="let intervention of cvModel.mandats; let i = index">
-            <tr>
-              <td colspan="7">
-                <b>{{intervention.nomEntreprise}}</b>
-              </td>
-            </tr>
-            <tr>
-              <th scope="row">{{intervention.numeroMandat}}</th>
-              <td>{{intervention.nomClient}}</td>
-              <td>{{intervention.titreProjet}}</td>
-              <td>{{intervention.envergure}}</td>
-              <td>{{intervention.fonction}}</td>
-              <td>{{intervention.debutMandat | date:'yyyy'}}</td>
-              <td>{{intervention.efforts}}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <div class="lgs-section">
-      <app-mandat *ngFor="let mandat of cvModel.mandats" [mandat]="mandat"></app-mandat>
-      <router-outlet></router-outlet>
-    </div>
-
-    <div class="lgs-section">
-      <div class="form-group row">
-        <div class="col-lg-6">
-          <div>
-            <div class="lgs-label">
-              Expériences Technologiques
-            </div>
-            <div class="lgs-floatLeftButtons">
-              <button type="button" class="btn btn-link"></button>
-            </div>
-            <table class="table table-hover small">
-              <thead>
-                <tr class="lgs-backgroundColor">
-                  <th scope="col">Sous-catégorie</th>
-                  <th scope="col">Mois</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let tech of cvModel.technologies">
-                  <td>{{tech.description}}</td>
-                  <td>{{tech.mois}}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <div class="col-lg-6">
-
-          <div>
-            <div class="lgs-label">Langues</div>
-            <label (click)="AddLangue()">+</label>
-
-            <div class="lgs-floatLeftButtons">
-              <button type="button" class="btn btn-link"></button>
-            </div>
-
-            <table class="table table-hover small">
-              <thead>
-                <tr class="lgs-backgroundColor">
-                  <th scope="col">Langue</th>
-                  <th scope="col">N. Écrit</th>
-                  <th scope="col">N. Lu</th>
-                  <th scope="col">N. Parlé</th>
-                  <th scope="col"> </th>
-                </tr>
-              </thead>
-              <tbody>
-               <!--   <tr *ngFor="let langue of langues"> -->
-              <tr >
-                  <td>
-                    -------------
 
 
-                  </td>
-                  <!-- <td>
-                    <inline-editor empty="N. Écrit" [(ngModel)]="langue.NiveauEcrit" [ngModelOptions]="{standalone: true}" [name]="langue.NiveauEcrit"
-                      [cols]="250"></inline-editor>
-                  </td>
-                  <td>
-                    <inline-editor empty="N. Lu" [(ngModel)]="langue.NiveauLu" [ngModelOptions]="{standalone: true}" [name]="langue.NiveauLu"
-                      [cols]="250"></inline-editor>
-                  </td>
-                  <td>
-                    <inline-editor empty="N. Parlé" [(ngModel)]="langue.NiveauParle" [ngModelOptions]="{standalone: true}" [name]="langue.NiveauParle"
-                      [cols]="250"></inline-editor>
-                  </td>
-                  <td (click)="removeLange(langue)" class="XCancel">
-                    X
-                  </td> -->
-               </tr>
-              </tbody>
-            </table>
-          </div>
-
-        </div>
-      </div>
-      <div class="form-group row">
-        <div class="col-lg-6">
-
-          <div>
-
-            <div class="lgs-label">Perfectionnements </div>
-            <label (click)="AddPerfectionnement()">+</label>
-            <div class="lgs-floatLeftButtons">
-              <button type="button" class="btn btn-link"></button>
-            </div>
-
-
-            <table class="table table-hover small">
-              <thead>
-                <tr class="lgs-backgroundColor">
-                  <th scope="col">Sous-catégorie</th>
-                  <th scope="col">Année</th>
-                  <th scope="col"></th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let perf of perfectionnement">
-                  <td>
-                    <inline-editor [(ngModel)]="perf.Description" [ngModelOptions]="{standalone: true}" [name]="perf.Description" [cols]="250"></inline-editor>
-                  </td>
-                  <td style="width: 20px;">
-                    <inline-editor  type="number" [(ngModel)]="perf.Annee" [ngModelOptions]="{standalone: true}" [name]="perf.Annee" [cols]="250"></inline-editor>
-                  </td>
-                  <td (click)="removePerfectionnement(perf)" class="XCancel">
-                      X
-                    </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-        </div>
-      </div>
-
-    </div>
+</div>
 
 
   </form>

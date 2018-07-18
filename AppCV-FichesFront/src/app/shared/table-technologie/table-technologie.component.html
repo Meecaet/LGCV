@@ -1,0 +1,22 @@
+<div>
+    <div class="lgs-label">
+      Expériences Technologiques
+    </div>
+    <div class="lgs-floatLeftButtons">
+      <button type="button" class="btn btn-link"></button>
+    </div>
+    <table class="table table-hover small">
+      <thead>
+        <tr class="lgs-backgroundColor">
+          <th scope="col">Sous-catégorie</th>
+          <th scope="col">Mois</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let tech of technologies">
+          <td>{{tech.description}}</td>
+          <td>{{tech.mois}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>

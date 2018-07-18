@@ -1,8 +1,8 @@
 export class FormationAcademiqueViewModel {
-  GraphId: string;
-  GraphIdEtablissement: string;
+  graphId: string;
+  graphIdEtablissement: string;
 
-  Diplome: string;
-  Annee: Number;
-  Etablissement: string;
+  diplome: string;
+  annee: Number;
+  etablissement: string;
 }

@@ -1,0 +1,27 @@
+
+          <div>
+              <div class="lgs-label">Certifications </div>
+              <label (click)="AddCertifications()">+</label>
+              <div class="lgs-floatLeftButtons">
+                <button type="button" class="btn btn-link"></button>
+              </div>
+              <div class="lgs-group table-bordered">
+                <table class="table table-bordered table-hover">
+                  <tbody>
+                    <tr *ngFor=" let certif of certifications; let i = index">
+                      <td>
+                        <inline-editor [(ngModel)]="certif.description" empty="Description" [ngModelOptions]="{standalone: true}" [name]="certif.description"
+                          [cols]="250"></inline-editor>
+                      </td>
+                      <td style="width: 20px;">
+                        <inline-editor type="number" empty="Annee" [(ngModel)]="certif.annee" [ngModelOptions]="{standalone: true}" [name]="certif.annee"
+                          [cols]="250"></inline-editor>
+                      </td>
+                      <td (click)="removeCertification(certif)" class="XCancel">
+                        X
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>

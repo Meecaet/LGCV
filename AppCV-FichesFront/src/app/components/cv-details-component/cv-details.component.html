@@ -2,11 +2,11 @@
     .selectedItem {
         background-color: blue;
     }
-    
+
     table.table tbody tr {
         cursor: pointer
     }
-    
+
     .mandat-fiche:not(:first-of-type) {
         display: none
     }
@@ -113,12 +113,14 @@
         </div>
 
         <div class="lgs-section">
-            <app-resume-interventions [UtilisateurId]="123"></app-resume-interventions>
+
+
+          <!----------------------------- ATTENTION -------------------->
+            <!-- <app-resume-interventions [UtilisateurId]="123"></app-resume-interventions> -->
         </div>
 
         <div class="lgs-section">
-            <app-mandat *ngFor="let mandat of cvDetails.mandats" [mandat]="mandat"></app-mandat>
-            <router-outlet></router-outlet>
+                     <app-table-mandat [mandats]="mandats"></app-table-mandat>
         </div>
 
         <div class="lgs-section">

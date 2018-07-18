@@ -1,6 +1,6 @@
 export class CertificationViewModel {
-  GraphId: string;
-  GraphIdGenre: string;
-  Description: string;
-  Annee: number;
+  graphId: string;
+  graphIdGenre: string;
+  description: string;
+  annee: number;
 }

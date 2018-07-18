@@ -1,5 +1,5 @@
 export class DomaineDInterventionViewModel{
-  GraphId :string
-  Description :string;
+  graphId :string
+  description :string;
 
 }

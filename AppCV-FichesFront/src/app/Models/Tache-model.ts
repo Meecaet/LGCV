@@ -1,4 +1,4 @@
 export class TacheViewModel {
-  GraphId: string;
-  Description: string;
+  graphId: string;
+  description: string;
 }

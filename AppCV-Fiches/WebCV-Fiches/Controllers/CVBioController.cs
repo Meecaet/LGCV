@@ -12,7 +12,8 @@ namespace WebCV_Fiches.Controllers
     public class CVBioController : Controller
     {
         [Route("{cvId}/Detail/{utilisateurId}")]
-        [AllowAnonymous]
+        //[AllowAnonymous]
+        [Authorize("Bearer")]
         public ActionResult Detail(string cvId, string utilisateurId)
         {
             return Json(new BioViewModel());
@@ -26,6 +27,17 @@ namespace WebCV_Fiches.Controllers
         {
             // Objet sugeré comme viewModel.
             return Json(new { Status = "OK", Message = "Biographie modifiée" });
+        }
+        [Authorize("Bearer")]
+        [HttpPost]
+        [Route("Create")]
+        public ActionResult Create([FromBody]BioViewModel bio)
+        {
+            // Objet sugeré comme viewModel.
+
+
+            bio.GraphIdUtilisateur = "retorno ok";
+            return Json(bio);
         }
     }
 }

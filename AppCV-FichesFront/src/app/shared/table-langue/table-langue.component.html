@@ -1,0 +1,47 @@
+<div>
+    <div class="lgs-label">Langues</div>
+    <label (click)="AddLangue()">+</label>
+    <div class="lgs-floatLeftButtons">
+      <button type="button" class="btn btn-link"></button>
+    </div>
+    <table class="table table-hover small">
+      <thead>
+        <tr class="lgs-backgroundColor">
+          <th scope="col">Langue</th>
+          <th scope="col">N. Écrit</th>
+          <th scope="col">N. Lu</th>
+          <th scope="col">N. Parlé</th>
+          <th scope="col"> </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let langue of langues">
+          <td>
+            <mat-form-field class="example-full-width">
+              <input type="text" placeholder="Pick one" aria-label="Number" matInput [formControl]="langue.LangueControl" [matAutocomplete]="auto">
+            </mat-form-field>
+            <mat-autocomplete #auto="matAutocomplete">
+              <mat-option *ngFor="let option of languesAutoComplete|langueService:langue.LangueControl.value " [value]="option.nom">
+                {{ option.nom}}
+              </mat-option>
+            </mat-autocomplete>
+          </td>
+          <td>
+            <inline-editor empty="N. Écrit" [(ngModel)]="langue.niveauecrit" [ngModelOptions]="{standalone: true}" [name]="langue.niveauecrit"
+              [cols]="250"></inline-editor>
+          </td>
+          <td>
+            <inline-editor empty="N. Lu" [(ngModel)]="langue.niveaulu" [ngModelOptions]="{standalone: true}" [name]="langue.niveaulu"
+              [cols]="250"></inline-editor>
+          </td>
+          <td>
+            <inline-editor empty="N. Parlé" [(ngModel)]="langue.niveauparle" [ngModelOptions]="{standalone: true}" [name]="langue.niveauparle"
+              [cols]="250"></inline-editor>
+          </td>
+          <td (click)="removeLange(langue)" class="XCancel">
+            X
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>

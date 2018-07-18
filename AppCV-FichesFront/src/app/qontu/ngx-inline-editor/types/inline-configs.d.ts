@@ -11,6 +11,7 @@ export interface InlineBaseConfig extends InputBaseConfig {
     required?: boolean;
     disabled?: boolean;
     onlyValue?: boolean;
+
 }
 export interface InlineTextConfig extends InlineBaseConfig, InputRegexTestable {
 }
@@ -21,6 +22,8 @@ export interface InlineNumberConfig extends InlineBaseConfig, InputLengthTestabl
 export interface InlineTextareaConfig extends InlineBaseConfig, TextareaConfig, InputRegexTestable {
     rows: number;
     cols: number;
+    resize:string;
+
 }
 export interface InlineCheckboxConfig extends InlineBaseConfig, CheckboxConfig {
     checkedText: string;

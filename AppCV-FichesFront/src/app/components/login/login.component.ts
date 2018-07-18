@@ -35,7 +35,7 @@ export class LoginComponent implements OnInit {
         if (x.authenticated) {
           this.MsgError = "";
           localStorage.setItem("token", x.token);
-          this.route.navigate(["/Details"]);
+          this.route.navigate(["/cv/details"]);
         } else {
           localStorage.removeItem("token");
           this.MsgError = "User or Password is wrong!!";

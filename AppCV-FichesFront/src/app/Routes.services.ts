@@ -12,22 +12,20 @@ import { CvCreateComponent } from "./components/cv-create-component/cv-create.co
 
 const routes: Routes = [
   { path: "", component: HomeComponent },
-  { path: "Home", component: HomeComponent },
+  { path: "home", component: HomeComponent },
   {
-    path: "Account",
+    path: "account",
     children: [
-      { path: "Login", component: LoginComponent },
-      { path: "Register", component: RegisterComponent },
-      { path: "ForgotPassword", component: ForgotPasswordComponent }
+      { path: "login", component: LoginComponent },
+      { path: "register", component: RegisterComponent },
+      { path: "forgotpassword", component: ForgotPasswordComponent }
     ]
   },
-
-  // { path: 'Details/:id', component: CvDetailsComponent, canActivate: [AuthGuard] , },
   {
-    path: "CV",
+    path: "cv",
     children: [
-      { path: "Details/:id", component: CvDetailsComponent },
-      { path: "Create", component: CvCreateComponent },
+      { path: "details/:id", component: CvDetailsComponent,canActivate:[AuthGuard] },
+      { path: "create", component: CvCreateComponent,canActivate:[AuthGuard]  },
     ]
   },
 

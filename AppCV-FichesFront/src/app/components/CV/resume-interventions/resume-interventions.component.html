@@ -15,7 +15,7 @@
             </tr>
         </thead>
 
-        <tbody *ngFor="let intervention of Interventions; let i = index">
+        <!-- <tbody *ngFor="let intervention of Interventions; let i = index">
             <tr *ngIf="i == 0 || (i>0 && Interventions[i-1].nomEntreprise != intervention.Entreprise)">
                 <td colspan="7"><b>{{intervention.entrerise}}</b></td>
             </tr>
@@ -28,6 +28,6 @@
                 <td>{{intervention.debutMandat | date:'yyyy'}}</td>
                 <td>{{intervention.efforts}}</td>
             </tr>
-        </tbody>
+        </tbody> -->
     </table>
 </div>

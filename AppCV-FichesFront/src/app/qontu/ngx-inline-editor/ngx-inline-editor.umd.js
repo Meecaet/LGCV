@@ -469,7 +469,7 @@ InputCheckboxComponent.ctorParameters = function () { return [
     { type: _angular_core.Injector, },
 ]; };
 var InputTextareaComponent = (function (_super) {
-    __extends(InputTextareaComponent, _super);
+     __extends(InputTextareaComponent, _super);
     /**
      * @param {?} injector
      */
@@ -481,11 +481,14 @@ var InputTextareaComponent = (function (_super) {
     }
     return InputTextareaComponent;
 }(InputBase));
+
 InputTextareaComponent.decorators = [
-    { type: _angular_core.Component, args: [{
+    {
+
+      type: _angular_core.Component, args: [{
                 selector: "inline-editor-textarea",
                 styles: ["a {     text-decoration: none;     color: #428bca;     border-bottom: dashed 1px #428bca;     cursor: pointer;     line-height: 2;     margin-right: 5px;     margin-left: 5px; }   /* editable-empty */  .editable-empty, .editable-empty:hover, .editable-empty:focus, a.editable-empty, a.editable-empty:hover, a.editable-empty:focus {     font-style: italic;     color: #DD1144;     text-decoration: none; }  .inlineEditForm {     display: inline-block;     white-space: nowrap;     margin: 0; }  #inlineEditWrapper {     display: inline-block; }  .inlineEditForm input, select {     width: auto;     display: inline; }  .editInvalid {     color: #a94442;     margin-bottom: 0; }  .error {     border-color: #a94442; }  [hidden] {     display: none; }"],
-                template: "<textarea #inputRef class=\"form-control\" (keyup.enter)=\"onEnter($event)\"\n                (keyup.escape)=\"onEscape($event)\" (focus)=\"onFocus($event)\" (blur)=\"onBlur($event)\" (click)=\"onClick($event)\"\n                (keypress)=\"onKeyPress($event)\" [(ngModel)]=\"value\" [required]=\"config.required\"\n                [rows]=\"config.rows\" [cols]=\"config.cols\" [disabled]=\"state.isDisabled()\" [name]=\"config.name\"\n                [placeholder]=\"config.placeholder\"></textarea>",
+                template: "<textarea  #inputRef class=\"form-control\" (keyup.enter)=\"onEnter($event)\"\n                (keyup.escape)=\"onEscape($event)\" (focus)=\"onFocus($event)\" (blur)=\"onBlur($event)\" (click)=\"onClick($event)\"\n                (keypress)=\"onKeyPress($event)\" [(ngModel)]=\"value\" [required]=\"config.required\"\n                [rows]=\"config.rows\" [cols]=\"config.cols\" [disabled]=\"state.isDisabled()\" [name]=\"config.name\"\n                [placeholder]=\"config.placeholder\"></textarea>",
                 changeDetection: _angular_core.ChangeDetectionStrategy.OnPush,
             },] },
 ];

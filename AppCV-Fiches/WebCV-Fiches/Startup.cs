@@ -101,7 +101,7 @@ namespace WebCV_Fiches
 
             var tokenConfigurations = new TokenConfigurationExtentions();
             new ConfigureFromConfigurationOptions<TokenConfigurationExtentions>(
-                Configuration.GetSection("TokenConfigurationExtentions"))
+                Configuration.GetSection("TokenConfigurations"))
                     .Configure(tokenConfigurations);
             services.AddSingleton(tokenConfigurations);
 
