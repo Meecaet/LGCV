@@ -12,6 +12,7 @@ import { CVService } from "../../Services/cv.service";
 import { BioViewModel } from "../../Models/Bio-Model";
 import { ErrorService } from "../../Services/error.service";
 import { HttpErrorResponse } from "../../../../node_modules/@angular/common/http";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-cv-create",
@@ -20,6 +21,8 @@ import { HttpErrorResponse } from "../../../../node_modules/@angular/common/http
   providers: [LangueService]
 })
 export class CvCreateComponent implements OnInit {
+  UtilisatuerId: string = "10054df564s56df456df4g56df4s56g4d56s4fg6d";
+
   hidden: boolean = true;
   bio: BioViewModel;
   cvModel: CVViewModel;
@@ -33,7 +36,8 @@ export class CvCreateComponent implements OnInit {
   mandats: Array<MandatViewModel>;
   constructor(
     private cvService: CVService,
-    private errorService: ErrorService
+    private errorService: ErrorService,
+    private router: Router
   ) {
     this.bio = new BioViewModel();
     this.cvModel = new CVViewModel();
@@ -56,13 +60,13 @@ export class CvCreateComponent implements OnInit {
       case this.IsDataValid(model.GraphIdUtilisateur):
         this.cvService.CreateBio(model).subscribe(
           (data: BioViewModel) => {
-            this.hidden = false;
+            this.router.navigate(["cv/edit"]);
           },
           (error: HttpErrorResponse) => {
             this.errorService.ErrorHandle(error.status);
           }
         );
-        return;
+
       default:
         this.EditBio();
     }
@@ -79,14 +83,5 @@ export class CvCreateComponent implements OnInit {
   ngOnInit(): void {
     this.LoadLangue();
   }
-  LoadLangue(): void {
-    this.cvService.LoadLangue().subscribe(
-      (data: Array<LangueViewModel>) => {
-        this.languesAutoComplete = data;
-      },
-      (error: HttpErrorResponse) => {
-        this.errorService.ErrorHandle(error.status);
-      }
-    );
-  }
+  LoadLangue(): void {}
 }
