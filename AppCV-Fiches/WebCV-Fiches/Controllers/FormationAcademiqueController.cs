@@ -19,9 +19,9 @@ namespace WebCV_Fiches.Controllers
             return Json(new List<FormationAcademiqueViewModel> { } );
         }
 
-        [Route("{cvId}/Detail/{formationAcademiqueId}")]
+        [Route("/Detail/{utilisatuerId}")]
         [AllowAnonymous]
-        public ActionResult Detail(string cvId, string formationAcademiqueId)
+        public ActionResult Detail(string utilisatuerId)
         {
             return Json(new FormationAcademiqueViewModel());
         }

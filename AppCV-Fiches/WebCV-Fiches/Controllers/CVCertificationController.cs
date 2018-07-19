@@ -18,7 +18,7 @@ namespace WebCV_Fiches.Controllers
             return Json(new List<CertificationViewModel> { });
         }
 
-        [Route("{cvId}/Detail/{certificationId}")]
+        [Route("Detail/{certificationId}")]
         [AllowAnonymous]
         public ActionResult Detail(string cvId, string certificationId)
         {

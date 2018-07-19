@@ -19,9 +19,9 @@ namespace WebCV_Fiches.Controllers
             return Json(new List<PerfectionnementViewModel> { });
         }
 
-        [Route("{cvId}/Detail/{PerfectionnementId}")]
+        [Route("/Detail/{utlisateurId}")]
         [AllowAnonymous]
-        public ActionResult Detail(string cvId, string perfectionnementId)
+        public ActionResult Detail(string utlisateurId)
         {
             return Json(new PerfectionnementViewModel());
         }

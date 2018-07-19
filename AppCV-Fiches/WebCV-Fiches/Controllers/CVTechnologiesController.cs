@@ -17,9 +17,9 @@ namespace WebCV_Fiches.Controllers
             return Json(new List<TechnologieViewModel> { });
         }
 
-        [Route("{cvId}/Detail/{technologieId}")]
+        [Route("{utilisatuerId}/DetailS")]
         [AllowAnonymous]
-        public ActionResult Detail(string cvId, string technologieId)
+        public ActionResult Detail(string utilisatuerId)
         {
             return Json(new TechnologieViewModel());
         }

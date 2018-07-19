@@ -18,6 +18,14 @@ namespace WebCV_Fiches.Controllers
             return Json(new CVViewModel() { GraphIdCV = cvId });
         }
 
+
+        [Route("{utilisatuerId}/Details")]
+        [AllowAnonymous]
+        public ActionResult Details(string cvId)
+        {
+            return null;
+        }
+
         // POST: Mandat/Create
         [HttpPost]
         [AllowAnonymous]

@@ -1,0 +1,27 @@
+<div>
+    <div id="identification" class="form-inline">
+        <div class="lgs-label">Identification</div>
+        <div class="table-bordered lgs-group">
+            <div style="margin-bottom:25px">
+                <div>
+                    <h2 class="form-inline">
+                        <!--{{cvModel.prenom}} {{cvModel.nom}}-->
+                        <div class="form-inline">
+                            <div style="margin-right:10px">
+                                <inline-editor type="text" empty="Prenom" (onSave)="saveBio(bio)" [(ngModel)]="bio.prenom" name="prenom" [cols]="250"></inline-editor>
+                            </div>
+                            <div>
+                                <inline-editor type="text" (onSave)="saveBio(bio)" empty="Nom" [(ngModel)]="bio.nom" name="nom"></inline-editor>
+                            </div>
+                        </div>
+                    </h2>
+                </div>
+                <b>{{cvModel.fonction}}</b>
+            </div>
+            <div class="col-lg-12">
+                <inline-editor type="textarea" (onSave)="saveBio(bio)" empty="Biographie" [(ngModel)]="bio.biographie" name="biographie">
+                </inline-editor>
+            </div>
+        </div>
+    </div>
+</div>

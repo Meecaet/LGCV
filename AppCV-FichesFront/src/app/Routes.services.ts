@@ -27,7 +27,7 @@ const routes: Routes = [
     children: [
       { path: "details/:id", component: CvDetailsComponent,canActivate:[AuthGuard] },
       { path: "create", component: CvCreateComponent,canActivate:[AuthGuard]  },
-      { path: "edit", component: CvEditComponent,canActivate:[AuthGuard]  },
+      { path: "edit/:id", component: CvEditComponent,canActivate:[AuthGuard]  },
     ]
   },
 

@@ -11,7 +11,7 @@ namespace WebCV_Fiches.Controllers
     [Route("Bio")]
     public class CVBioController : Controller
     {
-        [Route("{cvId}/Detail/{utilisateurId}")]
+        [Route("Detail/{utilisateurId}")]
         //[AllowAnonymous]
         [Authorize("Bearer")]
         public ActionResult Detail(string cvId, string utilisateurId)
