@@ -3,55 +3,57 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WebCV_Fiches.Models.CVViewModels;
 
 namespace WebCV_Fiches.Controllers
 {
-    public class CVTechnologiesController : Controller
+    [Route("FormationAcademique")]
+    public class FormationAcademiqueController : Controller
     {
         [Route("{cvId}/All")]
         [AllowAnonymous]
         public ActionResult All(string cvId)
         {
-            return Json(new List<TechnologieViewModel> { });
+            return Json(new List<FormationAcademiqueViewModel> { } );
         }
 
-        [Route("{utilisatuerId}/DetailS")]
+        [Route("/Detail/{utilisatuerId}")]
         [AllowAnonymous]
         public ActionResult Detail(string utilisatuerId)
         {
-            return Json(new TechnologieViewModel());
+            return Json(new FormationAcademiqueViewModel());
         }
 
         // POST: Mandat/Create
         [HttpPost]
         [AllowAnonymous]
         [Route("{cvId}/Add")]
-        public ActionResult Add(string cvId, [FromBody]TechnologieViewModel technologie)
+        public ActionResult Add(string cvId, [FromBody]FormationAcademiqueViewModel formationAcademique)
         {
             // peut être le nouveau graphId.
-            return Json(technologie);
+            return Json(formationAcademique);
         }
 
         // POST: Mandat/Edit/cvId
         [HttpPost]
         [AllowAnonymous]
         [Route("{cvId}/Edit")]
-        public ActionResult Edit(string cvId, [FromBody]TechnologieViewModel technologie)
+        public ActionResult Edit(string cvId, [FromBody]FormationAcademiqueViewModel formationAcademique)
         {
             // Objet sugeré comme viewModel.
-            return Json(new { Status = "OK", Message = "technologie modifiée" });
+            return Json(new { Status="OK", Message="Formation académique modifiée" });
         }
 
         // POST: Mandat/Delete/5
         [HttpPost]
         [AllowAnonymous]
         [Route("Delete")]
-        public ActionResult Delete(string cvId, string technologieId)
+        public ActionResult Delete(string cvId, string formationAcademiqueId)
         {
             // Objet sugeré comme viewModel.
-            return Json(new { Status = "OK", Message = "technologie eliminé" });
+            return Json(new { Status = "OK", Message = "Formation académique eliminé" });
         }
     }
 }

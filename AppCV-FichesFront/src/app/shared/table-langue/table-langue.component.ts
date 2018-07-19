@@ -13,8 +13,6 @@ import { ErrorService } from "../../Services/error.service";
 export class TableLangueComponent implements OnInit {
   langues: Array<LangueViewModel>;
   languesAutoComplete: Array<LangueViewModel>;
-
-  @Input() IsLoad: boolean = false;
   @Input() UtilisateurId: string;
 
   constructor(
@@ -23,9 +21,9 @@ export class TableLangueComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    if (this.IsLoad) {
-      this.UserDataLoad();
-    }
+    
+    this.UserDataLoad();
+  
     this.DataLoad();
   }
   AddLangue(): void {

@@ -30,7 +30,7 @@ export class ValidatorService {
     if (element == null)
     return
     var regex = new RegExp(
-      /^(?=(?:[^a-z]*[A-z]){2})(?=(?:[^0-9]*[0-9]){2}).{8,}$/
+      /^(?=(?:[^a-z]*[A-z]){2})(?=(?:[^0-9]*[0-9]){2}).{4,}$/
     );
     if (regex.test(value)) {
       element.hidden = true;

@@ -46,11 +46,10 @@ export class CVService {
   }
 
   private DetailActionUrl(
-    cvId: string,
     controllerName: string,
     detailId: string
   ) {
-    return `${controllerName}/${cvId}/Detail/${detailId}`;
+    return `${controllerName}/Detail/${detailId}`;
   }
 
   public GetCV(id: string) {
@@ -91,6 +90,11 @@ export class CVService {
     //     return resumes;
     //   })
     // );
+  }
+
+  public GetBio(idUtilisateur: string) {
+    const url = this.DetailActionUrl("Bio", idUtilisateur);
+    return this.doRequest(url);
   }
 
   public CreateBio(bio: BioViewModel) {
