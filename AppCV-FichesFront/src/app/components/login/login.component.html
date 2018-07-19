@@ -15,7 +15,7 @@
           </div>
           <div class="form-group">
             <label for="Email">Email</label>
-            <input class="form-control" (keyup)="IsValid(Model.Email,IsValidEmail,IsValidEmailRegex)" [(ngModel)]="Model.Email" type="email"
+            <input class="form-control" (keyup)="IsValid(Model.email,IsValidEmail,IsValidEmailRegex)" [(ngModel)]="Model.email" type="email"
               name="Email" value="">
             <div #IsValidEmail class="alert alert-danger">
               This field is required
@@ -26,7 +26,7 @@
           </div>
           <div class="form-group">
             <label for="Password">Password</label>
-            <input class="form-control" (keyup)="IsValidPassword(Model.Password,IsValidPassWord,IsValidPassWordRegex)" [(ngModel)]="Model.Password"
+            <input class="form-control" (keyup)="IsValidPassword(Model.password,IsValidPassWord,IsValidPassWordRegex)" [(ngModel)]="Model.password"
               type="password" name="Password">
             <div #IsValidPassWord class="alert alert-danger">
               This field is required
@@ -38,7 +38,7 @@
           <div class="form-group">
             <div class="checkbox">
               <label for="RememberMe">
-                <input type="checkbox" [(ngModel)]="Model.RememberMe" name="RememberMe"> Remember me?
+                <input type="checkbox" [(ngModel)]="Model.rememberMe" name="RememberMe"> Remember me?
               </label>
             </div>
           </div>

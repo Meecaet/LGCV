@@ -24,6 +24,7 @@ namespace WebCV_Fiches.Controllers
         }
         [HttpGet]
         public ActionResult GetAllLangues()
+
         {
             List<LangueViewModel> langues = new List<LangueViewModel>();
             var lang = (List<Langue>)cache.Get("Langues");

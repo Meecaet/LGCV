@@ -11,6 +11,6 @@ export class AuthenticationService {
   constructor(private _http: HttpClient) {}
   Login(model:LoginModel): Observable<Credential> {
 
-    return this._http.post<Credential>("https://localhost:44344/api/AccountApi/DoLogin",{Email:model.Email,Password:model.Password,RemeberMe:model.RememberMe})
+    return this._http.post<Credential>("https://localhost:44344/api/AccountApi/DoLogin",{Email:model.email,Password:model.password,RemeberMe:model.rememberMe})
   }
 }

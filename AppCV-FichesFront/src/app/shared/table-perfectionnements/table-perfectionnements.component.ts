@@ -18,7 +18,7 @@ export class TablePerfectionnementsComponent implements OnInit {
   }
   removePerfectionnement(ele: PerfectionnementViewModel) {
     const index = this.perfectionnement.findIndex(
-      x => x.Annee == ele.Annee && x.Description == ele.Description
+      x => x.annee == ele.annee && x.description == ele.description
     );
     if (index >= 0) {
       this.perfectionnement.splice(index, 1);

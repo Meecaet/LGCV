@@ -1,5 +1,5 @@
 export class LoginModel {
-  Password:string;
-  Email:string;
-  RememberMe:boolean=false
+  password:string;
+  email:string;
+  rememberMe:boolean=false
 }

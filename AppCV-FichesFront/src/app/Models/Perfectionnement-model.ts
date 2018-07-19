@@ -1,7 +1,7 @@
 export class PerfectionnementViewModel{
-     GraphId :string;
-     GraphIdGenre  :string;
-     Description :string;
-      Annee  :Number;
+     graphId :string;
+     graphIdGenre  :string;
+     description :string;
+      annee  :Number;
 
 }

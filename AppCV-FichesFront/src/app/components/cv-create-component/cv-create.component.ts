@@ -57,7 +57,7 @@ export class CvCreateComponent implements OnInit {
         return;
       case this.IsDataValid(model.biographie):
         return;
-      case this.IsDataValid(model.GraphIdUtilisateur):
+      case this.IsDataValid(model.graphIdConseiller):
         this.cvService.CreateBio(model).subscribe(
           (data: BioViewModel) => {
             this.router.navigate(["cv/edit"]);
@@ -66,7 +66,6 @@ export class CvCreateComponent implements OnInit {
             this.errorService.ErrorHandle(error.status);
           }
         );
-
       default:
         this.EditBio();
     }

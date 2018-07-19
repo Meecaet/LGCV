@@ -30,20 +30,18 @@ export class LoginComponent implements OnInit {
   Login(): void {
     this.auth.Login(this.Model).subscribe(
       (x: Credential) => {
-        debugger;
-
         if (x.authenticated) {
           this.MsgError = "";
           localStorage.setItem("token", x.token);
-          this.route.navigate(["/cv/details"]);
+          localStorage.setItem("utilisateurId", x.utilisateurId);
+          this.route.navigate(['cv/edit/'+x.utilisateurId]);
         } else {
           localStorage.removeItem("token");
+          localStorage.removeItem("utilisateurId");
           this.MsgError = "User or Password is wrong!!";
         }
       },
-      (error: any) => {
-        debugger;
-      }
+      (error: any) => {}
     );
   }
 }

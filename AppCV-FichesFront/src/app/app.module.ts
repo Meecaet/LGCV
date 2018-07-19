@@ -36,6 +36,7 @@ import { JwtInterceptor } from "./Services/jwt-interceptor.service";
 import { CVService } from "./Services/cv.service";
 import { NgModule } from "@angular/core";
 import { CvEditComponent } from './components/cv-edit/cv-edit.component';
+import { BioComponent } from "./shared/bio/bio.component";
 
 @NgModule({
   declarations: [
@@ -57,7 +58,8 @@ import { CvEditComponent } from './components/cv-edit/cv-edit.component';
     ChipDomainComponent,
     TableTechnologieComponent,
     TableMandatComponent,
-    CvEditComponent
+    CvEditComponent,
+    BioComponent
   ],
   imports: [
     MatAutocompleteModule,
@@ -79,7 +81,6 @@ import { CvEditComponent } from './components/cv-edit/cv-edit.component';
     LangueService,
     ValidatorService,
     FormBuilder,
-
     CVService,
     {
       provide: HTTP_INTERCEPTORS,
