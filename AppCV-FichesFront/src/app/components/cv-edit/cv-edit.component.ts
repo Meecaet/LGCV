@@ -1,15 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from "@angular/core";
+import { ActivatedRoute } from "@angular/router";
 
 @Component({
-  selector: 'app-cv-edit',
-  templateUrl: './cv-edit.component.html',
-  styleUrls: ['./cv-edit.component.css']
+  selector: "app-cv-edit",
+  templateUrl: "./cv-edit.component.html",
+  styleUrls: ["./cv-edit.component.css"]
 })
 export class CvEditComponent implements OnInit {
-
-  constructor() { }
-
+  UtilisateurId: string;
+  constructor(private route: ActivatedRoute) {}
   ngOnInit() {
+    debugger
+    this.route.params.subscribe(params => {
+      this.UtilisateurId = params["id"];
+    });
   }
-
 }

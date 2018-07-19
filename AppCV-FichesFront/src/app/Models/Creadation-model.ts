@@ -4,4 +4,5 @@ export class Credential{
      expiration :Date;
      token :string
      message :string
+     utilisateurId:string
 }

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using DAL_CV_Fiches.Models.Graph;
 using DAL_CV_Fiches.Repositories.Graph;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WebCV_Fiches.Helpers;
 using WebCV_Fiches.Models.CVViewModels;

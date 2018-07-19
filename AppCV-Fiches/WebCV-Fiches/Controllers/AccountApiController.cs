@@ -5,12 +5,14 @@ using System.Linq;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading.Tasks;
+using DAL_CV_Fiches.Repositories.Graph;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using WebCV_Fiches.Extensions;
+using WebCV_Fiches.Models;
 using WebCV_Fiches.Models.AccountApiModels;
 using WebCV_Fiches.Models.AccountViewModels;
 using WebCV_Fiches.Models.Admin;
@@ -28,7 +30,7 @@ namespace WebCV_Fiches.Controllers
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
         //ForgotPasswordViewModel
-
+        private ApiCredential apiCredential;
 
 
         public AccountApiController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IEmailSender emailSender, ILogger<AccountController> logger)
@@ -51,10 +53,8 @@ namespace WebCV_Fiches.Controllers
             bool credenciaisValidas = false;
             if (userLogin != null)
             {
-                LoginModel usuarioBase = login.Find(userLogin);
-                credenciaisValidas = (usuarioBase != null &&
-                    userLogin.Password == usuarioBase.Password &&
-                                        userLogin.Email == usuarioBase.Email);
+                apiCredential   = login.Find(userLogin);
+                credenciaisValidas = (apiCredential != null );
             }
 
             if (credenciaisValidas)
@@ -83,22 +83,21 @@ namespace WebCV_Fiches.Controllers
                 });
                 var token = handler.WriteToken(securityToken);
 
-                return new
-                {
-                    authenticated = true,
-                    created = dataCriacao.ToString("yyyy-MM-dd HH:mm:ss"),
-                    expiration = dataExpiracao.ToString("yyyy-MM-dd HH:mm:ss"),
-                    Token = token,
-                    message = "OK"
-                };
+      
+                apiCredential.created = dataCriacao.ToString("yyyy-MM-dd HH:mm:ss");
+                apiCredential.expiration = dataExpiracao.ToString("yyyy-MM-dd HH:mm:ss");
+                apiCredential.Token = token;
+                return apiCredential;
             }
             else
             {
-                return new
-                {
-                    authenticated = false,
-                    message = "Falha ao autenticar"
-                };
+
+                apiCredential.authenticated = false;
+                apiCredential.message = "User not found";
+
+                return apiCredential;
+
+
             }
         }
 

@@ -3,8 +3,8 @@ export class BioViewModel {
   prenom: string;
   biographie: string;
   fonction: string;
-  GraphIdConseiller: string;
-  GraphIdUtilisateur: string;
-  GraphIdFonction: string;
-  GraphIdCV: string;
+  graphIdConseiller: string;
+  graphIdUtilisateur: string;
+  graphIdFonction: string;
+  graphIdCV: string;
 }

@@ -18,10 +18,10 @@
       <tbody>
         <tr *ngFor="let perf of perfectionnement">
           <td>
-            <inline-editor [(ngModel)]="perf.Description" [ngModelOptions]="{standalone: true}" [name]="perf.Description" [cols]="250"></inline-editor>
+            <inline-editor [(ngModel)]="perf.description" [ngModelOptions]="{standalone: true}" [name]="perf.description" [cols]="250"></inline-editor>
           </td>
           <td style="width: 20px;">
-            <inline-editor type="number" [(ngModel)]="perf.Annee" [ngModelOptions]="{standalone: true}" [name]="perf.Annee" [cols]="250"></inline-editor>
+            <inline-editor type="number" [(ngModel)]="perf.annee" [ngModelOptions]="{standalone: true}" [name]="perf.annee" [cols]="250"></inline-editor>
           </td>
           <td (click)="removePerfectionnement(perf)" class="XCancel">
             X

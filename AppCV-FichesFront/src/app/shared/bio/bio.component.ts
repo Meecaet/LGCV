@@ -1,9 +1,9 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { OnInit, Input, Component } from "@angular/core";
 import { BioViewModel } from "../../Models/Bio-Model";
 import { CVService } from "../../Services/cv.service";
 import { HttpErrorResponse } from "../../../../node_modules/@angular/common/http";
 import { ErrorService } from "../../Services/error.service";
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from "@angular/router";
 
 @Component({
   selector: "app-bio",
@@ -12,32 +12,55 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class BioComponent implements OnInit {
   bio: BioViewModel;
-  UtilisateurId: string;
-
+  @Input() UtilisateurId: string;
   constructor(
     private cvService: CVService,
     private errorService: ErrorService,
     private route: ActivatedRoute
-  ) { }
+  ) {
 
-  ngOnInit() {
-    this.route.params.subscribe(params => {
-      this.UtilisateurId = params['id'];
-      this.UserDataLoad();
-    });
+    this.bio = new BioViewModel();
   }
 
+  ngOnInit() {
+    this.UserDataLoad();
+  }
+  saveBio(model: BioViewModel): void {
+    switch ("") {
+      case this.IsDataValid(model.nom):
+        return;
+      case this.IsDataValid(model.prenom):
+        return;
+      case this.IsDataValid(model.biographie):
+        return;
+      case this.IsDataValid(model.graphIdConseiller):
+        this.cvService.CreateBio(model).subscribe(
+          (data: BioViewModel) => {},
+          (error: HttpErrorResponse) => {
+            this.errorService.ErrorHandle(error.status);
+          }
+        );
+      default:
+    }
+  }
+  IsDataValid(value: any): any {
+    if (value == null) {
+      return "";
+    } else {
+      return value.trim();
+    }
+  }
   UserDataLoad() {
-    this.cvService
-      .GetBio(this.UtilisateurId)
-      .subscribe(
-        (data: BioViewModel) => {
-          this.bio = data;
-          console.log(this.bio);
-        },
-        (error: HttpErrorResponse) => {
-          this.errorService.ErrorHandle(error.status);
-        }
-      );
+    debugger;
+    this.cvService.GetBio(this.UtilisateurId).subscribe(
+      (data: BioViewModel) => {
+        debugger;
+        this.bio = data;
+      },
+      (error: HttpErrorResponse) => {
+        debugger;
+        this.errorService.ErrorHandle(error.status);
+      }
+    );
   }
 }
