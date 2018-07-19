@@ -41,6 +41,8 @@ import { CarouselComponent } from './shared/carousel/carousel.component';
 import { DropDownFonctionComponent } from './shared/drop-down-fonction/drop-down-fonction.component';
 import { FonctionPipe } from "./Services/fonction.pipe";
 
+import { RoleAdminComponent} from "./components/role-admin/role-admin.component";
+import { RoleCreateComponent} from "./components/role-create/role-create.component";
 
 @NgModule({
   declarations: [
@@ -68,6 +70,8 @@ import { FonctionPipe } from "./Services/fonction.pipe";
     DropDownFonctionComponent,
 
 
+    RoleAdminComponent,
+    RoleCreateComponent
   ],
   imports: [
     MatAutocompleteModule,

@@ -10,10 +10,12 @@ import { PageNotFoundComponent } from "./components/page-not-found/page-not-foun
 import { ForgotPasswordComponent } from "./components/forgot-password/forgot-password.component";
 
 import { CvEditComponent } from "./components/cv-edit/cv-edit.component";
+import { RoleAdminComponent } from "./components/role-admin/role-admin.component";
+import { RoleCreateComponent } from "./components/role-create/role-create.component";
 
 const routes: Routes = [
-  { path: "", component: HomeComponent, canActivate:[AuthGuard] },
-  { path: "home", component: HomeComponent, canActivate:[AuthGuard] },
+  { path: "", component: HomeComponent},
+  { path: "home", component: HomeComponent},
   {
     path: "account",
     children: [
@@ -26,6 +28,13 @@ const routes: Routes = [
     path: "cv",
     children: [
       { path: "edit/:id", component: CvEditComponent,canActivate:[AuthGuard]  },
+    ]
+  },
+  {
+    path: "role",
+    children: [
+      { path: "admin", component: RoleAdminComponent},
+      { path: "create", component: RoleCreateComponent}
     ]
   },
 

@@ -1,0 +1,49 @@
+<div class="container body-content">
+  <h2>Créer</h2>
+
+  <h4>Rôles</h4>
+  <hr />
+  <div class="row">
+    <div class="col-md-4">
+      <form name="formCreate" novalidate>
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label for="Name">Name</label>
+            <input class="form-control" (keyup)="IsValidPassword(Model.password,IsValidPassWord,IsValidPassWordRegex)" [(ngModel)]="Model.password"
+            type="password" name="Password">
+<!-- 
+            <input class="form-control" type="text" name="Name" ng-model="Name" required> -->
+            <div #IsValidPassWord class="alert alert-danger">
+                This field is required
+              </div>
+              <div #IsValidPassWordRegex class="alert alert-danger">
+                the password must contain at least 8 characters, including UPPER/lowercase and numbers
+              </div>
+
+            <div #IsValidName class="alert alert-danger">
+              Ce champ est requis
+            </div>
+          </div>
+
+
+
+        <!-- <div class="form-group">
+          <label asp-for="Name" class="control-label"></label>
+          <input asp-for="Name" class="form-control" />
+          <span asp-validation-for="Name" class="text-danger"></span>
+        </div> -->
+        <div class="form-group">
+            <button type="button"
+            [disabled]="(IsValidPassWordRegex.hidden==false ||
+            IsValidPassWord.hidden==false)?true:false" (click)="Create()" class="btn btn-default">Créer</button>
+
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div>
+    <a asp-action="Index">Retourner à la liste</a>
+  </div>
+
+</div>

@@ -28,7 +28,7 @@ namespace WebCV_Fiches.Services
             if (result.Result == SignInResult.Success)
             {
 #if !debug
-  var utilisateur = UtilisateurDepot.Search(new Dictionary<string, object> { { "Nom", "JEAN BEAUCHEMIN" } }).DefaultIfEmpty(null).FirstOrDefault();
+  var utilisateur = UtilisateurDepot.Search(new Dictionary<string, object> { { "Nom", "MATEUS ELOY EVANGELISTA CAETANO" } }).DefaultIfEmpty(null).FirstOrDefault();
  
 #else
                 var utilisateur = UtilisateurDepot.Search(new Dictionary<string, object> { { "AdresseCourriel", loginModel.Email } }).DefaultIfEmpty(null).FirstOrDefault();
