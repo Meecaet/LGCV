@@ -12,8 +12,8 @@ import { ForgotPasswordComponent } from "./components/forgot-password/forgot-pas
 import { CvEditComponent } from "./components/cv-edit/cv-edit.component";
 
 const routes: Routes = [
-  { path: "", component: HomeComponent },
-  { path: "home", component: HomeComponent },
+  { path: "", component: HomeComponent, canActivate:[AuthGuard] },
+  { path: "home", component: HomeComponent, canActivate:[AuthGuard] },
   {
     path: "account",
     children: [
