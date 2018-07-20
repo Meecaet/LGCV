@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { AdminService } from '../../Services/admin.service';
+import { HttpErrorResponse } from '../../../../node_modules/@angular/common/http';
+import { RoleViewModel } from '../../Models/Admin/Role-model';
 
 @Component({
   selector: 'app-role-admin',
@@ -7,10 +10,25 @@ import { Component, OnInit } from '@angular/core';
 })
 export class RoleAdminComponent implements OnInit {
 
-  constructor() {
-  }
+  constructor(
+    private adminService: AdminService
+  ) {}
+
+  roles: Array<RoleViewModel>;
 
   ngOnInit() {
+    this.adminService.GetRole().subscribe(
+      (data: Array<RoleViewModel>) => {
+        this.roles = data;
+      }, 
+      (error: HttpErrorResponse) => {
+        // TODO
+        debugger;
+      }
+    );
+  }
+
+  confirmateDelete(): void {
   }
 
 }

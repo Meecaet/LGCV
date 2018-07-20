@@ -7,12 +7,15 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WebCV_Fiches.Data;
+using WebCV_Fiches.Models;
 using WebCV_Fiches.Models.Admin;
 using WebCV_Fiches.Models.AdminViewModels;
 
 namespace WebCV_Fiches.Controllers
 {
-    [Authorize(Roles = "Administrateur")]
+
+    //    [Authorize(Roles = "Administrateur")]
+    [Route("[controller]/[action]")]
     public class RoleController : Controller
     {
         private AdminViewModel adminViewModel;
@@ -35,6 +38,56 @@ namespace WebCV_Fiches.Controllers
             return View(adminViewModel);
         }
 
+        // POST: Role/Create
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult Create([FromBody]ApplicationRole role)
+        {
+            try
+            {
+                role.ConcurrencyStamp = Guid.NewGuid().ToString();
+                var result = roleManager.CreateAsync(role).Result;
+                
+
+                return Json(role);
+            }
+            catch
+            {
+                ErrorViewModel error = new ErrorViewModel();
+                error.RequestId = "Le rôle n'a pas pu être créé";
+                return Json(error);
+            }
+        }
+
+        [AllowAnonymous]
+        public ActionResult GetAll()
+        {
+            try
+            {
+                var result = roleManager.Roles.ToList();
+                return Json(result);
+            }
+            catch
+            {
+                ErrorViewModel error = new ErrorViewModel();
+                error.RequestId = "Une erreur s'est produite lors de la lecture de la liste des rôles";
+                return Json(error);
+            }
+        }
+
+        public ActionResult Delete(string id)
+        {
+            try
+            {
+                roleManager.DeleteAsync(roleManager.FindByIdAsync(id).Result);
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
         // GET: Admin/Details/5
         public ActionResult Details(string id)
         {
@@ -44,30 +97,6 @@ namespace WebCV_Fiches.Controllers
 
 
             return View(roleAdministrationViewModel);
-        }
-
-        // GET: Admin/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Admin/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(ApplicationRole role)
-        {
-            try
-            {
-                role.ConcurrencyStamp = Guid.NewGuid().ToString();
-                var result = roleManager.CreateAsync(role).Result;
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
         }
 
         // GET: Admin/Edit/5
@@ -94,19 +123,6 @@ namespace WebCV_Fiches.Controllers
 
                 await roleManager.UpdateAsync(role);
 
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        public ActionResult Delete(string id)
-        {
-            try
-            {
-                roleManager.DeleteAsync(roleManager.FindByIdAsync(id).Result);
                 return RedirectToAction(nameof(Index));
             }
             catch

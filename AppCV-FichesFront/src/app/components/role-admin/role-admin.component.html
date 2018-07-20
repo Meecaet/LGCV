@@ -1,51 +1,40 @@
 <div class="container body-content">
-  <h2>Administration des Rôles</h2>
+    <h2>Administration des Rôles</h2>
+    <p>
+        <a routerLink="/role/create">Créer nouveau</a>
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    <p>Nom du Rôle</p>
+                </th>
+                <th>
+                    <p>Mettre en jour</p>
+                </th>
+                <th>
+                    <p>Supprimer</p>
+                </th>
+                <th>
+                    <p>Détails</p>
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of roles">
+                <td>{{item.name}}</td>
 
-  <p>
-      <a routerLink="/role/create">Créer nouveau</a>
-  </p>
-  <table class="table">
-      <thead>
-          <tr>
-              <th>
-                  <p>Nom du Rôle</p>
-              </th>
-              <th>
-                  <p>Mettre en jour</p>
-              </th>
-              <th>
-                  <p>Supprimer</p>
-              </th>
-              <th>
-                  <p>Détails</p>
-              </th>
-              <th></th>
-          </tr>
-      </thead>
-      <!-- <tbody>
-          <tr *ngFor="let item of cvDetails.Roles">
-              <td>{{item.Name}}</td>
-          </tr>
-      </tbody> -->
-
-      <!-- <tbody>
-  @foreach (var item in Model.Roles) {
-          <tr>
-              <td>
-                  @Html.DisplayFor(modelItem => item.Name)
-              </td>
-              <td>
-                  <a asp-action="Edit" asp-route-id="@item.Id">Mettre en jour</a>
-              </td>
-              <td>
-                  <a asp-action="Delete" asp-route-id="@item.Id">Supprimer</a>
-              </td>
-              <td>                
-                  <a asp-action="Details" asp-route-id="@item.Id">Details</a>
-              </td>
-          </tr>
-  }
-      </tbody> -->
-  </table>
-  
+                <td>
+                    <a routerLink="/role/edit/{{item.id}}">Mettre en jour</a>
+                </td>
+                <td>
+                    <a onclick="confirmateDelete()">Supprimer</a>
+                </td>
+                <td>
+                    <a routerLink="/role/details">Details</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </div>

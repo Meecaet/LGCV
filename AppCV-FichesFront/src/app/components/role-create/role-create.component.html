@@ -8,42 +8,19 @@
       <form name="formCreate" novalidate>
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="form-group">
-            <label for="Name">Name</label>
-            <input class="form-control" (keyup)="IsValidPassword(Model.password,IsValidPassWord,IsValidPassWordRegex)" [(ngModel)]="Model.password"
-            type="password" name="Password">
-<!-- 
-            <input class="form-control" type="text" name="Name" ng-model="Name" required> -->
-            <div #IsValidPassWord class="alert alert-danger">
-                This field is required
-              </div>
-              <div #IsValidPassWordRegex class="alert alert-danger">
-                the password must contain at least 8 characters, including UPPER/lowercase and numbers
-              </div>
-
-            <div #IsValidName class="alert alert-danger">
-              Ce champ est requis
-            </div>
+          <label for="Name">Name</label>
+          <input class="form-control" (keyup)="IsValid(model.name,IsValidName)" [(ngModel)]="model.name" type="text" name="Name">
+          <div #IsValidName class="alert alert-danger">
+            Ce champ est requis
           </div>
-
-
-
-        <!-- <div class="form-group">
-          <label asp-for="Name" class="control-label"></label>
-          <input asp-for="Name" class="form-control" />
-          <span asp-validation-for="Name" class="text-danger"></span>
-        </div> -->
+        </div>
         <div class="form-group">
-            <button type="button"
-            [disabled]="(IsValidPassWordRegex.hidden==false ||
-            IsValidPassWord.hidden==false)?true:false" (click)="Create()" class="btn btn-default">Créer</button>
-
+          <button type="button" [disabled]="(IsValidName.hidden==false)?true:false" (click)="Create()" class="btn btn-default">Créer</button>
         </div>
       </form>
     </div>
   </div>
-
   <div>
-    <a asp-action="Index">Retourner à la liste</a>
+    <a routerLink="/role/admin">Retourner à la liste</a>
   </div>
-
 </div>
