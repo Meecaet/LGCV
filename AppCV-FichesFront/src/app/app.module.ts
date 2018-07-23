@@ -43,6 +43,8 @@ import { FonctionPipe } from "./Services/fonction.pipe";
 
 import { RoleAdminComponent} from "./components/role-admin/role-admin.component";
 import { RoleCreateComponent} from "./components/role-create/role-create.component";
+import { RoleDetailComponent } from './components/role-detail/role-detail.component';
+import { RoleEditComponent } from './components/role-edit/role-edit.component';
 
 @NgModule({
   declarations: [
@@ -71,7 +73,9 @@ import { RoleCreateComponent} from "./components/role-create/role-create.compone
 
 
     RoleAdminComponent,
-    RoleCreateComponent
+    RoleCreateComponent,
+    RoleDetailComponent,
+    RoleEditComponent
   ],
   imports: [
     MatAutocompleteModule,

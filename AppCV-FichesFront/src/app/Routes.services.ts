@@ -12,6 +12,7 @@ import { ForgotPasswordComponent } from "./components/forgot-password/forgot-pas
 import { CvEditComponent } from "./components/cv-edit/cv-edit.component";
 import { RoleAdminComponent } from "./components/role-admin/role-admin.component";
 import { RoleCreateComponent } from "./components/role-create/role-create.component";
+import { RoleEditComponent } from "./components/role-edit/role-edit.component";
 
 const routes: Routes = [
   { path: "", component: HomeComponent},
@@ -34,7 +35,8 @@ const routes: Routes = [
     path: "role",
     children: [
       { path: "admin", component: RoleAdminComponent},
-      { path: "create", component: RoleCreateComponent}
+      { path: "create", component: RoleCreateComponent},
+      { path: "edit/:id", component: RoleEditComponent}
     ]
   },
 

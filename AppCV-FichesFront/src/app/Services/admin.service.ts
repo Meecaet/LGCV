@@ -2,6 +2,8 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { RoleViewModel } from "../Models/Admin/Role-model";
+import { SelectItemViewModel } from "../Models/Admin/SelectItem-model"
+import { RoleAdministratioViewModel } from "../Models/Admin/RoleAdministration-model";
 
 
 @Injectable({
@@ -36,6 +38,20 @@ export class AdminService {
 
   public GetRole() {
     return this.doRequest(`Role/GetAll`);
+  }
+
+  public GetDetail(roleId: string) {
+    const url = `Role/Details/${roleId}`;
+    return this.doRequest<RoleAdministratioViewModel>(url);
+  }
+
+  public GetUsers() {
+    return this.doRequest<Array<SelectItemViewModel>>(`Role/GetAllUsers`);
+  }
+
+  public EditRol(role: RoleAdministratioViewModel) {
+    const url = "Role/Edit";
+    return this.doRequest<RoleAdministratioViewModel>(url, "post", role);
   }
 
 }

@@ -10,12 +10,12 @@
         <div class="form-group">
           <label for="Name">Name</label>
           <input class="form-control" (keyup)="IsValid(model.name,IsValidName)" [(ngModel)]="model.name" type="text" name="Name">
-          <div #IsValidName class="alert alert-danger">
+          <div #IsValidName class="alert alert-danger" presse="false" hidden="presse?false:true">
             Ce champ est requis
           </div>
         </div>
         <div class="form-group">
-          <button type="button" [disabled]="(IsValidName.hidden==false)?true:false" (click)="Create()" class="btn btn-default">Créer</button>
+          <button type="button" [disabled]="!IsValidName.presse?true:false || !IsValidName.hidden" (click)="Create()" class="btn btn-default">Créer</button>
         </div>
       </form>
     </div>

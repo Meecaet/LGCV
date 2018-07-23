@@ -25,6 +25,7 @@ export class RoleCreateComponent implements OnInit {
   ngOnInit() {}
   
   IsValid(value, errorEmpty) {
+    errorEmpty.presse = true;
     this.validator.ValidateEmpty(value, errorEmpty);
   }
   

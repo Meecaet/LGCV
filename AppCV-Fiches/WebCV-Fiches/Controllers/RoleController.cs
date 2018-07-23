@@ -15,7 +15,8 @@ namespace WebCV_Fiches.Controllers
 {
 
     //    [Authorize(Roles = "Administrateur")]
-    [Route("[controller]/[action]")]
+    //[Route("[controller]/[action]")]
+    [Route("Role")]
     public class RoleController : Controller
     {
         private AdminViewModel adminViewModel;
@@ -41,6 +42,7 @@ namespace WebCV_Fiches.Controllers
         // POST: Role/Create
         [HttpPost]
         [AllowAnonymous]
+        [Route("Create")]
         public ActionResult Create([FromBody]ApplicationRole role)
         {
             try
@@ -48,7 +50,6 @@ namespace WebCV_Fiches.Controllers
                 role.ConcurrencyStamp = Guid.NewGuid().ToString();
                 var result = roleManager.CreateAsync(role).Result;
                 
-
                 return Json(role);
             }
             catch
@@ -60,11 +61,29 @@ namespace WebCV_Fiches.Controllers
         }
 
         [AllowAnonymous]
+        [Route("GetAll")]
         public ActionResult GetAll()
         {
             try
             {
                 var result = roleManager.Roles.ToList();
+                return Json(result);
+            }
+            catch
+            {
+                ErrorViewModel error = new ErrorViewModel();
+                error.RequestId = "Une erreur s'est produite lors de la lecture de la liste des rôles";
+                return Json(error);
+            }
+        }
+
+        [AllowAnonymous]
+        [Route("GetAllUsers")]
+        public ActionResult getAllUsers()
+        {
+            try
+            {
+                var result = userManager.Users.Select(user => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem() { userName = user.UserName, id = user.Id }).AsEnumerable();
                 return Json(result);
             }
             catch
@@ -88,15 +107,16 @@ namespace WebCV_Fiches.Controllers
             }
         }
 
-        // GET: Admin/Details/5
-        public ActionResult Details(string id)
+        [AllowAnonymous]
+        [Route("Details/{roleId}")]
+        public ActionResult Details(string roleId)
         {
             roleAdministrationViewModel = new RoleAdministrationViewModel();
-            roleAdministrationViewModel.Role = roleManager.FindByIdAsync(id).Result;
+            roleAdministrationViewModel.Role = roleManager.FindByIdAsync(roleId).Result;
             roleAdministrationViewModel.Users = userManager.GetUsersInRoleAsync(roleAdministrationViewModel.Role.Name).Result.ToList();
 
 
-            return View(roleAdministrationViewModel);
+            return Json(roleAdministrationViewModel);
         }
 
         // GET: Admin/Edit/5
@@ -110,24 +130,26 @@ namespace WebCV_Fiches.Controllers
             return View(roleAdministrationViewModel);
         }
 
-        // POST: Admin/Edit/5
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(string id, IFormCollection collection)
+        [Route("Edit")]
+        [AllowAnonymous]
+        public async Task<ActionResult> Edit([FromBody]RoleAdministrationViewModel roleAdministration)
         {
             try
             {
-                ApplicationRole role = await roleManager.FindByIdAsync(id);
-                role.Name = collection["Role.Name"];
+                ApplicationRole role = await roleManager.FindByIdAsync(roleAdministration.Role.Id);
+                role.Name = roleAdministration.Role.Name;
                 role.NormalizedName = role.Name.ToUpper();
 
                 await roleManager.UpdateAsync(role);
 
-                return RedirectToAction(nameof(Index));
+                return Json(role);
             }
             catch
             {
-                return View();
+                ErrorViewModel error = new ErrorViewModel();
+                error.RequestId = "Le rôle n'a pas pu être modifié";
+                return Json(error);
             }
         }
 
