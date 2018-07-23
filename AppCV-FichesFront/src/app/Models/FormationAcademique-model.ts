@@ -5,4 +5,7 @@ export class FormationAcademiqueViewModel {
   diplome: string;
   annee: Number;
   etablissement: string;
+
+
+  highlight:string;
 }

@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from "@angular/core";
-import { MatChipInputEvent } from "../../../../node_modules/@angular/material";
+import { MatChipInputEvent } from "@angular/material";
 import { DomaineDInterventionViewModel } from "../../Models/DomaineDIntervention-model";
-import { ENTER, COMMA } from "../../../../node_modules/@angular/cdk/keycodes";
+import { ENTER, COMMA } from "@angular/cdk/keycodes";
 
 @Component({
   selector: "app-chip-domain",
@@ -9,16 +9,19 @@ import { ENTER, COMMA } from "../../../../node_modules/@angular/cdk/keycodes";
   styleUrls: ["./chip-domain.component.css"]
 })
 export class ChipDomainComponent implements OnInit {
-  @Input()domains: Array<DomaineDInterventionViewModel>;
+  domains: Array<DomaineDInterventionViewModel>;
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   visible = true;
   selectable = true;
   removable = true;
   addOnBlur = true;
-  constructor() {}
+  constructor() {
+    this.domains = new Array<DomaineDInterventionViewModel>();
+  }
 
   ngOnInit() {}
   addDomain(event: MatChipInputEvent): void {
+
     const input = event.input;
     const value = event.value;
 
@@ -35,6 +38,7 @@ export class ChipDomainComponent implements OnInit {
     }
   }
   removeDomain(domain: DomaineDInterventionViewModel): void {
+
     const index = this.domains.findIndex(
       x => x.description == domain.description
     );

@@ -2,7 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { ValidatorService } from "../../validator.services";
 import { LoginModel } from "../../Models/Login-Model";
-import { AuthenticationService } from "src/app/Services/authentication.service";
+import { AuthenticationService } from "../../Services/authentication.service";
 import { Credential } from "../../Models/Creadation-model";
 
 @Component({

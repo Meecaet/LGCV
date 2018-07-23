@@ -4,4 +4,6 @@ export class PerfectionnementViewModel{
      description :string;
       annee  :Number;
 
+      highlight:string;
+
 }

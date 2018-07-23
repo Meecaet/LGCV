@@ -4,6 +4,7 @@ import { Observable } from "rxjs";
 import { ResumeInterventionViewModel } from "../Models/CV/ResumeInterventionViewModel";
 import { BioViewModel } from "../Models/Bio-Model";
 import { LangueViewModel } from "../Models/Langue-model";
+import { FonctionViewModel } from "../Models/Fonction-model";
 
 @Injectable({
   providedIn: "root"
@@ -68,28 +69,6 @@ export class CVService {
   public GetCVResumeInterventions(idUtilisateur: string) {
     const url = `ResumeIntervention/${idUtilisateur}/All`;
     return this.doRequest(url);
-
-    // .pipe<ResumeInterventionViewModel[]>(
-    //   map((data: any[]) => {
-    //     let resumes: ResumeInterventionViewModel[] = [];
-    //     debugger;
-    //     for (let d of data) {
-    //       resumes.push({
-    //         nombre: d.nombre,
-    //         entrerise: d.entrerise,
-    //         client: d.client,
-    //         projet: d.projet,
-    //         envergure: d.envergure,
-    //         fonction: d.fonction,
-    //         annee: d.annee,
-    //         efforts: d.efforts,
-    //         debutMandat: d.debutMandat
-    //       });
-    //     }
-
-    //     return resumes;
-    //   })
-    // );
   }
 
   public GetBio(idUtilisateur: string) {
@@ -98,21 +77,21 @@ export class CVService {
   }
 
   public CreateBio(bio: BioViewModel) {
-    debugger;
     const url = "Bio/Create";
     return this.doRequest<BioViewModel>(url, "post", bio);
   }
   public NotifierChangement() {
     return this.doRequest("CV/Save");
   }
-  public UtilizaterLangue(): Observable<Array<LangueViewModel>> {
-
-
-    return;
+  public UtilizaterLangue(idUtilisateur:string): Observable<Array<LangueViewModel>> {
+    return new Observable<Array<LangueViewModel>>();
   }
   public LoadLangue(): Observable<Array<LangueViewModel>> {
     const url = this.rootPath + "/api/FrontEndLoadData/GetAllLangues";
-    debugger;
-    return this._http.get<Array<LangueViewModel>>(url);
+     return this._http.get<Array<LangueViewModel>>(url);
+  }
+  public LoadFonction(): Observable<Array<FonctionViewModel>> {
+    const url = this.rootPath + "/api/FrontEndLoadData/GetAllFonctions";
+     return this._http.get<Array<FonctionViewModel>>(url);
   }
 }

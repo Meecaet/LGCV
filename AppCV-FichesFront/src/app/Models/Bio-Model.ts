@@ -1,7 +1,7 @@
 export class BioViewModel {
   nom: string;
   prenom: string;
-  biographie: string;
+  resumeExperience: string;
   fonction: string;
   graphIdConseiller: string;
   graphIdUtilisateur: string;

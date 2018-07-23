@@ -1,34 +1,36 @@
 <div>
-    <div class="lgs-label">Formation Académique</div>
-    <label (click)="AddFormationAcademique()">+</label>
-    <div class="lgs-floatLeftButtons">
-      <button type="button" class="btn btn-link"></button>
-    </div>
-
-    <div class="lgs-group table-bordered">
-      <table class="table table-bordered table-hover">
-        <tbody>
-          <tr *ngFor=" let format of formationAcademique; let i = index">
-            <td style="width: 50%;">
-              <inline-editor [(ngModel)]="format.diplome" empty="Diplome" [ngModelOptions]="{standalone: true}" [name]="format.diplome"
-                [cols]="250"></inline-editor>
-            </td>
-
-            <td style="width: 50%;">
-              <inline-editor empty="Etablissement" [(ngModel)]="format.etablissement" [ngModelOptions]="{standalone: true}" [name]="format.etablissement"
-                [cols]="250"></inline-editor>
-            </td>
-            <td style="width: 20px;">
-              <inline-editor type="number" empty="Annee" [(ngModel)]="format.annee" [ngModelOptions]="{standalone: true}" [name]="format.annee"
-                [cols]="250"></inline-editor>
-            </td>
-            <td (click)="removeFormationAcademique(format)" class="XCancel">
-              X
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-
+  <div class="lgs-label">Formation Académique</div>
+  <label (click)="AddFormationAcademique()">+</label>
+  <div class="lgs-floatLeftButtons">
+    <button type="button" class="btn btn-link"></button>
   </div>
+
+  <div class="lgs-group table-bordered">
+    <table class="table table-bordered table-hover">
+      <tbody>
+        <tr class="{{format.highlight}}"  id="tr{{i}}" *ngFor=" let format of formationAcademique; let i = index">
+          <td style="width: 50%;">
+            <inline-editor [(ngModel)]="format.diplome" (onSave)="OrderBy()" empty="Diplome" [ngModelOptions]="{standalone: true}" [name]="format.diplome"
+              [cols]="250"></inline-editor>
+          </td>
+
+          <td style="width: 50%;">
+            <inline-editor empty="Etablissement" (onSave)="OrderBy()" [(ngModel)]="format.etablissement" [ngModelOptions]="{standalone: true}"
+              [name]="format.etablissement" [cols]="250"></inline-editor>
+          </td>
+          <td style="width: 20px;">
+            <inline-editor type="number" empty="Annee" (onSave)="OrderBy()" [(ngModel)]="format.annee" [ngModelOptions]="{standalone: true}"
+              [name]="format.annee" [cols]="250"></inline-editor>
+          </td>
+          <td id="bt{{i}}" style="width: 30px;">
+            <label (click)="removeFormationAcademique('tr'+i,'bt'+i,format)" class="XCancel">
+              X
+            </label>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+
+</div>

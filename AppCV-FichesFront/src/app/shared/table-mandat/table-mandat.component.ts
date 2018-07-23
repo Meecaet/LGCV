@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
 import { MandatViewModel } from "../../Models/Mandat-model";
 
 @Component({
@@ -7,15 +7,22 @@ import { MandatViewModel } from "../../Models/Mandat-model";
   styleUrls: ["./table-mandat.component.css"]
 })
 export class TableMandatComponent implements OnInit {
-  @Input() mandats: Array<MandatViewModel>;
-  constructor() {}
+  @Input("mandatCollection") mandatCollection: Array<MandatViewModel>;
+  @Input("numberPage") numberPage: number = 0;
+  @Output("AddNewMandat") AddNewMandat = new EventEmitter();
+  @Output("onChangeMandatFromTableMandat") onChangeMandatFromTableMandat = new EventEmitter();
+  constructor() {
+    this.mandatCollection = new Array<MandatViewModel>();
+  }
+
 
   ngOnInit() {}
   addMandat() {
-    this.mandats.push(new MandatViewModel());
+    this.numberPage = this.mandatCollection.length+1;
+    this.AddNewMandat.emit({newMandat:new MandatViewModel(),numberPage:this.numberPage});
   }
   removeMandat(ele: MandatViewModel) {
-    const index = this.mandats.findIndex(
+    const index = this.mandatCollection.findIndex(
       x =>
         x.graphId == ele.graphId &&
         x.graphIdProjet == ele.graphIdProjet &&
@@ -43,7 +50,10 @@ export class TableMandatComponent implements OnInit {
         x.courrielReference == ele.courrielReference
     );
     if (index >= 0) {
-      this.mandats.splice(index, 1);
+      this.mandatCollection.splice(index, 1);
     }
+  }
+  selectMandat(indexMandat: number, mandat: MandatViewModel) {
+    this.onChangeMandatFromTableMandat.emit({indexMandat:indexMandat+1,mandat:mandat});
   }
 }
