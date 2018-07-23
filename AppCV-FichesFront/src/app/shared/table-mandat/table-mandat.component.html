@@ -21,20 +21,38 @@
 
       </thead>
 
-      <tbody *ngFor="let intervention of mandats; let i = index">
-        <tr>
+      <tbody (click)="selectMandat(i,intervention)" *ngFor="let intervention of mandatCollection; let i = index">
+        <tr style="background: #80808070;font-size: 19px; color: white;">
           <td colspan="7">
-            <b>{{intervention.nomEntreprise}}</b>
+            <b>
+              {{i+1}} - {{intervention.nomEntreprise}}
+            </b>
           </td>
         </tr>
         <tr>
-          <th scope="row">{{intervention.numeroMandat}}</th>
-          <td>{{intervention.nomClient}}</td>
-          <td>{{intervention.titreProjet}}</td>
-          <td>{{intervention.envergure}}</td>
-          <td>{{intervention.fonction}}</td>
-          <td>{{intervention.debutMandat | date:'yyyy'}}</td>
-          <td>{{intervention.efforts}}</td>
+          <th scope="row">
+            {{intervention.numeroMandat}}
+          </th>
+          <td>
+            {{intervention.nomClient}}
+          </td>
+          <td>
+            {{intervention.titreProjet}}
+          </td>
+          <td>
+            {{ intervention.envergure}}
+
+          </td>
+          <td>
+            {{ intervention.fonction}}
+          </td>
+          <td>
+            {{ intervention.debutMandat}}
+          </td>
+          <td>
+
+            {{ intervention.efforts}}
+          </td>
           <td (click)="removeMandat(intervention)" class="XCancel">
             X
           </td>

@@ -9,10 +9,10 @@ import {
   MatAutocompleteModule,
   MatInputModule
 } from "@angular/material";
-import { CvCreateComponent } from "./components/cv-create-component/cv-create.component";
+
 import { ResumeInterventionsComponent } from "./components/CV/resume-interventions/resume-interventions.component";
 import { AppComponent } from "./app.component";
-import { CvDetailsComponent } from "./components/cv-details-component/cv-details.component";
+
 import { NavbarComponent } from "./components/navbar/navbar.component";
 import { HomeComponent } from "./components/home/home.component";
 import { RegisterComponent } from "./components/register/register.component";
@@ -37,18 +37,22 @@ import { CVService } from "./Services/cv.service";
 import { NgModule } from "@angular/core";
 import { CvEditComponent } from './components/cv-edit/cv-edit.component';
 import { BioComponent } from "./shared/bio/bio.component";
+import { CarouselComponent } from './shared/carousel/carousel.component';
+import { DropDownFonctionComponent } from './shared/drop-down-fonction/drop-down-fonction.component';
+import { FonctionPipe } from "./Services/fonction.pipe";
+
 
 @NgModule({
   declarations: [
     AppComponent,
-    CvDetailsComponent,
+
     NavbarComponent,
     HomeComponent,
     RegisterComponent,
     LoginComponent,
     PageNotFoundComponent,
     ForgotPasswordComponent,
-    CvCreateComponent,
+    FonctionPipe,
     ResumeInterventionsComponent,
     LangueService,
     TableLangueComponent,
@@ -59,7 +63,11 @@ import { BioComponent } from "./shared/bio/bio.component";
     TableTechnologieComponent,
     TableMandatComponent,
     CvEditComponent,
-    BioComponent
+    BioComponent,
+    CarouselComponent,
+    DropDownFonctionComponent,
+
+
   ],
   imports: [
     MatAutocompleteModule,
@@ -69,6 +77,7 @@ import { BioComponent } from "./shared/bio/bio.component";
     HttpClientModule,
     FormsModule,
     ServiceRoutingModule,
+
     InlineEditorModule,
     MatButtonModule,
     MatCheckboxModule,
@@ -78,7 +87,9 @@ import { BioComponent } from "./shared/bio/bio.component";
     MatInputModule
   ],
   providers: [
+
     LangueService,
+    FonctionPipe,
     ValidatorService,
     FormBuilder,
     CVService,
@@ -88,7 +99,7 @@ import { BioComponent } from "./shared/bio/bio.component";
       multi: true
     }
   ],
-  exports: [LangueService],
+  exports: [LangueService ,FonctionPipe],
 
   bootstrap: [AppComponent]
 })

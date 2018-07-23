@@ -6,11 +6,9 @@ import { Injectable } from "@angular/core";
 })
 export class AuthGuardService implements CanActivate {
   canActivate() {
-    debugger;
-    if (localStorage.getItem("token") != null) {
+     if (localStorage.getItem("token") != null) {
       return true;
     } else {
-
       return false;
     }
   }

@@ -1,7 +1,7 @@
 import { OnInit, Input, Component } from "@angular/core";
 import { BioViewModel } from "../../Models/Bio-Model";
 import { CVService } from "../../Services/cv.service";
-import { HttpErrorResponse } from "../../../../node_modules/@angular/common/http";
+import { HttpErrorResponse } from "@angular/common/http";
 import { ErrorService } from "../../Services/error.service";
 import { ActivatedRoute } from "@angular/router";
 
@@ -31,7 +31,7 @@ export class BioComponent implements OnInit {
         return;
       case this.IsDataValid(model.prenom):
         return;
-      case this.IsDataValid(model.biographie):
+      case this.IsDataValid(model.resumeExperience):
         return;
       case this.IsDataValid(model.graphIdConseiller):
         this.cvService.CreateBio(model).subscribe(
@@ -51,10 +51,8 @@ export class BioComponent implements OnInit {
     }
   }
   UserDataLoad() {
-    debugger;
     this.cvService.GetBio(this.UtilisateurId).subscribe(
       (data: BioViewModel) => {
-        debugger;
         this.bio = data;
       },
       (error: HttpErrorResponse) => {

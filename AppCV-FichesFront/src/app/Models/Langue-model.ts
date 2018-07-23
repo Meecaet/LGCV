@@ -1,5 +1,5 @@
-import { Observable, observable } from "../../../node_modules/rxjs";
-import { FormControl } from "../../../node_modules/@angular/forms";
+import { Observable, observable } from "rxjs";
+import { FormControl } from "@angular/forms";
 
 export class LangueViewModel {
   graphid: string;

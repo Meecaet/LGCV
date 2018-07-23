@@ -1,0 +1,8 @@
+<mat-form-field class="example-full-width">
+  <input type="text" placeholder="Fonction" aria-label="Number" matInput [formControl]="fonction.FonctionControl" [matAutocomplete]="auto">
+</mat-form-field>
+<mat-autocomplete #auto="matAutocomplete">
+  <mat-option *ngFor="let option of fonctionAutoComplete|fonctionFilter:fonction.FonctionControl.value " [value]="option.nom">
+    {{ option.nom}}
+  </mat-option>
+</mat-autocomplete>

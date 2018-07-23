@@ -34,6 +34,10 @@ export class MandatViewModel {
   taches: Array<TacheViewModel>;
   technologies: Array<TechnologieViewModel>;
 
+
+  //this is to color configurations
+  highlight:string;
+
   constructor() {
     this.taches = new Array<TacheViewModel>();
     this.technologies = new Array<TechnologieViewModel>();

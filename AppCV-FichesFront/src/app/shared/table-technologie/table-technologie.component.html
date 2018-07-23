@@ -1,22 +1,32 @@
 <div>
-    <div class="lgs-label">
-      Expériences Technologiques
-    </div>
-    <div class="lgs-floatLeftButtons">
-      <button type="button" class="btn btn-link"></button>
-    </div>
-    <table class="table table-hover small">
-      <thead>
-        <tr class="lgs-backgroundColor">
-          <th scope="col">Sous-catégorie</th>
-          <th scope="col">Mois</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let tech of technologies">
-          <td>{{tech.description}}</td>
-          <td>{{tech.mois}}</td>
-        </tr>
-      </tbody>
-    </table>
+  <div class="lgs-label">
+    Expériences Technologiques
+
+  </div>  <label (click)="addTechnologie()">+</label>
+  <div class="lgs-floatLeftButtons">
+    <button type="button" class="btn btn-link"></button>
   </div>
+  <table class="table table-hover small">
+    <thead>
+      <tr class="lgs-backgroundColor">
+        <th scope="col">Sous-catégorie</th>
+        <th scope="col">Mois</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr  *ngFor="let tech of technologies" >
+        <td >{{tech.description}}
+          <inline-editor empty="Description" [(ngModel)]="tech.description" [ngModelOptions]="{standalone: true}" [name]="tech.description"
+            [cols]="250"></inline-editor>
+        </td>
+        <td>
+          <inline-editor type="number" empty="Mois" [(ngModel)]="tech.mois" [ngModelOptions]="{standalone: true}" [name]="tech.mois" [cols]="250"></inline-editor>
+        </td>
+        <td (click)="removeTechonolie(tech)" class="XCancel">
+            X
+          </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

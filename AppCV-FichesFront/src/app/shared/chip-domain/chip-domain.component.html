@@ -7,7 +7,9 @@
         <mat-chip-list #chipList>
           <mat-chip *ngFor="let domain of domains" [selectable]="selectable" [removable]="removable" (removed)="removeDomain(domain)">
             {{domain.description}}
-            <mat-icon matChipRemove *ngIf="removable">x</mat-icon>
+            <mat-icon matChipRemove *ngIf="removable">
+            <label class="XCancel">x</label>
+            </mat-icon>
           </mat-chip>
           <input placeholder="Principaux domaines d'intervention" [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
             [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="addDomain($event)">

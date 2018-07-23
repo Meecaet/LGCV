@@ -1,8 +1,8 @@
 import { Component, OnInit, Input } from "@angular/core";
 import { LangueViewModel } from "../../Models/Langue-model";
-import { FormControl } from "../../../../node_modules/@angular/forms";
+import { FormControl } from "@angular/forms";
 import { CVService } from "../../Services/cv.service";
-import { HttpErrorResponse } from "../../../../node_modules/@angular/common/http";
+import { HttpErrorResponse } from "@angular/common/http";
 import { ErrorService } from "../../Services/error.service";
 
 @Component({
@@ -18,12 +18,15 @@ export class TableLangueComponent implements OnInit {
   constructor(
     private cvService: CVService,
     private errorService: ErrorService
-  ) {}
+  ) {
+    this.langues = new  Array<LangueViewModel>();
+
+  }
 
   ngOnInit() {
-    
+
     this.UserDataLoad();
-  
+
     this.DataLoad();
   }
   AddLangue(): void {
@@ -55,8 +58,8 @@ export class TableLangueComponent implements OnInit {
     );
   }
   UserDataLoad() {
-    this.cvService
-      .UtilizaterLangue()
+     this.cvService
+      .UtilizaterLangue(this.UtilisateurId)
       .subscribe((data: Array<LangueViewModel>) => {
         this.langues = data;
       });

@@ -1,32 +1,36 @@
 <div>
 
-    <div class="lgs-label">Perfectionnements </div>
-    <label (click)="AddPerfectionnement()">+</label>
-    <div class="lgs-floatLeftButtons">
-      <button type="button" class="btn btn-link"></button>
-    </div>
-
-
-    <table class="table table-hover small">
-      <thead>
-        <tr class="lgs-backgroundColor">
-          <th scope="col">Sous-catégorie</th>
-          <th scope="col">Année</th>
-          <th scope="col"></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let perf of perfectionnement">
-          <td>
-            <inline-editor [(ngModel)]="perf.description" [ngModelOptions]="{standalone: true}" [name]="perf.description" [cols]="250"></inline-editor>
-          </td>
-          <td style="width: 20px;">
-            <inline-editor type="number" [(ngModel)]="perf.annee" [ngModelOptions]="{standalone: true}" [name]="perf.annee" [cols]="250"></inline-editor>
-          </td>
-          <td (click)="removePerfectionnement(perf)" class="XCancel">
-            X
-          </td>
-        </tr>
-      </tbody>
-    </table>
+  <div class="lgs-label">Perfectionnements </div>
+  <label (click)="AddPerfectionnement()">+</label>
+  <div class="lgs-floatLeftButtons">
+    <button type="button" class="btn btn-link"></button>
   </div>
+
+
+  <table class="table table-hover small">
+    <thead>
+      <tr class="lgs-backgroundColor">
+        <th scope="col">Sous-catégorie</th>
+        <th scope="col">Année</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="{{perf.highlight}}" id="tr{{i}}" *ngFor="let perf of perfectionnement ; let i = index">
+        <td>
+          <inline-editor [(ngModel)]="perf.description" (onSave)="OrderBy()" [ngModelOptions]="{standalone: true}" [name]="perf.description"
+            [cols]="250"></inline-editor>
+        </td>
+        <td style="width: 20px;">
+          <inline-editor type="number" [(ngModel)]="perf.annee" (onSave)="OrderBy()" [ngModelOptions]="{standalone: true}" [name]="perf.annee"
+            [cols]="250"></inline-editor>
+        </td>
+        <td id="bt{{i}}" style="width: 30px;">
+          <label (click)="removePerfectionnement('tr'+i,'bt'+i,perf)" class="XCancel">
+            X
+          </label>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
