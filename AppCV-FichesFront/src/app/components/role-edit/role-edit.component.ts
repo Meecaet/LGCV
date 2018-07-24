@@ -4,7 +4,6 @@ import { HttpErrorResponse } from '../../../../node_modules/@angular/common/http
 import { UserViewModel } from '../../Models/Admin/User-model';
 import { ActivatedRoute, Route, Router } from '../../../../node_modules/@angular/router';
 import { RoleAdministratioViewModel } from '../../Models/Admin/RoleAdministration-model';
-import { SelectItemViewModel } from '../../Models/Admin/SelectItem-model'
 import { ValidatorService } from '../../validator.services';
 import { Location } from '../../../../node_modules/@angular/common';
 
@@ -16,7 +15,8 @@ import { Location } from '../../../../node_modules/@angular/common';
 export class RoleEditComponent implements OnInit {
 
   role: RoleAdministratioViewModel;
-  usersManager: Array<SelectItemViewModel>;
+  applicationUsers: Array<UserViewModel>;
+  selectedUserId: string;
 
   constructor(
     private validator: ValidatorService,
@@ -24,27 +24,51 @@ export class RoleEditComponent implements OnInit {
     private route: ActivatedRoute,
     private location: Location,
     private router: Router
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.route.params.subscribe(params => {
       const roleId = params['id'];
-      this.loadDetails(roleId);
       this.loadUsers();
+      this.loadDetails(roleId);
     });
   }
 
-  IsValid(value, errorEmpty) {
+  isValid(value, errorEmpty) {
     errorEmpty.presse = true;
     this.validator.ValidateEmpty(value, errorEmpty);
   }
 
-  Edit(): void {
+  editRole(): void {
     this.adminService.EditRol(this.role).subscribe(
       (data: RoleAdministratioViewModel) => {
         console.log(data);
         this.location.replaceState('/');
         this.router.navigate(['role/admin']);
+      },
+      (error: HttpErrorResponse) => {
+        // TODO
+        debugger;
+      }
+    );
+  }
+
+  addUser(): void {
+    this.adminService.AddUserRole(this.role.role.id, this.selectedUserId).subscribe(
+      (data: Array<UserViewModel>) => {
+        this.role.users = data;
+      },
+      (error: HttpErrorResponse) => {
+        // TODO
+        debugger;
+      }
+    );
+  }
+
+  delete(userId: string): void {
+    this.adminService.DeleteUserRol(this.role.role.id, userId).subscribe(
+      (data: Array<UserViewModel>) => {
+        this.role.users = data;
       },
       (error: HttpErrorResponse) => {
         // TODO
@@ -67,9 +91,13 @@ export class RoleEditComponent implements OnInit {
 
   loadUsers() {
     this.adminService.GetUsers().subscribe(
-      (data: Array<SelectItemViewModel>) => {
-        this.usersManager = data;
-        console.log(this.usersManager);
+      (data: Array<UserViewModel>) => {
+        let _default = new UserViewModel();
+        _default.userName = "---Selecionez un utilisateur---";
+        _default.id = "-1";
+        this.selectedUserId = _default.id;
+        data.unshift(_default);
+        this.applicationUsers = data;
       },
       (error: HttpErrorResponse) => {
         // TODO

@@ -15,7 +15,6 @@ namespace WebCV_Fiches.Controllers
 {
 
     //    [Authorize(Roles = "Administrateur")]
-    //[Route("[controller]/[action]")]
     [Route("Role")]
     public class RoleController : Controller
     {
@@ -39,6 +38,7 @@ namespace WebCV_Fiches.Controllers
             return View(adminViewModel);
         }
 
+
         // POST: Role/Create
         [HttpPost]
         [AllowAnonymous]
@@ -61,8 +61,8 @@ namespace WebCV_Fiches.Controllers
         }
 
         [AllowAnonymous]
-        [Route("GetAll")]
-        public ActionResult GetAll()
+        [Route("GetRoles")]
+        public ActionResult GetRoles()
         {
             try
             {
@@ -78,12 +78,23 @@ namespace WebCV_Fiches.Controllers
         }
 
         [AllowAnonymous]
+        [Route("Details/{roleId}")]
+        public ActionResult Details(string roleId)
+        {
+            roleAdministrationViewModel = new RoleAdministrationViewModel();
+            roleAdministrationViewModel.Role = roleManager.FindByIdAsync(roleId).Result;
+            roleAdministrationViewModel.Users = userManager.GetUsersInRoleAsync(roleAdministrationViewModel.Role.Name).Result.ToList();
+
+            return Json(roleAdministrationViewModel);
+        }
+
+        [AllowAnonymous]
         [Route("GetAllUsers")]
         public ActionResult getAllUsers()
         {
             try
             {
-                var result = userManager.Users.Select(user => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem() { userName = user.UserName, id = user.Id }).AsEnumerable();
+                var result = userManager.Users;
                 return Json(result);
             }
             catch
@@ -92,42 +103,6 @@ namespace WebCV_Fiches.Controllers
                 error.RequestId = "Une erreur s'est produite lors de la lecture de la liste des rôles";
                 return Json(error);
             }
-        }
-
-        public ActionResult Delete(string id)
-        {
-            try
-            {
-                roleManager.DeleteAsync(roleManager.FindByIdAsync(id).Result);
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        [AllowAnonymous]
-        [Route("Details/{roleId}")]
-        public ActionResult Details(string roleId)
-        {
-            roleAdministrationViewModel = new RoleAdministrationViewModel();
-            roleAdministrationViewModel.Role = roleManager.FindByIdAsync(roleId).Result;
-            roleAdministrationViewModel.Users = userManager.GetUsersInRoleAsync(roleAdministrationViewModel.Role.Name).Result.ToList();
-
-
-            return Json(roleAdministrationViewModel);
-        }
-
-        // GET: Admin/Edit/5
-        public ActionResult Edit(string id)
-        {
-            roleAdministrationViewModel = new RoleAdministrationViewModel();
-            roleAdministrationViewModel.Role = roleManager.FindByIdAsync(id).Result;
-            roleAdministrationViewModel.Users = userManager.GetUsersInRoleAsync(roleAdministrationViewModel.Role.Name).Result.ToList();
-
-            ViewData["Utilisateurs"] = userManager.Users.Select(user => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem() { Text = user.UserName, Value = user.Id }).AsEnumerable();
-            return View(roleAdministrationViewModel);
         }
 
         [HttpPost]
@@ -153,41 +128,73 @@ namespace WebCV_Fiches.Controllers
             }
         }
 
-        [HttpPost]
-        [Route("Admin/AddUserRole")]
-        public async Task<ActionResult> AddUserRole(IFormCollection collection)
+        [AllowAnonymous]
+        [Route("AddUserRole/{roleId}/User/{userId}")]
+        public async Task<ActionResult> AddUserRole(string roleId, string userId)
         {
             try
             {
-                ApplicationUser user = userManager.FindByIdAsync(collection["Utilisateurs"]).Result;
-                ApplicationRole role = roleManager.FindByIdAsync(collection["roleId"]).Result;
-
+                ApplicationUser user = userManager.FindByIdAsync(userId).Result;
+                ApplicationRole role = roleManager.FindByIdAsync(roleId).Result;
                 await userManager.AddToRoleAsync(user, role.Name);
 
-                return RedirectToAction(nameof(Edit), "Admin", new { id = role.Id });
+                var users = userManager.GetUsersInRoleAsync(role.Name).Result.ToList();
+                return Json(users);
             }
             catch
             {
-                return View();
+                ErrorViewModel error = new ErrorViewModel();
+                error.RequestId = "Le rôle n'a pas pu être modifié";
+                return Json(error);
             }
         }
 
-        [Route("Admin/DeleteUserRole/{roleId}/User/{userId}")]
+        [Route("DeleteUserRole/{roleId}/User/{userId}")]
         public async Task<ActionResult> DeleteUserRole(string roleId, string userId)
         {
             try
             {
                 ApplicationUser user = userManager.FindByIdAsync(userId).Result;
                 ApplicationRole role = roleManager.FindByIdAsync(roleId).Result;
-
                 await userManager.RemoveFromRoleAsync(user, role.Name);
 
-                return RedirectToAction(nameof(Edit), "Admin", new { id = roleId });
+                var users = userManager.GetUsersInRoleAsync(role.Name).Result.ToList();
+                return Json(users);
+            }
+            catch
+            {
+                ErrorViewModel error = new ErrorViewModel();
+                error.RequestId = "Le rôle n'a pas pu être modifié";
+                return Json(error);
+            }
+        }
+
+
+
+
+        public ActionResult Delete(string id)
+        {
+            try
+            {
+                roleManager.DeleteAsync(roleManager.FindByIdAsync(id).Result);
+                return RedirectToAction(nameof(Index));
             }
             catch
             {
                 return View();
             }
         }
+
+        // GET: Admin/Edit/5
+        public ActionResult Edit(string id)
+        {
+            roleAdministrationViewModel = new RoleAdministrationViewModel();
+            roleAdministrationViewModel.Role = roleManager.FindByIdAsync(id).Result;
+            roleAdministrationViewModel.Users = userManager.GetUsersInRoleAsync(roleAdministrationViewModel.Role.Name).Result.ToList();
+
+            ViewData["Utilisateurs"] = userManager.Users.Select(user => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem() { Text = user.UserName, Value = user.Id }).AsEnumerable();
+            return View(roleAdministrationViewModel);
+        }
+        
     }
 }

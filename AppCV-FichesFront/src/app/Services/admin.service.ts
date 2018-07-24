@@ -4,6 +4,7 @@ import { Observable } from "rxjs";
 import { RoleViewModel } from "../Models/Admin/Role-model";
 import { SelectItemViewModel } from "../Models/Admin/SelectItem-model"
 import { RoleAdministratioViewModel } from "../Models/Admin/RoleAdministration-model";
+import { UserViewModel } from "../Models/Admin/User-model";
 
 
 @Injectable({
@@ -37,7 +38,7 @@ export class AdminService {
   }
 
   public GetRole() {
-    return this.doRequest(`Role/GetAll`);
+    return this.doRequest(`Role/GetRoles`);
   }
 
   public GetDetail(roleId: string) {
@@ -46,7 +47,7 @@ export class AdminService {
   }
 
   public GetUsers() {
-    return this.doRequest<Array<SelectItemViewModel>>(`Role/GetAllUsers`);
+    return this.doRequest<Array<UserViewModel>>(`Role/GetAllUsers`);
   }
 
   public EditRol(role: RoleAdministratioViewModel) {
@@ -54,4 +55,13 @@ export class AdminService {
     return this.doRequest<RoleAdministratioViewModel>(url, "post", role);
   }
 
+  public AddUserRole(roleId: string, userId: string) {
+    const url = `Role/AddUserRole/${roleId}/User/${userId}`;
+    return this.doRequest<Array<UserViewModel>>(url);
+  }
+
+  public DeleteUserRol(roleId: string, userId: string) {
+    const url = `Role/DeleteUserRole/${roleId}/User/${userId}`;
+    return this.doRequest<Array<UserViewModel>>(url);
+  }
 }
