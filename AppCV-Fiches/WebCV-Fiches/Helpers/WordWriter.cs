@@ -796,7 +796,7 @@ namespace WebCV_Fiches.Helpers
                 diplomeModeleRun.Append(GetRunProperties("Arial", "Black", "20", true, false));
                 instituitionModeleRun.Append(GetRunProperties("Arial", "Black", "20", false, true));
 
-                diplomeModeleRun.Append(new Text($"{formation.Diplome} ({formation.DateConclusion.Year})"));
+                diplomeModeleRun.Append(new Text($"{formation.Diplome} ({formation.DateConclusion})"));
                 instituitionModeleRun.Append(new Text(formation.Ecole.Nom));
 
                 diplomeParagraphModele.Append(diplomeModeleRun);
