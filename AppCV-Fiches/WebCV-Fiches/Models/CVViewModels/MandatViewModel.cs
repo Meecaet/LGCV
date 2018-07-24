@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace WebCV_Fiches.Models.CVViewModels
 {
-    public class MandatViewModel
+    public class MandatViewModel : ViewModel
     {
         public string GraphId { get; set; }
         public string GraphIdProjet { get; set; }

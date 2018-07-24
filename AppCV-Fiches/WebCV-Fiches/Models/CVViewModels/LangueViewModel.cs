@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace WebCV_Fiches.Models.CVViewModels
 {
-    public class LangueViewModel
+    public class LangueViewModel : ViewModel
     {
         public string GraphId { get; set; }
         public string Nom { get; set; }

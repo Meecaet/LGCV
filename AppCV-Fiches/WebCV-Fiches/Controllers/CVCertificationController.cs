@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DAL_CV_Fiches.Models.Graph;
+using DAL_CV_Fiches.Repositories.Graph;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WebCV_Fiches.Helpers;
 using WebCV_Fiches.Models.CVViewModels;
 
 namespace WebCV_Fiches.Controllers
@@ -11,48 +14,129 @@ namespace WebCV_Fiches.Controllers
     [Route("Certification")]
     public class CVCertificationController : Controller
     {
-        [Route("{cvId}/All")]
-        [AllowAnonymous]
-        public ActionResult All(string cvId)
+        public EditionObjectGraphRepository editionObjectGraphRepository;
+        public UtilisateurGraphRepository utilisateurGraphRepository;
+        public FormationGraphRepository formationGraphRepository;
+
+        public CVCertificationController()
         {
-            return Json(new List<CertificationViewModel> { });
+            utilisateurGraphRepository = new UtilisateurGraphRepository();
+            editionObjectGraphRepository = new EditionObjectGraphRepository();
+            formationGraphRepository = new FormationGraphRepository();
         }
 
-        [Route("Detail/{certificationId}")]
+        [Route("{utilisateurId}/All")]
         [AllowAnonymous]
-        public ActionResult Detail(string cvId, string certificationId)
+        public ActionResult All(string utilisateurId)
         {
-            return Json(new CertificationViewModel());
+            Func<GraphObject, ViewModel> map = this.map;
+
+            var utilisateur = utilisateurGraphRepository.GetOne(utilisateurId);
+            var certifications = utilisateur.Conseiller.Certifications().Cast<GraphObject>().ToList(); ;
+            var noeudModifie = new List<GraphObject>();
+            noeudModifie.Add(utilisateur.Conseiller);
+            noeudModifie.AddRange(certifications);
+            var certificationsViewModel = ViewModelFactory.GetViewModels(utilisateurId: utilisateurId, noeudsModifie: noeudModifie, graphObjects: certifications, map: map);
+            return Json(certificationsViewModel);
+        }
+
+        private ViewModel map(GraphObject certificationModel)
+        {
+            var certification = (Formation)certificationModel;
+            return new CertificationViewModel
+            {
+                Annee = certification.AnAcquisition,
+                Description = certification.Description,
+                GraphId = certification.GraphKey,
+                GraphIdGenre = certification.Type.GraphKey,
+            };
         }
 
         // POST: Mandat/Create
         [HttpPost]
         [AllowAnonymous]
-        [Route("{cvId}/Add")]
-        public ActionResult Add(string cvId, [FromBody]CertificationViewModel certification)
+        [Route("{utilisateurId}/Add")]
+        public ActionResult Add(string utilisateurId, [FromBody]CertificationViewModel certification)
         {
-            // peut être le nouveau graphId.
+            var utilisateur = utilisateurGraphRepository.GetOne(utilisateurId);
+
+            var certificationModel = Formation.CreateCertification(certification.Annee, certification.Description);
+            formationGraphRepository.Add(certificationModel);
+            editionObjectGraphRepository.AjouterNoeud(objetAjoute: certificationModel, noeudModifiePropriete: "Formations", noeudModifie: utilisateur.Conseiller);
+
+            certification.GraphId = certificationModel.GraphKey;
+            certification.GraphIdGenre = certificationModel.Type.GraphKey;
+
             return Json(certification);
+
         }
 
         // POST: Mandat/Edit/cvId
         [HttpPost]
         [AllowAnonymous]
-        [Route("{cvId}/Edit")]
-        public ActionResult Edit(string cvId, [FromBody]CertificationViewModel certification)
+        [Route("{utilisateurId}/Edit")]
+        public ActionResult Edit(string utilisateurId, [FromBody]CertificationViewModel certification)
         {
-            // Objet sugeré comme viewModel.
-            return Json(new { Status = "OK", Message = "Certification modifiée" });
+
+            var utilisateur = utilisateurGraphRepository.GetOne(utilisateurId);
+            var certificationModel = formationGraphRepository.GetOne(certification.GraphId);
+
+            var certifications = utilisateur.Conseiller.Certifications();
+
+            if (certifications.Any(x => x.GraphKey == certification.GraphId))
+            {
+
+                var proprietesModifiees = new List<KeyValuePair<string, string>>();
+
+                if (certificationModel.AnAcquisition != certification.Annee)
+                    proprietesModifiees.Add(new KeyValuePair<string, string>("Annee", certification.Annee.ToString()));
+
+                if (certificationModel.Description != certification.Description)
+                    proprietesModifiees.Add(new KeyValuePair<string, string>("Description", certification.Description));
+
+                if (proprietesModifiees.Count() > 0)
+                    editionObjectGraphRepository.CreateOrUpdateProprieteEdition(proprietesModifiees, certificationModel);
+            }
+            else
+            {
+                certificationModel.AnAcquisition = certification.Annee;
+                certificationModel.Description = certification.Description;
+                formationGraphRepository.Update(certificationModel);
+            }
+
+            return Json(certification);
         }
 
         // POST: Mandat/Delete/5
         [HttpPost]
         [AllowAnonymous]
-        [Route("Delete")]
-        public ActionResult Delete(string cvId, string certificationId)
+        [Route("{utilisateurId}/Delete/{certificationId}")]
+        public ActionResult Delete(string utilisateurId, string certificationId)
         {
-            // Objet sugeré comme viewModel.
-            return Json(new { Status = "OK", Message = "Certification eliminé" });
+            var utilisateur = utilisateurGraphRepository.GetOne(utilisateurId);
+            var certification = formationGraphRepository.GetOne(certificationId);
+
+
+            var certifications = utilisateur.Conseiller.Certifications();
+
+            if (certifications.Any(x => x.GraphKey == certification.GraphKey))
+            {
+                foreach (var edition in certification.EditionObjects)
+                {
+                    editionObjectGraphRepository.Delete(edition);
+                }
+                editionObjectGraphRepository.SupprimerNoeud(certification, "Formations", utilisateur.Conseiller);
+            }
+            else
+            {
+                var edition = utilisateur.Conseiller.EditionObjects.Find(x => x.ObjetAjouteId == certification.GraphKey);
+                editionObjectGraphRepository.Delete(edition);
+                formationGraphRepository.Delete(certification);
+            }
+
+
+
+            return Json(certification);
         }
     }
 }

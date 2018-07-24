@@ -1,6 +1,7 @@
 ﻿using DAL_CV_Fiches.Repositories.Graph.Attributes;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace DAL_CV_Fiches.Models.Graph
@@ -34,7 +35,7 @@ namespace DAL_CV_Fiches.Models.Graph
         [Edge("TravailleComme")]
         public Fonction Fonction { get => (Fonction)LoadProperty("Fonction"); set => SetProperty("Fonction", value); }
 
-        [Edge("ATravailleDans")]
+        [Edge("ATravailleDans", lazyLoad: true)]
         public List<Mandat> Mandats { get => (List<Mandat>)LoadProperty("Mandats"); set => SetProperty("Mandats", value); }
 
         [Edge("Connait")]
@@ -70,6 +71,14 @@ namespace DAL_CV_Fiches.Models.Graph
             FormationsScolaires = new List<FormationScolaire>();
             Formations = new List<Formation>();
             DomaineDInterventions = new List<DomaineDIntervention>();
+        }
+
+        public List<Formation> Certifications()
+        {
+            return Formations.Where(x =>
+                        x.Type.Descriminator == Formation.Discriminator &&
+                        x.Type.Description == FormationType.Certification
+            ).ToList();
         }
     }
 }

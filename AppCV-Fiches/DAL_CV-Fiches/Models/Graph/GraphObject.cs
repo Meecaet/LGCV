@@ -10,7 +10,7 @@ using System.Xml.Serialization;
 namespace DAL_CV_Fiches.Models.Graph
 {
     [Serializable]
-    public abstract class GraphObject
+    public  class GraphObject
     {
         protected Dictionary<string, object> InternalPropertyDictionary;
 
@@ -29,6 +29,9 @@ namespace DAL_CV_Fiches.Models.Graph
         [XmlIgnore]
         public string GraphKey { get; set; }
         internal bool IsUpdateable;
+
+        [Edge("EteModifie", lazyLoad: true)]
+        public List<EditionObject> EditionObjects {get => (List<EditionObject>)LoadProperty("EditionObjects"); set => SetProperty("EditionObjects", value); }
 
         public GraphObject GetPreviousVersion()
         {
