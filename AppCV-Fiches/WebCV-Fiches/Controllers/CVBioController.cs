@@ -37,7 +37,7 @@ namespace WebCV_Fiches.Controllers
 
             bio.Nom = utilisateur.Nom ?? "";
             bio.Prenom = utilisateur.Prenom ?? "";
-            bio.Biographie = "To implement";
+            bio.ResumeExperience = "To implement";
 
             return Json(bio);
         }
@@ -49,7 +49,7 @@ namespace WebCV_Fiches.Controllers
         public ActionResult Edit(string utilisateurId, [FromBody]BioViewModel bio)
         {
             // Objet sugeré comme viewModel.
-            return Json(new { Status = "OK", Message = "Biographie modifiée" });
+            return Json(new { Status = "OK", Message = "ResumeExperience modifiée" });
         }
         [Authorize("Bearer")]
         [HttpPost]

@@ -160,5 +160,5 @@ body {
   border: rgba(243, 240, 46, 0.973) solid 2px;
 }
 .selected {
-  background: #c7c7c7
+  background: #80808070;font-size: 19px; color: white;
 }

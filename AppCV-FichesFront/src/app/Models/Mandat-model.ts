@@ -37,7 +37,7 @@ export class MandatViewModel {
 
   //this is to color configurations
   highlight:string;
-
+  mandatStatus:string="ajouter";
   constructor() {
     this.taches = new Array<TacheViewModel>();
     this.technologies = new Array<TechnologieViewModel>();

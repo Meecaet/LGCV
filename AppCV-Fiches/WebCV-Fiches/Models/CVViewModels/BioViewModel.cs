@@ -9,7 +9,7 @@ namespace WebCV_Fiches.Models.CVViewModels
     {
         public string Nom { get; set; }
         public string Prenom { get; set; }
-        public string Biographie { get; set; }
+        public string ResumeExperience { get; set; }
         public string Fonction { get; set; }
         public string GraphIdConseiller { get; set; }
         public string GraphIdUtilisateur { get; set; }
