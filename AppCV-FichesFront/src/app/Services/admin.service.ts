@@ -64,4 +64,9 @@ export class AdminService {
     const url = `Role/DeleteUserRole/${roleId}/User/${userId}`;
     return this.doRequest<Array<UserViewModel>>(url);
   }
+
+  public DeleteRol(roleId: string) {
+    const url = `Role/Delete/${roleId}`;
+    return this.doRequest<Array<RoleViewModel>>(url);
+  }
 }

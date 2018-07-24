@@ -14,7 +14,7 @@ using WebCV_Fiches.Models.AdminViewModels;
 namespace WebCV_Fiches.Controllers
 {
 
-    //    [Authorize(Roles = "Administrateur")]
+    [Authorize(Roles = "Administrateur")]
     [Route("Role")]
     public class RoleController : Controller
     {
@@ -81,11 +81,20 @@ namespace WebCV_Fiches.Controllers
         [Route("Details/{roleId}")]
         public ActionResult Details(string roleId)
         {
-            roleAdministrationViewModel = new RoleAdministrationViewModel();
-            roleAdministrationViewModel.Role = roleManager.FindByIdAsync(roleId).Result;
-            roleAdministrationViewModel.Users = userManager.GetUsersInRoleAsync(roleAdministrationViewModel.Role.Name).Result.ToList();
+            try
+            {
+                roleAdministrationViewModel = new RoleAdministrationViewModel();
+                roleAdministrationViewModel.Role = roleManager.FindByIdAsync(roleId).Result;
+                roleAdministrationViewModel.Users = userManager.GetUsersInRoleAsync(roleAdministrationViewModel.Role.Name).Result.ToList();
 
-            return Json(roleAdministrationViewModel);
+                return Json(roleAdministrationViewModel);
+            }
+            catch
+            {
+                ErrorViewModel error = new ErrorViewModel();
+                error.RequestId = "Une erreur s'est produite lors de la lecture de la liste des rôles";
+                return Json(error);
+            }
         }
 
         [AllowAnonymous]
@@ -106,8 +115,8 @@ namespace WebCV_Fiches.Controllers
         }
 
         [HttpPost]
-        [Route("Edit")]
         [AllowAnonymous]
+        [Route("Edit")]
         public async Task<ActionResult> Edit([FromBody]RoleAdministrationViewModel roleAdministration)
         {
             try
@@ -169,31 +178,22 @@ namespace WebCV_Fiches.Controllers
             }
         }
 
-
-
-
-        public ActionResult Delete(string id)
+        [Route("Delete/{roleId}")]
+        public async Task<ActionResult> Delete(string roleId)
         {
             try
             {
-                roleManager.DeleteAsync(roleManager.FindByIdAsync(id).Result);
-                return RedirectToAction(nameof(Index));
+                await roleManager.DeleteAsync(roleManager.FindByIdAsync(roleId).Result);
+
+                var result = roleManager.Roles.ToList();
+                return Json(result);
             }
             catch
             {
-                return View();
+                ErrorViewModel error = new ErrorViewModel();
+                error.RequestId = "Le rôle n'a pas pu être modifié";
+                return Json(error);
             }
-        }
-
-        // GET: Admin/Edit/5
-        public ActionResult Edit(string id)
-        {
-            roleAdministrationViewModel = new RoleAdministrationViewModel();
-            roleAdministrationViewModel.Role = roleManager.FindByIdAsync(id).Result;
-            roleAdministrationViewModel.Users = userManager.GetUsersInRoleAsync(roleAdministrationViewModel.Role.Name).Result.ToList();
-
-            ViewData["Utilisateurs"] = userManager.Users.Select(user => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem() { Text = user.UserName, Value = user.Id }).AsEnumerable();
-            return View(roleAdministrationViewModel);
         }
         
     }

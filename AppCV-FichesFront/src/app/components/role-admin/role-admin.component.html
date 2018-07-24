@@ -29,10 +29,10 @@
                     <a routerLink="/role/edit/{{item.id}}">Mettre en jour</a>
                 </td>
                 <td>
-                    <a onclick="confirmateDelete()">Supprimer</a>
+                    <button type="button" (click)="delete(item.id)">Supprimer</button>
                 </td>
                 <td>
-                    <a routerLink="/role/details">Details</a>
+                    <a routerLink="/role/detail/{{item.id}}">Details</a>
                 </td>
             </tr>
         </tbody>

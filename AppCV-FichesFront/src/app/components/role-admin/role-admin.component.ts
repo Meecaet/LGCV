@@ -28,7 +28,16 @@ export class RoleAdminComponent implements OnInit {
     );
   }
 
-  confirmateDelete(): void {
+  delete(roleId: string): void {
+    this.adminService.DeleteRol(roleId).subscribe(
+      (data: Array<RoleViewModel>) => {
+        this.roles = data;
+      },
+      (error: HttpErrorResponse) => {
+        // TODO
+        debugger;
+      }
+    );
   }
 
 }

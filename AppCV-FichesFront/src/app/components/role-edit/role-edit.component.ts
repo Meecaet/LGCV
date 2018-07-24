@@ -42,7 +42,6 @@ export class RoleEditComponent implements OnInit {
   editRole(): void {
     this.adminService.EditRol(this.role).subscribe(
       (data: RoleAdministratioViewModel) => {
-        console.log(data);
         this.location.replaceState('/');
         this.router.navigate(['role/admin']);
       },
@@ -65,7 +64,7 @@ export class RoleEditComponent implements OnInit {
     );
   }
 
-  delete(userId: string): void {
+  deleteUser(userId: string): void {
     this.adminService.DeleteUserRol(this.role.role.id, userId).subscribe(
       (data: Array<UserViewModel>) => {
         this.role.users = data;
