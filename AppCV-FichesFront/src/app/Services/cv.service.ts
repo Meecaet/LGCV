@@ -60,10 +60,10 @@ export class CVService {
     return this.doRequest(`CVPoc/Details/${id}`);
   }
 
-  public EditBio(cv: any) {
+  public EditBio(utilisateurId: any,model:any) {
     debugger;
-    const url = this.EditActiontUrl(cv.graphIdUtilisateur, "Bio");
-    return this.doRequest(url, "post", cv);
+    const url = this.EditActiontUrl(utilisateurId, "Bio");
+    return this.doRequest(url, "post", model);
   }
 
   public GetCVResumeInterventions(idUtilisateur: string) {
@@ -80,6 +80,7 @@ export class CVService {
     const url = "Bio/Create";
     return this.doRequest<BioViewModel>(url, "post", bio);
   }
+
   public NotifierChangement() {
     return this.doRequest("CV/Save");
   }

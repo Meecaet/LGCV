@@ -159,6 +159,13 @@ body {
 .highlightalert {
   border: rgba(243, 240, 46, 0.973) solid 2px;
 }
+
+.ChangementPropriete {
+  border: rgba(243, 240, 46, 0.973) solid 2px;
+}
+
 .selected {
-  background: #80808070;font-size: 19px; color: white;
+  background: #80808070;
+  font-size: 19px;
+  color: white;
 }
