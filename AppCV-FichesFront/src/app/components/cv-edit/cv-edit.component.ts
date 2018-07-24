@@ -14,6 +14,7 @@ export class CvEditComponent implements OnInit {
   numberPage: number;
   lastPage: number;
   showMandat: boolean = false;
+  hiddenButton: string;
   constructor(private route: ActivatedRoute) {
     this.mandatCollection = new Array<MandatViewModel>();
   }
@@ -31,15 +32,15 @@ export class CvEditComponent implements OnInit {
     this.lastPage = this.mandatCollection.length;
   }
   addNewMandatFromList(arg: any): void {
-    debugger;
     // this.InputMandatCarousel = arg.newMandat;
     this.numberPage = arg.numberPage;
     this.showMandat = true;
     this.lastPage = this.mandatCollection.length;
     this.mandatSeleted = new MandatViewModel();
+    debugger
+    this.hiddenButton =  this.mandatSeleted.mandatStatus;
   }
   onChangePage(changeTo: number): void {
-    debugger;
     const newValue = this.mandatCollection[changeTo];
     if (newValue != null) {
       this.mandatSeleted = newValue;
@@ -50,5 +51,7 @@ export class CvEditComponent implements OnInit {
     this.mandatSeleted = <MandatViewModel>arg.mandat;
     this.numberPage = arg.indexMandat;
     this.showMandat = true;
+    debugger
+    this.hiddenButton = this.mandatSeleted.mandatStatus;
   }
 }

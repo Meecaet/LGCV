@@ -11,7 +11,7 @@
         </button>
       </div>
 
-      <div [hidden]="numberPage > lastPage ?true:false"  (click)="next(numberPage)" style="float: right;position: relative">
+      <div [hidden]="numberPage > lastPage ?true:false" (click)="next(numberPage)" style="float: right;position: relative">
         <button class="btn btn-link">
           <b class="text-white">
             <i class="fas fa-chevron-right"></i>
@@ -163,8 +163,17 @@
 
     <div class="row">
       <div style="width: 100%;">
-        <button (click)="SendMandatCarousel(mandat)" style="width: 100px;float: right;margin-right: 20px;margin-bottom: 10px;" type="button"
-          class="btn btn-primary">Ajouter</button>
+        {{hiddenButton}}
+        <div [hidden]="hiddenButton=='ajouter'?false:true">
+          <button (click)="SendMandatCarousel(mandat)" style="width: 100px;float: right;margin-right: 20px;margin-bottom: 10px;" type="button"
+            class="btn btn-primary">Ajouter</button>
+        </div>
+
+        <div>
+          <button [hidden]="hiddenButton=='modifier'?false:true" (click)="ModifierMandatCarousel(mandat)" style="width: 100px;float: right;margin-right: 20px;margin-bottom: 10px;"
+            type="button" class="btn btn-success">Modifier</button>
+        </div>
+
       </div>
     </div>
 

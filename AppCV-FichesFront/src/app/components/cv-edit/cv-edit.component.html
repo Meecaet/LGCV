@@ -25,6 +25,7 @@
             <app-table-mandat
             (onChangeMandatFromTableMandat)="onChangeMandatFromTableMandat($event)"
               [numberPage]="numberPage"
+
               (AddNewMandat)="addNewMandatFromList($event)"
               [mandatCollection]="mandatCollection"></app-table-mandat>
           </div>
@@ -32,7 +33,7 @@
       </div>
       <div class="lgs-section">
         <app-carousel [hidden]="showMandat==true?false:true"
-
+        [hiddenButton]="hiddenButton"
         [lastPage]="lastPage"
         [ngModelMandat]="mandatSeleted" [numberPage]="numberPage"
           (OutPutMandatCarousel)="setToMandat($event)" (onChangePage)="onChangePage($event)"></app-carousel>

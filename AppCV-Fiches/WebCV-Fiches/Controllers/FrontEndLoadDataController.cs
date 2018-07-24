@@ -28,11 +28,13 @@ namespace WebCV_Fiches.Controllers
         {
             List<LangueViewModel> langues = new List<LangueViewModel>();
             var lang = (List<Langue>)cache.Get("Langues");
-            lang.OrderBy(o=> o.Nom).ToList().ForEach(x =>
+            if (lang != null)
             {
-                langues.Add(new LangueViewModel { GraphId = x.GraphKey, Nom = x.Nom });
-            });
-
+                lang.OrderBy(o => o.Nom).ToList().ForEach(x =>
+             {
+                 langues.Add(new LangueViewModel { GraphId = x.GraphKey, Nom = x.Nom });
+             });
+            }
             return Json(langues);
         }
         [HttpGet]
@@ -40,22 +42,27 @@ namespace WebCV_Fiches.Controllers
         {
             List<TechnologieViewModel> langues = new List<TechnologieViewModel>();
             var lang = (List<Technologie>)cache.Get("Technologies");
-            lang.OrderBy(o => o.Nom).ToList().ForEach(x =>
+            if (lang != null)
+            {
+                lang.OrderBy(o => o.Nom).ToList().ForEach(x =>
             {
                 langues.Add(new TechnologieViewModel { GraphId = x.GraphKey, Description = x.Nom });
             });
-
+            }
             return Json(langues);
         }
         [HttpGet]
         public ActionResult GetAllFonctions()
-        {
+            {
             List<FonctionViewModel> langues = new List<FonctionViewModel>();
             var lang = (List<Fonction>)cache.Get("Fonction");
-            lang.OrderBy(o => o.Description).ToList().ForEach(x =>
+            if (lang != null)
             {
-                langues.Add(new FonctionViewModel { GraphId = x.GraphKey, Nom = x.Description });
-            });
+                lang.OrderBy(o => o.Description).ToList().ForEach(x =>
+                {
+                    langues.Add(new FonctionViewModel { GraphId = x.GraphKey, Nom = x.Description });
+                });
+            }
 
             return Json(langues);
         }

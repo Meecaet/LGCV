@@ -12,10 +12,12 @@ import { Router } from "@angular/router";
 })
 export class CarouselComponent implements OnInit {
   @Input("ngModelMandat") mandat: MandatViewModel;
-  @Input("lastPage")lastPage: number;
+  @Input("lastPage") lastPage: number;
   @Output() OutPutMandatCarousel = new EventEmitter();
   @Input("numberPage") numberPage: number;
   @Output("onChangePage") onChangePage = new EventEmitter();
+
+  @Input("hiddenButton") hiddenButton: string;
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   visible = true;
   selectable = true;
@@ -59,17 +61,20 @@ export class CarouselComponent implements OnInit {
     }
   }
   previous(currentPage: number) {
-    debugger
+    debugger;
 
-    const newpage = currentPage - 2
+    const newpage = currentPage - 2;
     this.onChangePage.emit(newpage);
   }
   next(currentPage: number) {
-    const newpage = currentPage + 1
+    const newpage = currentPage + 1;
     this.onChangePage.emit(newpage);
   }
 
   SendMandatCarousel(mandat: MandatViewModel): void {
-     this.OutPutMandatCarousel.emit(mandat);
+    this.OutPutMandatCarousel.emit(mandat);
+  }
+  ModifierMandatCarousel(mandat: MandatViewModel): void {
+    alert("to implement");
   }
 }
