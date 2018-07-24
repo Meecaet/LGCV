@@ -16,11 +16,13 @@ namespace WebCV_Fiches.Controllers
     {
         public EditionObjectGraphRepository editionObjectGraphRepository;
         public UtilisateurGraphRepository utilisateurGraphRepository;
+        public FonctionGraphRepository fonctionGraphRepository;
 
         public CVBioController()
         {
             utilisateurGraphRepository = new UtilisateurGraphRepository();
             editionObjectGraphRepository = new EditionObjectGraphRepository();
+            fonctionGraphRepository = new FonctionGraphRepository();
         }
 
         [Route("Detail/{utilisateurId}")]
@@ -75,8 +77,9 @@ namespace WebCV_Fiches.Controllers
             var conseiller = utilisateur.Conseiller;
             if (conseiller.Fonction.GraphKey != bio.Fonction)
             {
+                var newFonction = fonctionGraphRepository.GetOne(bio.Fonction);
                 editionObjectGraphRepository.ChangerNoeud(
-                    objetAjouteGraphKey: bio.Fonction,
+                    objetAjoute: newFonction,
                     objetsupprimeGraphKey: conseiller.Fonction.GraphKey,
                     noeudModifiePropriete: "Fonction",
                     noeudModifie: conseiller);

@@ -10,7 +10,7 @@ namespace DAL_CV_Fiches.Repositories.Graph.Attributes
         public bool IgnoreEdgeProperties { get; }
         public bool LazyLoad { get; }
 
-        public Edge(string edgeName, bool ignoreEdgeProperties = false, bool lazyLoad = false)
+        public Edge(string edgeName, bool ignoreEdgeProperties = false, bool lazyLoad = true)
         {
             this.EdgeName = edgeName;
             this.IgnoreEdgeProperties = ignoreEdgeProperties;

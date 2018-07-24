@@ -6,7 +6,7 @@ namespace DAL_CV_Fiches.Models.Graph
 {
     public interface IChangementRelation : IEditionObject
     {
-        string ObjetAjouteId { get; set; }
+        GraphObject ObjetAjoute { get; set; }
         string ObjetSupprimeId { get; set; }
     }
 }

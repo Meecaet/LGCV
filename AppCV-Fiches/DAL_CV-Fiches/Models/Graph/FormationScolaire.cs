@@ -16,7 +16,7 @@ namespace DAL_CV_Fiches.Models.Graph
         [EdgeProperty]
         public bool EstPrincipal { get; set; }
 
-        [Edge("DelivrePar")]
+        [Edge("DelivrePar", lazyLoad: false)]
         public Instituition Ecole { get; set; }
 
         public static FormationScolaire CreateFormationScolaire(string diplome, int dateConlusion, string niveau, bool equivalence, bool principal, Instituition instituition)

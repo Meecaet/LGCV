@@ -65,8 +65,8 @@ namespace WebCV_Fiches.Helpers
 
         private string GetEditionid(EditionObject edition)
         {
-            if (!string.IsNullOrEmpty(edition.ObjetAjouteId))
-                return edition.ObjetAjouteId;
+            if (edition.ObjetAjoute != null)
+                return edition.ObjetAjoute.GraphKey;
             else if (!string.IsNullOrEmpty(edition.ObjetSupprimeId))
                 return edition.ObjetSupprimeId;
             else
@@ -79,10 +79,10 @@ namespace WebCV_Fiches.Helpers
 
             if (edtion.Type == EditionObjectType.ChangementRelation)
             {
-                if (!string.IsNullOrEmpty(edtion.ObjetAjouteId) && !string.IsNullOrEmpty(edtion.ObjetSupprimeId))
+                if (edtion.ObjetAjoute != null && !string.IsNullOrEmpty(edtion.ObjetSupprimeId))
                     return EditionObjectType.ChangementRelation;
 
-                if (!string.IsNullOrEmpty(edtion.ObjetAjouteId))
+                if (edtion.ObjetAjoute != null)
                     return "Addition";
 
                 if (!string.IsNullOrEmpty(edtion.ObjetSupprimeId))

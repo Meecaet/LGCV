@@ -29,7 +29,7 @@ namespace DAL_CV_Fiches.Models.Graph
 
         public Projet()
         {
-            Technologies = new List<Technologie>();
+            //Technologies = new List<Technologie>();
         }
     }
 }
