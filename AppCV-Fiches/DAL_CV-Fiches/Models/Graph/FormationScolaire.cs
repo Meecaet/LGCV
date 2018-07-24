@@ -9,7 +9,7 @@ namespace DAL_CV_Fiches.Models.Graph
     {
         public string Diplome { get; set; }
         [EdgeProperty]
-        public DateTime DateConclusion { get; set; }
+        public int DateConclusion { get; set; }
         public NiveauScolarite Niveau { get; set; }
         [EdgeProperty]
         public bool EstEquivalenceObtenu { get; set; }
@@ -18,8 +18,21 @@ namespace DAL_CV_Fiches.Models.Graph
 
         [Edge("DelivrePar")]
         public Instituition Ecole { get; set; }
-    }
 
+        public static FormationScolaire CreateFormationScolaire(string diplome, int dateConlusion, string niveau, bool equivalence, bool principal, Instituition instituition)
+        {
+            return new FormationScolaire()
+            {
+                DateConclusion = dateConlusion,
+                Diplome = diplome,
+                EstEquivalenceObtenu = equivalence,
+                EstPrincipal = principal,
+                Niveau = (NiveauScolarite)Enum.Parse(typeof(NiveauScolarite), niveau),
+                Ecole = instituition
+            };
+        }
+
+    }
     public enum NiveauScolarite
     {
         Primaire = 0,

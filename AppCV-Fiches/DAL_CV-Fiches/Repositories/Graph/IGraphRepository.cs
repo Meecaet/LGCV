@@ -6,7 +6,7 @@ namespace DAL_CV_Fiches.Repositories.Graph
 {
     public interface IGraphRepository<T>
     {
-        void Add(T obj);
+        void Add(T obj, bool cascade = true);
         void Update(T obj);
         void Delete(T obj);
         T GetOne(string id);

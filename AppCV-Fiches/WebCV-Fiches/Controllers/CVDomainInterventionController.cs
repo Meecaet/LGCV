@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DAL_CV_Fiches.Models.Graph;
+using DAL_CV_Fiches.Repositories.Graph;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WebCV_Fiches.Helpers;
 using WebCV_Fiches.Models.CVViewModels;
 
 namespace WebCV_Fiches.Controllers
@@ -11,31 +14,78 @@ namespace WebCV_Fiches.Controllers
     [Route("CVDomainIntervention")]
     public class CVDomainInterventionController : Controller
     {
-        [Route("{cvId}/All")]
-        [AllowAnonymous]
-        public ActionResult All(string cvId)
+        public EditionObjectGraphRepository editionObjectGraphRepository;
+        public UtilisateurGraphRepository utilisateurGraphRepository;
+        public DomaineDInterventionGraphRepository domaineDInterventionGraphRepository;
+
+        public CVDomainInterventionController()
         {
-            return Json(new CVDomainInterventionController());
+            editionObjectGraphRepository = new EditionObjectGraphRepository();
+            utilisateurGraphRepository = new UtilisateurGraphRepository();
+            domaineDInterventionGraphRepository = new DomaineDInterventionGraphRepository();
         }
 
-        // POST: Mandat/Create
+        [Route("{utilisateurId}/All")]
+        [AllowAnonymous]
+        public ActionResult All(string utilisateurId)
+        {
+            Func<GraphObject, ViewModel> map = this.map;
+
+            var utilisateur = utilisateurGraphRepository.GetOne(utilisateurId);
+            var domains = utilisateur.Conseiller.DomaineDInterventions.Cast<GraphObject>().ToList();
+            var domainsViewModel = ViewModelFactory.GetViewModels(utilisateurId: utilisateurId, noeudsModifie: new List<GraphObject> { utilisateur.Conseiller }, graphObjects: domains, map: map);
+
+            return Json(domainsViewModel);
+        }
+
+        private ViewModel map(GraphObject domainModel)
+        {
+            var domain = (DomaineDIntervention)domainModel;
+            return new DomaineDInterventionViewModel { Description = domain.Description, GraphId = domain.GraphKey };
+        }
+
         [HttpPost]
         [AllowAnonymous]
-        [Route("Add")]
-        public ActionResult Add(string cvId, string domaineInterventionId)
+        [Route("{utilisateurId}/Add")]
+        public ActionResult Add(string utilisateurId, [FromBody]DomaineDInterventionViewModel domain)
+        // POST: Mandat/Create
         {
-            // Objet sugeré comme viewModel.
-            return Json(new { Status = "OK", Message = "Domaine d'intervention ajouté." });
+            var utilisateur = utilisateurGraphRepository.GetOne(utilisateurId);
+
+            var domainModel = new DomaineDIntervention() { Description = domain.Description };
+            var savedDomainModel = domaineDInterventionGraphRepository.CreateIfNotExists(domainModel);
+            editionObjectGraphRepository.AjouterNoeud(objetAjoute: savedDomainModel, noeudModifiePropriete: "DomaineDInterventions", noeudModifie: utilisateur.Conseiller);
+
+            domain.GraphId = savedDomainModel.GraphKey;
+            return Json(domain);
         }
 
         // POST: Mandat/Delete/5
         [HttpPost]
         [AllowAnonymous]
-        [Route("Delete")]
-        public ActionResult Delete(string cvId, string domaineInterventionId)
+        [Route("{utilisateurId}/Delete/{domainId}")]
+        public ActionResult Delete(string utilisateurId, string domainId)
         {
-            // Objet sugeré comme viewModel.
-            return Json(new { Status = "OK", Message = "Domaine d'intervention eliminé" });
+            var utilisateur = utilisateurGraphRepository.GetOne(utilisateurId);
+            var domain = domaineDInterventionGraphRepository.GetOne(domainId);
+
+            if (utilisateur.Conseiller.DomaineDInterventions.Any(x => x.GraphKey == domain.GraphKey))
+            {
+                foreach (var edition in domain.EditionObjects)
+                {
+                    editionObjectGraphRepository.Delete(edition);
+                }
+
+                editionObjectGraphRepository.SupprimerNoeud(domain, "DomaineDInterventions", utilisateur.Conseiller);
+            }
+            else
+            {
+                var edition = utilisateur.Conseiller.EditionObjects.Find(x => x.ObjetAjouteId == domain.GraphKey);
+                editionObjectGraphRepository.Delete(edition);
+                domaineDInterventionGraphRepository.Delete(domain);
+            }
+
+            return Json(domain);
         }
     }
 }

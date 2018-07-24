@@ -8,32 +8,24 @@ using System.Text;
 
 namespace DAL_CV_Fiches.Models.Graph
 {
-    public class EditionObject : GraphObject
+    public class EditionObject : GraphObject, IChangementRelation
     {
         public string ObjetAjouteId { get; set; }
         public string ObjetSupprimeId { get; set; }
         public string Etat { get; set; }
         public string Observacao { get; set; }
         public string Type { get; set; }
+        public string ProprieteNom { get; set; } 
+        public string ProprieteValeur { get; set; } 
 
         [Edge("Modifier")]
         public GraphObject NoeudModifie { get => (GraphObject)LoadProperty("NoeudModifie"); set => SetProperty("NoeudModifie", value); }
-
-        [Edge("ValeurModifie")]
-        public List<ProprieteModifiee> ProprietesModifiees { get; set; }
-
-        public EditionObject()
-        {
-            ProprietesModifiees = new List<ProprieteModifiee>();
-        }
     }
 
 
     public static class EditionObjectType
     {
-        public static string Addition = "Addition";
         public static string ChangementPropriete = "ChangementPropriete";
-        public static string Enlevement = "Enlevement";
         public static string ChangementRelation = "ChangementRelation";
     }
 

@@ -1,15 +1,25 @@
-﻿using System;
+﻿using DAL_CV_Fiches.Models.Graph;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace WebCV_Fiches.Models.CVViewModels
 {
-    public class CertificationViewModel
+    public class CertificationViewModel : ViewModel
     {
-        public string GraphId { get; set; }
         public string GraphIdGenre { get; set; }
         public string Description { get; set; }
         public int Annee { get; set; }
+
+        public override bool HasEdtion(EditionObject edition)
+        {
+            if(edition.ProprieteNom == "Formations")
+                return true;
+
+            var propreties = MethodBase.GetCurrentMethod().DeclaringType.GetProperties().ToList();
+            return propreties.Any(x => x.Name == edition.ProprieteNom);
+        }
     }
 }

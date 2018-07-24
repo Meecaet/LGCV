@@ -32,10 +32,10 @@ namespace WebCV_Fiches.Helpers
             {
                 FormationAcademiqueViewModel formationAcademique = new FormationAcademiqueViewModel();
                 formationAcademique.GraphId = formationScolaire.GraphKey;
-                formationAcademique.GraphIdEtablissement = formationScolaire.Ecole.GraphKey;
+                formationAcademique.GraphIdEtablissement = formationScolaire.Ecole?.GraphKey;
                 formationAcademique.Diplome = formationScolaire.Diplome;
-                formationAcademique.Annee = formationScolaire.DateConclusion.Year;
-                formationAcademique.Etablissement = formationScolaire.Ecole.Nom;
+                formationAcademique.Annee = formationScolaire.DateConclusion;
+                formationAcademique.Etablissement = formationScolaire.Ecole?.Nom;
 
                 cVViewModel.FormationsAcademique.Add(formationAcademique);
             }
@@ -132,7 +132,7 @@ namespace WebCV_Fiches.Helpers
                 FormationScolaire formationScolaire = new FormationScolaire();
                 formationScolaire.GraphKey = formationAcademique.GraphId;
                 formationScolaire.Diplome = formationAcademique.Diplome;
-                formationScolaire.DateConclusion = DateTime.Parse($"{formationAcademique.Annee}-01-01");
+                formationScolaire.DateConclusion = formationAcademique.Annee;
                 formationScolaire.Ecole = new Instituition();
                 formationScolaire.Ecole.GraphKey = formationAcademique.GraphIdEtablissement;
                 formationScolaire.Ecole.Nom = formationAcademique.Etablissement;

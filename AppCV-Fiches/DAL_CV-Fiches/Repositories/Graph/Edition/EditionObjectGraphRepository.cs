@@ -12,119 +12,114 @@ namespace DAL_CV_Fiches.Repositories.Graph
 {
     public class EditionObjectGraphRepository : GraphRepositoy<EditionObject>
     {
-        public EditionObjectGraphRepository()
-        {
-        }
+        public EditionObjectGraphRepository() { }
 
-        public EditionObjectGraphRepository(DocumentClient documentClient, DocumentCollection documentCollection) : base(documentClient, documentCollection)
-        {
-        }
+        public EditionObjectGraphRepository(DocumentClient documentClient, DocumentCollection documentCollection) : base(documentClient, documentCollection) { }
 
-        public EditionObjectGraphRepository(string Database, string Graph) : base(Database, Graph)
-        {
-        }
+        public EditionObjectGraphRepository(string Database, string Graph) : base(Database, Graph) { }
 
-        public EditionObjectGraphRepository(string Endpoint, string Key, string Database, string Graph) : base(Endpoint, Key, Database, Graph)
-        {
-        }
+        public EditionObjectGraphRepository(string Endpoint, string Key, string Database, string Graph) : base(Endpoint, Key, Database, Graph) { }
 
-        public EditionObject CreateOrUpdateChangementPropietes(List<KeyValuePair<string, string>> proprietes, GraphObject noeudModifie)
+        public List<EditionObject> CreateOrUpdateProprieteEdition(List<KeyValuePair<string, string>> proprietes, GraphObject noeudModifie)
         {
+            List<EditionObject> editions = new List<EditionObject>();
+            EditionObject edition = new EditionObject();
 
-            var edition = FindEditionObjectOfType(noeudModifie, EditionObjectType.ChangementPropriete, EditionObjectEtat.Modifie);
-            if (edition != null)
+            foreach (KeyValuePair<string, string> prop in proprietes)
             {
-                var proprieteModifieeGraphRepository = new ProprieteModifieeGraphRepository();
-                foreach (ProprieteModifiee prop in edition.ProprietesModifiees)
+                edition = FindEditionObjectOfType(proprieteNom: prop.Key, graphnoeud: noeudModifie, type: EditionObjectType.ChangementPropriete, editionEtat: EditionObjectEtat.Modifie);
+                if (edition != null)
                 {
-                    var newProp = proprietes.Find(x => x.Key == prop.Nom);
-                    prop.valeur = newProp.Value;
-                    proprieteModifieeGraphRepository.Update(prop);
+                    edition.ProprieteValeur = prop.Value;
+                    Update(edition);
                 }
-            }
-            else
-            {
-                var proprietesModifiees = proprietes.Select(x => new ProprieteModifiee() { Nom = x.Key, valeur = x.Value });
-
-                edition = new EditionObject();
-                edition.NoeudModifie = noeudModifie;
-                edition.Type = EditionObjectType.ChangementPropriete;
-                edition.Etat = EditionObjectEtat.Modifie;
-                edition.ProprietesModifiees.AddRange(proprietesModifiees);
-
-                CreateRelation(noeudModifie, edition);
+                else
+                {
+                    edition = CreateEditionObject(proprieteNom: prop.Key, proprieteValuer: prop.Value, noeudModifie: noeudModifie);
+                }
+                editions.Add(edition);
             }
 
-
-            return edition;
-
+            return editions;
         }
 
-        public EditionObject CreateOrUpdateChangementRelation(string objetAjouteId, string objetSupprimeId, GraphObject noeudModifie)
+        public EditionObject ChangerNoeud(string objetAjouteGraphKey, string objetsupprimeGraphKey, string noeudModifiePropriete, GraphObject noeudModifie)
         {
-            var edition = FindEditionObjectOfType(noeudModifie, EditionObjectType.ChangementRelation, EditionObjectEtat.Modifie);
+            var edition = FindEditionObjectOfType(
+                proprieteNom: noeudModifiePropriete,
+                graphnoeud: noeudModifie,
+                type: EditionObjectType.ChangementRelation,
+                editionEtat: EditionObjectEtat.Modifie);
+
             if (edition != null)
             {
-                edition.ObjetAjouteId = objetAjouteId;
-                edition.ObjetSupprimeId = objetSupprimeId;
+                edition.ObjetAjouteId = objetAjouteGraphKey;
+                edition.ObjetSupprimeId = objetsupprimeGraphKey;
                 Update(edition);
             }
             else
             {
-                edition = new EditionObject();
-                edition.NoeudModifie = noeudModifie;
-                edition.ObjetAjouteId = objetAjouteId;
-                edition.ObjetSupprimeId = objetSupprimeId;
-                edition.Etat = EditionObjectEtat.Modifie;
+                edition = CreateEditionObject(
+                    proprieteNom: noeudModifiePropriete,
+                    objetAjouteId: objetAjouteGraphKey,
+                    objetSupprimeId: objetsupprimeGraphKey,
+                    noeudModifie: noeudModifie);
+            };
+            return edition;
+        }
+
+        public EditionObject AjouterNoeud(GraphObject objetAjoute, string noeudModifiePropriete, GraphObject noeudModifie)
+        {
+            return CreateEditionObject(proprieteNom: noeudModifiePropriete, objetAjouteId: objetAjoute.GraphKey, noeudModifie: noeudModifie);
+        }
+
+        public EditionObject SupprimerNoeud(GraphObject objetsupprime, string noeudModifiePropriete, GraphObject noeudModifie)
+        {
+            return CreateEditionObject(proprieteNom: noeudModifiePropriete, objetSupprimeId: objetsupprime.GraphKey, noeudModifie: noeudModifie);
+        }
+
+        private EditionObject CreateEditionObject(string proprieteNom, GraphObject noeudModifie, string proprieteValuer = null, string objetAjouteId = null, string objetSupprimeId = null)
+        {
+            var edition = new EditionObject();
+            edition.NoeudModifie = noeudModifie;
+            edition.ProprieteNom = proprieteNom;
+            if (proprieteValuer != null)
+            {
+                edition.Type = EditionObjectType.ChangementPropriete;
+                edition.ProprieteValeur = proprieteValuer;
+            }
+            else
+            {
                 edition.Type = EditionObjectType.ChangementRelation;
+                if (objetSupprimeId != null)
+                    edition.ObjetSupprimeId = objetSupprimeId;
 
-                CreateRelation(noeudModifie, edition);
-
+                if (objetAjouteId != null)
+                    edition.ObjetAjouteId = objetAjouteId;
             }
 
-            return edition;
-        }
-
-        public EditionObject CreateAddition(string objetAjouteId, GraphObject noeudModifie)
-        {
-            var edition = new EditionObject();
-            edition.NoeudModifie = noeudModifie;
-            edition.ObjetAjouteId = objetAjouteId;
             edition.Etat = EditionObjectEtat.Modifie;
-            edition.Type = EditionObjectType.Addition;
 
             CreateRelation(noeudModifie, edition);
 
             return edition;
         }
 
-
-        public EditionObject CreateEnlevement(string objetSupprimeId, GraphObject noeudModifie)
+        private EditionObject FindEditionObjectOfType(string proprieteNom, GraphObject graphnoeud, string type, string editionEtat)
         {
-            var edition = new EditionObject();
-            edition.NoeudModifie = noeudModifie;
-            edition.ObjetSupprimeId = objetSupprimeId;
-            edition.Etat = EditionObjectEtat.Modifie;
-            edition.Type = "Enlevement";
-
-            CreateRelation(noeudModifie, edition);
-
-            return edition;
-        }
-
-        public EditionObject FindEditionObjectOfType(GraphObject graphnoeud, string type, string editionEtat)
-        {
-            return graphnoeud.EditionObjects.Find(x => x.Type == type && x.Etat == editionEtat);
+            return graphnoeud.EditionObjects.Find(x => x.ProprieteNom == proprieteNom && x.Type == type && x.Etat == editionEtat);
         }
 
         private void CreateRelation(GraphObject noeudModifie, EditionObject edition)
         {
-            Add(edition);
+            Add(edition, false);
+            var att = (Edge)edition.GetType().GetProperty("NoeudModifie").GetCustomAttribute(typeof(Edge));
+            CreateEdge(edition, noeudModifie, att);
 
             noeudModifie.EditionObjects.Add(edition);
-            var noeuModifieRepository = GraphRepositoy.GetGenericRepository(noeudModifie.GetType());
-            var att = (Edge)noeudModifie.GetType().GetProperty("EditionObjects").GetCustomAttribute(typeof(Edge));
-            noeuModifieRepository.GetType().GetMethod("CreateEdge").Invoke(noeuModifieRepository, new object[] { noeudModifie, edition, att });
+            dynamic noeuModifieRepository = GraphRepositoy.GetGenericRepository(noeudModifie.GetType());
+            att = (Edge)noeudModifie.GetType().GetProperty("EditionObjects").GetCustomAttribute(typeof(Edge));
+            noeuModifieRepository.CreateEdge(noeudModifie, edition, att);
         }
 
     }

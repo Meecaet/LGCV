@@ -62,7 +62,7 @@ namespace DAL_CV_Fiches.Repositories.Graph
             documentCollection = GraphConfig.DocumentCollection;
         }
 
-        public void Add(T obj)
+        public void Add(T obj, bool cascade = true)
         {
             string addQuery;
             object currentPropValue;
@@ -74,6 +74,9 @@ namespace DAL_CV_Fiches.Repositories.Graph
                 addQuery = GetAddQuery(obj);
                 obj.GraphKey = ExecuteCommandVertex(addQuery);
             }
+
+            if (!cascade)
+                return;
 
             foreach (PropertyInfo propInfo in thisType.GetProperties())
             {
@@ -112,8 +115,7 @@ namespace DAL_CV_Fiches.Repositories.Graph
 
             genericRepository = GetGenericRepository(to.GetType());
 
-            if (to.GraphKey == null)
-                genericRepository.GetType().GetMethod("Add").Invoke(genericRepository, new object[] { to });
+            genericRepository.GetType().GetMethod("Add").Invoke(genericRepository, new object[] { to, true });
 
             if (!HasEdge(att, from, to))
                 CreateEdge(from, to, att);
@@ -122,7 +124,7 @@ namespace DAL_CV_Fiches.Repositories.Graph
         public void Delete(T obj)
         {
             string updateQuery = $"g.V('{obj.GraphKey}').drop()";
-            ExecuteCommandVertex(updateQuery);
+            ExecuteCommandQueryVertex(updateQuery);
         }
 
         public List<T> GetAll()

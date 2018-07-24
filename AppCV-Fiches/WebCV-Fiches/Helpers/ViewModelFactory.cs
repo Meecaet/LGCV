@@ -1,0 +1,41 @@
+﻿using DAL_CV_Fiches.Models.Graph;
+using DAL_CV_Fiches.Repositories.Graph;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using WebCV_Fiches.Models.CVViewModels;
+
+namespace WebCV_Fiches.Helpers
+{
+    public class ViewModelFactory
+    {
+        public static List<ViewModel> GetViewModels(string utilisateurId, List<GraphObject> noeudsModifie, List<GraphObject> graphObjects, Func<GraphObject, ViewModel> map)
+        {
+            var graphObjectsViewModel = graphObjects.Select(map).ToList();
+
+            var type = typeof(EditionObjectViewModelFactory<>).MakeGenericType(graphObjectsViewModel.First().GetType());
+            dynamic factory = Activator.CreateInstance(type);
+            var editionObjecViewModels = (List<EditionObjecViewModel>)factory.GetEditions(noeudsModifie);
+
+            dynamic repo = GraphRepositoy.GetGenericRepository(graphObjects.First().GetType());
+
+            foreach (var edition in editionObjecViewModels)
+            {
+                var viewModel = graphObjectsViewModel.Find(x => x.GraphId == edition.EditionId);
+                if (viewModel != null)
+                    viewModel.editionObjecViewModels.Add(edition);
+                else
+                {
+                    var newGraphObject = repo.GetOne(edition.EditionId);
+                    var newGraphObjectViewModel = map.Invoke(newGraphObject);
+                    newGraphObjectViewModel.editionObjecViewModels.Add(edition);
+                    graphObjectsViewModel.Add(newGraphObjectViewModel);
+                }
+
+            }
+
+            return graphObjectsViewModel;
+        }
+    }
+}

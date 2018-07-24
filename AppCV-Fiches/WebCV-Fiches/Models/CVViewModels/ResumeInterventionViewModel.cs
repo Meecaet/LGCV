@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace WebCV_Fiches.Models.CVViewModels
 {
-    public class ResumeInterventionViewModel
+    public class ResumeInterventionViewModel : ViewModel
     {
         public string MandatId { get; set; }
         public int Nombre { get; set; }

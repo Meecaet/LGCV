@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace WebCV_Fiches.Models.CVViewModels
 {
-    public class PerfectionnementViewModel
+    public class PerfectionnementViewModel : ViewModel
     {
         public string GraphId { get; set; }
         public string GraphIdGenre { get; set; }

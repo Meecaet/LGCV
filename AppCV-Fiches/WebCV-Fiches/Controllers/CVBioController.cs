@@ -16,31 +16,44 @@ namespace WebCV_Fiches.Controllers
     {
         public EditionObjectGraphRepository editionObjectGraphRepository;
         public UtilisateurGraphRepository utilisateurGraphRepository;
-        public ProprieteModifieeGraphRepository proprieteModifieeGraphRepository;
 
         public CVBioController()
         {
             utilisateurGraphRepository = new UtilisateurGraphRepository();
             editionObjectGraphRepository = new EditionObjectGraphRepository();
-            proprieteModifieeGraphRepository = new ProprieteModifieeGraphRepository();
         }
 
-        [Route("{cvId}/Detail/{utilisateurId}")]
-        //[AllowAnonymous]
-        [Authorize("Bearer")]
-        public ActionResult Detail(string cvId, string utilisateurId)
+        [Route("Detail/{utilisateurId}")]
+        [AllowAnonymous]
+        public ActionResult Detail(string utilisateurId)
         {
-            return Json(new BioViewModel());
+            var bioViewModel = new BioViewModel();
+
+            var utilisateur = utilisateurGraphRepository.GetOne(utilisateurId);
+
+            bioViewModel.Nom = utilisateur.Nom;
+            bioViewModel.Prenom = utilisateur.Prenom;
+
+            var cv = utilisateur.Conseiller.CVs.First();
+
+            bioViewModel.ResumeExperience = cv.ResumeExperience;
+
+            var conseiller = utilisateur.Conseiller;
+            bioViewModel.Fonction = conseiller.Fonction.GraphKey;
+
+            var editions = new EditionObjectViewModelFactory<BioViewModel>();
+            bioViewModel.editionObjecViewModels = editions.GetEditions(utilisateur, cv, conseiller);
+
+            return Json(bioViewModel);
         }
 
-        // POST: Mandat/Edit/cvId
         [HttpPost]
         [AllowAnonymous]
         [Route("{utilisateurId}/Edit")]
         public ActionResult Edit(string utilisateurId, [FromBody]BioViewModel bio)
         {
             var utilisateur = utilisateurGraphRepository.GetOne(utilisateurId);
-            List<KeyValuePair<string, string>> proprietesModifiees = new List<KeyValuePair<string, string>>();
+            var proprietesModifiees = new List<KeyValuePair<string, string>>();
 
             if (utilisateur.Prenom != bio.Prenom)
                 proprietesModifiees.Add(new KeyValuePair<string, string>("Prenom", bio.Prenom));
@@ -49,32 +62,27 @@ namespace WebCV_Fiches.Controllers
                 proprietesModifiees.Add(new KeyValuePair<string, string>("Nom", bio.Nom));
 
             if (proprietesModifiees.Count() > 0)
-                editionObjectGraphRepository.CreateOrUpdateChangementPropietes(proprietesModifiees, utilisateur);
+                editionObjectGraphRepository.CreateOrUpdateProprieteEdition(proprietesModifiees, utilisateur);
 
             var cv = utilisateur.Conseiller.CVs.First();
-            if (cv.ResumeExperience != bio.Biographie)
+            if (cv.ResumeExperience != bio.ResumeExperience)
             {
                 proprietesModifiees.Clear();
-                proprietesModifiees.Add(new KeyValuePair<string, string>("ResumeExperience", bio.Biographie));
-                editionObjectGraphRepository.CreateOrUpdateChangementPropietes(proprietesModifiees, cv);
+                proprietesModifiees.Add(new KeyValuePair<string, string>("ResumeExperience", bio.ResumeExperience));
+                editionObjectGraphRepository.CreateOrUpdateProprieteEdition(proprietesModifiees, cv);
             }
 
             var conseiller = utilisateur.Conseiller;
             if (conseiller.Fonction.GraphKey != bio.Fonction)
-                editionObjectGraphRepository.CreateOrUpdateChangementRelation(bio.Fonction, conseiller.Fonction.GraphKey, conseiller);
+            {
+                editionObjectGraphRepository.ChangerNoeud(
+                    objetAjouteGraphKey: bio.Fonction,
+                    objetsupprimeGraphKey: conseiller.Fonction.GraphKey,
+                    noeudModifiePropriete: "Fonction",
+                    noeudModifie: conseiller);
+            }
 
-            return Json(new { Status = "OK", Message = "Biographie modifiée" });
-        }
-        [Authorize("Bearer")]
-        [HttpPost]
-        [Route("Create")]
-        public ActionResult Create([FromBody]BioViewModel bio)
-        {
-            // Objet sugeré comme viewModel.
-
-
-            bio.GraphIdUtilisateur = "retorno ok";
-            return Json(bio);
+            return Json(new { Status = "OK", Message = "ResumeExperience modifiée" });
         }
     }
 }
