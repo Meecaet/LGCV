@@ -46,6 +46,10 @@ namespace WebCV_Fiches.Controllers
             var editions = new EditionObjectViewModelFactory<BioViewModel>();
             bioViewModel.editionObjecViewModels = editions.GetEditions(utilisateur, cv, conseiller);
 
+            var returnJon = new
+            {
+            };
+            
             return Json(bioViewModel);
         }
 

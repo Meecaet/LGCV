@@ -13,6 +13,9 @@ import { ActivatedRoute } from "@angular/router";
 export class BioComponent implements OnInit {
   bio: BioViewModel;
   @Input() UtilisateurId: string;
+  showLoadingBio:boolean=true;
+
+
   constructor(
     private cvService: CVService,
     private errorService: ErrorService,
@@ -25,11 +28,10 @@ export class BioComponent implements OnInit {
     this.UserDataLoad();
   }
   saveBio(model: BioViewModel): void {
-    debugger;
+
     this.cvService.EditBio(this.UtilisateurId, model).subscribe(
       (data: BioViewModel) => {
-        debugger;
-      },
+            },
       (error: HttpErrorResponse) => {
         this.errorService.ErrorHandle(error.status);
       }
@@ -46,25 +48,34 @@ export class BioComponent implements OnInit {
     this.cvService.GetBio(this.UtilisateurId).subscribe(
       (data: BioViewModel) => {
         this.SetData(data);
+        this.showLoadingBio=!this.showLoadingBio
       },
       (error: HttpErrorResponse) => {
-        debugger;
         this.errorService.ErrorHandle(error.status);
       }
     );
   }
+  classValidator(cssClass :string,optionCssClass):string{
+    if(this.showLoadingBio){
+      return cssClass;
+    }else{
+      return optionCssClass;
+    }
+  }
+
   SetData(data: BioViewModel) {
     if (data.editionObjecViewModels != null) {
       for (const key in data.editionObjecViewModels) {
-        debugger;
-      this.bio[data.editionObjecViewModels[key]["proprieteNom"]] = data.editionObjecViewModels[key]["proprieteValeur"];
-      //Set color
-      this.bio.bioHighlight[data.editionObjecViewModels[key]["proprieteNom"]]=data.editionObjecViewModels[key]["type"]
+      if(data.editionObjecViewModels[key]["etat"] == "Modifie" )
+       {
+        this.bio[data.editionObjecViewModels[key]["proprieteNom"]] = data.editionObjecViewModels[key]["proprieteValeur"];
+        //Set color
+        this.bio.bioHighlight[data.editionObjecViewModels[key]["proprieteNom"]]=data.editionObjecViewModels[key]["type"]
+       }
       }
     }
     //
-
-    if (this.bio.resumeExperience == null) {
+ if (this.bio.resumeExperience == null) {
       this.bio.resumeExperience = data.resumeExperience;
     }
     if (this.bio.nom == null) {

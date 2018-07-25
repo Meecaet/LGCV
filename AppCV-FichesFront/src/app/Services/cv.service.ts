@@ -91,7 +91,7 @@ export class CVService {
     const url = this.rootPath + "/api/FrontEndLoadData/GetAllLangues";
      return this._http.get<Array<LangueViewModel>>(url);
   }
-  public LoadFonction(): Observable<Array<FonctionViewModel>> {
+  public  LoadFonction(): Observable<Array<FonctionViewModel>> {
     const url = this.rootPath + "/api/FrontEndLoadData/GetAllFonctions";
      return this._http.get<Array<FonctionViewModel>>(url);
   }
