@@ -61,16 +61,16 @@ namespace DAL_CV_Fiches.Models.Graph
 
         public Conseiller()
         {
-            Employeurs = new List<Employeur>();
-            Technologies = new List<Technologie>();
-            PiecesJointes = new List<PieceJointe>();
-            CVs = new List<CV>();
-            Langues = new List<Langue>();
-            Mandats = new List<Mandat>();
-            Associations = new List<OrdreProfessional>();
-            FormationsScolaires = new List<FormationScolaire>();
-            Formations = new List<Formation>();
-            DomaineDInterventions = new List<DomaineDIntervention>();
+            //Employeurs = new List<Employeur>();
+            //Technologies = new List<Technologie>();
+            //PiecesJointes = new List<PieceJointe>();
+            //CVs = new List<CV>();
+            //Langues = new List<Langue>();
+            //Mandats = new List<Mandat>();
+            //Associations = new List<OrdreProfessional>();
+            //FormationsScolaires = new List<FormationScolaire>();
+            //Formations = new List<Formation>();
+            //DomaineDInterventions = new List<DomaineDIntervention>();
         }
 
         public List<Formation> Certifications()

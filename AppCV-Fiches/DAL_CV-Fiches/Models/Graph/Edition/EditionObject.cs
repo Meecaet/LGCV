@@ -10,7 +10,8 @@ namespace DAL_CV_Fiches.Models.Graph
 {
     public class EditionObject : GraphObject, IChangementRelation
     {
-        public string ObjetAjouteId { get; set; }
+        [Edge("Ajoute", lazyLoad: true)]
+        public GraphObject ObjetAjoute { get => (GraphObject)LoadProperty("ObjetAjoute"); set => SetProperty("ObjetAjoute", value); }
         public string ObjetSupprimeId { get; set; }
         public string Etat { get; set; }
         public string Observacao { get; set; }
@@ -18,7 +19,7 @@ namespace DAL_CV_Fiches.Models.Graph
         public string ProprieteNom { get; set; } 
         public string ProprieteValeur { get; set; } 
 
-        [Edge("Modifier")]
+        [Edge("Modifier", lazyLoad: true)]
         public GraphObject NoeudModifie { get => (GraphObject)LoadProperty("NoeudModifie"); set => SetProperty("NoeudModifie", value); }
     }
 

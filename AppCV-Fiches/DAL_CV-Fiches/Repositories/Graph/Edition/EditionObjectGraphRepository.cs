@@ -43,7 +43,7 @@ namespace DAL_CV_Fiches.Repositories.Graph
             return editions;
         }
 
-        public EditionObject ChangerNoeud(string objetAjouteGraphKey, string objetsupprimeGraphKey, string noeudModifiePropriete, GraphObject noeudModifie)
+        public EditionObject ChangerNoeud(GraphObject objetAjoute, string objetsupprimeGraphKey, string noeudModifiePropriete, GraphObject noeudModifie)
         {
             var edition = FindEditionObjectOfType(
                 proprieteNom: noeudModifiePropriete,
@@ -53,7 +53,7 @@ namespace DAL_CV_Fiches.Repositories.Graph
 
             if (edition != null)
             {
-                edition.ObjetAjouteId = objetAjouteGraphKey;
+                edition.ObjetAjoute = objetAjoute;
                 edition.ObjetSupprimeId = objetsupprimeGraphKey;
                 Update(edition);
             }
@@ -61,7 +61,7 @@ namespace DAL_CV_Fiches.Repositories.Graph
             {
                 edition = CreateEditionObject(
                     proprieteNom: noeudModifiePropriete,
-                    objetAjouteId: objetAjouteGraphKey,
+                    objetAjoute: objetAjoute,
                     objetSupprimeId: objetsupprimeGraphKey,
                     noeudModifie: noeudModifie);
             };
@@ -70,7 +70,7 @@ namespace DAL_CV_Fiches.Repositories.Graph
 
         public EditionObject AjouterNoeud(GraphObject objetAjoute, string noeudModifiePropriete, GraphObject noeudModifie)
         {
-            return CreateEditionObject(proprieteNom: noeudModifiePropriete, objetAjouteId: objetAjoute.GraphKey, noeudModifie: noeudModifie);
+            return CreateEditionObject(proprieteNom: noeudModifiePropriete, objetAjoute: objetAjoute, noeudModifie: noeudModifie);
         }
 
         public EditionObject SupprimerNoeud(GraphObject objetsupprime, string noeudModifiePropriete, GraphObject noeudModifie)
@@ -78,7 +78,7 @@ namespace DAL_CV_Fiches.Repositories.Graph
             return CreateEditionObject(proprieteNom: noeudModifiePropriete, objetSupprimeId: objetsupprime.GraphKey, noeudModifie: noeudModifie);
         }
 
-        private EditionObject CreateEditionObject(string proprieteNom, GraphObject noeudModifie, string proprieteValuer = null, string objetAjouteId = null, string objetSupprimeId = null)
+        private EditionObject CreateEditionObject(string proprieteNom, GraphObject noeudModifie, string proprieteValuer = null, GraphObject objetAjoute = null, string objetSupprimeId = null)
         {
             var edition = new EditionObject();
             edition.NoeudModifie = noeudModifie;
@@ -94,8 +94,8 @@ namespace DAL_CV_Fiches.Repositories.Graph
                 if (objetSupprimeId != null)
                     edition.ObjetSupprimeId = objetSupprimeId;
 
-                if (objetAjouteId != null)
-                    edition.ObjetAjouteId = objetAjouteId;
+                if (objetAjoute != null)
+                    edition.ObjetAjoute = objetAjoute;
             }
 
             edition.Etat = EditionObjectEtat.Modifie;
@@ -115,6 +115,12 @@ namespace DAL_CV_Fiches.Repositories.Graph
             Add(edition, false);
             var att = (Edge)edition.GetType().GetProperty("NoeudModifie").GetCustomAttribute(typeof(Edge));
             CreateEdge(edition, noeudModifie, att);
+
+            if (edition.ObjetAjoute != null)
+            {
+                att = (Edge)edition.GetType().GetProperty("ObjetAjoute").GetCustomAttribute(typeof(Edge));
+                CreateEdge(edition, edition.ObjetAjoute, att);
+            }
 
             noeudModifie.EditionObjects.Add(edition);
             dynamic noeuModifieRepository = GraphRepositoy.GetGenericRepository(noeudModifie.GetType());

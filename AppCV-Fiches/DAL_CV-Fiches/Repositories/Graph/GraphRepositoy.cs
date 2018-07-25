@@ -393,7 +393,7 @@ namespace DAL_CV_Fiches.Repositories.Graph
             Type thisType = noeudType != null ? noeudType : typeof(T),
                  genericArgumentType = null,
                  interfaceType = null;
-            T genObj = new T();
+            T genObj = (T)Activator.CreateInstance(thisType);
 
             Attribute att;
             Attributes.Edge attEdge;
@@ -451,17 +451,20 @@ namespace DAL_CV_Fiches.Repositories.Graph
 
             string transversalQuery = $"g.V('{fromId}').out('{edgeName}')";
             string getEdgeQuery = string.Empty;
-            Type noeudType = typeof(GraphObject);
 
-            if (typeof(T) != typeof(GraphObject))
+            if (thisType != typeof(GraphObject))
             {
                 transversalQuery = transversalQuery + $".hasLabel('{thisType.Name}')";
-                noeudType = typeof(T);
             }
 
             foreach (Vertex vertex in ExecuteCommandQueryVertex(transversalQuery))
             {
-                T embeddedObject = GetObjectFromVertex(vertex, noeudType);
+                if (thisType == typeof(GraphObject))
+                {
+                    thisType = Type.GetType($"DAL_CV_Fiches.Models.Graph.{vertex.Label}");
+                }
+
+                T embeddedObject = GetObjectFromVertex(vertex, thisType);
 
                 foreach (PropertyInfo propInfo in thisType.GetProperties())
                 {

@@ -129,7 +129,7 @@ namespace WebCV_Fiches.Controllers
             }
             else
             {
-                var edition = utilisateur.Conseiller.EditionObjects.Find(x => x.ObjetAjouteId == certification.GraphKey);
+                var edition = utilisateur.Conseiller.EditionObjects.Find(x => x.ObjetAjoute.GraphKey == certification.GraphKey);
                 editionObjectGraphRepository.Delete(edition);
                 formationGraphRepository.Delete(certification);
             }
