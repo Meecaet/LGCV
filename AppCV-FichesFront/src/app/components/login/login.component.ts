@@ -34,6 +34,7 @@ export class LoginComponent implements OnInit {
           this.MsgError = "";
           localStorage.setItem("token", x.token);
           localStorage.setItem("utilisateurId", x.utilisateurId);
+          localStorage.setItem("userName", x.userName);
           this.route.navigate(['home']);
         } else {
           localStorage.removeItem("token");

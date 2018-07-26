@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebCV_Fiches.Models.Admin;
 
 namespace WebCV_Fiches.Models
 {
@@ -13,5 +14,7 @@ namespace WebCV_Fiches.Models
         public string Token { get; set; }
         public string message { get; set; }
         public string utilisateurId { get; set; }
+        public string userName { get; set; }
+        public List<ApplicationRole> roles { get; set; }
     }
 }

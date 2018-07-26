@@ -84,7 +84,7 @@ namespace WebCV_Fiches.Controllers
                 });
                 var token = handler.WriteToken(securityToken);
 
-      
+                apiCredential.userName = userLogin.Email;
                 apiCredential.created = dataCriacao.ToString("yyyy-MM-dd HH:mm:ss");
                 apiCredential.expiration = dataExpiracao.ToString("yyyy-MM-dd HH:mm:ss");
                 apiCredential.Token = token;
