@@ -9,60 +9,54 @@
         <hr>
         <div class="form-group">
           <label for="Email">Email</label>
-          <input class="form-control" (keyup)="IsValid(Email,IsValidEmail,IsValidEmailRegex)" [(ngModel)]="Email" type="email" name="Email"
-            value="">
-          <div #IsValidEmail class="alert alert-danger">
+          <input class="form-control" (keyup)="IsValid(model.email, IsValidEmail, IsValidEmailRegex)" [(ngModel)]="model.email" type="email" name="Email" value="">
+          <div #IsValidEmail class="alert alert-danger" isTouched="false" hidden="isTouched?false:true">
             This field is required
           </div>
-          <div #IsValidEmailRegex class="alert alert-danger">
+          <div #IsValidEmailRegex class="alert alert-danger" isTouched="false" hidden="isTouched?false:true">
             The email format is incorrect
           </div>
         </div>
+
         <div class="form-group">
           <label for="Prenom">Prenom</label>
-          <input class="form-control" type="text" (keyup)="IsValid(Prenom,IsValidPrenom,null)" name="Prenom" [(ngModel)]="Prenom">
-          <div #IsValidPrenom class="alert alert-danger">
+          <input class="form-control" type="text" (keyup)="IsValid(model.prenom, IsValidPrenom, null)" name="Prenom" [(ngModel)]="model.prenom">
+          <div #IsValidPrenom class="alert alert-danger" isTouched="false" hidden="isTouched?false:true">
             This field is required
           </div>
         </div>
+
         <div class="form-group">
           <label for="Nom">Nom</label>
-
-          <input class="form-control" type="text" name="Nom" (keyup)="IsValid(Nom,IsValidNom,null)" [(ngModel)]="Nom">
-          <div #IsValidNom class="alert alert-danger">
-            This field is required --
+          <input class="form-control" type="text" name="Nom" (keyup)="IsValid(model.nom,IsValidNom,null)" [(ngModel)]="model.nom">
+          <div #IsValidNom class="alert alert-danger" isTouched="false" hidden="isTouched?false:true">
+            This field is required
           </div>
         </div>
+
         <div class="form-group">
           <label for="Password">Password</label>
-          <input class="form-control" (keyup)="IsValidPassword(PassWord,IsValidPassWord,IsValidPassWordRegex)" [(ngModel)]="PassWord"
+          <input class="form-control" (keyup)="IsValidPassword(model.password,IsValidPassWord,IsValidPassWordRegex)" [(ngModel)]="model.password"
             type="password" name="Password">
-          <div #IsValidPassWord class="alert alert-danger">
+          <div #IsValidPassWord class="alert alert-danger" isTouched="false" hidden="isTouched?false:true">
             This field is required
           </div>
-          <div #IsValidPassWordRegex class="alert alert-danger">
-            the password must contain at least 8 characters, including UPPER/lowercase and numbers
+          <div #IsValidPassWordRegex class="alert alert-danger" isTouched="false" hidden="isTouched?false:true">
+            The password must contain at least 8 characters, including UPPER/lowercase and numbers
           </div>
         </div>
+
         <div class="form-group">
           <label for="ConfirmPassword">Confirm password</label>
-          <input class="form-control" (keyup)="IsValidPassword(ConfirmPassword,IsValidConfirmPassword,IsValidConfirmPasswordRegex)"
-            type="password" [(ngModel)]="ConfirmPassword" name="ConfirmPassword">
-          <div #IsValidConfirmPassword class="alert alert-danger">
-            This field is required
-          </div>
-          <div #IsValidConfirmPasswordRegex class="alert alert-danger">
-            the password must contain at least 8 characters, including UPPER/lowercase and numbers
-          </div>
-          <div *ngIf="ConfirmPassword==PassWord?false:true" class="alert alert-danger">
-            the password has to be the samel
+          <input class="form-control" type="password" [(ngModel)]="ConfirmPassword" name="ConfirmPassword">
+          <div *ngIf="ConfirmPassword==model.password?false:true" class="alert alert-danger">
+            The password and confirmation password do not match.
           </div>
         </div>
-        <button type="button" [disabled]="DisanabledButton(IsValidEmail,IsValidEmailRegex,IsValidPrenom,IsValidNom,IsValidPassWord,IsValidPassWordRegex)"
-          class="btn btn-default">Register</button>
+
+        <button type="button" class="btn btn-default" (click)="Registre()">Register</button>
       </form>
     </div>
   </div>
-
 
 </div>

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading.Tasks;
+using DAL_CV_Fiches.Models.Graph;
 using DAL_CV_Fiches.Repositories.Graph;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -104,9 +105,8 @@ namespace WebCV_Fiches.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public async void Register([FromBody]RegisterViewModel model)
+        public async Task<ActionResult> Register([FromBody]RegisterViewModel model)
         {
-
             var user = new ApplicationUser { UserName = model.Email, Email = model.Email, Nom = model.Nom, Prenom = model.Prenom };
             var result = await _userManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
@@ -120,8 +120,21 @@ namespace WebCV_Fiches.Controllers
                 await _signInManager.SignInAsync(user, isPersistent: false);
                 _logger.LogInformation("User created a new account with password.");
 
+                var utilisateurGraphRepository = new UtilisateurGraphRepository();
+                var utilisateur = new Utilisateur() {
+                    Prenom = user.Prenom,
+                    Nom = user.Nom,
+                    AdresseCourriel = user.Email
+                };
+                var savedUserModel = utilisateurGraphRepository.CreateIfNotExists(utilisateur);
+                return Json(savedUserModel);
             }
-            //TODO: Do the return
+            else
+            {
+                ErrorViewModel error = new ErrorViewModel();
+                error.RequestId = "Le rôle n'a pas pu être modifié";
+                return Json(error);
+            }
         }
 
 

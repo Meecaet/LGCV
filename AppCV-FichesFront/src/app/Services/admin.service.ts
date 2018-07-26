@@ -4,6 +4,7 @@ import { Observable } from "rxjs";
 import { RoleViewModel } from "../Models/Admin/Role-model";
 import { RoleAdministratioViewModel } from "../Models/Admin/RoleAdministration-model";
 import { UserViewModel } from "../Models/Admin/User-model";
+import { RegisterViewModel } from "../Models/Register-model";
 
 
 @Injectable({
@@ -67,5 +68,10 @@ export class AdminService {
   public DeleteRol(roleId: string) {
     const url = `Role/Delete/${roleId}`;
     return this.doRequest<Array<RoleViewModel>>(url);
+  }
+
+  public Register(registrer: RegisterViewModel) {
+    const url = "api/AccountApi/Register";
+    return this.doRequest(url, "post", registrer);
   }
 }
