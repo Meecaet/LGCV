@@ -8,9 +8,9 @@ namespace DAL_CV_Fiches.Models.Graph
     public class Projet : GraphObject
     {
         [Edge("EteConseillePar", true)]
-        public Employeur SocieteDeConseil { get; set; }
+        public Employeur SocieteDeConseil { get => (Employeur)LoadProperty("SocieteDeConseil"); set => SetProperty("SocieteDeConseil", value); }
         [Edge("DemandePar")]
-        public Client Client { get; set; }
+        public Client Client { get => (Client)LoadProperty("Client"); set => SetProperty("Client", value); }
 
         public string Nom { get; set; }
         public int Envergure { get; set; }
@@ -25,7 +25,7 @@ namespace DAL_CV_Fiches.Models.Graph
         public double HeuresParSemaine { get; set; }
 
         [Edge("AUtilise", true)]
-        public List<Technologie> Technologies { get; set; }
+        public List<Technologie> Technologies { get => (List<Technologie>)LoadProperty("Technologies"); set => SetProperty("Technologies", value); }
 
         public Projet()
         {

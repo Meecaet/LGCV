@@ -126,8 +126,29 @@ namespace WebCV_Fiches.Controllers
         [Route("{utilisateurId}/Delete/{formationAcademiqueId}")]
         public ActionResult Delete(string utilisateurId, string formationAcademiqueId)
         {
-            // Objet sugeré comme viewModel.
-            return Json(new { Status = "OK", Message = "Formation académique eliminé" });
+            var utilisateur = utilisateurGraphRepository.GetOne(utilisateurId);
+            var formation = formationScolaireGraphRepository.GetOne(formationAcademiqueId);
+
+
+            var formations = utilisateur.Conseiller.FormationsScolaires;
+
+            if (formations.Any(x => x.GraphKey == formation.GraphKey))
+            {
+                foreach (var edition in formation.EditionObjects)
+                {
+                    editionObjectGraphRepository.Delete(edition);
+                }
+                editionObjectGraphRepository.SupprimerNoeud(formation, "FormationsScolaires", utilisateur.Conseiller);
+            }
+            else
+            {
+                var edition = utilisateur.Conseiller.EditionObjects.Find(x => x.ObjetAjoute.GraphKey == formation.GraphKey);
+                editionObjectGraphRepository.Delete(edition);
+            }
+
+
+
+            return Json(formation);
         }
     }
 }

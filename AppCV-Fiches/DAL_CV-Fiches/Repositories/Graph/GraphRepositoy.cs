@@ -121,7 +121,7 @@ namespace DAL_CV_Fiches.Repositories.Graph
                 CreateEdge(from, to, att);
         }
 
-        public void Delete(T obj)
+        public virtual void Delete(T obj)
         {
             string updateQuery = $"g.V('{obj.GraphKey}').drop()";
             ExecuteCommandQueryVertex(updateQuery);
@@ -568,7 +568,7 @@ namespace DAL_CV_Fiches.Repositories.Graph
             return feedResponse.First().Id.ToString();
         }
 
-        private FeedResponse<Vertex> ExecuteCommandQueryVertex(string CommandString)
+        protected FeedResponse<Vertex> ExecuteCommandQueryVertex(string CommandString)
         {
             CommandString = CommandString.Replace("$", "\\$");
 

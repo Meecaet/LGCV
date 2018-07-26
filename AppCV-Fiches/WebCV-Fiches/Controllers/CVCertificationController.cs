@@ -131,7 +131,6 @@ namespace WebCV_Fiches.Controllers
             {
                 var edition = utilisateur.Conseiller.EditionObjects.Find(x => x.ObjetAjoute.GraphKey == certification.GraphKey);
                 editionObjectGraphRepository.Delete(edition);
-                formationGraphRepository.Delete(certification);
             }
 
 

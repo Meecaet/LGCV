@@ -2,6 +2,7 @@
 using DAL_CV_Fiches.Repositories.Graph.Attributes;
 using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
+using Microsoft.Azure.Graphs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -77,6 +78,23 @@ namespace DAL_CV_Fiches.Repositories.Graph
         {
             return CreateEditionObject(proprieteNom: noeudModifiePropriete, objetSupprimeId: objetsupprime.GraphKey, noeudModifie: noeudModifie);
         }
+
+        public override void Delete(EditionObject obj)
+        {
+            string deleteAjouteEdgeQuery = $"g.V('{obj.GraphKey}').outE('Ajoute').drop()";
+            ExecuteCommandQueryVertex(deleteAjouteEdgeQuery);
+
+            string deleteModifierEdgeQuery = $"g.V('{obj.GraphKey}').outE('Modifier').drop()";
+            ExecuteCommandQueryVertex(deleteModifierEdgeQuery);
+
+            string deleteEteModifieQuery = $"g.V('{obj.GraphKey}').inE('EteModifie').drop()";
+            ExecuteCommandQueryVertex(deleteEteModifieQuery);
+
+            base.Delete(obj);
+        }
+
+
+
 
         private EditionObject CreateEditionObject(string proprieteNom, GraphObject noeudModifie, string proprieteValuer = null, GraphObject objetAjoute = null, string objetSupprimeId = null)
         {
