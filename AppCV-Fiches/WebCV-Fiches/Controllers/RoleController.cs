@@ -1,20 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using WebCV_Fiches.Data;
 using WebCV_Fiches.Models;
 using WebCV_Fiches.Models.Admin;
 using WebCV_Fiches.Models.AdminViewModels;
+using WebCV_Fiches.Filters;
 
 namespace WebCV_Fiches.Controllers
 {
 
-    [Authorize(Roles = "Administrateur")]
+    [Authorize("Bearer")]
+    [AuthorizeRoleFilter("Administrateur")]
     [Route("Role")]
     public class RoleController : Controller
     {
@@ -38,10 +37,8 @@ namespace WebCV_Fiches.Controllers
             return View(adminViewModel);
         }
 
-
         // POST: Role/Create
         [HttpPost]
-        [AllowAnonymous]
         [Route("Create")]
         public ActionResult Create([FromBody]ApplicationRole role)
         {
@@ -60,7 +57,6 @@ namespace WebCV_Fiches.Controllers
             }
         }
 
-        [AllowAnonymous]
         [Route("GetRoles")]
         public ActionResult GetRoles()
         {
@@ -77,7 +73,6 @@ namespace WebCV_Fiches.Controllers
             }
         }
 
-        [AllowAnonymous]
         [Route("Details/{roleId}")]
         public ActionResult Details(string roleId)
         {
@@ -97,7 +92,6 @@ namespace WebCV_Fiches.Controllers
             }
         }
 
-        [AllowAnonymous]
         [Route("GetAllUsers")]
         public ActionResult getAllUsers()
         {
@@ -115,7 +109,6 @@ namespace WebCV_Fiches.Controllers
         }
 
         [HttpPost]
-        [AllowAnonymous]
         [Route("Edit")]
         public async Task<ActionResult> Edit([FromBody]RoleAdministrationViewModel roleAdministration)
         {
@@ -137,7 +130,6 @@ namespace WebCV_Fiches.Controllers
             }
         }
 
-        [AllowAnonymous]
         [Route("AddUserRole/{roleId}/User/{userId}")]
         public async Task<ActionResult> AddUserRole(string roleId, string userId)
         {
@@ -195,6 +187,6 @@ namespace WebCV_Fiches.Controllers
                 return Json(error);
             }
         }
-        
     }
+
 }

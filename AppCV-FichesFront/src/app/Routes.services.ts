@@ -14,6 +14,7 @@ import { RoleAdminComponent } from "./components/role-admin/role-admin.component
 import { RoleCreateComponent } from "./components/role-create/role-create.component";
 import { RoleEditComponent } from "./components/role-edit/role-edit.component";
 import { RoleDetailComponent } from "./components/role-detail/role-detail.component";
+import { AccessDeniedComponent } from "./components/access-denied/access-denied.component";
 
 const routes: Routes = [
   { path: "", component: HomeComponent},
@@ -41,7 +42,7 @@ const routes: Routes = [
       { path: "detail/:id", component: RoleDetailComponent}
     ]
   },
-
+  { path: "accessdenied", component: AccessDeniedComponent },
   { path: "notfound", component: PageNotFoundComponent },
   { path: "**", redirectTo: "notfound" }
 ];

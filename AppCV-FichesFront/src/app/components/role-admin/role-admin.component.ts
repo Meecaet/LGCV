@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AdminService } from '../../Services/admin.service';
 import { HttpErrorResponse } from '../../../../node_modules/@angular/common/http';
 import { RoleViewModel } from '../../Models/Admin/Role-model';
+import { ErrorService } from '../../Services/error.service';
 
 @Component({
   selector: 'app-role-admin',
@@ -11,7 +12,8 @@ import { RoleViewModel } from '../../Models/Admin/Role-model';
 export class RoleAdminComponent implements OnInit {
 
   constructor(
-    private adminService: AdminService
+    private adminService: AdminService,
+    private errorService: ErrorService
   ) {}
 
   roles: Array<RoleViewModel>;
@@ -22,8 +24,7 @@ export class RoleAdminComponent implements OnInit {
         this.roles = data;
       }, 
       (error: HttpErrorResponse) => {
-        // TODO
-        debugger;
+        this.errorService.ErrorHandle(error.status);
       }
     );
   }
@@ -34,8 +35,7 @@ export class RoleAdminComponent implements OnInit {
         this.roles = data;
       },
       (error: HttpErrorResponse) => {
-        // TODO
-        debugger;
+        this.errorService.ErrorHandle(error.status);
       }
     );
   }

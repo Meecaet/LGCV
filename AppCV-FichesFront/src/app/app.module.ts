@@ -34,6 +34,7 @@ import {  ReactiveFormsModule,  FormsModule,  FormBuilder} from "@angular/forms"
 import { ValidatorService } from "./validator.services";
 import { JwtInterceptor } from "./Services/jwt-interceptor.service";
 import { CVService } from "./Services/cv.service";
+import { AdminService } from "./Services/admin.service";
 import { NgModule } from "@angular/core";
 import { CvEditComponent } from './components/cv-edit/cv-edit.component';
 import { BioComponent } from "./shared/bio/bio.component";
@@ -45,6 +46,7 @@ import { RoleAdminComponent} from "./components/role-admin/role-admin.component"
 import { RoleCreateComponent} from "./components/role-create/role-create.component";
 import { RoleDetailComponent } from './components/role-detail/role-detail.component';
 import { RoleEditComponent } from './components/role-edit/role-edit.component';
+import { AccessDeniedComponent } from './components/access-denied/access-denied.component';
 
 @NgModule({
   declarations: [
@@ -75,7 +77,8 @@ import { RoleEditComponent } from './components/role-edit/role-edit.component';
     RoleAdminComponent,
     RoleCreateComponent,
     RoleDetailComponent,
-    RoleEditComponent
+    RoleEditComponent,
+    AccessDeniedComponent
   ],
   imports: [
     MatAutocompleteModule,
@@ -101,6 +104,12 @@ import { RoleEditComponent } from './components/role-edit/role-edit.component';
     ValidatorService,
     FormBuilder,
     CVService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: JwtInterceptor,
+      multi: true
+    },
+    AdminService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: JwtInterceptor,

@@ -2,7 +2,6 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { RoleViewModel } from "../Models/Admin/Role-model";
-import { SelectItemViewModel } from "../Models/Admin/SelectItem-model"
 import { RoleAdministratioViewModel } from "../Models/Admin/RoleAdministration-model";
 import { UserViewModel } from "../Models/Admin/User-model";
 

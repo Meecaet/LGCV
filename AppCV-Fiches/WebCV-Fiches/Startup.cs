@@ -21,6 +21,7 @@ using WebCV_Fiches.Extensions;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using WebCV_Fiches.Models.AccountViewModels;
+using WebCV_Fiches.Filters;
 
 namespace WebCV_Fiches
 {
@@ -56,9 +57,6 @@ namespace WebCV_Fiches
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-
-
-
             services.ConfigureApplicationCookie(options =>
             {
                 options.Cookie.HttpOnly = true;
@@ -69,6 +67,11 @@ namespace WebCV_Fiches
             });
 
             services.AddCors();
+            //services.AddMvc(options => {
+            //    options.Filters.Add<AuthorizeRoleFilter>();
+
+            //});
+
             services.AddMvc();
             //services.AddMvc(config =>
             //{

@@ -5,13 +5,16 @@ import { Router } from "@angular/router";
   providedIn: "root"
 })
 export class ErrorService {
-  constructor(private route: Router) {}
+  constructor(private route: Router) { }
   ErrorHandle(errorStatus: number): void {
-
+    debugger;
     switch (errorStatus) {
       case 401:
-      sessionStorage.removeItem('token');
-      this.route.navigate(['/account/login'])
+        sessionStorage.removeItem('token');
+        this.route.navigate(['/account/login'])
+        break;
+      case 403:
+        this.route.navigate(['/accessdenied']);
         break;
 
       default:
