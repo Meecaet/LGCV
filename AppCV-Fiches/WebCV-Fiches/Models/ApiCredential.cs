@@ -16,5 +16,8 @@ namespace WebCV_Fiches.Models
         public string utilisateurId { get; set; }
         public string userName { get; set; }
         public List<ApplicationRole> roles { get; set; }
+        public bool isAdministrateur { get; set; }
+        public bool isConseiller { get; set; }
+        public bool isApprobateur { get; set; }
     }
 }
