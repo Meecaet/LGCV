@@ -6,4 +6,7 @@ export class Credential{
      message :string;
      utilisateurId:string;
      userName:string;
+     isAdministrateur:boolean;
+     isApprobateur:boolean;
+     isConseiller:boolean;
 }

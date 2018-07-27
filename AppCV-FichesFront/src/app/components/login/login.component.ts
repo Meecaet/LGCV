@@ -35,6 +35,9 @@ export class LoginComponent implements OnInit {
           localStorage.setItem("token", x.token);
           localStorage.setItem("utilisateurId", x.utilisateurId);
           localStorage.setItem("userName", x.userName);
+          localStorage.setItem("isAdministrateur", x.isAdministrateur.toString());
+          localStorage.setItem("isApprobateur", x.isApprobateur.toString());
+          localStorage.setItem("isConseiller", x.isConseiller.toString());
           this.route.navigate(['home']);
         } else {
           localStorage.removeItem("token");

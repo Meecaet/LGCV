@@ -9,6 +9,10 @@ import { Location } from "@angular/common";
 })
 export class HomeComponent implements OnInit {
 
+  isAdministrateur: boolean = false;
+  isApprobateur: boolean = false;
+  isConseiller: boolean = false;
+
   constructor(
     private router: Router,
     private location: Location
@@ -21,6 +25,9 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (localStorage.getItem("isAdministrateur")== "true") {this.isAdministrateur=true;}
+    if (localStorage.getItem("isApprobateur")== "true") {this.isApprobateur=true;}
+    if (localStorage.getItem("isConseiller")== "true") {this.isConseiller=true;}
   }
 
 }
