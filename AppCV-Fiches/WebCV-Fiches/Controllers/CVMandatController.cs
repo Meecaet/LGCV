@@ -60,7 +60,7 @@ namespace WebCV_Fiches.Controllers
             mandatViewModel.GraphIdFonction = mandat.Fonction.GraphKey;
             mandatViewModel.NumeroMandat = Convert.ToInt32(mandat.Numero);
             mandatViewModel.PorteeDesTravaux = mandat.Description;
-            mandatViewModel.Taches = ViewModelFactory.GetViewModels(utilisateurId: utilisateurId, noeudsModifie: new List<GraphObject> { mandat }, graphObjects: mandat.Taches.Cast<GraphObject>().ToList(), map: mapTache).ConvertAll(x => (TacheViewModel)x);
+            mandatViewModel.Taches = ViewModelFactory<Tache, TacheViewModel>.GetViewModels(utilisateurId: utilisateurId, noeudsModifie: new List<GraphObject> { mandat }, graphObjects: mandat.Taches.Cast<GraphObject>().ToList(), map: mapTache).ConvertAll(x => (TacheViewModel)x);
             mandatViewModel.TitreMandat = mandat.Titre;
 
             mandatViewModel.DebutProjet = mandat.Projet.DateDebut;
@@ -72,7 +72,7 @@ namespace WebCV_Fiches.Controllers
             mandatViewModel.GraphIdProjet = projet.GraphKey;
             mandatViewModel.FonctionReference = projet.FonctionReference;
             mandatViewModel.NomReference = projet.NomReference;
-            mandatViewModel.Technologies = ViewModelFactory.GetViewModels(utilisateurId: utilisateurId, noeudsModifie: new List<GraphObject> { mandat }, graphObjects: mandat.Projet.Technologies.Cast<GraphObject>().ToList(), map: mapTechnologie).ConvertAll(x => (TechnologieViewModel)x);
+            mandatViewModel.Technologies = ViewModelFactory<Technologie, TechnologieViewModel>.GetViewModels(utilisateurId: utilisateurId, noeudsModifie: new List<GraphObject> { mandat }, graphObjects: mandat.Projet.Technologies.Cast<GraphObject>().ToList(), map: mapTechnologie).ConvertAll(x => (TechnologieViewModel)x);
             mandatViewModel.TelephoneReference = projet.TelephoneReference;
             mandatViewModel.TitreProjet = projet.Nom;
 

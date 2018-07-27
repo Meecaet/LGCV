@@ -33,7 +33,7 @@ namespace WebCV_Fiches.Controllers
 
             var utilisateur = utilisateurGraphRepository.GetOne(utilisateurId);
             var domains = utilisateur.Conseiller.DomaineDInterventions.Cast<GraphObject>().ToList();
-            var domainsViewModel = ViewModelFactory.GetViewModels(utilisateurId: utilisateurId, noeudsModifie: new List<GraphObject> { utilisateur.Conseiller }, graphObjects: domains, map: map);
+            var domainsViewModel = ViewModelFactory<DomaineDIntervention, DomaineDInterventionViewModel>.GetViewModels(utilisateurId: utilisateurId, noeudsModifie: new List<GraphObject> { utilisateur.Conseiller }, graphObjects: domains, map: map);
 
             return Json(domainsViewModel);
         }

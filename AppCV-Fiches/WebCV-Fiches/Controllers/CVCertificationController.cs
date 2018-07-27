@@ -36,7 +36,7 @@ namespace WebCV_Fiches.Controllers
             var noeudModifie = new List<GraphObject>();
             noeudModifie.Add(utilisateur.Conseiller);
             noeudModifie.AddRange(certifications);
-            var certificationsViewModel = ViewModelFactory.GetViewModels(utilisateurId: utilisateurId, noeudsModifie: noeudModifie, graphObjects: certifications, map: map);
+            var certificationsViewModel = ViewModelFactory<Formation,CertificationViewModel>.GetViewModels(utilisateurId: utilisateurId, noeudsModifie: noeudModifie, graphObjects: certifications, map: map);
             return Json(certificationsViewModel);
         }
 

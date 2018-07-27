@@ -8,7 +8,6 @@ namespace WebCV_Fiches.Models.CVViewModels
 {
     public class TacheViewModel : ViewModel
     {
-        public string GraphId { get; set; }
         public string Description { get; set; }
 
         public override bool HasEdtion(EditionObject edition)
