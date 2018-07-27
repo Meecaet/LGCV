@@ -40,6 +40,12 @@ namespace WebCV_Fiches.Controllers
             noeudModifie.Add(utilisateur.Conseiller);
             noeudModifie.AddRange(formations);
             var formationsViewModel = ViewModelFactory.GetViewModels(utilisateurId: utilisateurId, noeudsModifie: noeudModifie, graphObjects: formations, map: map);
+
+            if (formationsViewModel.Count>1)
+            {
+                formationsViewModel = formationsViewModel.OrderByDescending(x => ((FormationAcademiqueViewModel)x).Annee).ToList();
+            }
+
             return Json(formationsViewModel);
         }
 
@@ -53,7 +59,7 @@ namespace WebCV_Fiches.Controllers
                 GraphIdEtablissement = formation.Ecole?.GraphKey,
                 GraphId = formation.GraphKey,
                 Etablissement = formation.Ecole?.Nom,
-                Niveau = formation.Niveau.ToString(),
+                Niveau = (int) formation.Niveau ,
                 Pays = formation.Ecole?.Pays?.Nom,
                 Principal = formation.EstPrincipal
             };
@@ -72,7 +78,7 @@ namespace WebCV_Fiches.Controllers
                 diplome: formationAcademique.Diplome,
                 dateConlusion: formationAcademique.Annee,
                 equivalence: false,
-                niveau: formationAcademique.Niveau,
+                niveau: formationAcademique.Niveau.ToString(),
                 principal: formationAcademique.Principal,
                 instituition: instituition
                 );

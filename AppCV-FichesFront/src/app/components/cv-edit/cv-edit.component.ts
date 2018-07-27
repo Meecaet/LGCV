@@ -32,6 +32,7 @@ export class CvEditComponent implements OnInit {
     this.lastPage = this.mandatCollection.length;
   }
   addNewMandatFromList(arg: any): void {
+    debugger
     // this.InputMandatCarousel = arg.newMandat;
     this.numberPage = arg.numberPage;
     this.showMandat = true;

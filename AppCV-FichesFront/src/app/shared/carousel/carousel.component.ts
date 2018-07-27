@@ -17,12 +17,16 @@ export class CarouselComponent implements OnInit {
   @Input("numberPage") numberPage: number;
   @Output("onChangePage") onChangePage = new EventEmitter();
 
+  @Input() private uploadSuccess: EventEmitter<boolean>;
+
   @Input("hiddenButton") hiddenButton: string;
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   visible = true;
   selectable = true;
   removable = true;
   addOnBlur = true;
+
+  showLoadingCarousel:boolean=false;
   ngOnInit() {}
   constructor(private route: Router) {
     this.mandat = new MandatViewModel();
@@ -36,6 +40,9 @@ export class CarouselComponent implements OnInit {
     }
   }
 
+  LoadMandat(utilizateurId:string,mandat:MandatViewModel){
+    this.showLoadingCarousel=true;
+  }
   addTache(event: MatChipInputEvent): void {
     const input = event.input;
     const value = event.value;
@@ -62,7 +69,6 @@ export class CarouselComponent implements OnInit {
   }
   previous(currentPage: number) {
     debugger;
-
     const newpage = currentPage - 2;
     this.onChangePage.emit(newpage);
   }
@@ -76,5 +82,12 @@ export class CarouselComponent implements OnInit {
   }
   ModifierMandatCarousel(mandat: MandatViewModel): void {
     alert("to implement");
+  }
+  classValidator(cssClass :string,optionCssClass):string{
+    if(this.showLoadingCarousel){
+      return cssClass;
+    }else{
+      return optionCssClass;
+    }
   }
 }

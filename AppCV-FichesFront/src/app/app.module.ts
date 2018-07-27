@@ -7,7 +7,8 @@ import {
   MatIconModule,
   MatFormFieldModule,
   MatAutocompleteModule,
-  MatInputModule
+  MatInputModule,
+  MatSelectModule
 } from "@angular/material";
 
 import { ResumeInterventionsComponent } from "./components/CV/resume-interventions/resume-interventions.component";
@@ -77,7 +78,7 @@ import { FonctionPipe } from "./Services/fonction.pipe";
     HttpClientModule,
     FormsModule,
     ServiceRoutingModule,
-
+MatSelectModule,
     InlineEditorModule,
     MatButtonModule,
     MatCheckboxModule,

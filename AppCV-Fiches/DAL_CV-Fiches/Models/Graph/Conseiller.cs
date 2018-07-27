@@ -75,10 +75,14 @@ namespace DAL_CV_Fiches.Models.Graph
 
         public List<Formation> Certifications()
         {
-            return Formations.Where(x =>
-                        x.Type.Descriminator == Formation.Discriminator &&
-                        x.Type.Description == FormationType.Certification
+            var formations = Formations.Where(x =>
+                        x.Type?.Descriminator == Formation.Discriminator &&
+                        x.Type?.Description == FormationType.Certification
             ).ToList();
+
+            formations.Add(new Formation() { Description = "", Type = new Genre() { Descriminator = Formation.Discriminator, Description = FormationType.Certification } });
+
+            return formations;
         }
     }
 }

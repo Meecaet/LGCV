@@ -1,26 +1,35 @@
 <div>
-  <div class="lgs-label">Certifications </div>
-  <label (click)="AddCertifications()">+</label>
-  <div class="lgs-floatLeftButtons">
-    <button type="button" class="btn btn-link"></button>
-  </div>
-  <div class="lgs-group table-bordered">
-    <table class="table table-bordered table-hover">
-      <tbody>
-        <tr  class="{{certif.highlight}}"  id="tr{{i}}" *ngFor=" let certif of certifications; let i = index">
-          <td>
-            <inline-editor [(ngModel)]="certif.description" empty="Description" (onSave)="OrderBy()" [ngModelOptions]="{standalone: true}"
-              [name]="certif.description" [cols]="250"></inline-editor>
-          </td>
-          <td style="width: 20px;">
-            <inline-editor type="number" empty="Annee" [(ngModel)]="certif.annee" (onSave)="OrderBy()" [ngModelOptions]="{standalone: true}"
-              [name]="certif.annee" [cols]="250"></inline-editor>
-          </td>
-          <td style="width: 30px;">
-            <label   id="bt{{i}}"  (click)="removeCertification('tr'+i,'bt'+i,certif)"  class="XCancel"> X</label>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+  <div  [ngClass]="classValidator('divrelativeOn form-inline ','divrelativeOff form-inline')">
+      <div [ngClass]="classValidator('divloadingOn','divloadingOff')" class="divloading">
+          <div style="margin-left: auto;margin-right: 300px;width: 1px">
+            <img [ngClass]="classValidator('imgloading','imgloadingHidden')">
+          </div>
+        </div>
+
+
+    <div class="lgs-label">Certifications </div>
+    <label (click)="AddCertifications()">+</label>
+    <div class="lgs-floatLeftButtons">
+      <button type="button" class="btn btn-link"></button>
+    </div>
+    <div class="lgs-group table-bordered">
+      <table class="table table-bordered table-hover">
+        <tbody>
+          <tr id="tr{{i}}" *ngFor=" let certif of certifications; let i = index">
+            <td class="{{certif.certificationHighlight.description}}">
+              <inline-editor [(ngModel)]="certif.description" empty="Description" (onSave)="SaveCertification(certif)" [ngModelOptions]="{standalone: true}"
+                [name]="certif.description" [cols]="250"></inline-editor>
+            </td>
+            <td class="{{certif.certificationHighlight.annee}}" style="width: 20px;">
+              <inline-editor type="number" empty="Annee" [(ngModel)]="certif.annee" (onSave)="SaveCertification(certif)" [ngModelOptions]="{standalone: true}"
+                [name]="certif.annee" [cols]="250"></inline-editor>
+            </td>
+            <td style="width: 30px;">
+              <label id="bt{{i}}" (click)="removeCertification('tr'+i,'bt'+i,certif)" class="XCancel"> X</label>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>

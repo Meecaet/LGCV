@@ -1,11 +1,17 @@
 <div>
+    <div  [ngClass]="classValidator('divrelativeOn form-inline ','divrelativeOff form-inline')">
+        <div [ngClass]="classValidator('divloadingOn','divloadingOff')" class="divloading">
+            <div style="margin-left: auto;margin-right: 300px;width: 1px">
+              <img [ngClass]="classValidator('imgloading','imgloadingHidden')">
+            </div>
+          </div>
     <div class="lgs-label">
       Principaux domaines d'intervention
     </div>
     <div class="lgs-group table-bordered">
       <mat-form-field class="chip-list">
         <mat-chip-list #chipList>
-          <mat-chip *ngFor="let domain of domains" [selectable]="selectable" [removable]="removable" (removed)="removeDomain(domain)">
+          <mat-chip   *ngFor="let domain of domains" [selectable]="selectable" [removable]="removable" (removed)="removeDomain(domain)">
             {{domain.description}}
             <mat-icon matChipRemove *ngIf="removable">
             <label class="XCancel">x</label>
@@ -18,3 +24,4 @@
 
     </div>
   </div>
+</div>

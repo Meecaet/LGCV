@@ -15,7 +15,7 @@ namespace WebCV_Fiches.Models.CVViewModels
         public int Annee { get; set; }
         public string Etablissement { get; set; }
         public string Pays { get; set; }
-        public string Niveau { get; set; }
+        public int Niveau { get; set; }
         public bool Principal{ get; set; }
 
         public override bool HasEdtion(EditionObject edition)
