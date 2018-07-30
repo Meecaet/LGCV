@@ -31,13 +31,14 @@ namespace WebCV_Fiches.Controllers
             var mandats = utilisateur.Conseiller.Mandats.Cast<GraphObject>().ToList();
             var noeudModifie = new List<GraphObject>();
             noeudModifie.Add(utilisateur.Conseiller);
-            var certificationsViewModel = ViewModelFactory<Mandat, ResumeInterventionViewModel>.GetViewModels(
+            noeudModifie.AddRange(mandats);
+            var resumeInterventionViewModel = ViewModelFactory<Mandat, ResumeInterventionViewModel>.GetViewModels(
                 utilisateurId: utilisateurId,
                 noeudsModifie: noeudModifie,
                 graphObjects: mandats,
                 map: map);
 
-            return Json(certificationsViewModel);
+            return Json(resumeInterventionViewModel);
         }
 
         private ViewModel map(GraphObject mandatModel)
