@@ -5,9 +5,8 @@ using System.Threading.Tasks;
 
 namespace WebCV_Fiches.Models.CVViewModels
 {
-    public class FonctionViewModel
+    public class FonctionViewModel :ViewModel
     {
-        public string GraphId { get; set; }
         public string Nom { get; set; }
     }
 }

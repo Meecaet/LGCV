@@ -1,0 +1,26 @@
+<div class="container body-content">
+  <h2>Créer</h2>
+
+  <h4>Rôles</h4>
+  <hr />
+  <div class="row">
+    <div class="col-md-4">
+      <form name="formCreate" novalidate>
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+          <label for="Name">Name</label>
+          <input class="form-control" (keyup)="IsValid(model.name,IsValidName)" [(ngModel)]="model.name" type="text" name="Name">
+          <div #IsValidName class="alert alert-danger" presse="false" hidden="presse?false:true">
+            Ce champ est requis
+          </div>
+        </div>
+        <div class="form-group">
+          <button type="button" [disabled]="!IsValidName.presse?true:false || !IsValidName.hidden" (click)="Create()" class="btn btn-default">Créer</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div>
+    <a routerLink="/role/admin">Retourner à la liste</a>
+  </div>
+</div>

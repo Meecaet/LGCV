@@ -7,7 +7,6 @@ namespace WebCV_Fiches.Models.CVViewModels
 {
     public class PerfectionnementViewModel : ViewModel
     {
-        public string GraphId { get; set; }
         public string GraphIdGenre { get; set; }
         public string Description { get; set; }
         public int Annee { get; set; }

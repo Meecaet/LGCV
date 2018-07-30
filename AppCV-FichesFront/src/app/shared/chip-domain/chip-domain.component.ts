@@ -15,12 +15,13 @@ export class ChipDomainComponent implements OnInit {
   @Input("UtilisateurId") UtilisateurId: string;
   domains: Array<DomaineDInterventionViewModel>;
   showLoadingDomain: boolean = true;
+
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   visible = true;
   selectable = true;
   removable = true;
   addOnBlur = true;
-  constructor(private CVserv: CVService, private servError: ErrorService) {
+  constructor(private CVserv: CVService,private   servError :ErrorService) {
     this.domains = new Array<DomaineDInterventionViewModel>();
   }
 
@@ -37,6 +38,7 @@ export class ChipDomainComponent implements OnInit {
     );
   }
   addDomain(event: MatChipInputEvent): void {
+
     const input = event.input;
     const value = event.value;
     // Add our fruit
@@ -58,6 +60,7 @@ export class ChipDomainComponent implements OnInit {
     this.servError.ErrorHandle(error.status);
   }
   removeDomain(domain: DomaineDInterventionViewModel): void {
+
     const index = this.domains.findIndex(
       x => x.description == domain.description
     );

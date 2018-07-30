@@ -8,6 +8,7 @@ import { FonctionViewModel } from "../Models/Fonction-model";
 import { CertificationViewModel } from "../Models/Certification-model";
 import { DomaineDInterventionViewModel } from "../Models/DomaineDIntervention-model";
 import { FormationAcademiqueViewModel } from "../Models/FormationAcademique-model";
+import { MandatViewModel } from "../Models/Mandat-model";
 
 @Injectable({
   providedIn: "root"
@@ -33,6 +34,11 @@ export class CVService {
     }
   }
 
+  IsTokenValid() : Observable<boolean> {
+    const url = this.rootPath + "/api/AccountApi/IsTokenValid";
+    return this._http.get<boolean>(url);
+  }
+
   private EditActiontUrl(cvId: string, controllerName: string) {
     return `${controllerName}/${cvId}/Edit`;
   }
@@ -42,6 +48,9 @@ export class CVService {
   }
   private AllActionUrl(cvId: string, controllerName: string) {
     return `${controllerName}/${cvId}/All`;
+  }
+  private LoadMandatActionUrl(utilisateurId: string, mandatId: string) {
+    return `Mandat/${utilisateurId}/Detail/${mandatId}`;
   }
 
   private DeleteActionUrl(
@@ -106,31 +115,32 @@ export class CVService {
   //
   LoadFormationAcademique(idUtilisateur: string) {
     const url = this.AllActionUrl(idUtilisateur, "FormationAcademique");
-     return this.doRequest<Array<FormationAcademiqueViewModel>>(url, "post");
+    return this.doRequest<Array<FormationAcademiqueViewModel>>(url, "post");
   }
-    FormationAcademique( domain:FormationAcademiqueViewModel ,idUtilisateur: string) {
+  FormationAcademique(
+    domain: FormationAcademiqueViewModel,
+    idUtilisateur: string
+  ) {
     const url = this.AddActionUrl(idUtilisateur, "FormationAcademique");
     return this.doRequest<FormationAcademiqueViewModel>(url, "post", domain);
   }
 
-
-///
-//ResumeIntervention
-///
-
-
+  ///
+  //ResumeIntervention
+  ///
 
   LoadResumeIntervention(idUtilisateur: string) {
     const url = this.AllActionUrl(idUtilisateur, "ResumeIntervention");
     return this.doRequest<Array<ResumeInterventionViewModel>>(url, "post");
   }
 
-  AddResumeIntervention(idUtilisateur: string, domain: ResumeInterventionViewModel) {
+  AddResumeIntervention(
+    idUtilisateur: string,
+    domain: ResumeInterventionViewModel
+  ) {
     const url = this.AddActionUrl(idUtilisateur, "ResumeIntervention");
     return this.doRequest<ResumeInterventionViewModel>(url, "post", domain);
   }
-
-
 
   ///
   // Domain
@@ -158,4 +168,13 @@ export class CVService {
     const url = this.AddActionUrl(idUtilisateur, "Certification");
     return this.doRequest<CertificationViewModel>(url, "post", certification);
   }
+  ///
+  // Mandat
+  ///
+  LoadMandat(idUtilisateur: string,idMandat :string) {
+    debugger
+    const url = this.LoadMandatActionUrl(idUtilisateur,idMandat);
+    return this.doRequest<Array<MandatViewModel>>(url, "get");
+  }
+
 }

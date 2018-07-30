@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { MandatViewModel } from "../../Models/Mandat-model";
 import { ENTER, COMMA } from "@angular/cdk/keycodes";
+import { CVService } from "../../Services/cv.service";
 @Component({
   selector: "app-cv-edit",
   templateUrl: "./cv-edit.component.html",
@@ -15,7 +16,7 @@ export class CvEditComponent implements OnInit {
   lastPage: number;
   showMandat: boolean = false;
   hiddenButton: string;
-  constructor(private route: ActivatedRoute) {
+  constructor(private route: ActivatedRoute, private CVserv: CVService) {
     this.mandatCollection = new Array<MandatViewModel>();
   }
   ngOnInit() {
@@ -32,14 +33,14 @@ export class CvEditComponent implements OnInit {
     this.lastPage = this.mandatCollection.length;
   }
   addNewMandatFromList(arg: any): void {
-    debugger
+    debugger;
     // this.InputMandatCarousel = arg.newMandat;
     this.numberPage = arg.numberPage;
     this.showMandat = true;
     this.lastPage = this.mandatCollection.length;
     this.mandatSeleted = new MandatViewModel();
-    debugger
-    this.hiddenButton =  this.mandatSeleted.mandatStatus;
+    debugger;
+    this.hiddenButton = this.mandatSeleted.mandatStatus;
   }
   onChangePage(changeTo: number): void {
     const newValue = this.mandatCollection[changeTo];
@@ -49,10 +50,14 @@ export class CvEditComponent implements OnInit {
     }
   }
   onChangeMandatFromTableMandat(arg: any): void {
-    this.mandatSeleted = <MandatViewModel>arg.mandat;
-    this.numberPage = arg.indexMandat;
-    this.showMandat = true;
     debugger
-    this.hiddenButton = this.mandatSeleted.mandatStatus;
+    this.CVserv.LoadMandat(this.UtilisateurId, arg.mandatId).subscribe((valeu:any)=>{
+      debugger
+    });
+
+    // this.mandatSeleted = this.numberPage = arg.indexMandat;
+    // this.showMandat = true;
+    // debugger;
+    // this.hiddenButton = this.mandatSeleted.mandatStatus;
   }
 }

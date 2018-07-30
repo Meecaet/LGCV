@@ -18,11 +18,10 @@ import { CarouselComponent } from "../carousel/carousel.component";
   providers:[CarouselComponent]
 })
 export class TableMandatComponent implements OnInit {
-  showMandat: boolean = false;
-  showLoadingMandat: boolean = false;
 
-  @ViewChild("carouselChild") carouselChild: CarouselComponent;
+  showLoadingMandat: boolean = false;
   @Input("UtilisateurId") UtilisateurId: string;
+
   resume: Array<ResumeInterventionViewModel>;
 
   @Input("mandatCollection") mandatCollection: Array<MandatViewModel>;
@@ -30,6 +29,8 @@ export class TableMandatComponent implements OnInit {
   @Output("AddNewMandat") AddNewMandat = new EventEmitter();
 
   @Output("onChangeMandatFromTableMandat")
+
+
   onChangeMandatFromTableMandat = new EventEmitter();
   constructor(private serv: CVService) {
     this.mandatCollection = new Array<MandatViewModel>();
@@ -37,10 +38,8 @@ export class TableMandatComponent implements OnInit {
   }
 
   SelectedLine(mand: MandatViewModel): void {
-    this.showMandat=true;
-    this.carouselChild.
-    // .LoadMandat(this.UtilisateurId, mand);
-  }
+    this.onChangeMandatFromTableMandat.emit(mand)
+   }
 
   ngOnInit() {
     this.serv

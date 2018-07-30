@@ -30,6 +30,7 @@ namespace WebCV_Fiches.Helpers
                     //var newGraphObject = repo.GetElementsFromTransversal(edition.GraphIdEdition, "Ajoute").First();
                     var editionModel = new EditionObjectGraphRepository().GetOne(edition.GraphIdEdition);
                     dynamic newGraphObject = editionModel.ObjetAjoute;
+                    if (newGraphObject == null) continue;
                     var newGraphObjectViewModel = map.Invoke(newGraphObject);
                     newGraphObjectViewModel.editionObjecViewModels.Add(edition);
                     graphObjectsViewModel.Add(newGraphObjectViewModel);

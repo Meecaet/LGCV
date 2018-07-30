@@ -10,7 +10,6 @@ import { CVService } from "../../Services/cv.service";
 export class DropDownFonctionComponent implements OnInit {
   fonctionAutoComplete: Array<FonctionViewModel>;
   fonction: FonctionViewModel;
-
   constructor(private cvServices: CVService) {
     this.fonction = new FonctionViewModel();
     this.fonctionAutoComplete = new Array<FonctionViewModel>();

@@ -7,7 +7,6 @@ namespace WebCV_Fiches.Models.CVViewModels
 {
     public class LangueViewModel : ViewModel
     {
-        public string GraphId { get; set; }
         public string Nom { get; set; }
         public string NiveauParle { get; set; }
         public string NiveauEcrit { get; set; }

@@ -69,6 +69,7 @@ export class CarouselComponent implements OnInit {
   }
   previous(currentPage: number) {
     debugger;
+
     const newpage = currentPage - 2;
     this.onChangePage.emit(newpage);
   }

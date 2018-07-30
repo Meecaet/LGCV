@@ -521,7 +521,7 @@ namespace WebCV_Fiches.Helpers
 
             CreateBioSection(doc.Body);
             CreateDomaineDIntervetionSection(doc.Body);
-            CreateFormationAcademiqueEtCertificationSection(doc.Body);
+            //CreateFormationAcademiqueEtCertificationSection(doc.Body);
             CreateResumeDIntervention(doc.Body);
             CreateMandats(doc.Body);
 
@@ -566,7 +566,7 @@ namespace WebCV_Fiches.Helpers
             tableCellProperties.Append(new TableCellWidth { Width = new StringValue("1337"), Type = new EnumValue<TableWidthUnitValues>(TableWidthUnitValues.Dxa) });
             imageCell.Append(tableCellProperties);
 
-            imageCell.Append(new Paragraph(new Run(GetLogoImage(@"C:\Docs to zip\Images\logo.jpg"))));
+            imageCell.Append(new Paragraph(new Run(GetLogoImage(@"C:\Docs to zip\Images\logo.png"))));
 
             Run nomRun = new Run(), breakLine = new Run(), fonctionRun = new Run();
             nomRun.Append(GetRunProperties("Arial", mauveCode, "28", true, false));

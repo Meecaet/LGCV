@@ -28,7 +28,7 @@ namespace WebCV_Fiches.Controllers
         }
 
         [Route("Detail/{utilisateurId}")]
-        [AllowAnonymous]
+	[Authorize("Bearer")]
         public ActionResult Detail(string utilisateurId)
         {
             var bioViewModel = new BioViewModel();

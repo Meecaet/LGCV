@@ -32,6 +32,7 @@ export class TableCertificationsComponent implements OnInit {
         this.showLoadingCertification = false;
       }, this.Error);
   }
+
   AddCertifications(): void {
     this.certifications.push(new CertificationViewModel());
   }
@@ -110,5 +111,6 @@ export class TableCertificationsComponent implements OnInit {
     } else {
       return optionCssClass;
     }
+
   }
 }

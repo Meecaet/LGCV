@@ -1,0 +1,33 @@
+<div class="container body-content">
+    <h2>Détails</h2>
+
+    <div>
+        <h4>{{role.role.name}}</h4>
+        <hr />
+    </div>
+    
+    <div>
+        <a routerLink="/role/edit/{{role.role.id}}">Mettre en jour</a> |
+        <a routerLink="/role/admin">Retourner à la liste</a>
+    </div>
+    <div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        <p>Nom du Utilisateur</p>
+                    </th>
+                    <th>
+                        <p>Adresse Courriel</p>
+                    </th>                
+                </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let user of role.users">
+                <td>{{user.userName}}</td>
+                <td>{{user.email}}</td>
+              </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,40 @@
+<div class="container body-content">
+    <h2>Administration des Rôles</h2>
+    <p>
+        <a routerLink="/role/create">Créer nouveau</a>
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    <p>Nom du Rôle</p>
+                </th>
+                <th>
+                    <p>Mettre en jour</p>
+                </th>
+                <th>
+                    <p>Supprimer</p>
+                </th>
+                <th>
+                    <p>Détails</p>
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of roles">
+                <td>{{item.name}}</td>
+
+                <td>
+                    <a routerLink="/role/edit/{{item.id}}">Mettre en jour</a>
+                </td>
+                <td>
+                    <button type="button" (click)="delete(item.id)">Supprimer</button>
+                </td>
+                <td>
+                    <a routerLink="/role/detail/{{item.id}}">Details</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

@@ -13,4 +13,5 @@ export class BioViewModel {
     this.editionObjecViewModels = new Array<EditionObjecViewModel>();
     this.bioHighlight =new BioHighlight();
   }
+
 }

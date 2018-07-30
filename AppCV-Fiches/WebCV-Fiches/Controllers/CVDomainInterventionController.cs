@@ -82,7 +82,6 @@ namespace WebCV_Fiches.Controllers
             {
                 var edition = utilisateur.Conseiller.EditionObjects.Find(x => x.ObjetAjoute.GraphKey == domain.GraphKey);
                 editionObjectGraphRepository.Delete(edition);
-                domaineDInterventionGraphRepository.Delete(domain);
             }
 
             return Json(domain);

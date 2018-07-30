@@ -16,6 +16,7 @@ export class TableFormationAcademiqueComponent implements OnInit {
   @Input() UtilisateurId: string;
   showLoadingFormationAcademique: boolean = true;
   constructor(private serv: CVService, private servError: ErrorService) {
+
     this.formationAcademique = new Array<FormationAcademiqueViewModel>();
   }
 

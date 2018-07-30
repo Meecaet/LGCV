@@ -15,6 +15,8 @@ namespace WebCV_Fiches.Controllers
         [AllowAnonymous]
         public ActionResult All(string utilisateurId)
         {
+
+        
             return Json(new List<ResumeInterventionViewModel> {
                 new ResumeInterventionViewModel{
                     Annee = 2007,
@@ -22,9 +24,9 @@ namespace WebCV_Fiches.Controllers
                     Effors = 1200,
                     Envergure = 3000,
                     Fonction = "Analyste programmeur",
-                    MandatId = Guid.NewGuid().ToString(),
+                    MandatId = "2a5110b1-bb07-4981-9a3d-33aaedde49f0",
                     Nombre = 1,
-                    Projet = "Système académique et de géstion"
+                    Projet = "Amélioration du module de projets"
                 },
                 new ResumeInterventionViewModel{
                     Annee = 2010,
@@ -32,9 +34,9 @@ namespace WebCV_Fiches.Controllers
                     Effors = 1200,
                     Envergure = 8000,
                     Fonction = "Analyste programmeur .Net",
-                    MandatId = Guid.NewGuid().ToString(),
+                    MandatId = "13d8799f-ebb2-4501-b3a6-2053c0fd7ea5",
                     Nombre = 2,
-                    Projet = "Système de gestion d'inventaires"
+                    Projet = "Développement d’un module d’indicateurs de gestion"
                 },
                 new ResumeInterventionViewModel{
                     Annee = 2011,
@@ -42,9 +44,9 @@ namespace WebCV_Fiches.Controllers
                     Effors = 1100,
                     Envergure = 8450,
                     Fonction = "Analyste programmeur .Net",
-                    MandatId = Guid.NewGuid().ToString(),
+                    MandatId = "c725b9f0-7dfe-4ce0-a9a4-2448707197e7",
                     Nombre = 3,
-                    Projet = "Interactive Voice Response"
+                    Projet = "Amélioration d’un système SIG"
                 }
             });
         }
