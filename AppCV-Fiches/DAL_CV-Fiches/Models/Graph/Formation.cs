@@ -11,16 +11,16 @@ namespace DAL_CV_Fiches.Models.Graph
         public int AnAcquisition { get; set; }
         public static string Discriminator = "Formation";
 
-        [Edge("DuType")]
+        [Edge("DuType",lazyLoad: false)]
         public Genre Type { get; set; }
 
-        public static Formation CreateCertification(int annee, string description)
+        public static Formation CreateFormation(int annee, string description, string formationType)
         {
             return new Formation()
             {
                 AnAcquisition = annee,
                 Description = description,
-                Type = new Genre { Descriminator = Formation.Discriminator, Description = FormationType.Certification }
+                Type = new Genre { Descriminator = Formation.Discriminator, Description = formationType }
             };
         }
     }

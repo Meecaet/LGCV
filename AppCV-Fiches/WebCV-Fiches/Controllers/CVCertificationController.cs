@@ -12,130 +12,106 @@ using WebCV_Fiches.Models.CVViewModels;
 namespace WebCV_Fiches.Controllers
 {
     [Route("Certification")]
-    public class CVCertificationController : Controller
+    public class CVCertificationController : CVController
     {
-        public EditionObjectGraphRepository editionObjectGraphRepository;
-        public UtilisateurGraphRepository utilisateurGraphRepository;
         public FormationGraphRepository formationGraphRepository;
 
-        public CVCertificationController()
+        public CVCertificationController() : base()
         {
-            utilisateurGraphRepository = new UtilisateurGraphRepository();
-            editionObjectGraphRepository = new EditionObjectGraphRepository();
             formationGraphRepository = new FormationGraphRepository();
         }
 
-        [Route("{utilisateurId}/All")]
-        [AllowAnonymous]
-        public ActionResult All(string utilisateurId)
-        {
-            Func<GraphObject, ViewModel> map = this.map;
-
-            var utilisateur = utilisateurGraphRepository.GetOne(utilisateurId);
-            var certifications = utilisateur.Conseiller.Certifications().Cast<GraphObject>().ToList(); ;
-            var noeudModifie = new List<GraphObject>();
-            noeudModifie.Add(utilisateur.Conseiller);
-            noeudModifie.AddRange(certifications);
-            var certificationsViewModel = ViewModelFactory<Formation,CertificationViewModel>.GetViewModels(utilisateurId: utilisateurId, noeudsModifie: noeudModifie, graphObjects: certifications, map: map);
-            return Json(certificationsViewModel);
-        }
-
-        private ViewModel map(GraphObject certificationModel)
-        {
-            var certification = (Formation)certificationModel;
-            return new CertificationViewModel
-            {
-                Annee = certification.AnAcquisition,
-                Description = certification.Description,
-                GraphId = certification.GraphKey,
-                GraphIdGenre = certification.Type.GraphKey,
-            };
-        }
-
-        // POST: Mandat/Create
         [HttpPost]
         [AllowAnonymous]
         [Route("{utilisateurId}/Add")]
         public ActionResult Add(string utilisateurId, [FromBody]CertificationViewModel certification)
         {
-            var utilisateur = utilisateurGraphRepository.GetOne(utilisateurId);
-
-            var certificationModel = Formation.CreateCertification(certification.Annee, certification.Description);
-            formationGraphRepository.Add(certificationModel);
-            editionObjectGraphRepository.AjouterNoeud(objetAjoute: certificationModel, noeudModifiePropriete: "Formations", noeudModifie: utilisateur.Conseiller);
-
-            certification.GraphId = certificationModel.GraphKey;
-            certification.GraphIdGenre = certificationModel.Type.GraphKey;
-
-            return Json(certification);
-
+            return Json(base.Add(utilisateurId, certification));
         }
 
-        // POST: Mandat/Edit/cvId
         [HttpPost]
         [AllowAnonymous]
         [Route("{utilisateurId}/Edit")]
         public ActionResult Edit(string utilisateurId, [FromBody]CertificationViewModel certification)
         {
-
-            var utilisateur = utilisateurGraphRepository.GetOne(utilisateurId);
-            var certificationModel = formationGraphRepository.GetOne(certification.GraphId);
-
-            var certifications = utilisateur.Conseiller.Certifications();
-
-            if (certifications.Any(x => x.GraphKey == certification.GraphId))
-            {
-
-                var proprietesModifiees = new List<KeyValuePair<string, string>>();
-
-                if (certificationModel.AnAcquisition != certification.Annee)
-                    proprietesModifiees.Add(new KeyValuePair<string, string>("Annee", certification.Annee.ToString()));
-
-                if (certificationModel.Description != certification.Description)
-                    proprietesModifiees.Add(new KeyValuePair<string, string>("Description", certification.Description));
-
-                if (proprietesModifiees.Count() > 0)
-                    editionObjectGraphRepository.CreateOrUpdateProprieteEdition(proprietesModifiees, certificationModel);
-            }
-            else
-            {
-                certificationModel.AnAcquisition = certification.Annee;
-                certificationModel.Description = certification.Description;
-                formationGraphRepository.Update(certificationModel);
-            }
-
-            return Json(certification);
+            return Json(base.Edit(utilisateurId, certification));
         }
 
         // POST: Mandat/Delete/5
         [HttpPost]
         [AllowAnonymous]
         [Route("{utilisateurId}/Delete/{certificationId}")]
-        public ActionResult Delete(string utilisateurId, string certificationId)
+        public new ActionResult Delete(string utilisateurId, string certificationId)
         {
-            var utilisateur = utilisateurGraphRepository.GetOne(utilisateurId);
-            var certification = formationGraphRepository.GetOne(certificationId);
+            return Json(base.Delete(utilisateurId, certificationId));
+        }
 
+        public override GraphObject CreateGraphObject(ViewModel viewModel)
+        {
+            var certification = (CertificationViewModel)viewModel;
+            var certificationModel = Formation.CreateFormation(certification.Annee, certification.Description, FormationType.Certification);
+            formationGraphRepository.Add(certificationModel);
+            return certificationModel;
+        }
 
-            var certifications = utilisateur.Conseiller.Certifications();
+        public override GraphObject GetGraphObject(string graphId)
+        {
+            return formationGraphRepository.GetOne(graphId);
+        }
 
-            if (certifications.Any(x => x.GraphKey == certification.GraphKey))
+        public override List<GraphObject> GetGraphObjects(Utilisateur utilisateur)
+        {
+            return utilisateur.Conseiller.Certifications().Cast<GraphObject>().ToList(); ;
+        }
+
+        public override List<ViewModel> GetViewModels(string utilisateurId, List<GraphObject> noeudsModifie, List<GraphObject> graphObjects, Func<GraphObject, ViewModel> map)
+        {
+            return ViewModelFactory<Formation, CertificationViewModel>.GetViewModels(
+                utilisateurId: utilisateurId,
+                noeudsModifie: noeudsModifie,
+                graphObjects: graphObjects,
+                map: map);
+        }
+
+        public override ViewModel Map(GraphObject graphObject)
+        {
+            var perfectionnement = (Formation)graphObject;
+            return new CertificationViewModel
             {
-                foreach (var edition in certification.EditionObjects)
-                {
-                    editionObjectGraphRepository.Delete(edition);
-                }
-                editionObjectGraphRepository.SupprimerNoeud(certification, "Formations", utilisateur.Conseiller);
-            }
-            else
-            {
-                var edition = utilisateur.Conseiller.EditionObjects.Find(x => x.ObjetAjoute.GraphKey == certification.GraphKey);
-                editionObjectGraphRepository.Delete(edition);
-            }
+                Annee = perfectionnement.AnAcquisition,
+                Description = perfectionnement.Description,
+                GraphId = perfectionnement.GraphKey,
+                GraphIdGenre = perfectionnement.Type.GraphKey,
+            };
+        }
 
+        public override void UpdateGraphObject(GraphObject graphObject, ViewModel viewModel)
+        {
+            var certificationObject = (Formation)graphObject;
+            var certificationViewModel = (CertificationViewModel)viewModel;
+            certificationObject.AnAcquisition = certificationViewModel.Annee;
+            certificationObject.Description = certificationViewModel.Description;
+            formationGraphRepository.Update(certificationObject);
+        }
 
+        public override List<KeyValuePair<string, string>> VerifierProprietesModifiees(GraphObject graphObject, ViewModel viewModel)
+        {
+            var proprietesModifiees = new List<KeyValuePair<string, string>>();
+            var certificationObject = (Formation)graphObject;
+            var certificationViewModel = (CertificationViewModel)viewModel;
 
-            return Json(certification);
+            if (certificationObject.AnAcquisition != certificationViewModel.Annee)
+                proprietesModifiees.Add(new KeyValuePair<string, string>("Annee", certificationViewModel.Annee.ToString()));
+
+            if (certificationObject.Description != certificationViewModel.Description)
+                proprietesModifiees.Add(new KeyValuePair<string, string>("Description", certificationViewModel.Description));
+
+            return proprietesModifiees;
+        }
+
+        public override string GetProprieteModifiee()
+        {
+            return "Formations";
         }
     }
 }
