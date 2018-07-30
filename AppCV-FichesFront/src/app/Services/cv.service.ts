@@ -130,7 +130,8 @@ export class CVService {
   ///
 
   LoadResumeIntervention(idUtilisateur: string) {
-    const url = this.AllActionUrl(idUtilisateur, "ResumeIntervention");
+    debugger
+    const url = this.AllActionUrl(idUtilisateur, "CVDomainIntervention");
     return this.doRequest<Array<ResumeInterventionViewModel>>(url, "post");
   }
 
@@ -146,6 +147,7 @@ export class CVService {
   // Domain
   ///
   LoadDomain(idUtilisateur: string) {
+    debugger
     const url = this.AllActionUrl(idUtilisateur, "CVDomainIntervention");
     return this.doRequest<Array<DomaineDInterventionViewModel>>(url, "post");
   }

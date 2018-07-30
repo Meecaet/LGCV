@@ -36,8 +36,10 @@ namespace WebCV_Fiches.Controllers
             var noeudModifie = new List<GraphObject>();
             noeudModifie.Add(utilisateur.Conseiller);
             noeudModifie.AddRange(certifications);
-            List<ViewModel> certificationsViewModel = ViewModelFactory.GetViewModels(utilisateurId: utilisateurId, noeudsModifie: noeudModifie, graphObjects: certifications, map: map);
-            if (certificationsViewModel.Count>1)
+
+            var certificationsViewModel = ViewModelFactory<Formation, CertificationViewModel>.GetViewModels(utilisateurId: utilisateurId, noeudsModifie: noeudModifie, graphObjects: certifications, map: map);
+
+            if (certificationsViewModel.Count > 1)
             {
                 certificationsViewModel = certificationsViewModel.OrderByDescending(x => ((CertificationViewModel)x).Annee).ToList();
 
