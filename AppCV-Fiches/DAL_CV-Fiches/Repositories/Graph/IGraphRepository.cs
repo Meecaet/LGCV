@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DAL_CV_Fiches.Models.Graph;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -7,7 +8,7 @@ namespace DAL_CV_Fiches.Repositories.Graph
     public interface IGraphRepository<T>
     {
         void Add(T obj, bool cascade = true);
-        void Update(T obj);
+        void Update(T obj, GraphObject parent);
         void Delete(T obj);
         T GetOne(string id);
         List<T> GetAll();

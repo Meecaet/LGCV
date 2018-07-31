@@ -43,7 +43,29 @@ namespace WebCV_Fiches.Controllers
         [Route("{utilisateurId}/Edit")]
         public ActionResult Edit(string utilisateurId, [FromBody]TechnologieViewModel technologie)
         {
-            return Json(base.Edit(utilisateurId, technologie));
+            var utilisateur = utilisateurGraphRepository.GetOne(utilisateurId);
+            var technologieModel = technologieGraphRepository.GetOne(technologie.GraphId);
+
+            var Technologies = utilisateur.Conseiller.Technologies.ToList();
+
+            if (Technologies.Any(x => x.GraphKey == technologie.GraphId))
+            {
+
+                var proprietesModifiees = VerifierProprietesModifiees(technologieModel, technologie);
+
+                if (proprietesModifiees.Count() > 0)
+                    editionObjectGraphRepository.CreateOrUpdateProprieteEdition(proprietesModifiees, technologieModel);
+            }
+            else
+            {
+                technologieModel.MoisDExperience = technologie.Mois;
+                technologieModel.Nom = technologie.Description;
+
+                var edition = utilisateur.Conseiller.EditionObjects.Find(x => x.ObjetAjoute?.GraphKey == technologie.GraphId);
+                technologieGraphRepository.Update(technologieModel, edition);
+            }
+
+            return Json(technologie);
         }
 
         // POST: Mandat/Delete/5
@@ -95,15 +117,6 @@ namespace WebCV_Fiches.Controllers
             };
         }
 
-        public override void UpdateGraphObject(GraphObject graphObject, ViewModel viewModel)
-        {
-            var technologieObject = (Technologie)graphObject;
-            var technoloigeModel = (TechnologieViewModel)viewModel;
-            technologieObject.MoisDExperience = technoloigeModel.Mois;
-            technologieObject.Nom = technoloigeModel.Description;
-            technologieGraphRepository.Update(technologieObject);
-        }
-
         public override List<KeyValuePair<string, string>> VerifierProprietesModifiees(GraphObject graphObject, ViewModel viewModel)
         {
             var proprietesModifiees = new List<KeyValuePair<string, string>>();
@@ -119,6 +132,11 @@ namespace WebCV_Fiches.Controllers
         public override string GetProprieteModifiee()
         {
             return "Technologies";
+        }
+
+        public override void UpdateGraphObject(GraphObject graphObject, ViewModel viewModel)
+        {
+            throw new NotImplementedException();
         }
     }
 }

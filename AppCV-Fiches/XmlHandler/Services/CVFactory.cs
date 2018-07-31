@@ -403,7 +403,7 @@ namespace XmlHandler.Services
                         mois = lineParagraphsColumn2[j].GetParagraphText().Replace(".", ",");
 
                         technologie = technologieGraphRepository.CreateIfNotExists(new Dictionary<string, object> { { "Nom", techNom } });
-                        technologie.MoisDExperience = Convert.ToDouble(mois);
+                        technologie.MoisDExperience = Convert.ToInt32(mois);
 
                         if (categorie != null)
                             technologie.Categorie = categorie;
