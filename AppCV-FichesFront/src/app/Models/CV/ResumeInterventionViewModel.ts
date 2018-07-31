@@ -8,4 +8,7 @@ export interface ResumeInterventionViewModel {
     annee: number;
     effors: number;
     debutMandat: Date;
+
+
+    highlight: string;
 }

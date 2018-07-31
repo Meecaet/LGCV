@@ -21,7 +21,7 @@ export class ChipDomainComponent implements OnInit {
   selectable = true;
   removable = true;
   addOnBlur = true;
-  constructor(private CVserv: CVService,private   servError :ErrorService) {
+  constructor(private CVserv: CVService, private servError: ErrorService) {
     this.domains = new Array<DomaineDInterventionViewModel>();
   }
 
@@ -34,11 +34,10 @@ export class ChipDomainComponent implements OnInit {
         this.domains = data;
         this.showLoadingDomain = false;
       },
-       this.Error
+      this.Error
     );
   }
   addDomain(event: MatChipInputEvent): void {
-
     const input = event.input;
     const value = event.value;
     // Add our fruit
@@ -56,11 +55,10 @@ export class ChipDomainComponent implements OnInit {
       input.value = "";
     }
   }
-  Error(error: HttpErrorResponse){
+  Error(error: HttpErrorResponse) {
     this.servError.ErrorHandle(error.status);
   }
   removeDomain(domain: DomaineDInterventionViewModel): void {
-
     const index = this.domains.findIndex(
       x => x.description == domain.description
     );

@@ -15,12 +15,10 @@ import { CarouselComponent } from "../carousel/carousel.component";
   selector: "app-table-mandat",
   templateUrl: "./table-mandat.component.html",
   styleUrls: ["./table-mandat.component.css"],
-  providers:[CarouselComponent]
+  providers: [CarouselComponent]
 })
 export class TableMandatComponent implements OnInit {
-
   showLoadingMandat: boolean = false;
-  @Input("UtilisateurId") UtilisateurId: string;
 
   resume: Array<ResumeInterventionViewModel>;
 
@@ -28,20 +26,19 @@ export class TableMandatComponent implements OnInit {
   @Input("numberPage") numberPage: number = 0;
   @Output("AddNewMandat") AddNewMandat = new EventEmitter();
 
+  @Input("UtilisateurId") UtilisateurId: string;
+
   @Output("onChangeMandatFromTableMandat")
-
-
   onChangeMandatFromTableMandat = new EventEmitter();
+
   constructor(private serv: CVService) {
     this.mandatCollection = new Array<MandatViewModel>();
     this.resume = new Array<ResumeInterventionViewModel>();
   }
-
-  SelectedLine(mand: MandatViewModel): void {
-    this.onChangeMandatFromTableMandat.emit(mand)
-   }
-
   ngOnInit() {
+    this.LoadData();
+  }
+  LoadData() {
     this.serv
       .LoadResumeIntervention(this.UtilisateurId)
       .subscribe((data: Array<ResumeInterventionViewModel>) => {
@@ -49,6 +46,33 @@ export class TableMandatComponent implements OnInit {
         this.resume = data;
       });
   }
+
+  SelectedLine(mand: ResumeInterventionViewModel): void {
+    debugger;
+    this.SetHighLight("lineSeleted", mand);
+    this.onChangeMandatFromTableMandat.emit(mand);
+  }
+  SetHighLight(highlight: string, mand: ResumeInterventionViewModel) {
+    var cssClass = " " + highlight + " ";
+    this.UnSetHighLight(cssClass);
+    if (mand.highlight != undefined && mand.highlight != "") {
+      mand.highlight = mand.highlight + cssClass;
+    } else {
+      mand.highlight = cssClass;
+    }
+  }
+  UnSetHighLight(highlight) {
+    for (let index = 0; index < this.resume.length; index++) {
+      if (
+        this.resume[index].highlight != undefined &&
+        this.resume[index].highlight != ""
+      ) {
+        var newCss = this.resume[index].highlight.replace(highlight, "");
+        this.resume[index].highlight = newCss;
+      }
+    }
+  }
+
   addMandat() {
     this.numberPage = this.mandatCollection.length + 1;
     this.AddNewMandat.emit({

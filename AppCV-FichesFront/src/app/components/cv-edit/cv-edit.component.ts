@@ -16,14 +16,14 @@ export class CvEditComponent implements OnInit {
   lastPage: number;
   showMandat: boolean = false;
   hiddenButton: string;
+  showLoadingCarousel: boolean = true;
   constructor(private route: ActivatedRoute, private CVserv: CVService) {
     this.mandatCollection = new Array<MandatViewModel>();
-  }
-  ngOnInit() {
     this.route.params.subscribe(params => {
       this.UtilisateurId = params["id"];
     });
   }
+  ngOnInit() {}
   setToMandat(event: MandatViewModel): void {
     document.getElementById("anchor").scrollIntoView();
     this.showMandat = false;
@@ -33,13 +33,12 @@ export class CvEditComponent implements OnInit {
     this.lastPage = this.mandatCollection.length;
   }
   addNewMandatFromList(arg: any): void {
-    debugger;
     // this.InputMandatCarousel = arg.newMandat;
     this.numberPage = arg.numberPage;
     this.showMandat = true;
     this.lastPage = this.mandatCollection.length;
     this.mandatSeleted = new MandatViewModel();
-    debugger;
+
     this.hiddenButton = this.mandatSeleted.mandatStatus;
   }
   onChangePage(changeTo: number): void {
@@ -50,14 +49,32 @@ export class CvEditComponent implements OnInit {
     }
   }
   onChangeMandatFromTableMandat(arg: any): void {
-    debugger
-    this.CVserv.LoadMandat(this.UtilisateurId, arg.mandatId).subscribe((valeu:any)=>{
-      debugger
-    });
+    this.showLoadingCarousel = true;
+    this.CVserv.LoadMandat(this.UtilisateurId, arg.graphId).subscribe(
+      (valeu: MandatViewModel) => {
+        this.mandatSeleted = valeu;
 
-    // this.mandatSeleted = this.numberPage = arg.indexMandat;
-    // this.showMandat = true;
-    // debugger;
-    // this.hiddenButton = this.mandatSeleted.mandatStatus;
+        this.calcMonth(valeu.debutMandat, valeu.finMandat, "moisMandat");
+        this.calcMonth(valeu.debutProjet, valeu.finProjet, "moisProjet");
+
+        this.showMandat = true;
+        this.hiddenButton = "modifier";
+        this.numberPage = arg.nombre;
+        this.showLoadingCarousel = false;
+      }
+    );
+  }
+
+  private calcMonth(init: Date, fin: Date, eleHtml: string) {
+    if (init != null && fin != null) {
+      var date1: any = new Date(init);
+      var date2: any = new Date(fin);
+      var diffDays = Math.round((date2 - date1) / (1000 * 60 * 60 * 24 * 30));
+      if ("moisMandat" == eleHtml) {
+        this.mandatSeleted.moisMandat = diffDays;
+      } else {
+        this.mandatSeleted.moisProjet = diffDays;
+      }
+    }
   }
 }

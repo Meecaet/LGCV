@@ -60,7 +60,7 @@ namespace WebCV_Fiches.Controllers
             mandatViewModel.GraphIdFonction = mandat.Fonction.GraphKey;
             mandatViewModel.NumeroMandat = Convert.ToInt32(mandat.Numero);
             mandatViewModel.PorteeDesTravaux = mandat.Description;
-            mandatViewModel.Taches = ViewModelFactory<Tache, TacheViewModel>.GetViewModels(utilisateurId: utilisateurId, noeudsModifie: new List<GraphObject> { mandat }, graphObjects: mandat.Taches.Cast<GraphObject>().ToList(), map: mapTache).ConvertAll(x => (TacheViewModel)x);
+            mandatViewModel.Taches = GetTaches(utilisateurId, mandat);
             mandatViewModel.TitreMandat = mandat.Titre;
 
             mandatViewModel.DebutProjet = mandat.Projet.DateDebut;
@@ -72,7 +72,7 @@ namespace WebCV_Fiches.Controllers
             mandatViewModel.GraphIdProjet = projet.GraphKey;
             mandatViewModel.FonctionReference = projet.FonctionReference;
             mandatViewModel.NomReference = projet.NomReference;
-            mandatViewModel.Technologies = ViewModelFactory<Technologie, TechnologieViewModel>.GetViewModels(utilisateurId: utilisateurId, noeudsModifie: new List<GraphObject> { mandat }, graphObjects: mandat.Projet.Technologies.Cast<GraphObject>().ToList(), map: mapTechnologie).ConvertAll(x => (TechnologieViewModel)x);
+            mandatViewModel.Technologies = GetTechnologies(utilisateurId, mandat);
             mandatViewModel.TelephoneReference = projet.TelephoneReference;
             mandatViewModel.TitreProjet = projet.Nom;
 
@@ -85,9 +85,40 @@ namespace WebCV_Fiches.Controllers
             var editions = new EditionObjectViewModelFactory<MandatViewModel>();
             mandatViewModel.editionObjecViewModels = editions.GetEditions(mandat, projet, client, societeDeConseil);
 
-            return Json(mandatViewModel);
+
+            
+            var jsonSettings = new Newtonsoft.Json.JsonSerializerSettings();
+            jsonSettings.DateFormatString = "yyyy/MM/dd";
+            jsonSettings.ContractResolver = new   Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver();
+            return Json(mandatViewModel, jsonSettings);
         }
 
+        private List<TacheViewModel> GetTaches(string utilisateurId, Mandat mandat)
+        {
+            var noeudsModifie = new List<GraphObject> { mandat };
+            var taches = mandat.Taches.Cast<GraphObject>().ToList();
+
+            var tachesViewModels = ViewModelFactory<Tache, TacheViewModel>.GetViewModels(
+                utilisateurId: utilisateurId,
+                noeudsModifie: noeudsModifie,
+                graphObjects: taches,
+                map: mapTache);
+            return tachesViewModels.ConvertAll(x => (TacheViewModel)x);
+        }
+
+        private List<TechnologieViewModel> GetTechnologies(string utilisateurId, Mandat mandat)
+        {
+            var noeudsModifie = new List<GraphObject> { mandat };
+            var technologies = mandat.Projet.Technologies.Cast<GraphObject>().ToList();
+
+            var techsViewModels = ViewModelFactory<Technologie, TechnologieViewModel>.GetViewModels(
+                utilisateurId: utilisateurId,
+                noeudsModifie: noeudsModifie,
+                graphObjects: technologies,
+                map: mapTechnologie);
+
+            return techsViewModels.ConvertAll(x => (TechnologieViewModel)x);
+        }
         private ViewModel mapTache(GraphObject tacheModel)
         {
             var tache = (Tache)tacheModel;

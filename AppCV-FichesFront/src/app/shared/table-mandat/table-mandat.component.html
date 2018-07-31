@@ -28,7 +28,7 @@
 
           </thead>
 
-          <tbody  (click)="SelectedLine(intervention)"  id="tr{{i}}"   *ngFor="let intervention of resume; let i = index">
+         <tbody class="{{intervention.highlight}}" (click)="SelectedLine(intervention)"  id="tr{{i}}"   *ngFor="let intervention of resume; let i = index">
             <tr >
               <th  scope="row">
                 {{intervention.nombre}}

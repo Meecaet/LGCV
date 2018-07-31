@@ -19,7 +19,6 @@ export class MandatViewModel {
   contexteProjet: string;
   porteeDesTravaux: string;
 
-
   debutProjet: Date;
   finProjet: Date;
   debutMandat: Date;
@@ -34,10 +33,12 @@ export class MandatViewModel {
   taches: Array<TacheViewModel>;
   technologies: Array<TechnologieViewModel>;
 
-
   //this is to color configurations
-  highlight:string;
-  mandatStatus:string="ajouter";
+  highlight: string;
+  mandatStatus: string = "ajouter";
+
+  moisMandat: number = 0;
+  moisProjet: number = 0;
   constructor() {
     this.taches = new Array<TacheViewModel>();
     this.technologies = new Array<TechnologieViewModel>();

@@ -4,6 +4,7 @@ import { TacheViewModel } from "../../Models/Tache-model";
 import { ENTER, COMMA } from "@angular/cdk/keycodes";
 import { MatChipInputEvent } from "@angular/material";
 import { Router } from "@angular/router";
+import { Observable } from "../../../../node_modules/rxjs";
 
 @Component({
   selector: "app-carousel",
@@ -11,37 +12,45 @@ import { Router } from "@angular/router";
   styleUrls: ["./carousel.component.css"]
 })
 export class CarouselComponent implements OnInit {
+  //Inputs
   @Input("ngModelMandat") mandat: MandatViewModel;
   @Input("lastPage") lastPage: number;
-  @Output() OutPutMandatCarousel = new EventEmitter();
   @Input("numberPage") numberPage: number;
+  @Input("hiddenButton") hiddenButton: string;
+  @Input("showLoadingCarousel") showLoadingCarousel: boolean = true;
+  //Outputs
+  @Output("OutPutMandatCarousel") OutPutMandatCarousel = new EventEmitter();
   @Output("onChangePage") onChangePage = new EventEmitter();
 
-  @Input() private uploadSuccess: EventEmitter<boolean>;
-
-  @Input("hiddenButton") hiddenButton: string;
+  public watchTest;
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   visible = true;
   selectable = true;
   removable = true;
   addOnBlur = true;
 
-  showLoadingCarousel:boolean=false;
   ngOnInit() {}
   constructor(private route: Router) {
     this.mandat = new MandatViewModel();
   }
-  private calcMonth(init: Date, fin: Date, eleHtml: HTMLSpanElement) {
+
+  private calcMonth(init: Date, fin: Date, eleHtml: string) {
+    debugger;
     if (init != null && fin != null) {
       var date1: any = new Date(init);
       var date2: any = new Date(fin);
       var diffDays = Math.round((date2 - date1) / (1000 * 60 * 60 * 24 * 30));
-      eleHtml.innerHTML = "(" + diffDays + " mois )";
+
+      if ("moisMandat"==eleHtml) {
+        this.mandat.moisMandat= diffDays;
+      }else{
+        this.mandat.moisProjet= diffDays;
+      }
     }
   }
 
-  LoadMandat(utilizateurId:string,mandat:MandatViewModel){
-    this.showLoadingCarousel=true;
+  LoadMandat(utilizateurId: string, mandat: MandatViewModel) {
+    this.showLoadingCarousel = true;
   }
   addTache(event: MatChipInputEvent): void {
     const input = event.input;
@@ -84,10 +93,10 @@ export class CarouselComponent implements OnInit {
   ModifierMandatCarousel(mandat: MandatViewModel): void {
     alert("to implement");
   }
-  classValidator(cssClass :string,optionCssClass):string{
-    if(this.showLoadingCarousel){
+  classValidator(cssClass: string, optionCssClass): string {
+    if (this.showLoadingCarousel) {
       return cssClass;
-    }else{
+    } else {
       return optionCssClass;
     }
   }

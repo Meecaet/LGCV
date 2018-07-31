@@ -24,9 +24,7 @@ export class TableLangueComponent implements OnInit {
   }
 
   ngOnInit() {
-
     this.UserDataLoad();
-
     this.DataLoad();
   }
   AddLangue(): void {
