@@ -11,14 +11,14 @@ using WebCV_Fiches.Models.CVViewModels;
 namespace WebCV_Fiches.Controllers
 {
     [Route("Technologie")]
-    public class CVTechnologieController : Controller
+    public class CVMandatTechnologiesController : Controller
     {
         public EditionObjectGraphRepository editionObjectGraphRepository;
         public UtilisateurGraphRepository utilisateurGraphRepository;
         public MandatGraphRepository mandatGraphRepository;
         public TechnologieGraphRepository technologieGraphRepository;
 
-        public CVTechnologieController()
+        public CVMandatTechnologiesController()
         {
             utilisateurGraphRepository = new UtilisateurGraphRepository();
             editionObjectGraphRepository = new EditionObjectGraphRepository();

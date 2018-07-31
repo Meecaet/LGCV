@@ -48,7 +48,7 @@ namespace WebCV_Fiches.Controllers
             var utilisateur = utilisateurGraphRepository.GetOne(utilisateurId);
 
             var graphObject = CreateGraphObject(viewModel);
-            editionObjectGraphRepository.AjouterNoeud(objetAjoute: graphObject, noeudModifiePropriete: "Formations", noeudModifie: utilisateur.Conseiller);
+            editionObjectGraphRepository.AjouterNoeud(objetAjoute: graphObject, noeudModifiePropriete: GetProprieteModifiee(), noeudModifie: utilisateur.Conseiller);
 
             viewModel.GraphId = graphObject.GraphKey;
 
