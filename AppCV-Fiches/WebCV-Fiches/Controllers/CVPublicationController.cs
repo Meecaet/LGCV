@@ -12,12 +12,12 @@ using WebCV_Fiches.Models.CVViewModels;
 
 namespace WebCV_Fiches.Controllers
 {
-    [Route("Perfectionnement")]
-    public class CVPerfectionnementController : CVController
+    [Route("Publication")]
+    public class CVPublicationController : CVController
     {
         public FormationGraphRepository formationGraphRepository;
 
-        public CVPerfectionnementController() : base()
+        public CVPublicationController() : base()
         {
             formationGraphRepository = new FormationGraphRepository();
         }
@@ -25,34 +25,34 @@ namespace WebCV_Fiches.Controllers
         [HttpPost]
         [AllowAnonymous]
         [Route("{utilisateurId}/Add")]
-        public ActionResult Add(string utilisateurId, [FromBody]PerfectionnementViewModel perfectionnement)
+        public ActionResult Add(string utilisateurId, [FromBody]PublicationViewModel publication)
         {
-            return Json(base.Add(utilisateurId, perfectionnement));
+            return Json(base.Add(utilisateurId, publication));
         }
 
         [HttpPost]
         [AllowAnonymous]
         [Route("{utilisateurId}/Edit")]
-        public ActionResult Edit(string utilisateurId, [FromBody]PerfectionnementViewModel perfectionnement)
+        public ActionResult Edit(string utilisateurId, [FromBody]PublicationViewModel publication)
         {
-            return Json(base.Edit(utilisateurId, perfectionnement));
+            return Json(base.Edit(utilisateurId, publication));
         }
 
         // POST: Mandat/Delete/5
         [HttpPost]
         [AllowAnonymous]
-        [Route("{utilisateurId}/Delete/{perfectionnementId}")]
-        public new ActionResult Delete(string utilisateurId, string perfectionnementId)
+        [Route("{utilisateurId}/Delete/{publicationId}")]
+        public new ActionResult Delete(string utilisateurId, string publicationId)
         {
-            return Json(base.Delete(utilisateurId, perfectionnementId));
+            return Json(base.Delete(utilisateurId, publicationId));
         }
 
         public override GraphObject CreateGraphObject(ViewModel viewModel)
         {
-            var perfectionnement = (PerfectionnementViewModel)viewModel;
-            var PerfectionnementModel = Formation.CreateFormation(perfectionnement.Annee, perfectionnement.Description, FormationType.Perfectionnement);
-            formationGraphRepository.Add(PerfectionnementModel);
-            return PerfectionnementModel;
+            var publication = (PublicationViewModel)viewModel;
+            var publicationModel = Formation.CreateFormation(publication.Annee, publication.Description, FormationType.Publication);
+            formationGraphRepository.Add(publicationModel);
+            return publicationModel;
         }
 
         public override GraphObject GetGraphObject(string graphId)
@@ -62,12 +62,12 @@ namespace WebCV_Fiches.Controllers
 
         public override List<GraphObject> GetGraphObjects(Utilisateur utilisateur)
         {
-            return utilisateur.Conseiller.Perfectionnement().Cast<GraphObject>().ToList(); ;
+            return utilisateur.Conseiller.Publication().Cast<GraphObject>().ToList(); ;
         }
 
         public override List<ViewModel> GetViewModels(string utilisateurId, List<GraphObject> noeudsModifie, List<GraphObject> graphObjects, Func<GraphObject, ViewModel> map)
         {
-            return ViewModelFactory<Formation, PerfectionnementViewModel>.GetViewModels(
+            return ViewModelFactory<Formation, PublicationViewModel>.GetViewModels(
                 utilisateurId: utilisateurId,
                 noeudsModifie: noeudsModifie,
                 graphObjects: graphObjects,
@@ -77,7 +77,7 @@ namespace WebCV_Fiches.Controllers
         public override ViewModel Map(GraphObject graphObject)
         {
             var perfectionnement = (Formation)graphObject;
-            return new PerfectionnementViewModel
+            return new PublicationViewModel
             {
                 Annee = perfectionnement.AnAcquisition,
                 Description = perfectionnement.Description,
@@ -89,7 +89,7 @@ namespace WebCV_Fiches.Controllers
         public override void UpdateGraphObject(GraphObject graphObject, ViewModel viewModel)
         {
             var perfectionnementObject = (Formation)graphObject;
-            var perfectionnementViewModel = (PerfectionnementViewModel)viewModel;
+            var perfectionnementViewModel = (PublicationViewModel)viewModel;
             perfectionnementObject.AnAcquisition = perfectionnementViewModel.Annee;
             perfectionnementObject.Description = perfectionnementViewModel.Description;
             formationGraphRepository.Update(perfectionnementObject);
@@ -99,7 +99,7 @@ namespace WebCV_Fiches.Controllers
         {
             var proprietesModifiees = new List<KeyValuePair<string, string>>();
             var perfectionnementObject = (Formation)graphObject;
-            var perfectionnementViewModel = (PerfectionnementViewModel)viewModel;
+            var perfectionnementViewModel = (PublicationViewModel)viewModel;
 
             if (perfectionnementObject.AnAcquisition != perfectionnementViewModel.Annee)
                 proprietesModifiees.Add(new KeyValuePair<string, string>("Annee", perfectionnementViewModel.Annee.ToString()));
