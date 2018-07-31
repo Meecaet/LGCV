@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
-import { Location } from "@angular/common"
+import { Location } from "@angular/common";
 
 @Component({
   selector: 'app-home',
@@ -8,6 +8,10 @@ import { Location } from "@angular/common"
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
+
+  isAdministrateur: boolean = false;
+  isApprobateur: boolean = false;
+  isConseiller: boolean = false;
 
   constructor(
     private router: Router,
@@ -21,6 +25,9 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (localStorage.getItem("isAdministrateur")== "true") {this.isAdministrateur=true;}
+    if (localStorage.getItem("isApprobateur")== "true") {this.isApprobateur=true;}
+    if (localStorage.getItem("isConseiller")== "true") {this.isConseiller=true;}
   }
 
 }

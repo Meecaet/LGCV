@@ -1,33 +1,38 @@
 <nav class="navbar navbar-expand-lg navbar-dark lgs-backgroundColor">
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01"
+        aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
         <a class="navbar-brand" routerLink="/home">LGS</a>
         <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-            <li class="nav-item"><a class="nav-link" routerLink="home"    >Home</a></li>
-            <li class="nav-item"><a class="nav-link"  >About</a></li>
-            <li class="nav-item"><a class="nav-link"  >Contact</a></li>
+            <li class="nav-item">
+                <a class="nav-link" routerLink="home">Home</a>
+            </li>
         </ul>
 
-        <!--
+        <div *ngIf="isAuthenticated()">
+            <div class="my-2 my-lg-0">
+                <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                    <li class="nav-item" style="justify-content: center; display: flex; align-items: center">
+                            Hello {{userName}}!
+                    </li>
+                    <button type="submit" class="btn btn-link nav-link" (click)="logOut()">Log out</button>
+                </ul>
+            </div>
+        </div>
+        <div *ngIf="!isAuthenticated()">
+            <div class="my-2 my-lg-0">
+                <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" routerLink="/account/register">Register</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" routerLink="account/login">Log in</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
 
-      <form asp-area="" asp-controller="Account" asp-action="Logout" method="post" id="logoutForm" class="form-inline my-2 my-lg-0">
-          <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-              <li class="nav-item">
-                  <a class="nav-link" asp-area="" asp-controller="Manage" asp-action="Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
-              </li>
-              <li class="nav-item">
-                  <button type="submit" class="btn btn-link nav-link">Log out</button>
-              </li>
-          </ul>
-      </form>
-    -->
-        <form class="form-inline my-2 my-lg-0">
-            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                <li class="nav-item"><a class="nav-link" routerLink="/account/register">Register</a></li>
-                <li class="nav-item"><a class="nav-link" routerLink="account/login" style="line-height:0">Log in</a></li>
-            </ul>
-        </form>
     </div>
 </nav>

@@ -27,6 +27,7 @@ namespace WebCV_Fiches.Controllers
     public class AccountApiController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
@@ -34,9 +35,10 @@ namespace WebCV_Fiches.Controllers
         private ApiCredential apiCredential;
 
 
-        public AccountApiController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IEmailSender emailSender, ILogger<AccountController> logger)
+        public AccountApiController(UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager, SignInManager<ApplicationUser> signInManager, IEmailSender emailSender, ILogger<AccountController> logger)
         {
             _userManager = userManager;
+            _roleManager = roleManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _logger = logger;
@@ -84,21 +86,27 @@ namespace WebCV_Fiches.Controllers
                 });
                 var token = handler.WriteToken(securityToken);
 
-      
+                var user = _userManager.FindByEmailAsync(userLogin.Email).Result;
+
+                var approbateurs = _userManager.GetUsersInRoleAsync(_roleManager.FindByNameAsync("Approbateur").Result.Name).Result.ToList();
+                var conseillers = _userManager.GetUsersInRoleAsync(_roleManager.FindByNameAsync("Conseiller").Result.Name).Result.ToList();
+                var administrateurs = _userManager.GetUsersInRoleAsync(_roleManager.FindByNameAsync("Administrateur").Result.Name).Result.ToList();
+
+                apiCredential.isAdministrateur = administrateurs.Exists(x => x.Id == user.Id);
+                apiCredential.isApprobateur = approbateurs.Exists(x => x.Id == user.Id);
+                apiCredential.isConseiller = conseillers.Exists(x => x.Id == user.Id);
+                apiCredential.userName = userLogin.Email;
                 apiCredential.created = dataCriacao.ToString("yyyy-MM-dd HH:mm:ss");
                 apiCredential.expiration = dataExpiracao.ToString("yyyy-MM-dd HH:mm:ss");
                 apiCredential.Token = token;
+
                 return apiCredential;
             }
             else
             {
-
                 apiCredential.authenticated = false;
                 apiCredential.message = "User not found";
-
                 return apiCredential;
-
-
             }
         }
 

@@ -17,10 +17,9 @@ namespace WebCV_Fiches.Helpers
     public class WordWriter
     {
         private Utilisateur utilisateur;
-
         private WordprocessingDocument document;
-
         private const string mauveCode = "7030A0";
+        private const int spaceSimple = 240;
 
         private RunProperties GetRunProperties(string fontName, string colorName, string size, bool bold, bool italic)
         {
@@ -36,56 +35,49 @@ namespace WebCV_Fiches.Helpers
             return runProperties;
         }
 
-        private void AddSpacingToParagraph(Paragraph paragraph, int before, int after, int betweenLines)
+        private void AddSpacing(OpenXmlCompositeElement element, int before, int after, int betweenLines)
         {
             SpacingBetweenLines spacing = new SpacingBetweenLines();
 
-            if (before > 0)
-                spacing.Before = new StringValue(before.ToString());
-
-            if (after > 0)
-                spacing.After = new StringValue(after.ToString());
+            spacing.Before = new StringValue(before.ToString());
+            spacing.After = new StringValue(after.ToString());
 
             if (betweenLines > 0)
                 spacing.Line = new StringValue(betweenLines.ToString());
 
-            ParagraphProperties paragraphProperties = paragraph.GetFirstChild<ParagraphProperties>();
+            ParagraphProperties paragraphProperties = element.GetFirstChild<ParagraphProperties>();
             if (paragraphProperties == null)
             {
                 paragraphProperties = new ParagraphProperties();
                 paragraphProperties.Append(spacing);
-                //paragraphProperties.Append(new ContextualSpacing { Val = false });
-                paragraph.Append(paragraphProperties);
+                element.Append(paragraphProperties);
             }
             else
             {
                 paragraphProperties.Append(spacing);
-                //paragraphProperties.Append(new ContextualSpacing { Val = false });
             }
         }
 
-        private void AddIndentationToParagraph(Paragraph paragraph, int left, int right)
+        private void AddIndentation(OpenXmlCompositeElement element, int left, int right)
         {
             Indentation indentation = new Indentation();
 
-            if (right > 0)
-                indentation.Right = new StringValue(right.ToString());
+            //if (right > 0)
+            indentation.Right = new StringValue(right.ToString());
 
-            if (left > 0)
-                indentation.Left = new StringValue(left.ToString());
+            //if (left > 0)
+            indentation.Left = new StringValue(left.ToString());
 
-            ParagraphProperties paragraphProperties = paragraph.GetFirstChild<ParagraphProperties>();
+            ParagraphProperties paragraphProperties = element.GetFirstChild<ParagraphProperties>();
             if (paragraphProperties == null)
             {
                 paragraphProperties = new ParagraphProperties();
                 paragraphProperties.Append(indentation);
-                //paragraphProperties.Append(new ContextualSpacing { Val = false });
-                paragraph.Append(paragraphProperties);
+                element.Append(paragraphProperties);
             }
             else
             {
                 paragraphProperties.Append(indentation);
-                //paragraphProperties.Append(new ContextualSpacing { Val = false });
             }
         }
 
@@ -292,7 +284,7 @@ namespace WebCV_Fiches.Helpers
                                              new A.Stretch()),
                                          new PIC.ShapeProperties(
                                              new A.Transform2D(
-                                                 new A.Offset() { X = 0L, Y = 0L },
+                                                 new A.Offset() { X = -91L, Y = -108L },
                                                  new A.Extents() { Cx = 766445L, Cy = 766445L }),
                                              new A.PresetGeometry(
                                                  new A.AdjustValueList()
@@ -321,7 +313,7 @@ namespace WebCV_Fiches.Helpers
         private Drawing GetLogoImage(string imagePath)
         {
             MainDocumentPart mainPart = document.MainDocumentPart;
-            ImagePart imagePart = mainPart.AddImagePart(ImagePartType.Jpeg);
+            ImagePart imagePart = mainPart.AddImagePart(ImagePartType.Png);
 
             using (FileStream stream = new FileStream(imagePath, FileMode.Open))
             {
@@ -338,8 +330,8 @@ namespace WebCV_Fiches.Helpers
 
             PageMargin pageMargins = new PageMargin();
             pageMargins.Left = 1134;
-            pageMargins.Right = 851;
-            pageMargins.Bottom = 1077;
+            pageMargins.Right = 1021;
+            pageMargins.Bottom = 1276;
             pageMargins.Top = 1077;
             pageMargins.Footer = 454;
             pageMargins.Header = 720;
@@ -506,7 +498,7 @@ namespace WebCV_Fiches.Helpers
         public void CreateDummyTest()
         {
             document.AddMainDocumentPart();
-            document.MainDocumentPart.Document = new Document(); ;
+            document.MainDocumentPart.Document = new Document();
 
             Document doc = document.MainDocumentPart.Document;
             Body docBody = new Body();
@@ -520,8 +512,8 @@ namespace WebCV_Fiches.Helpers
             AddBulletToStyles(38, 0, "Puce1");
 
             CreateBioSection(doc.Body);
-            CreateDomaineDIntervetionSection(doc.Body);
-            //CreateFormationAcademiqueEtCertificationSection(doc.Body);
+            CreateDomainesDInterventionSection(doc.Body);
+            CreateFormationAcademiqueEtCertificationSection(doc.Body);
             CreateResumeDIntervention(doc.Body);
             CreateMandats(doc.Body);
 
@@ -533,7 +525,8 @@ namespace WebCV_Fiches.Helpers
             Table table = new Table();
             TableRow tableRow = new TableRow();
             TableCell imageCell = new TableCell();
-            TableCell NomEtFonctionCell = new TableCell();
+            TableCell nomEtFonctionCell = new TableCell();
+            TableCellProperties tableCellProperties;
 
             Paragraph nomEtFonctionParagraph, blankParagraph, bioParagraph;
 
@@ -542,30 +535,23 @@ namespace WebCV_Fiches.Helpers
 
             document.MainDocumentPart.StyleDefinitionsPart.Styles.Append(bioParagraphStyle);
 
-            TableProperties tableProperties = new TableProperties(new TableBorders(new TopBorder
-            {
-                Color = new StringValue(mauveCode),
-                Size = 1,
-                Val = new EnumValue<BorderValues>(BorderValues.Single)
-            },
-                                                                                   new BottomBorder
-                                                                                   {
-                                                                                       Color = new StringValue(mauveCode),
-                                                                                       Size = 1,
-                                                                                       Val = new EnumValue<BorderValues>(BorderValues.Single)
-                                                                                   }),
-                                                                  new TableWidth
-                                                                  {
-                                                                      Width = "5000",
-                                                                      Type = TableWidthUnitValues.Pct
-                                                                  });
+            TableProperties tableProperties = new TableProperties(
+                new TableWidth
+                {
+                    Width = "5000",
+                    Type = TableWidthUnitValues.Pct
+                },
+                new TableIndentation
+                {
+                    Width = -459,
+                    Type = TableWidthUnitValues.Dxa
+                });
 
             table.AppendChild<TableProperties>(tableProperties);
 
-            TableCellProperties tableCellProperties = new TableCellProperties();
-            tableCellProperties.Append(new TableCellWidth { Width = new StringValue("1337"), Type = new EnumValue<TableWidthUnitValues>(TableWidthUnitValues.Dxa) });
+            tableCellProperties = new TableCellProperties();
+            tableCellProperties.Append(new TableCellWidth { Width = new StringValue("1360"), Type = new EnumValue<TableWidthUnitValues>(TableWidthUnitValues.Dxa) });
             imageCell.Append(tableCellProperties);
-
             imageCell.Append(new Paragraph(new Run(GetLogoImage(@"C:\Docs to zip\Images\logo.png"))));
 
             Run nomRun = new Run(), breakLine = new Run(), fonctionRun = new Run();
@@ -578,20 +564,28 @@ namespace WebCV_Fiches.Helpers
             fonctionRun.Append(new Text { Text = utilisateur.Conseiller.Fonction.Description });
 
             nomEtFonctionParagraph = new Paragraph();
-            AddSpacingToParagraph(nomEtFonctionParagraph, 240, 240, 0);
+            AddSpacing(nomEtFonctionParagraph, 240, 240, 0);
             nomEtFonctionParagraph.Append(nomRun, breakLine, fonctionRun);
 
-            NomEtFonctionCell.Append(nomEtFonctionParagraph);
+            nomEtFonctionCell.Append(nomEtFonctionParagraph);
 
-            tableRow.Append(imageCell, NomEtFonctionCell);
+            tableCellProperties = new TableCellProperties();
+            tableCellProperties.Append(new TableCellBorders
+            {
+                TopBorder = new TopBorder { Val = new EnumValue<BorderValues>(BorderValues.Single), Size = 1, Color = mauveCode },
+                BottomBorder = new BottomBorder { Val = new EnumValue<BorderValues>(BorderValues.Single), Size = 1, Color = mauveCode }
+            });
+            nomEtFonctionCell.Append(tableCellProperties);
+
+            tableRow.Append(imageCell, nomEtFonctionCell);
             table.Append(tableRow);
-
             docBody.Append(table);
 
             blankParagraph = new Paragraph();
             docBody.Append(blankParagraph);
 
             bioParagraph = new Paragraph();
+            AddIndentation(bioParagraph, 993, 0);
             AddAligmentToParagrah(bioParagraph, ParagraphAligment.Justifie);
 
             Run bioRun = new Run();
@@ -600,9 +594,48 @@ namespace WebCV_Fiches.Helpers
 
             bioParagraph.Append(bioRun);
             docBody.Append(bioParagraph);
+            docBody.Append(new Paragraph());
         }
 
-        public void CreateDomaineDIntervetionSection(Body docBody)
+        private Border GenerateBorder(string color, bool showTop, bool showBottom, bool showLeft, bool showRight)
+        {
+            Border border = new Border();
+
+            LeftBorder leftBorder = new LeftBorder() {
+                Color = new StringValue(color),
+                Size = 1,
+                Val = new EnumValue<BorderValues>(BorderValues.Single)
+            };
+
+            RightBorder rightBorder = new RightBorder()
+            {
+                Color = new StringValue(color),
+                Size = 1,
+                Val = new EnumValue<BorderValues>(BorderValues.Single)
+            };
+
+            TopBorder topBorder = new TopBorder()
+            {
+                Color = new StringValue(color),
+                Size = 1,
+                Val = new EnumValue<BorderValues>(BorderValues.Single)
+            };
+
+            BottomBorder bottomBorder = new BottomBorder()
+            {
+                Color = new StringValue(color),
+                Size = 1,
+                Val = new EnumValue<BorderValues>(BorderValues.Single)
+            };
+
+            if (showTop) { border.Append(topBorder); }
+            if (showBottom) { border.Append(bottomBorder); }
+            if (showLeft) { border.Append(leftBorder); }
+            if (showRight) { border.Append(rightBorder); }
+            return border;
+        }
+
+        public void CreateDomainesDInterventionSection(Body docBody)
         {
             Table tableItems;
             TableRow domainesRow;
@@ -613,16 +646,17 @@ namespace WebCV_Fiches.Helpers
 
             bool twoColumns = false;
 
-            string[] domaineItens = utilisateur.Conseiller.DomaineDInterventions.Select(x => x.Description).ToArray();
+            var domaines = utilisateur.Conseiller.DomaineDInterventions.Where(x => !String.IsNullOrEmpty(x.Description)).ToList();
+            string[] domaineItens = domaines.Select(x => x.Description).ToArray();
+            
 
             titreParagraph = new Paragraph();
-            AddIndentationToParagraph(titreParagraph, 993, 0);
+            AddIndentation(titreParagraph, 993, 0);
 
             titreRun = new Run();
             titreRun.Append(GetRunProperties("Arial", mauveCode, "22", true, false));
             titreRun.Append(new Text("PRINCIPAUX DOMAINES D’INTERVENTION"));
             titreParagraph.Append(titreRun);
-
 
             tableItems = new Table();
 
@@ -632,22 +666,22 @@ namespace WebCV_Fiches.Helpers
                 Size = 1,
                 Val = new EnumValue<BorderValues>(BorderValues.Dotted)
             },
-                                                                               new BottomBorder
-                                                                               {
-                                                                                   Color = new StringValue(mauveCode),
-                                                                                   Size = 1,
-                                                                                   Val = new EnumValue<BorderValues>(BorderValues.Dotted)
-                                                                               }),
-                                                              new TableWidth
-                                                              {
-                                                                  Width = "9382",
-                                                                  Type = TableWidthUnitValues.Dxa
-                                                              },
-                                                              new TableIndentation
-                                                              {
-                                                                  Width = 959,
-                                                                  Type = TableWidthUnitValues.Dxa
-                                                              });
+            new BottomBorder
+            {
+                Color = new StringValue(mauveCode),
+                Size = 1,
+                Val = new EnumValue<BorderValues>(BorderValues.Dotted)
+            }),
+            new TableWidth
+            {
+                Width = "9382",
+                Type = TableWidthUnitValues.Dxa
+            },
+            new TableIndentation
+            {
+                Width = 959,
+                Type = TableWidthUnitValues.Dxa
+            });
 
             tableItems.AppendChild<TableProperties>(tableProperties);
 
@@ -656,9 +690,6 @@ namespace WebCV_Fiches.Helpers
             secondColumn = new TableCell();
 
             itemParagraphModele = new Paragraph();
-
-            //itemRun.Append(GetRunProperties("Arial", "Black", "20", false, false), new Text(domaineItens[i]));
-
             ParagraphProperties paragraphProperties = new ParagraphProperties();
             paragraphProperties.ParagraphStyleId = new ParagraphStyleId { Val = "Puce1" };
             paragraphProperties.SpacingBetweenLines = new SpacingBetweenLines { Before = "0", After = "0" };
@@ -667,54 +698,21 @@ namespace WebCV_Fiches.Helpers
             itemParagraphModele.Append(paragraphProperties);
 
             twoColumns = domaineItens.Length > 4;
-            if (twoColumns)
+            int count = 0;
+            foreach (string domaine in domaineItens)
             {
-                int minCol1, maxCol1, minCol2, maxCol2;
+                itemRun = new Run();
+                itemRun.Append(GetRunProperties("Arial", "Black", "20", false, false), new Text(domaine));
 
-                minCol1 = 0;
-                maxCol1 = domaineItens.Length / 2;
-                minCol2 = (domaineItens.Length / 2) + 1;
-                maxCol2 = domaineItens.Length - 1;
-
-
-                for (int i = minCol1; i <= maxCol1; i++)
-                {
-                    itemRun = new Run();
-                    itemRun.Append(GetRunProperties("Arial", "Black", "20", false, false), new Text(domaineItens[i]));
-
-                    currentParagraphItem = (Paragraph)itemParagraphModele.CloneNode(true);
-                    currentParagraphItem.Append(itemRun);
-
+                currentParagraphItem = (Paragraph)itemParagraphModele.CloneNode(true);
+                currentParagraphItem.Append(itemRun);
+                if (!twoColumns || count <= (domaineItens.Length / 2))
                     firstColumn.Append(currentParagraphItem);
-
-                }
-
-                for (int i = minCol2; i <= maxCol2; i++)
-                {
-                    itemRun = new Run();
-                    itemRun.Append(GetRunProperties("Arial", "Black", "20", false, false), new Text(domaineItens[i]));
-
-                    currentParagraphItem = (Paragraph)itemParagraphModele.CloneNode(true);
-                    currentParagraphItem.Append(itemRun);
-
+                else
                     secondColumn.Append(currentParagraphItem);
-                }
-
+                count++;
             }
-            else
-            {
-                for (int i = 0; i < domaineItens.Length; i++)
-                {
-                    itemRun = new Run();
-                    itemRun.Append(GetRunProperties("Arial", "Black", "20", false, false), new Text(domaineItens[i]));
-
-                    currentParagraphItem = (Paragraph)itemParagraphModele.CloneNode(true);
-                    currentParagraphItem.Append(itemRun);
-
-                    firstColumn.Append(currentParagraphItem);
-                }
-            }
-
+            
             if (twoColumns)
                 domainesRow.Append(firstColumn, secondColumn);
             else
@@ -722,13 +720,13 @@ namespace WebCV_Fiches.Helpers
 
             tableItems.Append(domainesRow);
 
-            docBody.Append(GetNewBlankParagraph(2), titreParagraph, tableItems);
+            docBody.Append(titreParagraph, tableItems);
         }
 
         public void CreateFormationAcademiqueEtCertificationSection(Body docBody)
         {
-            bool HasCertification = utilisateur.Conseiller.Formations.Any(x => x.Type.Description == "Certification");
-
+            bool HasCertification = utilisateur.Conseiller.Formations.Any(x => x.Type != null && x.Type.Description == "Certification");
+            
             Table tableFormationAcademiqueEtCertification;
             TableProperties tableProperties;
             TableGrid tableGrid;
@@ -743,8 +741,19 @@ namespace WebCV_Fiches.Helpers
             tableFormationAcademiqueEtCertification = new Table();
 
             tableProperties = new TableProperties();
-            tableProperties.Append(new TableIndentation { Width = 959, Type = new EnumValue<TableWidthUnitValues>(TableWidthUnitValues.Dxa) },
-                                    new TableLook { Val = "04A0", NoVerticalBand = new OnOffValue(true), LastColumn = new OnOffValue(false), FirstColumn = new OnOffValue(true), LastRow = new OnOffValue(false), FirstRow = new OnOffValue(true) });
+            tableProperties.Append(
+                new TableIndentation {
+                    Width = 959,
+                    Type = new EnumValue<TableWidthUnitValues>(TableWidthUnitValues.Dxa)
+                },
+                new TableLook {
+                    Val = "04A0",
+                    NoVerticalBand = new OnOffValue(true),
+                    LastColumn = new OnOffValue(false),
+                    FirstColumn = new OnOffValue(true),
+                    LastRow = new OnOffValue(false),
+                    FirstRow = new OnOffValue(true)
+                });
 
             tableGrid = new TableGrid();
             tableGrid.Append(new GridColumn { Width = new StringValue("4679") }, new GridColumn { Width = new StringValue("4689") });
@@ -756,6 +765,7 @@ namespace WebCV_Fiches.Helpers
 
             formationTitreCell = new TableCell();
             formationTitreParagraph = new Paragraph();
+            AddSpacing(formationTitreParagraph, 120, 120, spaceSimple);
             formationTitreRun = new Run();
 
             formationCellPropertiesModele = new TableCellProperties();
@@ -771,6 +781,8 @@ namespace WebCV_Fiches.Helpers
             {
                 certificationTitreCell = new TableCell();
                 certificationTitreParagraph = new Paragraph();
+                AddSpacing(certificationTitreParagraph, 120, 120, spaceSimple);
+                AddIndentation(certificationTitreParagraph, 283, 0);
                 certificationTitreRun = new Run();
 
                 certificationCellPropertiesModele = new TableCellProperties();
@@ -789,7 +801,9 @@ namespace WebCV_Fiches.Helpers
             {
                 formationAcademiqueCellModele = new TableCell();
                 diplomeParagraphModele = new Paragraph();
+                AddSpacing(diplomeParagraphModele, 0, 0, spaceSimple);
                 instituitionParagraphModele = new Paragraph();
+                AddSpacing(instituitionParagraphModele, 0, 0, spaceSimple);
                 diplomeModeleRun = new Run();
                 instituitionModeleRun = new Run();
 
@@ -824,17 +838,22 @@ namespace WebCV_Fiches.Helpers
 
                     ParagraphProperties paragraphProperties = new ParagraphProperties();
                     paragraphProperties.ParagraphStyleId = new ParagraphStyleId { Val = "Puce1" };
-                    paragraphProperties.SpacingBetweenLines = new SpacingBetweenLines { Before = "0", After = "0" };
                     paragraphProperties.Justification = new Justification { Val = new EnumValue<JustificationValues>(JustificationValues.Left) };
 
                     certificationItemParagraphModele.Append(paragraphProperties, certificationItemRun);
                     certificationCell.Append(certificationItemParagraphModele);
+                    AddIndentation(certificationItemParagraphModele, 743, 0);
+                    AddSpacing(certificationItemParagraphModele, 0, 0, spaceSimple);
                 }
 
                 firstRow.Append(certificationCell);
             }
 
-            docBody.Append(GetNewBlankParagraph(), tableFormationAcademiqueEtCertification);
+            Paragraph blankParagraph = new Paragraph();
+            AddSpacing(blankParagraph, 0, 0, spaceSimple);
+            docBody.Append(blankParagraph);
+
+            docBody.Append(tableFormationAcademiqueEtCertification);
         }
 
         public void CreateResumeDIntervention(Body docBody)
@@ -853,21 +872,16 @@ namespace WebCV_Fiches.Helpers
             //Nouvelle page et titre
 
             docBody.Append(new Paragraph(new Run(new Break { Type = new EnumValue<BreakValues>(BreakValues.Page) })));
-
             currentParagraph = new Paragraph();
-            AddSpacingToParagraph(currentParagraph, 0, 120, 0);
-            AddIndentationToParagraph(currentParagraph, -284, 0);
-
+            AddSpacing(currentParagraph, 0, 120, spaceSimple);
+            AddIndentation(currentParagraph, -198, 0);
             currentRun = new Run();
             currentRun.Append(GetRunProperties("Arial Gras", mauveCode, "22", true, false));
             currentRun.Append(new Text("RÉSUMÉ DES INTERVENTIONS"));
             currentParagraph.Append(currentRun);
-
             docBody.Append(currentParagraph);
-            docBody.Append(new Paragraph());
 
             //Fin nouvelle page et titre
-
 
             tableResumeIntervention = new Table();
 
@@ -885,7 +899,7 @@ namespace WebCV_Fiches.Helpers
                 InsideHorizontalBorder = new InsideHorizontalBorder { Val = new EnumValue<BorderValues>(BorderValues.Dotted), Size = 4, Space = 0, Color = borderColor },
                 InsideVerticalBorder = new InsideVerticalBorder { Val = new EnumValue<BorderValues>(BorderValues.Dotted), Size = 4, Space = 0, Color = borderColor }
             },
-            new TableWidth { Width = "10986", Type = new EnumValue<TableWidthUnitValues>(TableWidthUnitValues.Dxa) },
+            new TableWidth { Width = "10477", Type = new EnumValue<TableWidthUnitValues>(TableWidthUnitValues.Dxa) },
             new TableJustification { Val = new EnumValue<TableRowAlignmentValues>(TableRowAlignmentValues.Center) },
             new TableLayout { Type = new EnumValue<TableLayoutValues>(TableLayoutValues.Fixed) },
             new TableCellMargin
@@ -894,16 +908,15 @@ namespace WebCV_Fiches.Helpers
                 RightMargin = new RightMargin { Width = "70", Type = new EnumValue<TableWidthUnitValues>(TableWidthUnitValues.Dxa) }
             },
             new TableGrid(
-                            new GridColumn { Width = "506" },
-                            new GridColumn { Width = "2262" },
-                            new GridColumn { Width = "2842" },
-                            new GridColumn { Width = "1275" },
-                            new GridColumn { Width = "1843" },
-                            new GridColumn { Width = "1134" },
-                            new GridColumn { Width = "1124" }
+                            new GridColumn { Width = "454" },
+                            new GridColumn { Width = "2222" },
+                            new GridColumn { Width = "2738" },
+                            new GridColumn { Width = "1287" },
+                            new GridColumn { Width = "1701" },
+                            new GridColumn { Width = "1077" },
+                            new GridColumn { Width = "998" }
                          )
             );
-
 
             tableResumeIntervention.Append(tableProperties);
 
@@ -920,9 +933,11 @@ namespace WebCV_Fiches.Helpers
             runPropertiesModele = GetRunProperties("Arial", "White", "18", true, false);
             headerRun.Append(runPropertiesModele);
 
-            new string[] { "NO", "CLIENT", "PROJET", "ENVERGURE (J-P)", "FONCTION", "ANNÉE", "EFFORTS (MOIS)" }.ToList().ForEach(x =>
+            new string[] { "N°", "CLIENT", "PROJET", "ENVERGURE (J-P)", "FONCTION", "ANNÉE", "EFFORTS (MOIS)" }.ToList().ForEach(x =>
             {
                 currentParagraph = (Paragraph)headerParagraph.CloneNode(true);
+                AddSpacing(currentParagraph, 40, 40, spaceSimple);
+                AddAligmentToParagrah(currentParagraph, ParagraphAligment.Centre);
                 currentRun = (Run)headerRun.CloneNode(true);
 
                 currentRun.Append(new Text(x));
@@ -960,7 +975,7 @@ namespace WebCV_Fiches.Helpers
                 currentCell.Append(cellProperties);
 
                 employeurParagraphModele = new Paragraph();
-                AddSpacingToParagraph(employeurParagraphModele, 40, 40, 0);
+                AddSpacing(employeurParagraphModele, 40, 40, 0);
 
                 employeurRunModele = new Run();
                 employeurRunModele.Append(GetRunProperties("Arial Gras", "262626", "20", true, false));
@@ -995,7 +1010,7 @@ namespace WebCV_Fiches.Helpers
                     .ToList().ForEach(x =>
                     {
                         mandatParagraphModele = new Paragraph();
-                        AddSpacingToParagraph(mandatParagraphModele, 40, 40, 0);
+                        AddSpacing(mandatParagraphModele, 40, 40, 0);
                         AddAligmentToParagrah(mandatParagraphModele, ParagraphAligment.Centre);
 
                         mandatRunModele = new Run();
