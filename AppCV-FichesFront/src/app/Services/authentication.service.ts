@@ -13,4 +13,9 @@ export class AuthenticationService {
 
     return this._http.post<Credential>("https://localhost:44344/api/AccountApi/DoLogin",{Email:model.email,Password:model.password,RemeberMe:model.rememberMe})
   }
+
+ ForgotPassword(email:string) {
+   debugger;
+    return this._http.post("https://localhost:44344/api/AccountApi/ForgotPassword", {Email: email})
+  }
 }

@@ -56,8 +56,8 @@ namespace WebCV_Fiches.Controllers
             bool credenciaisValidas = false;
             if (userLogin != null)
             {
-                apiCredential   = login.Find(userLogin);
-                credenciaisValidas = (apiCredential != null );
+                apiCredential = login.Find(userLogin);
+                credenciaisValidas = (apiCredential != null);
             }
 
             if (credenciaisValidas)
@@ -129,7 +129,8 @@ namespace WebCV_Fiches.Controllers
                 _logger.LogInformation("User created a new account with password.");
 
                 var utilisateurGraphRepository = new UtilisateurGraphRepository();
-                var utilisateur = new Utilisateur() {
+                var utilisateur = new Utilisateur()
+                {
                     Prenom = user.Prenom,
                     Nom = user.Nom,
                     AdresseCourriel = user.Email
@@ -162,9 +163,22 @@ namespace WebCV_Fiches.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordViewModel model)
         {
-            return View();
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
+            {
+                // Don't reveal that the user does not exist or is not confirmed
+                return Ok();
+            }
+
+            // For more information on how to enable account confirmation and password reset please
+            // visit https://go.microsoft.com/fwlink/?LinkID=532713
+            var code = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var callbackUrl = Url.ResetPasswordCallbackLink(user.Id, code, Request.Scheme);
+            await _emailSender.SendEmailAsync(model.Email, "Reset Password",
+               $"Please reset your password by clicking here: <a href='{callbackUrl}'>link</a>");
+            return Ok();
         }
 
         [HttpGet]

@@ -25,7 +25,8 @@ namespace WebCV_Fiches.Controllers
         public CVFormation()
         {
             utilisateurGraphRepository = new UtilisateurGraphRepository();
-            formationGraphRepository = new FormationGraphRepository();   editionObjectGraphRepository = new EditionObjectGraphRepository();
+            formationGraphRepository = new FormationGraphRepository();
+            editionObjectGraphRepository = new EditionObjectGraphRepository();
         }
 
         public List<ViewModel> All(string utilisateurId)
