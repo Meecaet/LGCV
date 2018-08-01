@@ -1,5 +1,9 @@
 import { Component, OnInit, Input } from "@angular/core";
 import { FormationAcademiqueViewModel } from "../../Models/FormationAcademique-model";
+import { CVService } from "../../Services/cv.service";
+import { HttpErrorResponse } from "@angular/common/http";
+import { ErrorService } from "../../Services/error.service";
+import { NiveauAcademique } from "../../Models/niveau-academique.enum";
 
 @Component({
   selector: "app-table-formation-academique",
@@ -8,22 +12,38 @@ import { FormationAcademiqueViewModel } from "../../Models/FormationAcademique-m
 })
 export class TableFormationAcademiqueComponent implements OnInit {
   formationAcademique: Array<FormationAcademiqueViewModel>;
-  constructor() {
+  niveauAcademique  : NiveauAcademique= new  NiveauAcademique();
+  @Input() UtilisateurId: string;
+  showLoadingFormationAcademique: boolean = true;
+  constructor(private serv: CVService, private servError: ErrorService) {
+
     this.formationAcademique = new Array<FormationAcademiqueViewModel>();
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+   this.LoadUserData();
+  }
   AddFormationAcademique(): void {
     this.formationAcademique.push(new FormationAcademiqueViewModel());
   }
-
+  LoadUserData() {
+    this.showLoadingFormationAcademique = true;
+    this.serv
+      .LoadFormationAcademique(this.UtilisateurId)
+      .subscribe((obs: Array<FormationAcademiqueViewModel>) => {
+        this.formationAcademique = obs;
+        this.showLoadingFormationAcademique = false;
+      }, this.Error);
+  }
+  Error(error: HttpErrorResponse) {
+    debugger;
+    this.servError.ErrorHandle(error.status);
+  }
   removeFormationAcademique(
     ele: any,
     button: any,
     form: FormationAcademiqueViewModel
   ) {
-
-
     if (confirm("Vous voulez supprime ?")) {
       form.highlight = "highlighterror";
       document.getElementById(button).remove();
@@ -33,25 +53,28 @@ export class TableFormationAcademiqueComponent implements OnInit {
   deleteFromDatabase(form: FormationAcademiqueViewModel) {
     alert("to implement");
   }
-  OrderBy(): void {
-    this.formationAcademique = Array.from(this.formationAcademique).sort(
-      (item1: any, item2: any) => {
-        return this.orderByComparator(item2["annee"], item1["annee"]);
-      }
-    );
-  }
-  private orderByComparator(a: any, b: any): number {
+
+  SaveFormation(model: FormationAcademiqueViewModel) {
     if (
-      isNaN(parseFloat(a)) ||
-      !isFinite(a) ||
-      (isNaN(parseFloat(b)) || !isFinite(b))
+      model.annee !== undefined &&
+      model.diplome !== undefined &&
+      model.etablissement !== undefined &&
+      model.niveau !== undefined
     ) {
-      if (a < b) return -1;
-      if (a > b) return 1;
-    } else {
-      if (parseFloat(a) < parseFloat(b)) return -1;
-      if (parseFloat(a) > parseFloat(b)) return 1;
+      this.showLoadingFormationAcademique = true;
+      this.serv
+        .FormationAcademique(model, this.UtilisateurId)
+        .subscribe((obs: FormationAcademiqueViewModel) => {
+          this.LoadUserData();
+        }, this.Error);
     }
-    return 0;
+  }
+
+  classValidator(cssClass: string, optionCssClass): string {
+    if (this.showLoadingFormationAcademique) {
+      return cssClass;
+    } else {
+      return optionCssClass;
+    }
   }
 }

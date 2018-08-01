@@ -6,6 +6,9 @@ export interface ResumeInterventionViewModel {
     envergure: string;
     fonction: string;
     annee: number;
-    efforts: string;
+    effors: number;
     debutMandat: Date;
+
+
+    highlight: string;
 }

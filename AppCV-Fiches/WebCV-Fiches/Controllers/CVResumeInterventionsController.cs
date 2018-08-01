@@ -27,7 +27,7 @@ namespace WebCV_Fiches.Controllers
         [AllowAnonymous]
         public ActionResult All(string utilisateurId)
         {
-            var utilisateur = utilisateurGraphRepository.GetOne(utilisateurId);
+             var utilisateur = utilisateurGraphRepository.GetOne(utilisateurId);
             var mandats = utilisateur.Conseiller.Mandats.Cast<GraphObject>().ToList();
             var noeudModifie = new List<GraphObject>();
             noeudModifie.Add(utilisateur.Conseiller);
@@ -55,6 +55,7 @@ namespace WebCV_Fiches.Controllers
                 Projet = mandat.Titre,
                 GraphId = mandat.GraphKey
             };
+ 
         }
     }
 }

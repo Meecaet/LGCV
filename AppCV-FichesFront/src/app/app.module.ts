@@ -7,7 +7,8 @@ import {
   MatIconModule,
   MatFormFieldModule,
   MatAutocompleteModule,
-  MatInputModule
+  MatInputModule,
+  MatSelectModule
 } from "@angular/material";
 
 import { ResumeInterventionsComponent } from "./components/CV/resume-interventions/resume-interventions.component";
@@ -88,14 +89,14 @@ import { AccessDeniedComponent } from './components/access-denied/access-denied.
     HttpClientModule,
     FormsModule,
     ServiceRoutingModule,
-
     InlineEditorModule,
     MatButtonModule,
     MatCheckboxModule,
     MatChipsModule,
     MatIconModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    MatSelectModule
   ],
   providers: [
 

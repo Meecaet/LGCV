@@ -20,6 +20,8 @@ export class DropDownFonctionComponent implements OnInit {
       .LoadFonction()
       .subscribe((data: Array<FonctionViewModel>) => {
         this.fonctionAutoComplete = data;
+
+
       });
   }
 }

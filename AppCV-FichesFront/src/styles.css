@@ -151,14 +151,23 @@ body {
   width: 100%;
 }
 .highlighterror {
-  border: #ff0081 solid 2.3px;
+  border: #ff0081 solid 2.3px!important;
 }
 .highlightsuccess {
-  border: rgba(58, 180, 58, 0.664) solid 2px;
+  border: rgba(58, 180, 58, 0.664) solid 2px!important;
 }
 .highlightalert {
-  border: rgba(243, 240, 46, 0.973) solid 2px;
+  border: rgba(243, 240, 46, 0.973) solid 2px!important;
 }
+
+.ChangementPropriete {
+  border: rgba(243, 240, 46, 0.973) solid 2px!important;
+}
+
 .selected {
-  background: #80808070;font-size: 19px; color: white;
+  background: #80808070;
+  font-size: 19px;
+  color: white;
 }
+
+

@@ -56,8 +56,8 @@ namespace WebCV_Fiches.Helpers
                   EditionId = GetEditionid(x),
                   Etat = x.Etat,
                   Observacao = x.Observacao,
-                  ProprieteNom = x.ProprieteNom,
-                  ProprieteValeur = x.ProprieteValeur,
+                  ProprieteNom = CamelCase(x.ProprieteNom),
+                  ProprieteValeur =x.ProprieteValeur,
                   Type = GetTypeFrom(x)
               }
              ).ToList();
@@ -92,5 +92,14 @@ namespace WebCV_Fiches.Helpers
             return string.Empty;
         }
 
+        public string CamelCase(string value)
+        {
+            string newValue = value[0].ToString().ToLower();
+            string oldValue = value[0].ToString();
+
+              value = value.Replace(oldValue,newValue);
+
+            return value;
+        }
     }
 }

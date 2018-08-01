@@ -16,6 +16,10 @@ export class ErrorService {
       case 403:
         this.route.navigate(['/accessdenied']);
         break;
+      case 404:
+      sessionStorage.removeItem('token');
+      this.route.navigate(['/account/login'])
+        break;
 
       default:
         break;

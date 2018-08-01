@@ -39,6 +39,7 @@ export class LoginComponent implements OnInit {
           localStorage.setItem("isApprobateur", x.isApprobateur.toString());
           localStorage.setItem("isConseiller", x.isConseiller.toString());
           this.route.navigate(['home']);
+          this.route.navigate(['cv/edit/'+x.utilisateurId]);
         } else {
           localStorage.removeItem("token");
           localStorage.removeItem("utilisateurId");

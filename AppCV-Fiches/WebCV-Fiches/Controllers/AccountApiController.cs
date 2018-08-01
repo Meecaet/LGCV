@@ -44,7 +44,12 @@ namespace WebCV_Fiches.Controllers
             _logger = logger;
         }
 
-
+        [HttpGet]
+        [Authorize("Bearer")]
+        public IActionResult IsTokenValid()
+        {
+            return Json(new { ok = true });
+        }
         [AllowAnonymous]
         [HttpPost]
         public object DoLogin(
@@ -207,6 +212,9 @@ namespace WebCV_Fiches.Controllers
         {
             return View();
         }
+
+       
+
     }
 }
 

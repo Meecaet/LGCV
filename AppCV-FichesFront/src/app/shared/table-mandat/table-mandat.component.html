@@ -1,60 +1,65 @@
 <div>
 
+  <div [ngClass]="classValidator('divrelativeOn form-inline ','divrelativeOff form-inline')">
+    <div [ngClass]="classValidator('divloadingOn','divloadingOff')" class="divloading">
+      <div style="margin-left: auto;margin-right: 600px;width: 1px">
+        <img [ngClass]="classValidator('imgloading','imgloadingHidden')">
+      </div>
+    </div>
 
-  <div class="lgs-label">RÉSUME DES INTERVENTION</div>
-  <label (click)="addMandat()">+</label>
-  <div>
-    <table class="table table-hover small">
-      <thead>
-        <tr class="lgs-backgroundColor">
-          <th scope="col">#</th>
-          <th scope="col">CLIENT</th>
-          <th scope="col">PROJET</th>
-          <th scope="col">ENVERGURE
-            <br />(J - P)</th>
-          <th scope="col">FONCTION</th>
-          <th scope="col">ANNÉE</th>
-          <th scope="col">EFFORTS (MOIS)</th>
-          <th scope="col"></th>
+    <div class="lgs-label">RÉSUME DES INTERVENTION</div>
+    <label (click)="addMandat()">+</label>
 
-        </tr>
+    <div class="lgs-group divborder">
+        <table class="table table-hover small">
+          <thead>
+            <tr class="lgs-backgroundColor">
+              <th scope="col">#</th>
+              <th scope="col">CLIENT</th>
+              <th scope="col">PROJET</th>
+              <th scope="col">ENVERGURE
+                <br />(J - P)</th>
+              <th scope="col">FONCTION</th>
+              <th scope="col">ANNÉE</th>
+              <th scope="col">EFFORTS (MOIS)</th>
+              <th scope="col"></th>
 
-      </thead>
+            </tr>
 
-      <tbody class="{{intervention.highlight}}" id="tr{{i}}" (click)="selectMandat(i,intervention)" *ngFor="let intervention of mandatCollection; let i = index">
-        <tr >
-          <th  scope="row">
-            {{i+1}} - {{intervention.nomEntreprise}}
-          </th>
+          </thead>
 
-          <th scope="row">
-            {{intervention.numeroMandat}}
-          </th>
-          <td>
-            {{intervention.nomClient}}
-          </td>
-          <td>
-            {{intervention.titreProjet}}
-          </td>
-          <td>
-            {{ intervention.envergure}}
+         <tbody class="{{intervention.highlight}}" (click)="SelectedLine(intervention)"  id="tr{{i}}"   *ngFor="let intervention of resume; let i = index">
+            <tr >
+              <th  scope="row">
+                {{intervention.nombre}}
+              </th>
 
-          </td>
-          <td>
-            {{ intervention.fonction}}
-          </td>
-          <td>
-            {{ intervention.debutMandat}}
-          </td>
-          <td>
+              <th scope="row">
+                {{intervention.client}}
+              </th>
+              <td>
+                {{intervention.projet}}
+              </td>
 
-            {{ intervention.efforts}}
-          </td>
-          <td id="bt{{i}}" style="width: 30px;">
-            <label (click)="removeMandat('tr'+i,'bt'+i,intervention)" class="XCancel"> X</label>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+              <td>
+                {{ intervention.envergure}}
+
+              </td>
+              <td>
+                {{ intervention.fonction}}
+              </td>
+              <td>
+                {{ intervention.annee}}
+              </td>
+              <td>
+             {{ intervention.effors }}
+              </td>
+              <td id="bt{{i}}" style="width: 30px;">
+                <label  class="XCancel"> X</label>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
-</div>

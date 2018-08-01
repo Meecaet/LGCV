@@ -1,36 +1,53 @@
 <div>
-  <div class="lgs-label">Formation Académique</div>
-  <label (click)="AddFormationAcademique()">+</label>
-  <div class="lgs-floatLeftButtons">
-    <button type="button" class="btn btn-link"></button>
+
+  <div [ngClass]="classValidator('divrelativeOn form-inline ','divrelativeOff form-inline')">
+    <div [ngClass]="classValidator('divloadingOn','divloadingOff')" class="divloading">
+      <div style="margin-left: auto;margin-right: 600px;width: 1px">
+        <img [ngClass]="classValidator('imgloading','imgloadingHidden')">
+      </div>
+    </div>
+
+    <div class="lgs-label">Formation Académique</div>
+    <label (click)="AddFormationAcademique()">+</label>
+    <div class="lgs-floatLeftButtons">
+      <button type="button" class="btn btn-link"></button>
+    </div>
+
+    <div class="lgs-group table-bordered">
+      <table class="table table-bordered table-hover">
+        <tbody>
+          <tr class="{{format.highlight}}" id="tr{{i}}" *ngFor=" let format of formationAcademique; let i = index">
+            <td style="width: 50%;">
+              <inline-editor [(ngModel)]="format.diplome" (onSave)="SaveFormation(format)" empty="Diplome" [ngModelOptions]="{standalone: true}"
+                [name]="format.diplome" [cols]="250"></inline-editor>
+            </td>
+
+            <td style="width: 50%;">
+              <inline-editor empty="Etablissement" (onSave)="SaveFormation(format)" [(ngModel)]="format.etablissement" [ngModelOptions]="{standalone: true}"
+                [name]="format.etablissement" [cols]="250"></inline-editor>
+            </td>
+            <td style="width: 20px;">
+              <inline-editor type="number" (onSave)="SaveFormation(format)" empty="Annee" [(ngModel)]="format.annee" [ngModelOptions]="{standalone: true}"
+                [name]="format.annee" [cols]="250"></inline-editor>
+            </td>
+            <td style="width: 20px;">
+              <mat-form-field style="width: 90px;">
+                <mat-select placeholder="Niveau" (selectionChange)="SaveFormation(format)" [(ngModel)]="format.niveau" name="food">
+                  <mat-option *ngFor="let item of niveauAcademique.Collection" [value]="item.value">
+                    {{item.label}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </td>
+            <td id="bt{{i}}" style="width: 30px;">
+              <label (click)="removeFormationAcademique('tr'+i,'bt'+i,format)" class="XCancel">
+                X
+              </label>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
   </div>
-
-  <div class="lgs-group table-bordered">
-    <table class="table table-bordered table-hover">
-      <tbody>
-        <tr class="{{format.highlight}}"  id="tr{{i}}" *ngFor=" let format of formationAcademique; let i = index">
-          <td style="width: 50%;">
-            <inline-editor [(ngModel)]="format.diplome" (onSave)="OrderBy()" empty="Diplome" [ngModelOptions]="{standalone: true}" [name]="format.diplome"
-              [cols]="250"></inline-editor>
-          </td>
-
-          <td style="width: 50%;">
-            <inline-editor empty="Etablissement" (onSave)="OrderBy()" [(ngModel)]="format.etablissement" [ngModelOptions]="{standalone: true}"
-              [name]="format.etablissement" [cols]="250"></inline-editor>
-          </td>
-          <td style="width: 20px;">
-            <inline-editor type="number" empty="Annee" (onSave)="OrderBy()" [(ngModel)]="format.annee" [ngModelOptions]="{standalone: true}"
-              [name]="format.annee" [cols]="250"></inline-editor>
-          </td>
-          <td id="bt{{i}}" style="width: 30px;">
-            <label (click)="removeFormationAcademique('tr'+i,'bt'+i,format)" class="XCancel">
-              X
-            </label>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-
 </div>

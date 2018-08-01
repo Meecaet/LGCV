@@ -5,6 +5,10 @@ import { ResumeInterventionViewModel } from "../Models/CV/ResumeInterventionView
 import { BioViewModel } from "../Models/Bio-Model";
 import { LangueViewModel } from "../Models/Langue-model";
 import { FonctionViewModel } from "../Models/Fonction-model";
+import { CertificationViewModel } from "../Models/Certification-model";
+import { DomaineDInterventionViewModel } from "../Models/DomaineDIntervention-model";
+import { FormationAcademiqueViewModel } from "../Models/FormationAcademique-model";
+import { MandatViewModel } from "../Models/Mandat-model";
 
 @Injectable({
   providedIn: "root"
@@ -30,12 +34,23 @@ export class CVService {
     }
   }
 
+  IsTokenValid() : Observable<boolean> {
+    const url = this.rootPath + "/api/AccountApi/IsTokenValid";
+    return this._http.get<boolean>(url);
+  }
+
   private EditActiontUrl(cvId: string, controllerName: string) {
     return `${controllerName}/${cvId}/Edit`;
   }
 
   private AddActionUrl(cvId: string, controllerName: string) {
     return `${controllerName}/${cvId}/Add`;
+  }
+  private AllActionUrl(cvId: string, controllerName: string) {
+    return `${controllerName}/${cvId}/All`;
+  }
+  private LoadMandatActionUrl(utilisateurId: string, mandatId: string) {
+    return `Mandat/${utilisateurId}/Detail/${mandatId}`;
   }
 
   private DeleteActionUrl(
@@ -46,10 +61,7 @@ export class CVService {
     return `${controllerName}/${cvId}/Delete/${detailId}`;
   }
 
-  private DetailActionUrl(
-    controllerName: string,
-    detailId: string
-  ) {
+  private DetailActionUrl(controllerName: string, detailId: string) {
     return `${controllerName}/Detail/${detailId}`;
   }
 
@@ -60,10 +72,10 @@ export class CVService {
     return this.doRequest(`CVPoc/Details/${id}`);
   }
 
-  public EditBio(cv: any) {
+  public EditBio(utilisateurId: any, model: any) {
     debugger;
-    const url = this.EditActiontUrl(cv.graphIdUtilisateur, "Bio");
-    return this.doRequest(url, "post", cv);
+    const url = this.EditActiontUrl(utilisateurId, "Bio");
+    return this.doRequest(url, "post", model);
   }
 
   public GetCVResumeInterventions(idUtilisateur: string) {
@@ -80,18 +92,91 @@ export class CVService {
     const url = "Bio/Create";
     return this.doRequest<BioViewModel>(url, "post", bio);
   }
+
   public NotifierChangement() {
     return this.doRequest("CV/Save");
   }
-  public UtilizaterLangue(idUtilisateur:string): Observable<Array<LangueViewModel>> {
-    return new Observable<Array<LangueViewModel>>();
-  }
-  public LoadLangue(): Observable<Array<LangueViewModel>> {
-    const url = this.rootPath + "/api/FrontEndLoadData/GetAllLangues";
-     return this._http.get<Array<LangueViewModel>>(url);
-  }
+
   public LoadFonction(): Observable<Array<FonctionViewModel>> {
     const url = this.rootPath + "/api/FrontEndLoadData/GetAllFonctions";
-     return this._http.get<Array<FonctionViewModel>>(url);
+    return this._http.get<Array<FonctionViewModel>>(url);
+  }
+
+  ///
+  // FormationAcademique
+  //
+  LoadFormationAcademique(idUtilisateur: string) {
+    const url = this.AllActionUrl(idUtilisateur, "FormationAcademique");
+    return this.doRequest<Array<FormationAcademiqueViewModel>>(url, "post");
+  }
+  FormationAcademique(
+    domain: FormationAcademiqueViewModel,
+    idUtilisateur: string
+  ) {
+    const url = this.AddActionUrl(idUtilisateur, "FormationAcademique");
+    return this.doRequest<FormationAcademiqueViewModel>(url, "post", domain);
+  }
+
+  ///
+  //ResumeIntervention
+  ///
+
+  LoadResumeIntervention(idUtilisateur: string) {
+
+    const url = this.AllActionUrl(idUtilisateur, "ResumeIntervention");
+    return this.doRequest<Array<ResumeInterventionViewModel>>(url, "post");
+  }
+
+  AddResumeIntervention(
+    idUtilisateur: string,
+    domain: ResumeInterventionViewModel
+  ) {
+    const url = this.AddActionUrl(idUtilisateur, "ResumeIntervention");
+    return this.doRequest<ResumeInterventionViewModel>(url, "post", domain);
+  }
+
+  ///
+  // Domain
+  ///
+  LoadDomain(idUtilisateur: string) {
+    const url = this.AllActionUrl(idUtilisateur, "CVDomainIntervention");
+    return this.doRequest<Array<DomaineDInterventionViewModel>>(url, "post");
+  }
+
+  AddDomain(idUtilisateur: string, domain: DomaineDInterventionViewModel) {
+    const url = this.AddActionUrl(idUtilisateur, "CVDomainIntervention");
+    return this.doRequest<DomaineDInterventionViewModel>(url, "post", domain);
+  }
+  ///
+  // Certifications
+  ///
+  LoadCertification(idUtilisateur: string) {
+    const url = this.AllActionUrl(idUtilisateur, "Certification");
+    return this.doRequest<Array<CertificationViewModel>>(url, "post");
+  }
+  public AddCertifications(
+    certification: CertificationViewModel,
+    idUtilisateur: string
+  ) {
+    const url = this.AddActionUrl(idUtilisateur, "Certification");
+    return this.doRequest<CertificationViewModel>(url, "post", certification);
+  }
+  ///
+  // Mandat
+  ///
+  LoadMandat(idUtilisateur: string,idMandat :string) {
+
+    const url = this.LoadMandatActionUrl(idUtilisateur,idMandat);
+    return this.doRequest<MandatViewModel>(url, "get");
+  }
+  /// Langue
+  public UtilizaterLangue(idUtilisateur: string  ): Observable<Array<LangueViewModel>> {
+    const url = this.rootPath + "/Langue/"+idUtilisateur+"/All";
+    return this._http.get<Array<LangueViewModel>>(url);
+  }
+
+  public LoadLangue(): Observable<Array<LangueViewModel>> {
+    const url = this.rootPath + "/api/FrontEndLoadData/GetAllLangues";
+    return this._http.get<Array<LangueViewModel>>(url);
   }
 }

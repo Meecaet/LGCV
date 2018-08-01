@@ -7,6 +7,7 @@ using DAL_CV_Fiches.Repositories.Graph;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using WebCV_Fiches.Helpers;
 using WebCV_Fiches.Models.CVViewModels;
 
@@ -47,6 +48,10 @@ namespace WebCV_Fiches.Controllers
             var editions = new EditionObjectViewModelFactory<BioViewModel>();
             bioViewModel.editionObjecViewModels = editions.GetEditions(utilisateur, cv, conseiller);
 
+            var returnJon = new
+            {
+            };
+            
             return Json(bioViewModel);
         }
 
