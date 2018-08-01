@@ -15,24 +15,21 @@ using WebCV_Fiches.Models.CVViewModels;
 
 namespace WebCV_Fiches.Controllers
 {
-    public abstract class CVController : Controller
+    public abstract class CVFormation : Controller
     {
 
         public EditionObjectGraphRepository editionObjectGraphRepository;
         public UtilisateurGraphRepository utilisateurGraphRepository;
+        public FormationGraphRepository formationGraphRepository;
 
-        public CVController()
+        public CVFormation()
         {
             utilisateurGraphRepository = new UtilisateurGraphRepository();
-            editionObjectGraphRepository = new EditionObjectGraphRepository();
+            formationGraphRepository = new FormationGraphRepository();   editionObjectGraphRepository = new EditionObjectGraphRepository();
         }
 
-        [Route("{utilisateurId}/All")]
-        [AllowAnonymous]
-        public ActionResult All(string utilisateurId)
+        public List<ViewModel> All(string utilisateurId)
         {
-            Func<GraphObject, ViewModel> map = this.Map;
-
             var utilisateur = utilisateurGraphRepository.GetOne(utilisateurId);
             var graphObjects = GetGraphObjects(utilisateur);
             var noeudModifie = new List<GraphObject>();
@@ -40,7 +37,7 @@ namespace WebCV_Fiches.Controllers
             noeudModifie.AddRange(graphObjects);
             var graphObjectsViewModel = GetViewModels(utilisateur.GraphKey, noeudModifie, graphObjects, Map);
 
-            return Json(graphObjectsViewModel);
+            return graphObjectsViewModel;
         }
 
         public ViewModel Add(string utilisateurId, ViewModel viewModel)
@@ -104,12 +101,20 @@ namespace WebCV_Fiches.Controllers
             return graphObject;
         }
 
+        public string GetProprieteModifiee()
+        {
+            return "Formations";
+        }
+
+        public  GraphObject GetGraphObject(string graphId)
+        {
+            return formationGraphRepository.GetOne(graphId);
+        }
+
 
         public abstract ViewModel Map(GraphObject graphObject);
 
         public abstract List<GraphObject> GetGraphObjects(Utilisateur utilisateur);
-
-        public abstract GraphObject GetGraphObject(string graphId);
 
         public abstract List<ViewModel> GetViewModels(string utilisateurId, List<GraphObject> noeudsModifie, List<GraphObject> graphObjects, Func<GraphObject, ViewModel> map);
 
@@ -118,7 +123,5 @@ namespace WebCV_Fiches.Controllers
         public abstract  List<KeyValuePair<string, string>> VerifierProprietesModifiees(GraphObject graphObject, ViewModel viewModel);
 
         public abstract void UpdateGraphObject(GraphObject graphObject, ViewModel viewModel);
-
-        public abstract string GetProprieteModifiee();
     }
 }

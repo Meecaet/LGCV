@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace WebCV_Fiches.Models.CVViewModels
 {
-    public class PublicationViewModel : ViewModel
+    public class ConferenceViewModel : ViewModel
     {
         public string GraphIdGenre { get; set; }
         public string Description { get; set; }

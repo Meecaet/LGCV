@@ -13,13 +13,13 @@ using WebCV_Fiches.Models.CVViewModels;
 namespace WebCV_Fiches.Controllers
 {
     [Route("Publication")]
-    public class CVPublicationController : CVController
+    public class CVPublicationController : CVFormation
     {
-        public FormationGraphRepository formationGraphRepository;
-
-        public CVPublicationController() : base()
+        [AllowAnonymous]
+        [Route("{utilisateurId}/All")]
+        public new ActionResult All(string utilisateurId)
         {
-            formationGraphRepository = new FormationGraphRepository();
+            return Json(base.All(utilisateurId));
         }
 
         [HttpPost]
@@ -53,11 +53,6 @@ namespace WebCV_Fiches.Controllers
             var publicationModel = Formation.CreateFormation(publication.Annee, publication.Description, FormationType.Publication);
             formationGraphRepository.Add(publicationModel);
             return publicationModel;
-        }
-
-        public override GraphObject GetGraphObject(string graphId)
-        {
-           return formationGraphRepository.GetOne(graphId);
         }
 
         public override List<GraphObject> GetGraphObjects(Utilisateur utilisateur)
@@ -108,11 +103,6 @@ namespace WebCV_Fiches.Controllers
                 proprietesModifiees.Add(new KeyValuePair<string, string>("Description", perfectionnementViewModel.Description));
 
             return proprietesModifiees;
-        }
-
-        public override string GetProprieteModifiee()
-        {
-            return "Formations";
         }
     }
 }

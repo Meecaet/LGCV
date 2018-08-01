@@ -12,13 +12,13 @@ using WebCV_Fiches.Models.CVViewModels;
 namespace WebCV_Fiches.Controllers
 {
     [Route("Certification")]
-    public class CVCertificationController : CVController
+    public class CVCertificationController : CVFormation
     {
-        public FormationGraphRepository formationGraphRepository;
-
-        public CVCertificationController() : base()
+        [AllowAnonymous]
+        [Route("{utilisateurId}/All")]
+        public new ActionResult All(string utilisateurId)
         {
-            formationGraphRepository = new FormationGraphRepository();
+            return Json(base.All(utilisateurId));
         }
 
         [HttpPost]
@@ -52,11 +52,6 @@ namespace WebCV_Fiches.Controllers
             var certificationModel = Formation.CreateFormation(certification.Annee, certification.Description, FormationType.Certification);
             formationGraphRepository.Add(certificationModel);
             return certificationModel;
-        }
-
-        public override GraphObject GetGraphObject(string graphId)
-        {
-            return formationGraphRepository.GetOne(graphId);
         }
 
         public override List<GraphObject> GetGraphObjects(Utilisateur utilisateur)
@@ -107,11 +102,6 @@ namespace WebCV_Fiches.Controllers
                 proprietesModifiees.Add(new KeyValuePair<string, string>("Description", certificationViewModel.Description));
 
             return proprietesModifiees;
-        }
-
-        public override string GetProprieteModifiee()
-        {
-            return "Formations";
         }
     }
 }

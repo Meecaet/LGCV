@@ -12,13 +12,35 @@ using WebCV_Fiches.Models.CVViewModels;
 namespace WebCV_Fiches.Controllers
 {
     [Route("Technologies")]
-    public class CVTechnologiesController : CVController
+    public class CVTechnologiesController : Controller
     {
+        public EditionObjectGraphRepository editionObjectGraphRepository;
+        public UtilisateurGraphRepository utilisateurGraphRepository;
         public TechnologieGraphRepository technologieGraphRepository;
 
         public CVTechnologiesController() : base()
         {
             technologieGraphRepository = new TechnologieGraphRepository();
+            utilisateurGraphRepository = new UtilisateurGraphRepository();
+            editionObjectGraphRepository = new EditionObjectGraphRepository();
+        }
+
+        [Route("{utilisateurId}/All")]
+        [AllowAnonymous]
+        public ActionResult All(string utilisateurId)
+        {
+            var utilisateur = utilisateurGraphRepository.GetOne(utilisateurId);
+            var tecnologies = utilisateur.Conseiller.Technologies.Cast<GraphObject>().ToList();
+            var noeudModifie = new List<GraphObject>();
+            noeudModifie.Add(utilisateur.Conseiller);
+            noeudModifie.AddRange(tecnologies);
+            var tecnologiesViewModel = ViewModelFactory<Technologie, TechnologieViewModel>.GetViewModels(
+                utilisateurId: utilisateurId,
+                noeudsModifie: noeudModifie,
+                graphObjects: tecnologies,
+                map: Map);
+
+            return Json(tecnologiesViewModel);
         }
 
         [HttpPost]
@@ -27,15 +49,22 @@ namespace WebCV_Fiches.Controllers
         public ActionResult Add(string utilisateurId, [FromBody]TechnologieViewModel technologie)
         {
             var utilisateur = utilisateurGraphRepository.GetOne(utilisateurId);
-            var technologies = GetGraphObjects(utilisateur);
+            var technologies = utilisateur.Conseiller.Technologies;
 
             if (technologies.Any(x => x.GraphKey == technologie.GraphId))
                 return Json(technologie);
 
-            if(utilisateur.Conseiller.EditionObjects.Any(x => x.ObjetAjoute?.GraphKey == technologie.GraphId))
+            if (utilisateur.Conseiller.EditionObjects.Any(x => x.ObjetAjoute?.GraphKey == technologie.GraphId))
                 return Json(technologie);
 
-            return Json(base.Add(utilisateurId, technologie));
+            var technologieModel = technologieGraphRepository.GetOne(technologie.GraphId);
+            technologieModel.MoisDExperience = technologie.Mois;
+
+            editionObjectGraphRepository.AjouterNoeud(objetAjoute: technologieModel, noeudModifiePropriete: "Technologies", noeudModifie: utilisateur.Conseiller);
+
+            technologie.GraphId = technologieModel.GraphKey;
+
+            return Json(technologieModel);
         }
 
         [HttpPost]
@@ -46,12 +75,14 @@ namespace WebCV_Fiches.Controllers
             var utilisateur = utilisateurGraphRepository.GetOne(utilisateurId);
             var technologieModel = technologieGraphRepository.GetOne(technologie.GraphId);
 
-            var Technologies = utilisateur.Conseiller.Technologies.ToList();
+            var Technologies = utilisateur.Conseiller.Technologies;
 
             if (Technologies.Any(x => x.GraphKey == technologie.GraphId))
             {
-
-                var proprietesModifiees = VerifierProprietesModifiees(technologieModel, technologie);
+                var proprietesModifiees = new List<KeyValuePair<string, string>>();
+                
+                if (technologieModel.MoisDExperience != technologie.Mois)
+                    proprietesModifiees.Add(new KeyValuePair<string, string>("Mois", technologie.Mois.ToString()));
 
                 if (proprietesModifiees.Count() > 0)
                     editionObjectGraphRepository.CreateOrUpdateProprieteEdition(proprietesModifiees, technologieModel);
@@ -72,40 +103,32 @@ namespace WebCV_Fiches.Controllers
         [HttpPost]
         [AllowAnonymous]
         [Route("{utilisateurId}/Delete/{technologieId}")]
-        public new ActionResult Delete(string utilisateurId, string technologieId)
+        public ActionResult Delete(string utilisateurId, string technologieId)
         {
-            return Json(base.Delete(utilisateurId, technologieId));
+            var utilisateur = utilisateurGraphRepository.GetOne(utilisateurId);
+            var technologie = technologieGraphRepository.GetOne(technologieId);
+
+            var technologies = utilisateur.Conseiller.Technologies;
+
+            if (technologies.Any(x => x.GraphKey == technologie.GraphKey))
+            {
+                foreach (var edition in technologie.EditionObjects)
+                {
+                    editionObjectGraphRepository.Delete(edition);
+                }
+                editionObjectGraphRepository.SupprimerNoeud(technologie, "Technologies", utilisateur.Conseiller);
+            }
+            else
+            {
+                var edition = utilisateur.Conseiller.EditionObjects.Find(x => x.ObjetAjoute?.GraphKey == technologie.GraphKey);
+                editionObjectGraphRepository.Delete(edition);
+            }
+
+            return NoContent();
         }
 
 
-        public override GraphObject CreateGraphObject(ViewModel viewModel)
-        {
-            var technologie = (TechnologieViewModel)viewModel;
-            var technologieModel = technologieGraphRepository.GetOne(viewModel.GraphId);
-            technologieModel.MoisDExperience = technologie.Mois;
-            return technologieModel;
-        }
-
-        public override GraphObject GetGraphObject(string graphId)
-        {
-            return technologieGraphRepository.GetOne(graphId);
-        }
-
-        public override List<GraphObject> GetGraphObjects(Utilisateur utilisateur)
-        {
-            return utilisateur.Conseiller.Technologies.Cast<GraphObject>().ToList(); ;
-        }
-
-        public override List<ViewModel> GetViewModels(string utilisateurId, List<GraphObject> noeudsModifie, List<GraphObject> graphObjects, Func<GraphObject, ViewModel> map)
-        {
-            return ViewModelFactory<Formation, TechnologieViewModel>.GetViewModels(
-                utilisateurId: utilisateurId,
-                noeudsModifie: noeudsModifie,
-                graphObjects: graphObjects,
-                map: map);
-        }
-
-        public override ViewModel Map(GraphObject graphObject)
+        public ViewModel Map(GraphObject graphObject)
         {
             var technologie = (Technologie)graphObject;
             return new TechnologieViewModel
@@ -115,28 +138,6 @@ namespace WebCV_Fiches.Controllers
                 GraphId = technologie.GraphKey,
                 Categorie = technologie.Categorie?.Nom
             };
-        }
-
-        public override List<KeyValuePair<string, string>> VerifierProprietesModifiees(GraphObject graphObject, ViewModel viewModel)
-        {
-            var proprietesModifiees = new List<KeyValuePair<string, string>>();
-            var technologieObject = (Technologie)graphObject;
-            var technologieViewModel = (TechnologieViewModel)viewModel;
-
-            if (technologieObject.MoisDExperience != technologieViewModel.Mois)
-                proprietesModifiees.Add(new KeyValuePair<string, string>("Mois", technologieViewModel.Mois.ToString()));
-
-            return proprietesModifiees;
-        }
-
-        public override string GetProprieteModifiee()
-        {
-            return "Technologies";
-        }
-
-        public override void UpdateGraphObject(GraphObject graphObject, ViewModel viewModel)
-        {
-            throw new NotImplementedException();
         }
     }
 }

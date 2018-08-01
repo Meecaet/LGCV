@@ -13,13 +13,13 @@ using WebCV_Fiches.Models.CVViewModels;
 namespace WebCV_Fiches.Controllers
 {
     [Route("Perfectionnement")]
-    public class CVPerfectionnementController : CVController
+    public class CVPerfectionnementController : CVFormation
     {
-        public FormationGraphRepository formationGraphRepository;
-
-        public CVPerfectionnementController() : base()
+        [AllowAnonymous]
+        [Route("{utilisateurId}/All")]
+        public new ActionResult All(string utilisateurId)
         {
-            formationGraphRepository = new FormationGraphRepository();
+            return Json(base.All(utilisateurId));
         }
 
         [HttpPost]
@@ -53,11 +53,6 @@ namespace WebCV_Fiches.Controllers
             var PerfectionnementModel = Formation.CreateFormation(perfectionnement.Annee, perfectionnement.Description, FormationType.Perfectionnement);
             formationGraphRepository.Add(PerfectionnementModel);
             return PerfectionnementModel;
-        }
-
-        public override GraphObject GetGraphObject(string graphId)
-        {
-           return formationGraphRepository.GetOne(graphId);
         }
 
         public override List<GraphObject> GetGraphObjects(Utilisateur utilisateur)
@@ -108,11 +103,6 @@ namespace WebCV_Fiches.Controllers
                 proprietesModifiees.Add(new KeyValuePair<string, string>("Description", perfectionnementViewModel.Description));
 
             return proprietesModifiees;
-        }
-
-        public override string GetProprieteModifiee()
-        {
-            return "Formations";
         }
     }
 }
