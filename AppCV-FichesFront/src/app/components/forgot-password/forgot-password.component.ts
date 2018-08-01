@@ -11,6 +11,7 @@ import { ErrorService } from "../../Services/error.service";
 export class ForgotPasswordComponent implements OnInit {
   Email: string;
   IsSuccess?: boolean = null;
+  showLoadingForgotPassword: boolean = false;
 
   constructor(
     private validator: ValidatorService,
@@ -26,14 +27,25 @@ export class ForgotPasswordComponent implements OnInit {
   }
 
   ForgotPassword() {
-    this.auth.ForgotPassword(this.Email).subscribe(
-      (data: any) => {
-        this.IsSuccess = true;
-        this.Email = "";
-      },
-      erro => {
-        this.IsSuccess = false;
-      }
-    );
+    this.showLoadingForgotPassword = true;
+     this.auth.ForgotPassword(this.Email).subscribe(
+       (data: any) => {
+         this.showLoadingForgotPassword = false;
+         this.IsSuccess = true;
+         this.Email = "";
+       },
+       erro => {
+         this.IsSuccess = false;
+         this.showLoadingForgotPassword = false;
+       }
+     );
+  }
+
+  classValidator(cssClass: string, optionCssClass): string {
+    if (this.showLoadingForgotPassword) {
+      return cssClass;
+    } else {
+      return optionCssClass;
+    }
   }
 }
