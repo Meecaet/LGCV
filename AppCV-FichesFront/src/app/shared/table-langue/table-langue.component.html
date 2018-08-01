@@ -1,4 +1,12 @@
 <div>
+
+  <div [ngClass]="classValidator('divrelativeOn form-inline ','divrelativeOff form-inline')">
+    <div [ngClass]="classValidator('divloadingOn','divloadingOff')" class="divloading">
+      <div style="margin-left: auto;margin-right: 600px;width: 1px">
+        <img [ngClass]="classValidator('imgloading','imgloadingHidden')">
+      </div>
+    </div>
+
     <div class="lgs-label">Langues</div>
     <label (click)="AddLangue()">+</label>
     <div class="lgs-floatLeftButtons">
@@ -15,28 +23,35 @@
         </tr>
       </thead>
       <tbody>
+
         <tr *ngFor="let langue of langues">
           <td>
-            <mat-form-field class="example-full-width">
-              <input type="text" placeholder="Pick one" aria-label="Number" matInput [formControl]="langue.LangueControl" [matAutocomplete]="auto">
+            <mat-form-field style="width: 100%;">
+              <mat-select [(ngModel)]="langue.graphId" placeholder="Select">
+                <mat-option *ngFor="let option of languesAutoComplete" [value]="option.graphId">{{option.nom}}</mat-option>
+              </mat-select>
             </mat-form-field>
-            <mat-autocomplete #auto="matAutocomplete">
-              <mat-option *ngFor="let option of languesAutoComplete|langueService:langue.LangueControl.value " [value]="option.nom">
-                {{ option.nom}}
-              </mat-option>
-            </mat-autocomplete>
           </td>
           <td>
-            <inline-editor empty="N. Écrit" [(ngModel)]="langue.niveauecrit" [ngModelOptions]="{standalone: true}" [name]="langue.niveauecrit"
-              [cols]="250"></inline-editor>
+            <mat-form-field style="width: 100%;">
+              <mat-select [(ngModel)]="langue.niveauEcrit" placeholder="Select">
+                <mat-option *ngFor="let niveauEcrit of niveauLangue.Collection" [value]="niveauEcrit.label">{{niveauEcrit.label}}</mat-option>
+              </mat-select>
+            </mat-form-field>
           </td>
           <td>
-            <inline-editor empty="N. Lu" [(ngModel)]="langue.niveaulu" [ngModelOptions]="{standalone: true}" [name]="langue.niveaulu"
-              [cols]="250"></inline-editor>
+            <mat-form-field style="width: 100%;">
+              <mat-select [(ngModel)]="langue.niveauLu" placeholder="Select">
+                <mat-option *ngFor="let niveauLu of niveauLangue.Collection" [value]="niveauLu.label">{{niveauLu.label}}</mat-option>
+              </mat-select>
+            </mat-form-field>
           </td>
           <td>
-            <inline-editor empty="N. Parlé" [(ngModel)]="langue.niveauparle" [ngModelOptions]="{standalone: true}" [name]="langue.niveauparle"
-              [cols]="250"></inline-editor>
+            <mat-form-field style="width: 100%;">
+              <mat-select [(ngModel)]="langue.niveauParle" placeholder="Select">
+                <mat-option *ngFor="let niveauParle of niveauLangue.Collection" [value]="niveauParle.label">{{niveauParle.label}}</mat-option>
+              </mat-select>
+            </mat-form-field>
           </td>
           <td (click)="removeLange(langue)" class="XCancel">
             X
@@ -45,3 +60,4 @@
       </tbody>
     </table>
   </div>
+</div>

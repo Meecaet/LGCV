@@ -39,6 +39,7 @@ export class TableMandatComponent implements OnInit {
     this.LoadData();
   }
   LoadData() {
+    this.showLoadingMandat = true;
     this.serv
       .LoadResumeIntervention(this.UtilisateurId)
       .subscribe((data: Array<ResumeInterventionViewModel>) => {

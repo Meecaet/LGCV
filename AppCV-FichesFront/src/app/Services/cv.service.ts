@@ -96,15 +96,7 @@ export class CVService {
   public NotifierChangement() {
     return this.doRequest("CV/Save");
   }
-  public UtilizaterLangue(
-    idUtilisateur: string
-  ): Observable<Array<LangueViewModel>> {
-    return new Observable<Array<LangueViewModel>>();
-  }
-  public LoadLangue(): Observable<Array<LangueViewModel>> {
-    const url = this.rootPath + "/api/FrontEndLoadData/GetAllLangues";
-    return this._http.get<Array<LangueViewModel>>(url);
-  }
+
   public LoadFonction(): Observable<Array<FonctionViewModel>> {
     const url = this.rootPath + "/api/FrontEndLoadData/GetAllFonctions";
     return this._http.get<Array<FonctionViewModel>>(url);
@@ -177,5 +169,14 @@ export class CVService {
     const url = this.LoadMandatActionUrl(idUtilisateur,idMandat);
     return this.doRequest<MandatViewModel>(url, "get");
   }
+  /// Langue
+  public UtilizaterLangue(idUtilisateur: string  ): Observable<Array<LangueViewModel>> {
+    const url = this.rootPath + "/Langue/"+idUtilisateur+"/All";
+    return this._http.get<Array<LangueViewModel>>(url);
+  }
 
+  public LoadLangue(): Observable<Array<LangueViewModel>> {
+    const url = this.rootPath + "/api/FrontEndLoadData/GetAllLangues";
+    return this._http.get<Array<LangueViewModel>>(url);
+  }
 }

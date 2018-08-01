@@ -294,11 +294,31 @@ namespace WebCV_Fiches.Controllers
         // POST: Mandat/Delete/5
         [HttpPost]
         [AllowAnonymous]
-        [Route("{utilisateurId}/Delete/{formationAcademiqueId}")]
+        [Route("{utilisateurId}/Delete/{mandatId}")]
         public ActionResult Delete(string utilisateurId, string mandatId)
         {
-            // Objet sugeré comme viewModel.
-            return Json(new { Status = "OK", Message = "Mandat eliminé" });
+            var utilisateur = utilisateurGraphRepository.GetOne(utilisateurId);
+            var mandat = mandatGraphRepository.GetOne(mandatId);
+
+            var mandats = utilisateur.Conseiller.Mandats;
+
+            if (mandats.Any(x => x.GraphKey == mandat.GraphKey))
+            {
+                foreach (var edition in mandat.EditionObjects)
+                {
+                    editionObjectGraphRepository.Delete(edition);
+                }
+                editionObjectGraphRepository.SupprimerNoeud(mandat, "Mandats", utilisateur.Conseiller);
+            }
+            else
+            {
+                var edition = utilisateur.Conseiller.EditionObjects.Find(x => x.ObjetAjoute?.GraphKey == mandat.GraphKey);
+                editionObjectGraphRepository.Delete(edition);
+            }
+
+
+
+            return Json(mandat);
         }
     }
 }

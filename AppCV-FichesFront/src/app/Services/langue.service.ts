@@ -9,11 +9,13 @@ import { LangueViewModel } from "../Models/Langue-model";
 export class LangueService implements PipeTransform {
   constructor() {}
   transform(value: Array<LangueViewModel>, args?: any): Array<LangueViewModel> {
-    if (args === "" || args === null) {
+
+    if (args === "" || args === null || args===undefined) {
       return value;
     } else {
       return value.filter((x: LangueViewModel) => {
-        return x.nom.toLowerCase().startsWith(args.toLowerCase());
+
+        return x.graphId.toLowerCase().startsWith(args.toLowerCase());
       });
     }
   }

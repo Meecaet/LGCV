@@ -121,7 +121,29 @@ namespace WebCV_Fiches.Controllers
         [Route("{utilisateurId}/Delete/{langueId}")]
         public ActionResult Delete(string utilisateurId, string langueId)
         {
-            return Json(new LangueViewModel());
+            var utilisateur = utilisateurGraphRepository.GetOne(utilisateurId);
+            var langue = langueGraphRepository.GetOne(langueId);
+
+
+            var langues = utilisateur.Conseiller.Langues;
+
+            if (langues.Any(x => x.GraphKey == langue.GraphKey))
+            {
+                foreach (var edition in langue.EditionObjects)
+                {
+                    editionObjectGraphRepository.Delete(edition);
+                }
+                editionObjectGraphRepository.SupprimerNoeud(langue, "Langues", utilisateur.Conseiller);
+            }
+            else
+            {
+                var edition = utilisateur.Conseiller.EditionObjects.Find(x => x.ObjetAjoute.GraphKey == langue.GraphKey);
+                editionObjectGraphRepository.Delete(edition);
+            }
+
+
+
+            return Json(langue);
         }
     }
 }

@@ -56,21 +56,8 @@ namespace DAL_CV_Fiches.Models.Graph
         [Edge("ATravaillePour")]
         public List<Employeur> Employeurs { get => (List<Employeur>)LoadProperty("Employeurs"); set => SetProperty("Employeurs", value); }
 
-        //[Edge("Was")]
-        //public Conseiller VersionPrecedent { get => (Conseiller)LoadProperty("VersionPrecedent"); set => SetProperty("VersionPrecedent", value); }
-
         public Conseiller()
         {
-            //Employeurs = new List<Employeur>();
-            //Technologies = new List<Technologie>();
-            //PiecesJointes = new List<PieceJointe>();
-            //CVs = new List<CV>();
-            //Langues = new List<Langue>();
-            //Mandats = new List<Mandat>();
-            //Associations = new List<OrdreProfessional>();
-            //FormationsScolaires = new List<FormationScolaire>();
-            //Formations = new List<Formation>();
-            //DomaineDInterventions = new List<DomaineDIntervention>();
         }
 
         public List<Formation> Certifications()
@@ -83,6 +70,30 @@ namespace DAL_CV_Fiches.Models.Graph
             formations.Add(new Formation() { Description = "", Type = new Genre() { Descriminator = Formation.Discriminator, Description = FormationType.Certification } });
 
             return formations;
+        }
+
+        public List<Formation> Perfectionnement()
+        {
+            return Formations.Where(x =>
+                        x.Type.Descriminator == Formation.Discriminator &&
+                        x.Type.Description == FormationType.Perfectionnement
+            ).ToList();
+        }
+
+        public List<Formation> Publication()
+        {
+            return Formations.Where(x =>
+                        x.Type.Descriminator == Formation.Discriminator &&
+                        x.Type.Description == FormationType.Publication
+            ).ToList();
+        }
+
+        public List<Formation> Conference()
+        {
+            return Formations.Where(x =>
+                        x.Type.Descriminator == Formation.Discriminator &&
+                        x.Type.Description == FormationType.Conference
+            ).ToList();
         }
     }
 }
