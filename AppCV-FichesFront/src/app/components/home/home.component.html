@@ -1,9 +1,27 @@
 <div class="container body-content">
-  <div class="center" style="position:absolute; top:25%; left:50%">
-    <a href="CV" class="button">CV</a>
-    <a href="#" class="button">Fiches de Projets</a>
-    <a href="#" class="button">Approuver CV/Fiches</a>
-    <a href="#" class="button">Alertes</a>
-    <a href="role/admin" class="button">Administration et Pilotage</a>
+  <div class="row">
+    <div class="col-md-3">
+      <img class="img-responsive" title="CV" *ngIf="isAdministrateur || isApprobateur || isConseiller" [routerLink]="['/cv/edit/'+utilisateurId]"
+        src="../../../assets/cv-image.png" style="width: 50px">
+
+    </div>
+    <div class="col-md-3">
+      <img style="width: 50px" *ngIf="isAdministrateur || isApprobateur" title="Fiches de Projets" src="../../../assets/folder.png"
+        alt="Image">
+
+    </div>
+    <div class="col-md-3">
+      <div>
+        <img   title="Approuver CV/Fiches" *ngIf="isAdministrateur || isApprobateur" src="../../../assets/cv-image.png"
+          style="position: absolute!important;width: 50px">
+        <img   class="arrowRight">
+
+      </div>
+    </div>
+    <div class="col-md-3">
+      <a *ngIf="isAdministrateur" href="role/admin" class="button">Administration et Pilotage</a>
+
+      <img src=".." alt="">
+    </div>
   </div>
 </div>

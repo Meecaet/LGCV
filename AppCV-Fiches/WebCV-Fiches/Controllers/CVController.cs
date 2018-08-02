@@ -38,7 +38,7 @@ namespace WebCV_Fiches.Controllers
             var noeudModifie = new List<GraphObject>();
             noeudModifie.Add(utilisateur.Conseiller);
             noeudModifie.AddRange(graphObjects);
-            var graphObjectsViewModel = GetViewModels(utilisateur.GraphKey, noeudModifie, graphObjects, Map);
+            var graphObjectsViewModel = GetViewModels(utilisateur.GraphKey, noeudModifie, graphObjects, Map).ToList();
 
             return Json(graphObjectsViewModel);
         }
@@ -48,12 +48,13 @@ namespace WebCV_Fiches.Controllers
             var utilisateur = utilisateurGraphRepository.GetOne(utilisateurId);
 
             var graphObject = CreateGraphObject(viewModel);
-            editionObjectGraphRepository.AjouterNoeud(objetAjoute: graphObject, noeudModifiePropriete: "Formations", noeudModifie: utilisateur.Conseiller);
+            editionObjectGraphRepository.AjouterNoeud(objetAjoute: graphObject, noeudModifiePropriete: GetProprieteModifiee(), noeudModifie: utilisateur.Conseiller);
 
             viewModel.GraphId = graphObject.GraphKey;
 
             return viewModel;
         }
+
 
 
         public ViewModel Edit(string utilisateurId, ViewModel viewModel)
@@ -115,7 +116,7 @@ namespace WebCV_Fiches.Controllers
 
         public abstract GraphObject CreateGraphObject(ViewModel viewModel);
 
-        public abstract  List<KeyValuePair<string, string>> VerifierProprietesModifiees(GraphObject graphObject, ViewModel viewModel);
+        public abstract List<KeyValuePair<string, string>> VerifierProprietesModifiees(GraphObject graphObject, ViewModel viewModel);
 
         public abstract void UpdateGraphObject(GraphObject graphObject, ViewModel viewModel);
 

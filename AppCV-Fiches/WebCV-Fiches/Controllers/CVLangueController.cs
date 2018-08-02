@@ -110,7 +110,8 @@ namespace WebCV_Fiches.Controllers
                 langueModel.Parle = (Niveau)Enum.Parse(typeof(Niveau), langue.NiveauParle);
                 langueModel.Ecrit = (Niveau)Enum.Parse(typeof(Niveau), langue.NiveauEcrit);
                 langueModel.Lu = (Niveau)Enum.Parse(typeof(Niveau), langue.NiveauLu);
-                langueGraphRepository.Update(langueModel);
+                var edition = utilisateur.Conseiller.EditionObjects.Find(x => x.ObjetAjoute?.GraphKey == langue.GraphId);
+                langueGraphRepository.Update(langueModel, edition);
             }
 
             return Json(langue);

@@ -44,7 +44,7 @@ const routes: Routes = [
   },
   { path: "accessdenied", component: AccessDeniedComponent },
   { path: "notfound", component: PageNotFoundComponent },
-  { path: "**", redirectTo: "notfound" }
+  // { path: "**", redirectTo: "notfound" }
 ];
 
 @NgModule({

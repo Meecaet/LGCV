@@ -240,7 +240,7 @@ namespace DAL_CV_Fiches.Repositories.Graph
             return listOfElements;
         }
 
-        public void Update(T obj)
+        public void Update(T obj, GraphObject parent = null)
         {
 
             Type thisType = obj.GetType();
@@ -253,75 +253,43 @@ namespace DAL_CV_Fiches.Repositories.Graph
                     continue;
 
                 currentValue = propInfo.GetValue(obj);
-                if (currentValue != null)
-                {
-                    var edgeProperty = (EdgeProperty)thisType.GetCustomAttribute(typeof(EdgeProperty));
-                    if (edgeProperty != null)
-                        continue;
+                if ((Attributes.Edge)propInfo.GetCustomAttribute(typeof(Attributes.Edge)) != null)
+                    continue;
 
-                    if (currentValue is String)
-                        updateQuery += $".property(\"{propInfo.Name}\", \"{currentValue.ToString().Replace("'", "’")}\")";
-                    else if (currentValue is Int32)
-                        updateQuery += $".property(\"{propInfo.Name}\", {currentValue})";
-                    else if (currentValue is Enum)
-                        updateQuery += $".property(\"{propInfo.Name}\", {(int)currentValue})";
-                    else if (currentValue is DateTime)
-                        updateQuery += $".property(\"{propInfo.Name}\", \"{Convert.ToInt32(currentValue)}\")";
+                var edgeProperty = (EdgeProperty)propInfo.GetCustomAttribute(typeof(EdgeProperty));
+                if (edgeProperty != null && parent != null)
+                {
+                    string updateEdgeQuery = $"g.E().has('_vertexId','{parent.GraphKey}').has('_sink', '{ obj.GraphKey }')";
+                    updateEdgeQuery += getPropertyQuery(propInfo.Name, currentValue);
+                    ExecuteCommandEdge(updateEdgeQuery);
                 }
                 else
-                {
-                    updateQuery += $".property('{propInfo.Name}','')";
-                }
+                    updateQuery += getPropertyQuery(propInfo.Name, currentValue);
             }
 
             ExecuteCommandVertex(updateQuery);
 
-            //if (obj.IsUpdateable)
-            //{
-            //    //Update stardart
-            //}
-            //else
-            //{
+        }
 
-            //}
+        private string getPropertyQuery(string propName, object currentValue)
+        {
+            var propertyQuery = string.Empty;
 
-            //Type thisType = obj.GetType();
-            //string updateQuery = $"g.V('{obj.GraphKey}')";
+            if (currentValue != null)
+            {
+                if (currentValue is String)
+                    propertyQuery = $".property(\"{propName}\", \"{currentValue.ToString().Replace("'", "’")}\")";
+                else if (currentValue is Int32)
+                    propertyQuery = $".property(\"{propName}\", {currentValue})";
+                else if (currentValue is Enum)
+                    propertyQuery = $".property(\"{propName}\", {(int)currentValue})";
+                else if (currentValue is DateTime)
+                    propertyQuery = $".property(\"{propName}\", \"{Convert.ToInt32(currentValue)}\")";
+            }
+            else
+                propertyQuery += $".property('{propName}','')";
 
-            //object currentValue = null, genericRepository = null;
-            //Attributes.Edge att;
-            //GraphObject graphObjectCurrentValue;
-
-            //foreach (PropertyInfo propInfo in thisType.GetProperties())
-            //{
-            //    currentValue = propInfo.GetValue(updateQuery);
-            //    if (currentValue != null)
-            //    {
-            //        if (propInfo.PropertyType.BaseType == typeof(Enum))
-            //            updateQuery += $".property('{propInfo.Name}','{Convert.ToInt32(currentValue)}')";
-            //        else if (currentValue is GraphObject)
-            //        {
-            //            graphObjectCurrentValue = (GraphObject)currentValue;
-            //            att = (Attributes.Edge)currentValue.GetType().GetCustomAttribute(typeof(Attributes.Edge));
-            //            if (att == null)
-            //                continue;
-
-            //            genericRepository = GetGenericRepository(currentValue.GetType());
-            //            if (HasEdge(att, obj, graphObjectCurrentValue))
-            //                genericRepository.GetType().GetMethod("Update").Invoke(genericRepository, new object[] { currentValue });
-            //            else if (string.IsNullOrEmpty(graphObjectCurrentValue.GraphKey))
-            //            {
-            //                genericRepository.GetType().GetMethod("Add").Invoke(genericRepository, new object[] { currentValue });
-            //                CreateEdge(obj, graphObjectCurrentValue, att);
-            //            }
-
-            //        }
-            //        else
-            //            updateQuery += $".property('{propInfo.Name}','{currentValue}')";
-            //    }
-            //}
-
-            //ExecuteCommandVertex(updateQuery);
+            return propertyQuery;
         }
 
         public T CreateIfNotExists(T obj)

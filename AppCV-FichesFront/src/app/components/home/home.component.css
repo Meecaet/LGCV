@@ -1,0 +1,12 @@
+.arrowRight {
+  margin-top: -15px;
+  margin-left: 29px;
+  background-repeat: no-repeat;
+  position: relative;
+  width: 30px;
+  height: 30px;
+
+  background-image: url("../../../assets/arrow.png")
+  /* background-image: url("../../../assets/loading-small.gif") */
+
+}

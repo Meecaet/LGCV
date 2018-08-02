@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, Input } from "@angular/core";
 import { FonctionViewModel } from "../../Models/Fonction-model";
 import { CVService } from "../../Services/cv.service";
 
@@ -8,6 +8,7 @@ import { CVService } from "../../Services/cv.service";
   styleUrls: ["./drop-down-fonction.component.css"]
 })
 export class DropDownFonctionComponent implements OnInit {
+  @Input() UtilisateurId: string;
   fonctionAutoComplete: Array<FonctionViewModel>;
   fonction: FonctionViewModel;
   constructor(private cvServices: CVService) {

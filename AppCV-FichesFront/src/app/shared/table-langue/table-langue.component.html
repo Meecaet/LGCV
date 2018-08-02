@@ -24,29 +24,29 @@
       </thead>
       <tbody>
 
-        <tr *ngFor="let langue of langues">
-          <td>
+        <tr  style="width: 100%;" *ngFor="let langue of langues">
+          <td  style="width: 25%;">
             <mat-form-field style="width: 100%;">
               <mat-select [(ngModel)]="langue.graphId" placeholder="Select">
                 <mat-option *ngFor="let option of languesAutoComplete" [value]="option.graphId">{{option.nom}}</mat-option>
               </mat-select>
             </mat-form-field>
           </td>
-          <td>
+          <td style="width: 25%;">
             <mat-form-field style="width: 100%;">
               <mat-select [(ngModel)]="langue.niveauEcrit" placeholder="Select">
                 <mat-option *ngFor="let niveauEcrit of niveauLangue.Collection" [value]="niveauEcrit.label">{{niveauEcrit.label}}</mat-option>
               </mat-select>
             </mat-form-field>
           </td>
-          <td>
+          <td style="width: 25%;">
             <mat-form-field style="width: 100%;">
               <mat-select [(ngModel)]="langue.niveauLu" placeholder="Select">
                 <mat-option *ngFor="let niveauLu of niveauLangue.Collection" [value]="niveauLu.label">{{niveauLu.label}}</mat-option>
               </mat-select>
             </mat-form-field>
           </td>
-          <td>
+          <td style="width: 25%;">
             <mat-form-field style="width: 100%;">
               <mat-select [(ngModel)]="langue.niveauParle" placeholder="Select">
                 <mat-option *ngFor="let niveauParle of niveauLangue.Collection" [value]="niveauParle.label">{{niveauParle.label}}</mat-option>

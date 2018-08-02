@@ -13,6 +13,7 @@ namespace WebCV_Fiches.Controllers
 {
 
     [Authorize("Bearer")]
+    //[AuthorizeRoleFilter("Administrateur", "Approbateur")]
     [AuthorizeRoleFilter("Administrateur")]
     [Route("Role")]
     public class RoleController : Controller

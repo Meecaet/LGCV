@@ -1,0 +1,41 @@
+<div>
+    <div [ngClass]="classValidator('divrelativeOn form-inline ','divrelativeOff form-inline')">
+      <div [ngClass]="classValidator('divloadingOn','divloadingOff')" class="divloading">
+        <div style="margin-left: auto;margin-right: 300px;width: 1px">
+          <img [ngClass]="classValidator('imgloading','imgloadingHidden')">
+        </div>
+      </div>
+
+      <div class="lgs-label">Conférences suivies </div>
+      <label (click)="AddConference()">+</label>
+      <div class="lgs-floatLeftButtons">
+        <button type="button" class="btn btn-link"></button>
+      </div>
+      <table class="table table-hover small">
+          <thead>
+            <tr class="lgs-backgroundColor">
+              <th scope="col">DESCRIPTION</th>
+              <th scope="col">ANNÉE</th>
+              <th scope="col"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let consference of conferenceses">
+              <td  style="width: 80%;">
+                <div>
+                  <inline-editor type="text" empty="Description" [(ngModel)]="consference.description" name="description" [cols]="250"></inline-editor>
+                </div>
+              </td>
+              <td style="width: 20%;">
+                <div>
+                  <inline-editor type="number" empty="Annee" [(ngModel)]="consference.annee" name="annee" [cols]="250"></inline-editor>
+                </div>
+              </td>
+              <td style="width: 30px;">
+                <label class="XCancel"> X</label>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+    </div>
+  </div>

@@ -19,6 +19,9 @@
           </div>
         </div>
       </div>
+
+
+
       <div id="anchor" class="lgs-section">
         <div class="form-group row">
           <div class="col-lg-12">
@@ -33,6 +36,16 @@
           (onChangePage)="onChangePage($event)">
 
         </app-carousel>
+      </div>
+      <div class="lgs-section">
+        <div class="form-group row">
+          <div class="col-lg-6">
+         <app-table-conference  [UtilisateurId]="UtilisateurId"></app-table-conference>
+          </div>
+          <div class="col-lg-6">
+             <app-table-publication  [UtilisateurId]="UtilisateurId"> </app-table-publication>
+          </div>
+        </div>
       </div>
       <div class="lgs-section">
         <div class="form-group row">

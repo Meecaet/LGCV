@@ -34,7 +34,7 @@ export class CarouselComponent implements OnInit {
     this.mandat = new MandatViewModel();
   }
 
-  private calcMonth(init: Date, fin: Date, eleHtml: string) {
+   calcMonth(init: Date, fin: Date, eleHtml: string) {
     debugger;
     if (init != null && fin != null) {
       var date1: any = new Date(init);

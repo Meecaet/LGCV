@@ -35,9 +35,19 @@ export class LoginComponent implements OnInit {
           localStorage.setItem("token", x.token);
           localStorage.setItem("utilisateurId", x.utilisateurId);
           this.route.navigate(['cv/edit/'+x.utilisateurId]);
+          localStorage.setItem("userName", x.userName);
+          localStorage.setItem("isAdministrateur", x.isAdministrateur.toString());
+          localStorage.setItem("isApprobateur", x.isApprobateur.toString());
+          localStorage.setItem("isConseiller", x.isConseiller.toString());
+          this.route.navigate(['home']);
         } else {
           localStorage.removeItem("token");
           localStorage.removeItem("utilisateurId");
+          localStorage.removeItem("userName");
+          localStorage.removeItem("isAdministrateur");
+          localStorage.removeItem("isApprobateur");
+          localStorage.removeItem("isConseiller");
+
           this.MsgError = "User or Password is wrong!!";
         }
       },

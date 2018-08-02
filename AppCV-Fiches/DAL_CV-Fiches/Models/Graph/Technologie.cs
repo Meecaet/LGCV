@@ -12,10 +12,10 @@ namespace DAL_CV_Fiches.Models.Graph
         public string Version { get; set; }
         public string Description { get; set; }
 
-        [Edge("EstPartieDe")]
+        [Edge("EstPartieDe", lazyLoad: false)]
         public CategorieDeTechnologie Categorie { get; set; }
 
         [EdgeProperty]
-        public double MoisDExperience { get; set; }
+        public int MoisDExperience { get; set; }
     }
 }
