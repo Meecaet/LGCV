@@ -48,6 +48,7 @@ import { RoleCreateComponent} from "./components/role-create/role-create.compone
 import { RoleDetailComponent } from './components/role-detail/role-detail.component';
 import { RoleEditComponent } from './components/role-edit/role-edit.component';
 import { AccessDeniedComponent } from './components/access-denied/access-denied.component';
+import { ResetPasswordComponent } from "./components/reset-password/reset-password.component";
 
 @NgModule({
   declarations: [
@@ -59,6 +60,7 @@ import { AccessDeniedComponent } from './components/access-denied/access-denied.
     LoginComponent,
     PageNotFoundComponent,
     ForgotPasswordComponent,
+    ResetPasswordComponent,
     FonctionPipe,
     ResumeInterventionsComponent,
     LangueService,
