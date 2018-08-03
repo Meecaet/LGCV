@@ -18,6 +18,7 @@ namespace WebCV_Fiches.Helpers
         private WordprocessingDocument document;
         private const string mauveCode = "7030A0";
         private const int spaceSimple = 240;
+        private FooterPart footerPart1;
 
         private RunProperties GetRunProperties(string fontName, string colorName, string size, bool bold, bool italic)
         {
@@ -154,7 +155,8 @@ namespace WebCV_Fiches.Helpers
 
             AddSpacingToElement(paragraph, before, after, betweenLines);
             AddIndentationToElement(paragraph, left, right);
-            paragraphRun.Append(GetRunProperties(fontName, fontColor, fontSize.ToString(), isBold, isItalic), new Text(text));
+            paragraphRun.Append(GetRunProperties(fontName, fontColor, fontSize.ToString(), isBold, isItalic));
+            paragraphRun.Append(new Text(text));
             paragraph.Append(paragraphRun);
             AddAligmentToParagrah(paragraph, aligment);
             return paragraph;
@@ -503,7 +505,7 @@ namespace WebCV_Fiches.Helpers
             return cellProperties;
         }
 
-        private TableCell GetCell(Paragraph paragraph, string backgroundColor = "White", string borderColor = "Black",
+        private TableCell GetCell(Paragraph paragraph, string backgroundColor = "White", string borderColor = "Black", BorderValues borderValue = BorderValues.Single,
             TableRowAlignmentValues alignment = TableRowAlignmentValues.Left, TableVerticalAlignmentValues verticalAligment = TableVerticalAlignmentValues.Center,
             bool isTop =  false, bool isBottom = false)
         {
@@ -516,14 +518,14 @@ namespace WebCV_Fiches.Helpers
             {
                 cellProperties.Append(new TableCellBorders
                 {
-                    BottomBorder = new BottomBorder { Val = new EnumValue<BorderValues>(BorderValues.Single), Size = 1, Color = borderColor }
+                    BottomBorder = new BottomBorder { Val = new EnumValue<BorderValues>(borderValue), Size = 1, Color = borderColor }
                 });
             }
             if (isTop)
             {
                 cellProperties.Append(new TableCellBorders
                 {
-                    TopBorder = new TopBorder { Val = new EnumValue<BorderValues>(BorderValues.Single), Size = 1, Color = mauveCode },
+                    TopBorder = new TopBorder { Val = new EnumValue<BorderValues>(borderValue), Size = 1, Color = mauveCode },
                 });
             }
             tableCell.Append(paragraph);
@@ -575,12 +577,11 @@ namespace WebCV_Fiches.Helpers
             CreatePublications(doc.Body);
             CreateConferences(doc.Body);
             CreateLangues(doc.Body);
-
+            ApplyFooter();
 
             document.Save();
         }
-
-        private void CreateBioSection(Body docBody)
+            private void CreateBioSection(Body docBody)
         {
             Table table = new Table();
             TableRow tableRow = new TableRow();
@@ -1086,7 +1087,7 @@ namespace WebCV_Fiches.Helpers
 
         public void CreateMandats(Body docBody)
         {
-            Paragraph employeurParagraphModele, clientParagraphModele, currentParagraph;
+            Paragraph employeurParagraphModele, currentParagraph;
             ParagraphProperties paragraphProperties;
 
             Run currentRun;
@@ -1273,15 +1274,15 @@ namespace WebCV_Fiches.Helpers
 
         private void CreateTechnologies(Body docBody)
         {
-            var categoriesDeTechnologie = utilisateur.Conseiller.Technologies.Select(x => x.Categorie).Distinct().ToArray();
-            var technologies = utilisateur.Conseiller.Technologies;
-            
+            var technologisByCategorie = from data in utilisateur.Conseiller.Technologies
+                                         group data by data.Categorie.Nom into g
+                                     select g;
+
             Table tableTechnologies = new Table();
             TableProperties tableProperties = new TableProperties();
             TableRow tableRow;
 
             docBody.Append(new Paragraph(new Run(new Break { Type = new EnumValue<BreakValues>(BreakValues.Page) })));
-
             tableProperties.Append(new TableWidth { Width = "10131", Type = new EnumValue<TableWidthUnitValues>(TableWidthUnitValues.Dxa) });
             tableProperties.Append(new TableLayout { Type = new EnumValue<TableLayoutValues>(TableLayoutValues.Fixed) });
             tableProperties.Append(new TableCellMargin
@@ -1314,28 +1315,84 @@ namespace WebCV_Fiches.Helpers
 
             tableRow.Append(GetCell(GetNewParagraph("TECHNOLOGIES", fontColor: mauveCode, isBold: true, before: 120, after: 120, fontSize:18, betweenLines: 276), borderColor: mauveCode, isTop: true, isBottom: true));
             tableRow.Append(GetCell(GetNewParagraph("MOIS", fontColor: mauveCode, isBold: true, before: 120, after: 120, fontSize: 18, betweenLines: 276), borderColor: mauveCode, isTop: true, isBottom: true));
-            tableRow.Append(GetCell(GetNewParagraph("", isBold: true, before: 120, after: 120, betweenLines: 276)));
+            tableRow.Append(GetCell(GetNewParagraph("", fontSize: 18, isBold: true, before: 120, after: 120, betweenLines: 276)));
             tableRow.Append(GetCell(GetNewParagraph("TECHNOLOGIES", fontColor: mauveCode, isBold: true, before: 120, after: 120, fontSize: 18, betweenLines: 276), borderColor: mauveCode, isTop: true, isBottom: true));
             tableRow.Append(GetCell(GetNewParagraph("MOIS", fontColor: mauveCode, isBold: true, before: 120, after: 120, fontSize: 18, betweenLines: 276), borderColor: mauveCode, isTop: true, isBottom: true));
             tableTechnologies.Append(tableRow);
 
-            // Categories de technologie
-            /*foreach (CategorieDeTechnologie categorie in categoriesDeTechnologie)
-            {
-                tableRow = new TableRow();
-                tableRow.Append(new TableCell(new Paragraph(paragraphProperties.CloneNode(true), new Run(GetRunProperties("Arial", "Black", "20", false, false), new Text(categorie.Nom)))));
-                tableTechnologies.Append(tableRow);
-            }*/
+            // Technologies
+            var total = (technologisByCategorie.Count()*2) + utilisateur.Conseiller.Technologies.Count();
+            var droite = total / 2;
+            var gauche = total - droite;
+            var count = 0;
+            var isFirts = true;
 
-            foreach (Technologie technologie in technologies)
+            foreach (var categorie in technologisByCategorie)
             {
-                tableRow = new TableRow();
-                tableRow.Append(GetCell(GetNewParagraph(technologie.Nom, fontSize: 18)));
-                tableRow.Append(GetCell(GetNewParagraph(technologie.MoisDExperience.ToString(), fontSize: 18, aligment: ParagraphAligment.Centre)));
-                tableTechnologies.Append(tableRow);
+                AddTechnologieCell(tableTechnologies, categorie.Key, null, count, isFirts);
+                isFirts = isFirts && count < gauche;
+                count = count == 0 ? count : count + 1;
+                count = count >= gauche ? 0 : count+1;
+                
+                var technologies = from data in categorie
+                                   select data;
+
+                foreach (Technologie technologie in technologies)
+                {
+                    AddTechnologieCell(tableTechnologies, categorie.Key, technologie, count, isFirts);
+                    isFirts = isFirts && count < gauche;
+                    count = count >= gauche ? 0 : count+1;
+                }
             }
 
             docBody.Append(tableTechnologies);
+        }
+
+        private void AddTechnologieCell(Table tableTechnologies, string categorie, Technologie technologie, int possition, bool isFirts)
+        {
+            TableRow tableRow;
+            if (technologie == null)
+            {
+                if (isFirts)
+                {
+                    if (possition > 0)
+                    {
+                        tableRow = new TableRow();
+                        tableRow.Append(GetCell(GetNewParagraph("")));
+                        tableRow.Append(GetCell(GetNewParagraph("")));
+                        tableRow.Append(GetCell(GetNewParagraph("")));
+                        tableTechnologies.Append(tableRow);
+                    }
+                    tableRow = new TableRow();
+                    tableRow.Append(GetCell(GetNewParagraph(categorie, fontSize: 18, isBold: true, isItalic: true), isTop: possition != 0, borderColor: mauveCode, borderValue: BorderValues.Dotted));
+                    tableRow.Append(GetCell(GetNewParagraph(""), isTop: possition != 0, borderColor: mauveCode, borderValue: BorderValues.Dotted));
+                    tableRow.Append(GetCell(GetNewParagraph("")));
+                    tableTechnologies.Append(tableRow);
+                }
+                else
+                {
+                    tableRow = tableTechnologies.Elements<TableRow>().ElementAt(possition+2);
+                    tableRow.Append(GetCell(GetNewParagraph(categorie, fontSize: 18, isBold: true, isItalic: true), isTop: possition != 0, borderColor: mauveCode, borderValue: BorderValues.Dotted));
+                    tableRow.Append(GetCell(GetNewParagraph(""), isTop: possition != 0, borderColor: mauveCode, borderValue: BorderValues.Dotted));
+                }                
+            }
+            else
+            {
+                if (isFirts)
+                {
+                    tableRow = new TableRow();
+                    tableRow.Append(GetCell(GetNewParagraph(technologie.Nom, fontSize: 18)));
+                    tableRow.Append(GetCell(GetNewParagraph(technologie.MoisDExperience.ToString(), fontSize: 18, aligment: ParagraphAligment.Centre)));
+                    tableRow.Append(GetCell(GetNewParagraph("")));
+                    tableTechnologies.Append(tableRow);
+                }
+                else
+                {
+                    tableRow = tableTechnologies.Elements<TableRow>().ElementAt(possition + 1);
+                    tableRow.Append(GetCell(GetNewParagraph(technologie.Nom, fontSize: 18)));
+                    tableRow.Append(GetCell(GetNewParagraph(technologie.MoisDExperience.ToString(), fontSize: 18, aligment: ParagraphAligment.Centre)));
+                }
+            }
         }
 
         private void CreatePerfectionnement(Body docBody)
@@ -1472,6 +1529,61 @@ namespace WebCV_Fiches.Helpers
                     docBody.Append(GetNewParagraph("Lu : " + langue.Lu, left: 709, before: 40));
                 }
             }
+        }
+
+        private void ApplyFooter()
+        {
+            MainDocumentPart mainDocPart = document.MainDocumentPart;
+            FooterPart footerPart1 = mainDocPart.AddNewPart<FooterPart>("footerId");
+            Footer footer1 = new Footer();
+
+            //footer1.Append(new Paragraph(new Run(GetLogoImage(@"C:\Docs to zip\Images\logo.png"))));
+
+
+            Paragraph paragraph1 = new Paragraph() { };
+
+            Run run1 = new Run();
+            run1.Append(GetLogoImage(@"C:\Docs to zip\Images\footer.png"));
+            /*Text text1 = new Text();
+            text1.Text = "Footer ";
+
+            run1.Append(text1);*/
+
+            paragraph1.Append(run1);
+
+
+            footer1.Append(paragraph1);
+
+            footerPart1.Footer = footer1;
+
+
+
+            SectionProperties sectionProperties1 = mainDocPart.Document.Body.Descendants<SectionProperties>().FirstOrDefault();
+            if (sectionProperties1 == null)
+            {
+                sectionProperties1 = new SectionProperties() { };
+                mainDocPart.Document.Body.Append(sectionProperties1);
+            }
+            FooterReference footerReference1 = new FooterReference() { Type = DocumentFormat.OpenXml.Wordprocessing.HeaderFooterValues.Default, Id = "footerId" };
+
+
+            sectionProperties1.InsertAt(footerReference1, 0);
+
+        }
+
+        private Drawing GetFooterImage(string imagePath)
+        {
+            MainDocumentPart mainDocPart = document.MainDocumentPart;
+            FooterPart footerPart1 = mainDocPart.AddNewPart<FooterPart>("footerId");
+            ImagePart imagePart = footerPart1.AddImagePart(ImagePartType.Png);
+
+            using (FileStream stream = new FileStream(imagePath, FileMode.Open))
+            {
+                imagePart.FeedData(stream);
+            }
+
+            Drawing drawing = GetNewLogoDrawing(footerPart1.GetIdOfPart(imagePart));
+            return drawing;
         }
 
     }
