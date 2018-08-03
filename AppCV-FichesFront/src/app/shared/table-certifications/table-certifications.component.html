@@ -12,8 +12,16 @@
     <div class="lgs-floatLeftButtons">
       <button type="button" class="btn btn-link"></button>
     </div>
-    <div class="lgs-group table-bordered">
-      <table class="table table-bordered table-hover">
+
+      <table  class="table table-hover small">
+          <thead>
+              <tr class="lgs-backgroundColor">
+                <th scope="col">DESCRIPTION</th>
+                <th scope="col">ANNÉE</th>
+                <th scope="col"></th>
+              </tr>
+            </thead>
+
         <tbody>
           <tr id="tr{{i}}" *ngFor=" let certif of certifications; let i = index">
             <td class="{{certif.certificationHighlight.description}}">
@@ -31,5 +39,5 @@
         </tbody>
       </table>
     </div>
-  </div>
+
 </div>

@@ -55,7 +55,7 @@ namespace WebCV_Fiches.Controllers
         public ActionResult GetAllFonctions()
             {
             List<FonctionViewModel> fonctions = new List<FonctionViewModel>();
-            var fonction = (List<Fonction>)cache.Get("Fonction");
+            var fonction = (List<Fonction>)cache.Get("Fonctions");
             if (fonction != null)
             {
                 fonction.OrderBy(o => o.Description).ToList().ForEach(x =>

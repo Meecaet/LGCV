@@ -49,6 +49,8 @@ import { RoleDetailComponent } from './components/role-detail/role-detail.compon
 import { RoleEditComponent } from './components/role-edit/role-edit.component';
 import { AccessDeniedComponent } from './components/access-denied/access-denied.component';
 import { ResetPasswordComponent } from "./components/reset-password/reset-password.component";
+import { TablePublicationComponent } from './shared/table-publication/table-publication.component';
+import { TableConferenceComponent } from './shared/table-conference/table-conference.component';
 
 @NgModule({
   declarations: [
@@ -81,7 +83,9 @@ import { ResetPasswordComponent } from "./components/reset-password/reset-passwo
     RoleCreateComponent,
     RoleDetailComponent,
     RoleEditComponent,
-    AccessDeniedComponent
+    AccessDeniedComponent,
+    TablePublicationComponent,
+    TableConferenceComponent
   ],
   imports: [
     MatAutocompleteModule,
