@@ -26,7 +26,7 @@ const routes: Routes = [
       { path: "login", component: LoginComponent },
       { path: "register", component: RegisterComponent },
       { path: "forgotpassword", component: ForgotPasswordComponent },
-      { path: "resetpassword/:code", component: ResetPasswordComponent ,},
+      { path: "resetpassword", component: ResetPasswordComponent ,},
     ]
   },
   {
@@ -46,7 +46,7 @@ const routes: Routes = [
   },
   { path: "accessdenied", component: AccessDeniedComponent },
   { path: "notfound", component: PageNotFoundComponent },
-  // { path: "**", redirectTo: "notfound" }
+  { path: "**", redirectTo: "notfound" }
 ];
 
 @NgModule({

@@ -12,24 +12,20 @@ import { ActivatedRoute } from "@angular/router";
 })
 export class ResetPasswordComponent implements OnInit {
   showLoadingResetPassword: boolean = false;
+  model: ResetPasswordModel = new ResetPasswordModel();
+  MsgError = "";
+  IsSuccess?: boolean = null;
 
   constructor(
     private route: ActivatedRoute,
     private validator: ValidatorService,
     private auth: AuthenticationService
   ) {
-    debugger;
-
-    this.route.params.subscribe(params => {
+    this.route.queryParams.subscribe(params => {
       debugger;
-
-      this.model.code = params["code"];
+      this.model.code = params.code;
     });
   }
-
-  model: ResetPasswordModel = new ResetPasswordModel();
-  MsgError = "";
-  IsSuccess?: boolean = null;
 
   ngOnInit() {}
 
@@ -40,6 +36,14 @@ export class ResetPasswordComponent implements OnInit {
   IsValidPassword(value, errorEmpty, errorRegex) {
     this.validator.ValidateEmpty(value, errorEmpty);
     this.validator.ValidadePassword(value, errorRegex);
+  }
+
+  classValidator(cssClass: string, optionCssClass): string {
+    if (this.showLoadingResetPassword) {
+      return cssClass;
+    } else {
+      return optionCssClass;
+    }
   }
 
   ResetPassword() {

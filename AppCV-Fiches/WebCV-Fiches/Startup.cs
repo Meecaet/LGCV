@@ -22,6 +22,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using WebCV_Fiches.Models.AccountViewModels;
 using WebCV_Fiches.Filters;
+using WebCV_Fiches.Helpers;
 
 namespace WebCV_Fiches
 {
@@ -67,22 +68,12 @@ namespace WebCV_Fiches
             });
 
             services.AddCors();
-            //services.AddMvc(options => {
-            //    options.Filters.Add<AuthorizeRoleFilter>();
-
-            //});
 
             services.AddMvc();
-            //services.AddMvc(config =>
-            //{
-            //    var policy = new AuthorizationPolicyBuilder()
-            //                     .RequireAuthenticatedUser()
-            //                     .Build();
-            //    config.Filters.Add(new AuthorizeFilter(policy));
-            //});
-
-            // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
+            services.AddSingleton(Configuration);
+            services.AddSingleton<IEmailSender, EmailSender>();
+            services.Configure<AuthMessageSenderOptions>(Configuration);
 
             services.AddDistributedMemoryCache();
 
