@@ -1,7 +1,7 @@
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/common'), require('@angular/forms')) :
 	typeof define === 'function' && define.amd ? define(['exports', '@angular/core', '@angular/common', '@angular/forms'], factory) :
-	(factory((global['@qontu/ngx-inline-editor'] = {}),global._angular_core,global._angular_common,global._angular_forms));
+	(factory((global['../qontu/ngx-inline-editor'] = {}),global._angular_core,global._angular_common,global._angular_forms));
 }(this, (function (exports,_angular_core,_angular_common,_angular_forms) { 'use strict';
 
 var __extends = (undefined && undefined.__extends) || (function () {

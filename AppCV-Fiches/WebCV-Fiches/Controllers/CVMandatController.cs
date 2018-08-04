@@ -85,7 +85,12 @@ namespace WebCV_Fiches.Controllers
             var editions = new EditionObjectViewModelFactory<MandatViewModel>();
             mandatViewModel.editionObjecViewModels = editions.GetEditions(mandat, projet, client, societeDeConseil);
 
-            return Json(mandatViewModel);
+
+            
+            var jsonSettings = new Newtonsoft.Json.JsonSerializerSettings();
+            jsonSettings.DateFormatString = "yyyy/MM/dd";
+            jsonSettings.ContractResolver = new   Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver();
+            return Json(mandatViewModel, jsonSettings);
         }
 
         private List<TacheViewModel> GetTaches(string utilisateurId, Mandat mandat)

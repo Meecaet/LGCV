@@ -54,17 +54,17 @@ namespace WebCV_Fiches.Controllers
         [HttpGet]
         public ActionResult GetAllFonctions()
             {
-            List<FonctionViewModel> langues = new List<FonctionViewModel>();
-            var lang = (List<Fonction>)cache.Get("Fonction");
-            if (lang != null)
+            List<FonctionViewModel> fonctions = new List<FonctionViewModel>();
+            var fonction = (List<Fonction>)cache.Get("Fonctions");
+            if (fonction != null)
             {
-                lang.OrderBy(o => o.Description).ToList().ForEach(x =>
+                fonction.OrderBy(o => o.Description).ToList().ForEach(x =>
                 {
-                    langues.Add(new FonctionViewModel { GraphId = x.GraphKey, Nom = x.Description });
+                    fonctions.Add(new FonctionViewModel { GraphId = x.GraphKey, Nom = x.Description });
                 });
             }
 
-            return Json(langues);
+            return Json(fonctions);
         }
     }
 }

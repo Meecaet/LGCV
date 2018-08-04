@@ -1,6 +1,7 @@
 ﻿using DAL_CV_Fiches.Models.Graph;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -26,12 +27,16 @@ namespace WebCV_Fiches.Models.CVViewModels
         public string PorteeDesTravaux { get; set; }
         public List<TacheViewModel> Taches { get; set; }
         public List<TechnologieViewModel> Technologies { get; set; }
+
+
+        //Date projet 
         public DateTime DebutProjet { get; set; }
         public DateTime FinProjet { get; set; }
+        // Date Mandat
         public DateTime DebutMandat { get; set; }
         public DateTime FinMandat { get; set; }
 
-        
+
         public string NomReference { get; set; }
         public string FonctionReference { get; set; }
         public string TelephoneReference { get; set; }
@@ -46,7 +51,7 @@ namespace WebCV_Fiches.Models.CVViewModels
 
         public override bool HasEdtion(EditionObject edition)
         {
-            if(edition.ProprieteNom == "Mandats")
+            if (edition.ProprieteNom == "Mandats")
                 return true;
 
             var propreties = MethodBase.GetCurrentMethod().DeclaringType.GetProperties().ToList();

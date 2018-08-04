@@ -1,16 +1,16 @@
 {
-  "_from": "@qontu/ngx-inline-editor",
-  "_id": "@qontu/ngx-inline-editor@0.2.0-alpha.12",
+  "_from": "@angular/../../src/app/qontu/ngx-inline-editor",
+  "_id": "@angular/../../src/app/qontu/ngx-inline-editor@0.2.0-alpha.12",
   "_inBundle": false,
   "_integrity": "sha1-Tp/d0rav2S0BCl80IPfCRYRlioQ=",
-  "_location": "/@qontu/ngx-inline-editor",
+  "_location": "@angular/../../src/app/qontu/ngx-inline-editor",
   "_phantomChildren": {},
   "_requested": {
     "type": "tag",
     "registry": true,
-    "raw": "@qontu/ngx-inline-editor",
-    "name": "@qontu/ngx-inline-editor",
-    "escapedName": "@qontu%2fngx-inline-editor",
+    "raw": "ngx-inline-editor",
+    "name": "ngx-inline-editor",
+    "escapedName": "fngx-inline-editor",
     "scope": "@qontu",
     "rawSpec": "",
     "saveSpec": null,
@@ -22,12 +22,9 @@
   ],
   "_resolved": "https://registry.npmjs.org/@qontu/ngx-inline-editor/-/ngx-inline-editor-0.2.0-alpha.12.tgz",
   "_shasum": "4e9fddd2b6afd92d010a5f3420f7c24584658a84",
-  "_spec": "@qontu/ngx-inline-editor",
+  "_spec": "@angular/../../src/app/qontu/ngx-inline-editor",
   "_where": "C:\\JDC\\LGS\\CV-Fiches\\AppCV-FichesFront",
-  "author": {
-    "name": "Carlos Caballero",
-    "email": "caballerog.carlos@gmail.com"
-  },
+
   "bugs": {
     "url": "https://github.com/qontu/ngx-inline-editor/issues"
   },
@@ -105,18 +102,9 @@
   ],
   "license": "MIT",
   "main": "ngx-inline-editor.umd.js",
-  "maintainers": [
-    {
-      "name": "Carlos Caballero",
-      "email": "caballerog.carlos@gmail.com"
-    },
-    {
-      "name": "Toni Villena",
-      "email": "tonivj5@gmail.com"
-    }
-  ],
+
   "module": "ngx-inline-editor.es5.js",
-  "name": "@qontu/ngx-inline-editor",
+  "name": "ngx-inline-editor",
   "peerDependencies": {
     "@angular/common": "^4.0.0",
     "@angular/core": "^4.0.0",

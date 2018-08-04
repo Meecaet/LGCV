@@ -4,6 +4,7 @@ import { FormControl } from "@angular/forms";
 import { CVService } from "../../Services/cv.service";
 import { HttpErrorResponse } from "@angular/common/http";
 import { ErrorService } from "../../Services/error.service";
+import { NiveauLangue } from "../../Models/niveau-langue.enum";
 
 @Component({
   selector: "app-table-langue",
@@ -13,20 +14,21 @@ import { ErrorService } from "../../Services/error.service";
 export class TableLangueComponent implements OnInit {
   langues: Array<LangueViewModel>;
   languesAutoComplete: Array<LangueViewModel>;
+  niveauLangue = new NiveauLangue;
+  LangueControl = new FormControl();
   @Input() UtilisateurId: string;
-
+  showLoadingLangue:boolean = false;
   constructor(
     private cvService: CVService,
     private errorService: ErrorService
   ) {
-    this.langues = new  Array<LangueViewModel>();
-
+  this.  niveauLangue =   new NiveauLangue();
+    this.languesAutoComplete = new  Array<LangueViewModel>();
+    this.langues = new Array<LangueViewModel>();
   }
 
   ngOnInit() {
-
-    this.UserDataLoad();
-
+    this.showLoadingLangue =  true;
     this.DataLoad();
   }
   AddLangue(): void {
@@ -37,9 +39,9 @@ export class TableLangueComponent implements OnInit {
   removeLange(ele: LangueViewModel) {
     const index = this.langues.findIndex(
       x =>
-        x.niveauecrit == ele.niveauecrit &&
-        x.niveaulu == ele.niveaulu &&
-        x.niveauparle == ele.niveauparle &&
+        x.niveauEcrit == ele.niveauEcrit &&
+        x.niveauLu== ele.niveauLu &&
+        x.niveauParle == ele.niveauParle &&
         x.nom == ele.nom
     );
     if (index >= 0) {
@@ -51,6 +53,8 @@ export class TableLangueComponent implements OnInit {
     this.cvService.LoadLangue().subscribe(
       (data: Array<LangueViewModel>) => {
         this.languesAutoComplete = data;
+        this.UserDataLoad();
+
       },
       (error: HttpErrorResponse) => {
         this.errorService.ErrorHandle(error.status);
@@ -58,10 +62,33 @@ export class TableLangueComponent implements OnInit {
     );
   }
   UserDataLoad() {
-     this.cvService
+    this.cvService
       .UtilizaterLangue(this.UtilisateurId)
       .subscribe((data: Array<LangueViewModel>) => {
-        this.langues = data;
+        for (let index = 0; index < data.length; index++) {
+          this.langues.push(this.SetValue(data[index]));
+        }
+        this.showLoadingLangue =  false;
       });
+  }
+  SetValue(data: LangueViewModel): LangueViewModel {
+    let returnValue = data;
+    returnValue.nom;
+    returnValue.LangueControl = new FormControl({
+      graphId: returnValue.graphId,
+      nom: returnValue.nom
+    });
+
+    return returnValue;
+  }
+  SetValueFromControl(formControl: any) {
+    return formControl.value.nom;
+  }
+  classValidator(cssClass: string, optionCssClass): string {
+    if (this.showLoadingLangue) {
+      return cssClass;
+    } else {
+      return optionCssClass;
+    }
   }
 }

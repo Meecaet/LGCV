@@ -1,27 +1,37 @@
 <div>
-    <div id="identification" class="form-inline">
-        <div class="lgs-label">Identification</div>
-        <div class="table-bordered lgs-group">
-            <div style="margin-bottom:25px">
-                <div>
-                    <h2 class="form-inline">
-                        <!--{{cvModel.prenom}} {{cvModel.nom}}-->
-                        <div class="form-inline">
-                            <div style="margin-right:10px">
-                                <inline-editor type="text" empty="Prenom" (onSave)="saveBio(bio)" [(ngModel)]="bio.prenom" name="prenom" [cols]="250"></inline-editor>
-                            </div>
-                            <div>
-                                <inline-editor type="text" (onSave)="saveBio(bio)" empty="Nom" [(ngModel)]="bio.nom" name="nom"></inline-editor>
-                            </div>
-                        </div>
-                    </h2>
-                </div>
-                <b> </b>
-            </div>
-            <div class="col-lg-12">
-                <inline-editor type="textarea" (onSave)="saveBio(bio)" empty="Biographie" [(ngModel)]="bio.resumeExperience" name="biographie">
-                </inline-editor>
-            </div>
-        </div>
+
+
+  <div id="identification" [ngClass]="classValidator('divrelativeOn form-inline ','divrelativeOff form-inline')">
+    <div [ngClass]="classValidator('divloadingOn','divloadingOff')" class="divloading">
+      <div style="margin-left: auto;margin-right: 660px;width: 1px">
+        <img [ngClass]="classValidator('imgloading','imgloadingHidden')">
+      </div>
     </div>
+    <div class="lgs-label">Identification</div>
+    <div class="table-bordered lgs-group">
+      <div style="margin-bottom:25px">
+        <div>
+          <h2 class="form-inline">
+            <div class="form-inline">
+              <div class="{{bio.bioHighlight.nom}}" style="margin-right:10px">
+                <inline-editor type="text" empty="Prenom" (onSave)="saveBio(bio)" [(ngModel)]="bio.prenom" name="prenom" [cols]="250"></inline-editor>
+              </div>
+              <div class="{{bio.bioHighlight.nom}}">
+                <inline-editor type="text" (onSave)="saveBio(bio)" empty="Nom" [(ngModel)]="bio.nom" name="nom"></inline-editor>
+              </div>
+            </div>
+
+          </h2>
+          <div class="form-inline">
+            <app-drop-down-fonction [UtilisateurId]="UtilisateurId"></app-drop-down-fonction>
+          </div>
+        </div>
+        <b> </b>
+      </div>
+      <div class="col-lg-12  {{bio.bioHighlight.nom}}">
+        <inline-editor type="textarea" (onSave)="saveBio(bio)" empty="Biographie" [(ngModel)]="bio.resumeExperience" name="biographie">
+        </inline-editor>
+      </div>
+    </div>
+  </div>
 </div>

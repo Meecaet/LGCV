@@ -15,6 +15,7 @@ import { RoleCreateComponent } from "./components/role-create/role-create.compon
 import { RoleEditComponent } from "./components/role-edit/role-edit.component";
 import { RoleDetailComponent } from "./components/role-detail/role-detail.component";
 import { AccessDeniedComponent } from "./components/access-denied/access-denied.component";
+import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
 
 const routes: Routes = [
   { path: "", component: HomeComponent},
@@ -24,7 +25,8 @@ const routes: Routes = [
     children: [
       { path: "login", component: LoginComponent },
       { path: "register", component: RegisterComponent },
-      { path: "forgotpassword", component: ForgotPasswordComponent }
+      { path: "forgotpassword", component: ForgotPasswordComponent },
+      { path: "resetpassword", component: ResetPasswordComponent ,},
     ]
   },
   {

@@ -1,11 +1,12 @@
 import { InlineBaseConfig } from "../types/inline-configs";
 import { Renderer, ElementRef, OnInit, Injector, OnChanges, DoCheck, AfterContentInit, AfterViewInit, AfterViewChecked, AfterContentChecked, OnDestroy, ChangeDetectorRef } from "@angular/core";
-import { Subscription } from "rxjs";
+
 import { InlineEditorError } from "../types/inline-editor-error.interface";
 import { InlineEditorState } from "../types/inline-editor-state.class";
 import { InlineEditorService } from "../inline-editor.service";
 import { OnUpdateConfig } from "../types/lifecycles.interface";
 import { InputRegexTestable, InputLengthTestable } from "../types/testable-inputs.interface";
+import { Subscription } from "../../../../../node_modules/rxjs";
 export declare class InputBase implements OnInit, OnChanges, DoCheck, AfterContentInit, AfterContentChecked, AfterViewInit, AfterViewChecked, OnDestroy, OnUpdateConfig {
     protected injector: Injector;
     constructor(injector: Injector);

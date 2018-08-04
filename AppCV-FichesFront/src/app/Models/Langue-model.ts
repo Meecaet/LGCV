@@ -1,19 +1,15 @@
 import { Observable, observable } from "rxjs";
 import { FormControl } from "@angular/forms";
+import { EditionObjecViewModel } from "./EditionObjec-model";
 
 export class LangueViewModel {
-  graphid: string;
+  graphId: string;
   nom: string;
-  niveauparle: string;
-  niveauecrit: string;
-  niveaulu: string;
+  niveauParle: string;
+  niveauEcrit: string;
+  niveauLu: string;
+  LangueControl: FormControl = new FormControl();
+  editionObjecViewModels: Array<EditionObjecViewModel>;
 
-  LangueControl: FormControl;
- LoadLangue(langues: Array<LangueViewModel>) {
-    return new Observable(observable => {
-      observable.next(langues);
-      observable.complete();
-    });
-  }
 
 }
