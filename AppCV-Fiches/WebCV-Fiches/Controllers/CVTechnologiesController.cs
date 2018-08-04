@@ -30,7 +30,9 @@ namespace WebCV_Fiches.Controllers
         public ActionResult All(string utilisateurId)
         {
             var utilisateur = utilisateurGraphRepository.GetOne(utilisateurId);
-            var tecnologies = utilisateur.Conseiller.Technologies.Cast<GraphObject>().ToList();
+            var tecnologies = utilisateur.Conseiller?.Technologies?.Cast<GraphObject>().ToList();
+            if(tecnologies == null)    
+                return Json(new List<TechnologieViewModel>());
             var noeudModifie = new List<GraphObject>();
             noeudModifie.Add(utilisateur.Conseiller);
             noeudModifie.AddRange(tecnologies);

@@ -55,32 +55,32 @@ namespace WebCV_Fiches.Controllers
             mandatViewModel.DebutMandat = mandat.DateDebut;
             mandatViewModel.Efforts = mandat.Efforts;
             mandatViewModel.FinMandat = mandat.DateFin;
-            mandatViewModel.Fonction = mandat.Fonction.Description;
+            mandatViewModel.Fonction = mandat.Fonction?.Description;
             mandatViewModel.GraphId = mandat.GraphKey;
-            mandatViewModel.GraphIdFonction = mandat.Fonction.GraphKey;
+            mandatViewModel.GraphIdFonction = mandat.Fonction?.GraphKey;
             mandatViewModel.NumeroMandat = Convert.ToInt32(mandat.Numero);
             mandatViewModel.PorteeDesTravaux = mandat.Description;
             mandatViewModel.Taches = GetTaches(utilisateurId, mandat);
             mandatViewModel.TitreMandat = mandat.Titre;
 
             mandatViewModel.DebutProjet = mandat.Projet.DateDebut;
-            mandatViewModel.CellulaireReference = projet.CellulaireReference;
-            mandatViewModel.ContexteProjet = projet.Description;
-            mandatViewModel.CourrielReference = projet.CourrielReference;
+            mandatViewModel.CellulaireReference = projet?.CellulaireReference;
+            mandatViewModel.ContexteProjet = projet?.Description;
+            mandatViewModel.CourrielReference = projet?.CourrielReference;
             mandatViewModel.Envergure = projet.Envergure;
             mandatViewModel.FinProjet = projet.DateFin;
-            mandatViewModel.GraphIdProjet = projet.GraphKey;
-            mandatViewModel.FonctionReference = projet.FonctionReference;
-            mandatViewModel.NomReference = projet.NomReference;
+            mandatViewModel.GraphIdProjet = projet?.GraphKey;
+            mandatViewModel.FonctionReference = projet?.FonctionReference;
+            mandatViewModel.NomReference = projet?.NomReference;
             mandatViewModel.Technologies = GetTechnologies(utilisateurId, mandat);
-            mandatViewModel.TelephoneReference = projet.TelephoneReference;
-            mandatViewModel.TitreProjet = projet.Nom;
+            mandatViewModel.TelephoneReference = projet?.TelephoneReference;
+            mandatViewModel.TitreProjet = projet?.Nom;
 
-            mandatViewModel.GraphIdClient = client.GraphKey;
-            mandatViewModel.NomClient = client.Nom;
+            mandatViewModel.GraphIdClient = client?.GraphKey;
+            mandatViewModel.NomClient = client?.Nom;
 
-            mandatViewModel.GraphIdSocieteDeConseil = societeDeConseil.GraphKey;
-            mandatViewModel.NomEntreprise = societeDeConseil.Nom;
+            mandatViewModel.GraphIdSocieteDeConseil = societeDeConseil?.GraphKey;
+            mandatViewModel.NomEntreprise = societeDeConseil?.Nom;
 
             var editions = new EditionObjectViewModelFactory<MandatViewModel>();
             mandatViewModel.editionObjecViewModels = editions.GetEditions(mandat, projet, client, societeDeConseil);

@@ -10,6 +10,6 @@ namespace WebCV_Fiches.Services
 {
     public interface ILoginService
     {
-        ApiCredential Find(LoginModel loginModel);
+        ApiCredential Find(LoginModel loginModel, string NomeComplet);
     }
 }

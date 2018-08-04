@@ -33,6 +33,9 @@ namespace WebCV_Fiches.Controllers
         {
             var utilisateur = utilisateurGraphRepository.GetOne(utilisateurId);
             var graphObjects = GetGraphObjects(utilisateur);
+            if (graphObjects == null)
+                return new List<ViewModel>();
+
             var noeudModifie = new List<GraphObject>();
             noeudModifie.Add(utilisateur.Conseiller);
             noeudModifie.AddRange(graphObjects);

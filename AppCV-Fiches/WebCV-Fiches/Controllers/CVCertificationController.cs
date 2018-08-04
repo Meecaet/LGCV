@@ -56,7 +56,7 @@ namespace WebCV_Fiches.Controllers
 
         public override List<GraphObject> GetGraphObjects(Utilisateur utilisateur)
         {
-            return utilisateur.Conseiller.Certifications().Cast<GraphObject>().ToList(); ;
+            return utilisateur.Conseiller?.Certifications()?.Cast<GraphObject>().ToList(); ;
         }
 
         public override List<ViewModel> GetViewModels(string utilisateurId, List<GraphObject> noeudsModifie, List<GraphObject> graphObjects, Func<GraphObject, ViewModel> map)

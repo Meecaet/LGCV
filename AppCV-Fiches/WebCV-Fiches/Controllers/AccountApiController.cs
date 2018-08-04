@@ -37,10 +37,10 @@ namespace WebCV_Fiches.Controllers
         private ApiCredential apiCredential;
 
 
-        public AccountApiController(UserManager<ApplicationUser> userManager, 
-            RoleManager<ApplicationRole> roleManager, 
-            SignInManager<ApplicationUser> signInManager, 
-            IEmailSender emailSender, 
+        public AccountApiController(UserManager<ApplicationUser> userManager,
+            RoleManager<ApplicationRole> roleManager,
+            SignInManager<ApplicationUser> signInManager,
+            IEmailSender emailSender,
             ILogger<AccountController> logger,
             IConfiguration configuration)
         {
@@ -67,11 +67,16 @@ namespace WebCV_Fiches.Controllers
           [FromServices]TokenConfigurationExtentions tokenConfigurations)
         {
             bool credenciaisValidas = false;
-            if (userLogin != null)
+            if (userLogin == null || userLogin.Email == null)
             {
-                apiCredential = login.Find(userLogin);
-                credenciaisValidas = (apiCredential != null);
+                apiCredential.authenticated = false;
+                apiCredential.message = "User not found";
+                return apiCredential;
             }
+
+            var user = _userManager.FindByEmailAsync(userLogin.Email).Result;
+            apiCredential = login.Find(userLogin, $"{user.Prenom} {user.Nom}");
+            credenciaisValidas = (apiCredential != null);
 
             if (credenciaisValidas)
             {
@@ -99,7 +104,7 @@ namespace WebCV_Fiches.Controllers
                 });
                 var token = handler.WriteToken(securityToken);
 
-                var user = _userManager.FindByEmailAsync(userLogin.Email).Result;
+
 
                 var approbateurs = _userManager.GetUsersInRoleAsync(_roleManager.FindByNameAsync("Approbateur").Result.Name).Result.ToList();
                 var conseillers = _userManager.GetUsersInRoleAsync(_roleManager.FindByNameAsync("Conseiller").Result.Name).Result.ToList();

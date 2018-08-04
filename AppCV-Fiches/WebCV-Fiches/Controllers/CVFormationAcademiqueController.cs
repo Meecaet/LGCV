@@ -35,7 +35,9 @@ namespace WebCV_Fiches.Controllers
             Func<GraphObject, ViewModel> map = this.map;
 
             var utilisateur = utilisateurGraphRepository.GetOne(utilisateurId);
-            var formations = utilisateur.Conseiller.FormationsScolaires.Cast<GraphObject>().ToList(); ;
+            var formations = utilisateur.Conseiller?.FormationsScolaires?.Cast<GraphObject>().ToList(); ;
+            if(formations == null)    
+                return Json(new List<FormationAcademiqueViewModel>());
             var noeudModifie = new List<GraphObject>();
             noeudModifie.Add(utilisateur.Conseiller);
             noeudModifie.AddRange(formations);

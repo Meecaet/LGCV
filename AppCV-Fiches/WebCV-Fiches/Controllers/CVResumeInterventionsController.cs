@@ -28,7 +28,11 @@ namespace WebCV_Fiches.Controllers
         public ActionResult All(string utilisateurId)
         {
              var utilisateur = utilisateurGraphRepository.GetOne(utilisateurId);
-            var mandats = utilisateur.Conseiller.Mandats.Cast<GraphObject>().ToList();
+            var mandats = utilisateur.Conseiller?.Mandats?.Cast<GraphObject>().ToList();
+
+            if (mandats == null)
+                return Json(new List<ResumeInterventionViewModel>());
+
             var noeudModifie = new List<GraphObject>();
             noeudModifie.Add(utilisateur.Conseiller);
             noeudModifie.AddRange(mandats);

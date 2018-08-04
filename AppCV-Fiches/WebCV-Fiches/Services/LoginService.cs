@@ -19,20 +19,27 @@ namespace WebCV_Fiches.Services
             _signInManager = signInManager;
         }
 
-        public ApiCredential Find(LoginModel loginModel)
+        public ApiCredential Find(LoginModel loginModel, string NomeComplet)
         {
             ApiCredential credential = new ApiCredential();
 
             var result = _signInManager.PasswordSignInAsync(loginModel.Email, loginModel.Password, loginModel.RemeberMe, lockoutOnFailure: false);
-            
+
             if (result.Result == SignInResult.Success)
             {
-#if !debug
-  var utilisateur = UtilisateurDepot.Search(new Dictionary<string, object> { { "Nom", "MATEUS ELOY EVANGELISTA CAETANO" } }).DefaultIfEmpty(null).FirstOrDefault();
- 
-#else
+                //#if !debug
+                //  var utilisateur = UtilisateurDepot.Search(new Dictionary<string, object> { { "Nom", "MATEUS ELOY EVANGELISTA CAETANO" } }).DefaultIfEmpty(null).FirstOrDefault();
+
+                //#else
                 var utilisateur = UtilisateurDepot.Search(new Dictionary<string, object> { { "AdresseCourriel", loginModel.Email } }).DefaultIfEmpty(null).FirstOrDefault();
-#endif
+                if (utilisateur == null)
+                {
+                    utilisateur = UtilisateurDepot.Search(new Dictionary<string, object> { { "Nom", NomeComplet.ToUpper() } }).DefaultIfEmpty(null).FirstOrDefault();
+                    utilisateur.AdresseCourriel = loginModel.Email;
+                    var repository = new UtilisateurGraphRepository();
+                    repository.Update(utilisateur);
+                }
+                //#endif
 
                 credential.authenticated = true;
                 credential.message = "Ok";
