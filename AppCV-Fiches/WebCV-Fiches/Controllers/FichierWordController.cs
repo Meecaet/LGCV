@@ -6,33 +6,41 @@ using Microsoft.AspNetCore.Mvc;
 using DAL_CV_Fiches.Models.Graph;
 using DAL_CV_Fiches.Repositories.Graph;
 using WebCV_Fiches.Helpers;
+using Microsoft.AspNetCore.Routing;
+using System.IO;
 
 namespace WebCV_Fiches.Controllers
 {
-    public class FichierWordController : Controller
+    [Route("FichierWord")]
+    public class FichierWordController : ControllerBase
     {
-        public string Index()
+        [Route("{utilisateurId}")]
+        public async System.Threading.Tasks.Task<IActionResult> IndexAsync(string utilisateurId)
         {
             WordWriter wordWriter;
             Utilisateur utilisateur;
 
             UtilisateurGraphRepository utilisateurGraph = new UtilisateurGraphRepository();
-            utilisateur = utilisateurGraph.GetAll().First();
+            utilisateur = utilisateurGraph.GetOne(utilisateurId);
 
-            try
+            var fileName = $"{utilisateur.Nom}.docx";
+            var filePath = $"Files\\{fileName}";
+            using (var document = WordprocessingDocument.Create(filePath, WordprocessingDocumentType.Document))
             {
-                using (var document = WordprocessingDocument.Create($"C:\\Docs to zip\\{utilisateur.Nom}_Test.docx", WordprocessingDocumentType.Document))
+                wordWriter = new WordWriter(document, utilisateur);
+                wordWriter.CreateDummyTest();
+
+                var memory = new MemoryStream();
+                using (var stream = new FileStream(filePath, FileMode.Open))
                 {
-                    wordWriter = new WordWriter(document, utilisateur);
-                    wordWriter.CreateDummyTest();
+                    await stream.CopyToAsync(memory);
                 }
-            }
-            catch (Exception ex)
-            {
-                return $"Error : { ex.Message}";
+                memory.Position = 0;
+                System.IO.File.Delete(filePath);
+                HttpContext.Response.Headers.Add("Access-Control-Expose-Headers", "*");
+                return File(memory, "application/vnd.ms-word", fileName);
             }
 
-            return "Finished";
         }
-    }    
+    }
 }

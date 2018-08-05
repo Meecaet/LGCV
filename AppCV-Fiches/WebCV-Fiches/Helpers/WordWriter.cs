@@ -580,6 +580,7 @@ namespace WebCV_Fiches.Helpers
             ApplyFooter();
 
             document.Save();
+            document.Close();
         }
             private void CreateBioSection(Body docBody)
         {
@@ -613,7 +614,7 @@ namespace WebCV_Fiches.Helpers
             tableCellProperties = new TableCellProperties();
             tableCellProperties.Append(new TableCellWidth { Width = new StringValue("1360"), Type = new EnumValue<TableWidthUnitValues>(TableWidthUnitValues.Dxa) });
             imageCell.Append(tableCellProperties);
-            imageCell.Append(new Paragraph(new Run(GetLogoImage(@"C:\Docs to zip\Images\logo.png"))));
+            imageCell.Append(new Paragraph(new Run(GetLogoImage(@"C:\Docs to zip\Images\logo.jpg"))));
 
             Run nomRun = new Run(), breakLine = new Run(), fonctionRun = new Run();
             nomRun.Append(GetRunProperties("Arial", mauveCode, "28", true, false));

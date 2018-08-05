@@ -1,4 +1,20 @@
 <div class="container-fluid" style="padding-top:30px">
+        <div *ngIf="!IsSuccess">
+            <div class="alert alert-danger">
+                Échec du téléchargement du fichier veuillez réessayer
+            </div>
+        </div>
+
+  <div class="mb-2 d-flex justify-content-end" >
+                <div id="identification" [ngClass]="classValidator('divrelativeOn form-inline ','divrelativeOff form-inline')">
+                    <div [ngClass]="classValidator('divloadingOn','divloadingOff')" class="divloading">
+                        <div style="margin-left: auto;margin-right: 65px;width: 1px">
+                            <img [ngClass]="classValidator('imgloading','imgloadingHidden')">
+                        </div>
+                    </div>
+                    <input type="button" (click)="DownloadFile()" *ngIf="!showDownloadFile" class="btn btn-primary btn-lg" value="Télécharger le cv original"/>
+                </div>
+  </div>
   <form>
     <div class="form-group">
       <app-bio [UtilisateurId]="UtilisateurId"></app-bio>

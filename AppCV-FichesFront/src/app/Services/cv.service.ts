@@ -72,8 +72,11 @@ export class CVService {
     return this.doRequest(`CVPoc/Details/${id}`);
   }
 
+  public DownloadCV(id: string) {
+    return this._http.get(`${this.rootPath}/FichierWord/${id}`, { observe: 'response' , responseType: 'arraybuffer'});
+  }
+
   public EditBio(utilisateurId: any, model: any) {
-    debugger;
     const url = this.EditActiontUrl(utilisateurId, "Bio");
     return this.doRequest(url, "post", model);
   }

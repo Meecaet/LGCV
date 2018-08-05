@@ -155,6 +155,7 @@ namespace WebCV_Fiches
 
 
             app.UseCors("Bearer");
+            app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin().AllowCredentials());
 
 
             app.UseStaticFiles();

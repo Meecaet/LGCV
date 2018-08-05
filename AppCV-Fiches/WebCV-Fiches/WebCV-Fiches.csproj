@@ -29,4 +29,8 @@
     <ProjectReference Include="..\DAL_CV-Fiches\DAL_CV-Fiches.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Files\" />
+  </ItemGroup>
+
 </Project>
