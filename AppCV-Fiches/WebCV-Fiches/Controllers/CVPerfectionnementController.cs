@@ -12,7 +12,7 @@ using WebCV_Fiches.Models.CVViewModels;
 
 namespace WebCV_Fiches.Controllers
 {
-    [Route("Perfectionnement")]
+    [Route("api/Perfectionnement")]
     public class CVPerfectionnementController : CVFormation
     {
         [AllowAnonymous]

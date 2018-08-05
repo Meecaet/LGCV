@@ -11,7 +11,7 @@ using WebCV_Fiches.Models.CVViewModels;
 
 namespace WebCV_Fiches.Controllers
 {
-    [Route("ResumeIntervention")]
+    [Route("api/ResumeIntervention")]
     public class CVResumeInterventionsController : Controller
     {
         public UtilisateurGraphRepository utilisateurGraphRepository;

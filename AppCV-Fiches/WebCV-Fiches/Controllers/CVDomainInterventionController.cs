@@ -11,7 +11,7 @@ using WebCV_Fiches.Models.CVViewModels;
 
 namespace WebCV_Fiches.Controllers
 {
-    [Route("CVDomainIntervention")]
+    [Route("api/CVDomainIntervention")]
     public class CVDomainInterventionController : Controller
     {
         public EditionObjectGraphRepository editionObjectGraphRepository;

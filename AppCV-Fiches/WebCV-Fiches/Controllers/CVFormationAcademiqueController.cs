@@ -12,7 +12,7 @@ using WebCV_Fiches.Models.CVViewModels;
 
 namespace WebCV_Fiches.Controllers
 {
-    [Route("FormationAcademique")]
+    [Route("api/FormationAcademique")]
     public class CVFormationAcademiqueController : Controller
     {
         public EditionObjectGraphRepository editionObjectGraphRepository;

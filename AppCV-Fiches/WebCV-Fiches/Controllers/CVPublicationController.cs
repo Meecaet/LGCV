@@ -12,7 +12,7 @@ using WebCV_Fiches.Models.CVViewModels;
 
 namespace WebCV_Fiches.Controllers
 {
-    [Route("Publication")]
+    [Route("api/Publication")]
     public class CVPublicationController : CVFormation
     {
         [AllowAnonymous]

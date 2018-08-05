@@ -11,7 +11,7 @@ using WebCV_Fiches.Models.CVViewModels;
 
 namespace WebCV_Fiches.Controllers
 {
-    [Route("Certification")]
+    [Route("api/Certification")]
     public class CVCertificationController : CVFormation
     {
         [AllowAnonymous]

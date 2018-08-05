@@ -11,7 +11,7 @@ using WebCV_Fiches.Models.CVViewModels;
 
 namespace WebCV_Fiches.Controllers
 {
-    [Route("Technologies")]
+    [Route("api/Technologies")]
     public class CVTechnologiesController : Controller
     {
         public EditionObjectGraphRepository editionObjectGraphRepository;

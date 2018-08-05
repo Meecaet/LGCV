@@ -14,8 +14,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AppCV-Fiches\DAL_CV-Fiches\DAL_CV-Fiches.csproj" />
-    <ProjectReference Include="..\AppCV-Fiches\WebCV-Fiches\WebCV-Fiches.csproj" />
+    <ProjectReference Include="..\DAL_CV-Fiches\DAL_CV-Fiches.csproj" />
+    <ProjectReference Include="..\WebCV-Fiches\WebCV-Fiches.csproj" />
   </ItemGroup>
 
 </Project>

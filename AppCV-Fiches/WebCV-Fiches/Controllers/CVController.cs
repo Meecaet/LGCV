@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Routing;
 
 namespace WebCV_Fiches.Controllers
 {
-    [Route("CV")]
+    [Route("api/CV")]
     public class CVController : Controller
     {
         public UtilisateurGraphRepository utilisateurGraphRepository;

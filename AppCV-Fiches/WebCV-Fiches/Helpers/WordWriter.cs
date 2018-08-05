@@ -18,7 +18,6 @@ namespace WebCV_Fiches.Helpers
         private WordprocessingDocument document;
         private const string mauveCode = "7030A0";
         private const int spaceSimple = 240;
-        private FooterPart footerPart1;
 
         private RunProperties GetRunProperties(string fontName, string colorName, string size, bool bold, bool italic)
         {

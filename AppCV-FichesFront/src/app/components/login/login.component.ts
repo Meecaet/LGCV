@@ -34,13 +34,11 @@ export class LoginComponent implements OnInit {
           this.MsgError = "";
           localStorage.setItem("token", x.token);
           localStorage.setItem("utilisateurId", x.utilisateurId);
-          this.route.navigate(['cv/edit/'+x.utilisateurId]);
           localStorage.setItem("userName", x.userName);
           localStorage.setItem("isAdministrateur", x.isAdministrateur.toString());
           localStorage.setItem("isApprobateur", x.isApprobateur.toString());
           localStorage.setItem("isConseiller", x.isConseiller.toString());
           this.route.navigate(['home']);
-          this.route.navigate(['cv/edit/'+x.utilisateurId]);
         } else {
           localStorage.removeItem("token");
           localStorage.removeItem("utilisateurId");

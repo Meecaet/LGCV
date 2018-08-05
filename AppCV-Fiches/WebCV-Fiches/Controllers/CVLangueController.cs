@@ -11,7 +11,7 @@ using WebCV_Fiches.Models.CVViewModels;
 
 namespace WebCV_Fiches.Controllers
 {
-    [Route("Langue")]
+    [Route("api/Langue")]
     public class CVLangueController : Controller
     {
         public EditionObjectGraphRepository editionObjectGraphRepository;

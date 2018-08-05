@@ -24,7 +24,7 @@ using WebCV_Fiches.Services;
 
 namespace WebCV_Fiches.Controllers
 {
-    [Route("api/[controller]/[action]")]
+    [Route("api/AccountApi")]
     public class AccountApiController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -41,7 +41,7 @@ namespace WebCV_Fiches.Controllers
             RoleManager<ApplicationRole> roleManager,
             SignInManager<ApplicationUser> signInManager,
             IEmailSender emailSender,
-            ILogger<AccountController> logger,
+            ILogger<AccountApiController> logger,
             IConfiguration configuration)
         {
             _userManager = userManager;
@@ -53,13 +53,16 @@ namespace WebCV_Fiches.Controllers
         }
 
         [HttpGet]
-        [Authorize("Bearer")]
+        //[Authorize("Bearer")]
+        [Route("IsTokenValid")]
         public IActionResult IsTokenValid()
         {
             return Json(new { ok = true });
         }
+
         [AllowAnonymous]
         [HttpPost]
+        [Route("DoLogin")]
         public object DoLogin(
           [FromBody]LoginModel userLogin,
           [FromServices]LoginService login,
@@ -131,6 +134,7 @@ namespace WebCV_Fiches.Controllers
 
         [HttpPost]
         [AllowAnonymous]
+        [Route("Register")]
         public async Task<ActionResult> Register([FromBody]RegisterViewModel model)
         {
             var user = new ApplicationUser { UserName = model.Email, Email = model.Email, Nom = model.Nom, Prenom = model.Prenom };
@@ -167,6 +171,7 @@ namespace WebCV_Fiches.Controllers
 
         [HttpPost]
         [AllowAnonymous]
+        [Route("ForgotPassword")]
         public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordViewModel model)
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
@@ -188,6 +193,7 @@ namespace WebCV_Fiches.Controllers
 
         [HttpPost]
         [AllowAnonymous]
+        [Route("ResetPassword")]
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordViewModel model)
         {
             if (!ModelState.IsValid)

@@ -13,7 +13,7 @@ using WebCV_Fiches.Models.CVViewModels;
 
 namespace WebCV_Fiches.Controllers
 {
-    [Route("Bio")]
+    [Route("api/Bio")]
     public class CVBioController : Controller
     {
         public EditionObjectGraphRepository editionObjectGraphRepository;

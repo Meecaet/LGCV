@@ -1,4 +1,5 @@
-﻿using DAL_CV_Fiches.Repositories.Graph;
+﻿using DAL_CV_Fiches.Models.Graph;
+using DAL_CV_Fiches.Repositories.Graph;
 using Microsoft.AspNetCore.Identity;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,6 @@ namespace WebCV_Fiches.Services
 {
     public class LoginService : ILoginService
     {
-        private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private UtilisateurGraphRepository UtilisateurDepot;
         public LoginService(SignInManager<ApplicationUser> signInManager)
@@ -35,9 +35,15 @@ namespace WebCV_Fiches.Services
                 if (utilisateur == null)
                 {
                     utilisateur = UtilisateurDepot.Search(new Dictionary<string, object> { { "Nom", NomeComplet.ToUpper() } }).DefaultIfEmpty(null).FirstOrDefault();
+
+                    if (utilisateur == null)
+                    {
+                        utilisateur = new Utilisateur();
+                        UtilisateurDepot.Add(utilisateur);
+                    }
+
                     utilisateur.AdresseCourriel = loginModel.Email;
-                    var repository = new UtilisateurGraphRepository();
-                    repository.Update(utilisateur);
+                    UtilisateurDepot.Update(utilisateur);
                 }
                 //#endif
 

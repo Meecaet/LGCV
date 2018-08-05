@@ -13,9 +13,8 @@ namespace WebCV_Fiches.Controllers
 {
 
     [Authorize("Bearer")]
-    //[AuthorizeRoleFilter("Administrateur", "Approbateur")]
     [AuthorizeRoleFilter("Administrateur")]
-    [Route("Role")]
+    [Route("api/Role")]
     public class RoleController : Controller
     {
         private AdminViewModel adminViewModel;
@@ -27,15 +26,6 @@ namespace WebCV_Fiches.Controllers
         {
             this.userManager = userManager;
             this.roleManager = roleManager;
-        }
-
-        // GET: Admin
-        public ActionResult Index()
-        {
-            adminViewModel = new AdminViewModel();
-            adminViewModel.Roles = roleManager.Roles.ToList();
-
-            return View(adminViewModel);
         }
 
         // POST: Role/Create

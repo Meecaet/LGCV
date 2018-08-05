@@ -13,7 +13,7 @@ using WebCV_Fiches.Models.CVViewModels;
 
 namespace WebCV_Fiches.Controllers
 {
-    [Route("Mandat")]
+    [Route("api/Mandat")]
     public class CVMandatController : Controller
     {
         public EditionObjectGraphRepository editionObjectGraphRepository;

@@ -23,6 +23,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using WebCV_Fiches.Models.AccountViewModels;
 using WebCV_Fiches.Filters;
 using WebCV_Fiches.Helpers;
+using System.Net;
+using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 
 namespace WebCV_Fiches
 {
@@ -140,8 +144,11 @@ namespace WebCV_Fiches
             return services;
         }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IMemoryCache cache)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IMemoryCache cache, ILoggerFactory loggerFactory)
         {
+            loggerFactory.AddFile("Logs/AppCV-Fiches-{Date}.log");
+            loggerFactory.AddDebug();
+
             if (env.IsDevelopment())
             {
                 app.UseBrowserLink();
@@ -150,7 +157,24 @@ namespace WebCV_Fiches
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler(builder =>
+                {
+                    builder.Run(async context =>
+                    {
+                        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError; ;
+                        context.Response.AddErrorHeaders();
+
+                        var error = context.Features.Get<IExceptionHandlerFeature>();
+                        if (error != null)
+                        {
+                            var logger = loggerFactory.CreateLogger("Global Exception Filter");
+                            logger.LogError(error.Error.Message + error.Error.StackTrace);
+                            context.Response.AddApplicationError(error.Error.Message);
+                            await context.Response.WriteAsync(error.Error.Message + error.Error.StackTrace);
+
+                        }
+                    });
+                });
             }
 
 
@@ -158,14 +182,18 @@ namespace WebCV_Fiches
             app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin().AllowCredentials());
 
 
+            app.UseAuthentication();
+            app.UseDefaultFiles();
             app.UseStaticFiles();
 
-            app.UseAuthentication();
-
             app.UseSession();
-            app.UseCors(p => p.WithOrigins("http://localhost:4200"));
+            //app.UseCors(p => p.WithOrigins("http://localhost:4200"));
             app.UseMvc(routes =>
             {
+                routes.MapSpaFallbackRoute(
+                   name: "spa-fallback", defaults: new { controller = "Fallback", action = "Index" }
+                    );
+
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
