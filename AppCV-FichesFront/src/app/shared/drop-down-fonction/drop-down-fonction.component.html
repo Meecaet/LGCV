@@ -1,8 +1,12 @@
-<mat-form-field style="width: 300px"  class="example-full-width">
-  <input type="text" style="width: 300px"  placeholder="Fonction" aria-label="Number" matInput [formControl]="fonction.FonctionControl" [matAutocomplete]="auto">
+{{functonGraphID}}
+
+<mat-form-field style="width: 100%;">
+  <mat-select   (valueChange)="Selected($event)"  [(ngModel)]="functonGraphID" placeholder="Select">
+    <mat-option   *ngFor="let option of fonctionAutoComplete" [value]="option.graphId">
+      {{option.nom}}
+      <input type="hidden"  [(ngModel)]="functonGraphID" >
+    </mat-option>
+  </mat-select>
 </mat-form-field>
-<mat-autocomplete #auto="matAutocomplete">
-  <mat-option *ngFor="let option of fonctionAutoComplete|fonctionFilter:fonction.FonctionControl.value " [value]="option.nom">
-    {{ option.nom}}
-  </mat-option>
-</mat-autocomplete>
+
+

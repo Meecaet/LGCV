@@ -2,6 +2,6 @@
 export class BioHighlight {
   nom: string;
   prenom: string;
-  resume: string;
+  resumeExperience: string;
   fonction: string;
  }

@@ -1,27 +1,54 @@
 <div class="container body-content">
   <div class="row">
-    <div class="col-md-3">
-      <img class="img-responsive" title="CV" *ngIf="isAdministrateur || isApprobateur || isConseiller" [routerLink]="['/cv/edit/'+utilisateurId]"
-        src="../../../assets/cv-image.png" style="width: 50px">
-
-    </div>
-    <div class="col-md-3">
-      <img style="width: 50px" *ngIf="isAdministrateur || isApprobateur" title="Fiches de Projets" src="../../../assets/folder.png"
-        alt="Image">
-
-    </div>
-    <div class="col-md-3">
+    <div *ngIf="isAdministrateur || isApprobateur || isConseiller" class="col-md-3" style="text-align: center;">
       <div>
-        <img   title="Approuver CV/Fiches" *ngIf="isAdministrateur || isApprobateur" src="../../../assets/cv-image.png"
-          style="position: absolute!important;width: 50px">
-        <img   class="arrowRight">
+        <img class="img-responsive"
 
+
+
+        title=""
+
+
+
+        [routerLink]="['/cv/edit/'+utilisateurId]" src="../../../assets/cv-image.png" style="width: 50px">
+      </div>
+      <div>
+        <label> CV</label>
+      </div>
+
+    </div>
+    <div *ngIf="isAdministrateur || isApprobateur" class="col-md-3" style="text-align: center;">
+      <div>
+        <img style="width: 50px" title="Fiches de Projets" src="../../../assets/folder.png" alt="Image">
+      </div>
+      <div>
+        <label> Fiches de Projets</label>
       </div>
     </div>
-    <div class="col-md-3">
-      <a *ngIf="isAdministrateur" href="role/admin" class="button">Administration et Pilotage</a>
+    <div *ngIf="isAdministrateur" href="role/admin" class="col-md-3" style="text-align: center;">
+      <div>
+        <div>
+          <div>
+            <img style="width: 50px" title="Administration et Pilotage" src="../../../assets/pilotage.png" alt="Image">
+          </div>
+          <div>
+            <label> Administration et Pilotage</label>
+          </div>
 
-      <img src=".." alt="">
+        </div>
+      </div>
+    </div>
+    <div *ngIf="isAdministrateur || isApprobateur" class="col-md-3" style="text-align: center;">
+      <div>
+        <div>
+          <img title="Approuver CV/Fiches" src="../../../assets/cv-image.png" style="position: absolute!important;width: 50px">
+          <img src="../../../assets/arrow.png" class="arrowRight">
+
+        </div>
+        <div>
+          <label style="    margin-top: 35px;"> Approuver CV/Fiches</label>
+        </div>
+      </div>
     </div>
   </div>
 </div>

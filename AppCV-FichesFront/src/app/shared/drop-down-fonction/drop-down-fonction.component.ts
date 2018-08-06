@@ -1,6 +1,7 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
 import { FonctionViewModel } from "../../Models/Fonction-model";
 import { CVService } from "../../Services/cv.service";
+
 
 @Component({
   selector: "app-drop-down-fonction",
@@ -9,8 +10,13 @@ import { CVService } from "../../Services/cv.service";
 })
 export class DropDownFonctionComponent implements OnInit {
   @Input() UtilisateurId: string;
+  @Input() functonGraphID: string = "";
   fonctionAutoComplete: Array<FonctionViewModel>;
   fonction: FonctionViewModel;
+  Teste:FonctionViewModel= new  FonctionViewModel();
+
+
+  @Output("onChange") onChange = new EventEmitter();
   constructor(private cvServices: CVService) {
     this.fonction = new FonctionViewModel();
     this.fonctionAutoComplete = new Array<FonctionViewModel>();
@@ -21,8 +27,10 @@ export class DropDownFonctionComponent implements OnInit {
       .LoadFonction()
       .subscribe((data: Array<FonctionViewModel>) => {
         this.fonctionAutoComplete = data;
-
-
       });
+  }
+  Selected(graphId: any) {
+    debugger
+     this.onChange.emit(graphId);
   }
 }

@@ -1,4 +1,20 @@
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
+@import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
+
+body {
+  font-family: Roboto, Arial, sans-serif;
+  margin: 0;
+}
+
+.basic-container {
+  padding: 30px;
+}
+
+.version-info {
+  font-size: 8pt;
+  float: right;
+}
+
 body {
   line-height: normal;
   padding-bottom: 20px;
@@ -164,6 +180,10 @@ body {
   border: rgba(243, 240, 46, 0.973) solid 2px!important;
 }
 
+.ChangementRelation  {
+ width: 450px;
+ border: rgba(243, 240, 46, 0.973) solid 2px!important;
+}
 .selected {
   background: #80808070;
   font-size: 19px;
@@ -171,3 +191,8 @@ body {
 }
 
 
+mat-dialog-container.mat-dialog-container{
+  border-radius: 15px;
+  min-width: 400px;
+  min-height: 300px;
+}
