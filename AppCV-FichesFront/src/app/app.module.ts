@@ -32,6 +32,7 @@ import { RegisterComponent } from "./components/register/register.component";
 import { LoginComponent } from "./components/login/login.component";
 import { PageNotFoundComponent } from "./components/page-not-found/page-not-found.component";
 import { ForgotPasswordComponent } from "./components/forgot-password/forgot-password.component";
+import { ResetPasswordComponent } from "./components/reset-password/reset-password.component";
 //Shared
 import { TableLangueComponent } from "./shared/table-langue/table-langue.component";
 import { TablePerfectionnementsComponent } from "./shared/table-perfectionnements/table-perfectionnements.component";
@@ -65,6 +66,7 @@ import { FonctionPipe } from "./Services/fonction.pipe";
     LoginComponent,
     PageNotFoundComponent,
     ForgotPasswordComponent,
+    ResetPasswordComponent,
     FonctionPipe,
     ResumeInterventionsComponent,
     LangueService,

@@ -13,8 +13,6 @@ export class DropDownFonctionComponent implements OnInit {
   @Input() functonGraphID: string = "";
   fonctionAutoComplete: Array<FonctionViewModel>;
   fonction: FonctionViewModel;
-  Teste:FonctionViewModel= new  FonctionViewModel();
-
 
   @Output("onChange") onChange = new EventEmitter();
   constructor(private cvServices: CVService) {
@@ -30,7 +28,6 @@ export class DropDownFonctionComponent implements OnInit {
       });
   }
   Selected(graphId: any) {
-    debugger
      this.onChange.emit(graphId);
   }
 }

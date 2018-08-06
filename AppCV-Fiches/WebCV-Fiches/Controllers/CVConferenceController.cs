@@ -12,15 +12,16 @@ using WebCV_Fiches.Models.CVViewModels;
 
 namespace WebCV_Fiches.Controllers
 {
-    [Route("Conference")]
-    public class CVConferenceController : CVController
+    [Route("api/Conference")]
+    public class CVConferenceController : CVFormation
     {
-        public FormationGraphRepository formationGraphRepository;
-
-        public CVConferenceController() : base()
+        [AllowAnonymous]
+        [Route("{utilisateurId}/All")]
+        public new ActionResult All(string utilisateurId)
         {
-            formationGraphRepository = new FormationGraphRepository();
+            return Json(base.All(utilisateurId));
         }
+
 
         [HttpPost]
         [AllowAnonymous]
@@ -53,11 +54,6 @@ namespace WebCV_Fiches.Controllers
             var conferenceModel = Formation.CreateFormation(conference.Annee, conference.Description, FormationType.Conference);
             formationGraphRepository.Add(conferenceModel);
             return conferenceModel;
-        }
-
-        public override GraphObject GetGraphObject(string graphId)
-        {
-           return formationGraphRepository.GetOne(graphId);
         }
 
         public override List<GraphObject> GetGraphObjects(Utilisateur utilisateur)
@@ -108,11 +104,6 @@ namespace WebCV_Fiches.Controllers
                 proprietesModifiees.Add(new KeyValuePair<string, string>("Description", conferenceViewModel.Description));
 
             return proprietesModifiees;
-        }
-
-        public override string GetProprieteModifiee()
-        {
-            return "Formations";
         }
     }
 }

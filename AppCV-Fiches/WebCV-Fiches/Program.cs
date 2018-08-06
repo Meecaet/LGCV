@@ -19,6 +19,7 @@ namespace WebCV_Fiches
 
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                .UseUrls("http://0.0.0.0:44344")
                 .UseStartup<Startup>()
                 .Build();
     }

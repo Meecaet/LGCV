@@ -3,6 +3,8 @@ import { ActivatedRoute } from "@angular/router";
 import { MandatViewModel } from "../../Models/Mandat-model";
 import { ENTER, COMMA } from "@angular/cdk/keycodes";
 import { CVService } from "../../Services/cv.service";
+import { Observable } from "../../../../node_modules/rxjs";
+import { saveAs } from 'file-saver/FileSaver';
 @Component({
   selector: "app-cv-edit",
   templateUrl: "./cv-edit.component.html",
@@ -17,6 +19,8 @@ export class CvEditComponent implements OnInit {
   showMandat: boolean = false;
   hiddenButton: string;
   showLoadingCarousel: boolean = true;
+  showDownloadFile: boolean = false;
+  IsSuccess: boolean = true;
   constructor(private route: ActivatedRoute, private CVserv: CVService) {
     this.mandatCollection = new Array<MandatViewModel>();
     this.route.params.subscribe(params => {
@@ -75,6 +79,32 @@ export class CvEditComponent implements OnInit {
       } else {
         this.mandatSeleted.moisProjet = diffDays;
       }
+    }
+  }
+
+  private DownloadFile() {
+    this.showDownloadFile = true;
+    this.IsSuccess = true;
+    this.CVserv.DownloadCV(this.UtilisateurId)
+    .subscribe(response => {
+      const fileName = response.headers.get('Content-Disposition').split(';')[1].split('filename')[1].split('=')[1].trim().replace(/"/g, '');;
+      const b: any = new Blob([response.body], { type: 'application/vnd.ms-word' });
+      saveAs(b, fileName);
+      this.showDownloadFile = false;
+      this.IsSuccess = true;
+       },
+       erro => {
+         this.IsSuccess = false;
+         this.showDownloadFile = false;
+       }
+  );
+  }
+
+classValidator(cssClass: string, optionCssClass): string {
+    if (this.showDownloadFile) {
+      return cssClass;
+    } else {
+      return optionCssClass;
     }
   }
 }

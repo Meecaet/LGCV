@@ -11,7 +11,7 @@ using WebCV_Fiches.Models.CVViewModels;
 
 namespace WebCV_Fiches.Controllers
 {
-    [Route("Langue")]
+    [Route("api/Langue")]
     public class CVLangueController : Controller
     {
         public EditionObjectGraphRepository editionObjectGraphRepository;
@@ -32,7 +32,9 @@ namespace WebCV_Fiches.Controllers
             Func<GraphObject, ViewModel> map = this.map;
 
             var utilisateur = utilisateurGraphRepository.GetOne(utilisateurId);
-            var langues = utilisateur.Conseiller.Langues.Cast<GraphObject>().ToList();
+            var langues = utilisateur.Conseiller?.Langues?.Cast<GraphObject>().ToList();
+            if(langues == null)    
+                return Json(new List<LangueViewModel>());
             var noeudModifie = new List<GraphObject>();
             noeudModifie.Add(utilisateur.Conseiller);
             noeudModifie.AddRange(langues);

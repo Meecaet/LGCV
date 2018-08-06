@@ -15,6 +15,7 @@ export class HomeComponent implements OnInit {
   isAdministrateur: boolean = false;
   isApprobateur: boolean = false;
   isConseiller: boolean = false;
+
   utilisateurId:string=localStorage.getItem("utilisateurId");
   constructor(
     private router: Router,
@@ -34,6 +35,7 @@ export class HomeComponent implements OnInit {
       }
     );
   }
+
   Error(error: HttpErrorResponse) {
     this.errorServ.ErrorHandle(error.status);
   }
@@ -42,5 +44,4 @@ export class HomeComponent implements OnInit {
     if (localStorage.getItem("isApprobateur")== "true") {this.isApprobateur=true;}
     if (localStorage.getItem("isConseiller")== "true") {this.isConseiller=true;}
   }
-
 }

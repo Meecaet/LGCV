@@ -11,7 +11,7 @@ using WebCV_Fiches.Models.CVViewModels;
 
 namespace WebCV_Fiches.Controllers
 {
-    [Route("ResumeIntervention")]
+    [Route("api/ResumeIntervention")]
     public class CVResumeInterventionsController : Controller
     {
         public UtilisateurGraphRepository utilisateurGraphRepository;
@@ -28,7 +28,11 @@ namespace WebCV_Fiches.Controllers
         public ActionResult All(string utilisateurId)
         {
              var utilisateur = utilisateurGraphRepository.GetOne(utilisateurId);
-            var mandats = utilisateur.Conseiller.Mandats.Cast<GraphObject>().ToList();
+            var mandats = utilisateur.Conseiller?.Mandats?.Cast<GraphObject>().ToList();
+
+            if (mandats == null)
+                return Json(new List<ResumeInterventionViewModel>());
+
             var noeudModifie = new List<GraphObject>();
             noeudModifie.Add(utilisateur.Conseiller);
             noeudModifie.AddRange(mandats);
@@ -43,18 +47,27 @@ namespace WebCV_Fiches.Controllers
 
         private ViewModel map(GraphObject mandatModel)
         {
-            var mandat = (Mandat)mandatModel;
-            return new ResumeInterventionViewModel
+            try
             {
-                Annee = $"{mandat.DateDebut.Year}-{mandat.DateFin.Year}",
-                Client = mandat.Projet.Client.Nom,
-                Effors = mandat.Efforts,
-                Envergure = mandat.Projet.Envergure,
-                Fonction = mandat.Fonction.Description,
-                Nombre = mandat.Numero,
-                Projet = mandat.Titre,
-                GraphId = mandat.GraphKey
-            };
+                var mandat = (Mandat)mandatModel;
+                return new ResumeInterventionViewModel
+                {
+                    Annee = $"{mandat.DateDebut.Year}-{mandat.DateFin.Year}",
+                    Client = mandat.Projet.Client.Nom,
+                    Effors = mandat.Efforts,
+                    Envergure = mandat.Projet.Envergure,
+                    Fonction = mandat.Fonction.Description,
+                    Nombre = mandat.Numero,
+                    Projet = mandat.Titre,
+                    GraphId = mandat.GraphKey
+                };
+            }
+            catch (Exception)
+            {
+
+                return new ResumeInterventionViewModel();
+            }
+           
  
         }
     }

@@ -6,6 +6,7 @@ import { ErrorService } from "../../Services/error.service";
 import { ActivatedRoute } from "@angular/router";
 import { MatDialog } from "../../../../node_modules/@angular/material";
 import { ModalOldInformationComponent } from "../modal-old-information/modal-old-information.component";
+import { FonctionViewModel } from "../../Models/Fonction-model";
 
 
 @Component({
@@ -18,7 +19,7 @@ export class BioComponent implements OnInit {
   originalBio: BioViewModel;
   @Input() UtilisateurId: string;
   showLoadingBio: boolean = true;
-
+  fonctionAutoComplete :Array<FonctionViewModel>;
   constructor(
     private cvService: CVService,
     private errorService: ErrorService,
@@ -31,6 +32,12 @@ export class BioComponent implements OnInit {
 
   ngOnInit() {
     this.UserDataLoad();
+
+    this.cvService
+    .LoadFonction()
+    .subscribe((data: Array<FonctionViewModel>) => {
+      this.fonctionAutoComplete = data;
+    });
   }
   saveBio(model: BioViewModel): void {
     this.cvService.EditBio(this.UtilisateurId, model).subscribe(
@@ -72,14 +79,18 @@ export class BioComponent implements OnInit {
     }
   }
   IsShowInformations(fieldName): boolean {
-    if (this.originalBio.editionObjecViewModels.length > 0) {
+    try {
+      if (this.originalBio.editionObjecViewModels.length > 0) {
 
-      var teste = this.originalBio.editionObjecViewModels.some(
-        x => x.proprieteNom === fieldName
-      );
-      return teste;
-    } else {
-      return false;
+        var teste = this.originalBio.editionObjecViewModels.some(
+          x => x.proprieteNom === fieldName
+        );
+        return teste;
+      } else {
+        return false;
+      }
+    } catch (error) {
+
     }
   }
   onChange(data:any){
@@ -88,7 +99,7 @@ export class BioComponent implements OnInit {
   }
   SetData(data: BioViewModel) {
     if (data.editionObjecViewModels != null) {
-      debugger
+
       for (const key in data.editionObjecViewModels) {
         if (data.editionObjecViewModels[key]["etat"] == "Modifie") {
 
@@ -131,7 +142,12 @@ export class BioComponent implements OnInit {
   /**********************************************************************************
    * *MODAL*MODAL*MODAL*MODAL*MODAL*MODAL*MODAL*MODAL*MODAL*MODAL*MODAL*MODAL*MODAL**
    * *********************************************************************************/
+  openDialogDropDown(graphId, OriginalChamp){
+    debugger
+    let label = this.fonctionAutoComplete.filter(x=> x.graphId == graphId) ;
+     this.openDialog(label[0].nom,OriginalChamp);
 
+  }
   openDialog(ModalMessage, OriginalChamp) {
 
     this.dialog.open(ModalOldInformationComponent, {

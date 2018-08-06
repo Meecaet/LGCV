@@ -13,7 +13,7 @@ using WebCV_Fiches.Models.CVViewModels;
 
 namespace WebCV_Fiches.Controllers
 {
-    [Route("Bio")]
+    [Route("api/Bio")]
     public class CVBioController : Controller
     {
         public EditionObjectGraphRepository editionObjectGraphRepository;
@@ -28,7 +28,7 @@ namespace WebCV_Fiches.Controllers
         }
 
         [Route("Detail/{utilisateurId}")]
-	//[Authorize("Bearer")]
+	   // [Authorize("Bearer")]
         public ActionResult Detail(string utilisateurId)
         {
             var bioViewModel = new BioViewModel();
@@ -38,7 +38,10 @@ namespace WebCV_Fiches.Controllers
             bioViewModel.Nom = utilisateur.Nom;
             bioViewModel.Prenom = utilisateur.Prenom;
 
-            var cv = utilisateur.Conseiller.CVs.First();
+            var cv = utilisateur?.Conseiller?.CVs?.First();
+
+            if (cv == null)
+                return Json(new { });
 
             bioViewModel.ResumeExperience = cv.ResumeExperience;
 

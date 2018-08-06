@@ -11,7 +11,7 @@ using WebCV_Fiches.Models.CVViewModels;
 
 namespace WebCV_Fiches.Controllers
 {
-    [Route("CVDomainIntervention")]
+    [Route("api/CVDomainIntervention")]
     public class CVDomainInterventionController : Controller
     {
         public EditionObjectGraphRepository editionObjectGraphRepository;
@@ -32,8 +32,16 @@ namespace WebCV_Fiches.Controllers
             Func<GraphObject, ViewModel> map = this.map;
 
             var utilisateur = utilisateurGraphRepository.GetOne(utilisateurId);
-            var domains = utilisateur.Conseiller.DomaineDInterventions.Cast<GraphObject>().ToList();
-            var domainsViewModel = ViewModelFactory<DomaineDIntervention, DomaineDInterventionViewModel>.GetViewModels(utilisateurId: utilisateurId, noeudsModifie: new List<GraphObject> { utilisateur.Conseiller }, graphObjects: domains, map: map);
+            var domains = utilisateur.Conseiller?.DomaineDInterventions;
+            if(domains == null)    
+                return Json(new List<DomaineDInterventionViewModel>());
+
+            var domainsObjects = domains.Cast<GraphObject>().ToList();
+            var domainsViewModel = ViewModelFactory<DomaineDIntervention, DomaineDInterventionViewModel>.GetViewModels(
+                utilisateurId: utilisateurId, 
+                noeudsModifie: new List<GraphObject> { utilisateur.Conseiller }, 
+                graphObjects: domainsObjects, 
+                map: map);
 
             return Json(domainsViewModel);
         }

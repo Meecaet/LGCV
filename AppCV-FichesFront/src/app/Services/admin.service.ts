@@ -5,14 +5,17 @@ import { RoleViewModel } from "../Models/Admin/Role-model";
 import { RoleAdministratioViewModel } from "../Models/Admin/RoleAdministration-model";
 import { UserViewModel } from "../Models/Admin/User-model";
 import { RegisterViewModel } from "../Models/Register-model";
+import { environment } from "../../environments/environment";
 
 
 @Injectable({
   providedIn: "root"
 })
 export class AdminService {
-  constructor(private _http: HttpClient) {}
-  private rootPath = "https://localhost:44344";
+  constructor(private _http: HttpClient) {
+    this.rootPath = environment.apiUrl;
+  }
+  private rootPath = "";
   
   private doRequest<T>(
     path: string,
@@ -71,7 +74,7 @@ export class AdminService {
   }
 
   public Register(registrer: RegisterViewModel) {
-    const url = "api/AccountApi/Register";
+    const url = "AccountApi/Register";
     return this.doRequest(url, "post", registrer);
   }
 }

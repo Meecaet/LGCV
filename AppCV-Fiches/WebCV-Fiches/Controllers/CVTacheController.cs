@@ -10,7 +10,7 @@ using WebCV_Fiches.Models.CVViewModels;
 
 namespace WebCV_Fiches.Controllers
 {
-    [Route("Tache")]
+    [Route("api/Tache")]
     public class CVTacheController : Controller
     {
         public EditionObjectGraphRepository editionObjectGraphRepository;

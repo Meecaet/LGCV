@@ -9,13 +9,16 @@ import { CertificationViewModel } from "../Models/Certification-model";
 import { DomaineDInterventionViewModel } from "../Models/DomaineDIntervention-model";
 import { FormationAcademiqueViewModel } from "../Models/FormationAcademique-model";
 import { MandatViewModel } from "../Models/Mandat-model";
+import { environment } from "../../environments/environment";
 
 @Injectable({
   providedIn: "root"
 })
 export class CVService {
-  constructor(private _http: HttpClient) {}
-  private rootPath = "https://localhost:44344";
+  constructor(private _http: HttpClient) {
+    this.rootPath = environment.apiUrl;
+  }
+  private rootPath = "";
   private doRequest<T>(
     path: string,
     method: string = "get",
@@ -35,7 +38,7 @@ export class CVService {
   }
 
   IsTokenValid() : Observable<boolean> {
-    const url = this.rootPath + "/api/AccountApi/IsTokenValid";
+    const url = this.rootPath + "/AccountApi/IsTokenValid";
     return this._http.get<boolean>(url);
   }
 
@@ -72,8 +75,11 @@ export class CVService {
     return this.doRequest(`CVPoc/Details/${id}`);
   }
 
+  public DownloadCV(id: string) {
+    return this._http.get(`${this.rootPath}/FichierWord/${id}`, { observe: 'response' , responseType: 'arraybuffer'});
+  }
+
   public EditBio(utilisateurId: any, model: any) {
-    debugger;
     const url = this.EditActiontUrl(utilisateurId, "Bio");
     return this.doRequest(url, "post", model);
   }
@@ -98,7 +104,7 @@ export class CVService {
   }
 
   public LoadFonction(): Observable<Array<FonctionViewModel>> {
-    const url = this.rootPath + "/api/FrontEndLoadData/GetAllFonctions";
+    const url = this.rootPath + "/FrontEndLoadData/GetAllFonctions";
     return this._http.get<Array<FonctionViewModel>>(url);
   }
 
@@ -176,7 +182,7 @@ export class CVService {
   }
 
   public LoadLangue(): Observable<Array<LangueViewModel>> {
-    const url = this.rootPath + "/api/FrontEndLoadData/GetAllLangues";
+    const url = this.rootPath + "/FrontEndLoadData/GetAllLangues";
     return this._http.get<Array<LangueViewModel>>(url);
   }
 }

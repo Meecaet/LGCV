@@ -1,4 +1,22 @@
 <div class="container-fluid" style="padding-top:30px">
+  <div *ngIf="!IsSuccess">
+    <div class="alert alert-danger">
+      Échec du téléchargement du fichier veuillez réessayer
+    </div>
+
+
+  </div>
+
+  <div class="mb-2 d-flex justify-content-end">
+    <div id="identification" [ngClass]="classValidator('divrelativeOn form-inline ','divrelativeOff form-inline')">
+      <div [ngClass]="classValidator('divloadingOn','divloadingOff')" class="divloading">
+        <div style="margin-left: auto;margin-right: 65px;width: 1px">
+          <img [ngClass]="classValidator('imgloading','imgloadingHidden')">
+        </div>
+      </div>
+      <img  (click)="DownloadFile()" *ngIf="!showDownloadFile" src="../../../assets/Download.png"  style="width: 40px;cursor: pointer;">
+     </div>
+  </div>
   <form>
     <div class="form-group">
       <app-bio [UtilisateurId]="UtilisateurId"></app-bio>
@@ -40,10 +58,10 @@
       <div class="lgs-section">
         <div class="form-group row">
           <div class="col-lg-6">
-         <app-table-conference  [UtilisateurId]="UtilisateurId"></app-table-conference>
+            <app-table-conference [UtilisateurId]="UtilisateurId"></app-table-conference>
           </div>
           <div class="col-lg-6">
-             <app-table-publication  [UtilisateurId]="UtilisateurId"> </app-table-publication>
+            <app-table-publication [UtilisateurId]="UtilisateurId"> </app-table-publication>
           </div>
         </div>
       </div>
