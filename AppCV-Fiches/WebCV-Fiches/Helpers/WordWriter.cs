@@ -18,7 +18,6 @@ namespace WebCV_Fiches.Helpers
         private WordprocessingDocument document;
         private const string mauveCode = "7030A0";
         private const int spaceSimple = 240;
-        private FooterPart footerPart1;
 
         private RunProperties GetRunProperties(string fontName, string colorName, string size, bool bold, bool italic)
         {
@@ -337,7 +336,6 @@ namespace WebCV_Fiches.Helpers
             pageSize.Code = 1;
 
             sectionProps.Append(pageSize, pageMargins);
-            docBody.Append(sectionProps);
         }
 
         private void AddBulletToStyles(int bulletId, int level, string bulletName)
@@ -563,6 +561,7 @@ namespace WebCV_Fiches.Helpers
             AddStyleToStylesPart(CreateTitre2Style());
 
             AddBulletToStyles(38, 0, "Puce1");
+            ApplyFooter(doc.Body);
 
             CreateBioSection(doc.Body);
             CreateDomainesDInterventionSection(doc.Body);
@@ -577,7 +576,6 @@ namespace WebCV_Fiches.Helpers
             CreatePublications(doc.Body);
             CreateConferences(doc.Body);
             CreateLangues(doc.Body);
-            ApplyFooter();
 
             document.Save();
         }
@@ -613,7 +611,7 @@ namespace WebCV_Fiches.Helpers
             tableCellProperties = new TableCellProperties();
             tableCellProperties.Append(new TableCellWidth { Width = new StringValue("1360"), Type = new EnumValue<TableWidthUnitValues>(TableWidthUnitValues.Dxa) });
             imageCell.Append(tableCellProperties);
-            imageCell.Append(new Paragraph(new Run(GetLogoImage(@"C:\Docs to zip\Images\logo.png"))));
+            imageCell.Append(new Paragraph(new Run(GetLogoImage(@"images\logo.png"))));
 
             Run nomRun = new Run(), breakLine = new Run(), fonctionRun = new Run();
             nomRun.Append(GetRunProperties("Arial", mauveCode, "28", true, false));
@@ -1531,31 +1529,30 @@ namespace WebCV_Fiches.Helpers
             }
         }
 
-        private void ApplyFooter()
+        private void ApplyFooter(Body docBody)
         {
             MainDocumentPart mainDocPart = document.MainDocumentPart;
-            FooterPart footerPart1 = mainDocPart.AddNewPart<FooterPart>("footerId");
+            mainDocPart.DeleteParts(mainDocPart.FooterParts);
+
+            FooterPart footerPart1 = mainDocPart.AddNewPart<FooterPart>("footer1");
+            FooterPart footerPartEven = mainDocPart.AddNewPart<FooterPart>("footerEven");
+            FooterPart footerPartOdd = mainDocPart.AddNewPart<FooterPart>("footerOdd");
+
             Footer footer1 = new Footer();
-
-            //footer1.Append(new Paragraph(new Run(GetLogoImage(@"C:\Docs to zip\Images\logo.png"))));
-
-
-            Paragraph paragraph1 = new Paragraph() { };
-
-            Run run1 = new Run();
-            run1.Append(GetLogoImage(@"C:\Docs to zip\Images\footer.png"));
-            /*Text text1 = new Text();
-            text1.Text = "Footer ";
-
-            run1.Append(text1);*/
-
-            paragraph1.Append(run1);
-
-
-            footer1.Append(paragraph1);
-
+            Paragraph paragraph = new Paragraph();
+            AddAligmentToParagrah(paragraph, ParagraphAligment.Centre);
+            paragraph.Append(new Run(GetFooterImage(@"images\footer.png", footerPart1)));
+            footer1.Append(paragraph);
             footerPart1.Footer = footer1;
 
+            Footer footerEven = new Footer();
+            footerEven.Append(GetNewParagraph("Footer1"));
+            footerPartEven.Footer = footerEven;
+
+
+            Footer footerOdd = new Footer();
+            footerOdd.Append(GetNewParagraph("Footer2"));
+            footerPartOdd.Footer = footerOdd;
 
 
             SectionProperties sectionProperties1 = mainDocPart.Document.Body.Descendants<SectionProperties>().FirstOrDefault();
@@ -1564,25 +1561,25 @@ namespace WebCV_Fiches.Helpers
                 sectionProperties1 = new SectionProperties() { };
                 mainDocPart.Document.Body.Append(sectionProperties1);
             }
-            FooterReference footerReference1 = new FooterReference() { Type = DocumentFormat.OpenXml.Wordprocessing.HeaderFooterValues.Default, Id = "footerId" };
+            FooterReference footerReference1 = new FooterReference() { Type = HeaderFooterValues.Default, Id = "footer1" };
+            FooterReference footerReferenceEven = new FooterReference() { Type = HeaderFooterValues.Even, Id = "footerEven" };
+            FooterReference footerReferenceOdd = new FooterReference() { Type = HeaderFooterValues.First, Id = "footerOdd" };
 
-
-            sectionProperties1.InsertAt(footerReference1, 0);
+            sectionProperties1.Append(footerReference1);
+            sectionProperties1.Append(footerReferenceEven);
+            sectionProperties1.Append(footerReferenceOdd);
 
         }
 
-        private Drawing GetFooterImage(string imagePath)
+        private Drawing GetFooterImage(string imagePath, FooterPart footerPart)
         {
-            MainDocumentPart mainDocPart = document.MainDocumentPart;
-            FooterPart footerPart1 = mainDocPart.AddNewPart<FooterPart>("footerId");
-            ImagePart imagePart = footerPart1.AddImagePart(ImagePartType.Png);
-
+            ImagePart imagePart = footerPart.AddImagePart(ImagePartType.Png);
             using (FileStream stream = new FileStream(imagePath, FileMode.Open))
             {
                 imagePart.FeedData(stream);
             }
-
-            Drawing drawing = GetNewLogoDrawing(footerPart1.GetIdOfPart(imagePart));
+            
+            Drawing drawing = GetNewLogoDrawing(footerPart.GetIdOfPart(imagePart));
             return drawing;
         }
 
