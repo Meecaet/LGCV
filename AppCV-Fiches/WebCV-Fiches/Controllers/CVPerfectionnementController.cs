@@ -90,19 +90,20 @@ namespace WebCV_Fiches.Controllers
             formationGraphRepository.Update(perfectionnementObject);
         }
 
-        public override List<KeyValuePair<string, string>> VerifierProprietesModifiees(GraphObject graphObject, ViewModel viewModel)
+        public override void VerifierProprietesModifiees(GraphObject graphObject, ViewModel viewModel)
         {
-            var proprietesModifiees = new List<KeyValuePair<string, string>>();
             var perfectionnementObject = (Formation)graphObject;
             var perfectionnementViewModel = (PerfectionnementViewModel)viewModel;
 
-            if (perfectionnementObject.AnAcquisition != perfectionnementViewModel.Annee)
-                proprietesModifiees.Add(new KeyValuePair<string, string>("Annee", perfectionnementViewModel.Annee.ToString()));
+            editionObjectGraphRepository.ChangerPropriete(
+                viewModelPropriete: () => perfectionnementViewModel.Annee,
+                graphModelPropriete: () => perfectionnementObject.AnAcquisition,
+                noeudModifie: graphObject);
 
-            if (perfectionnementObject.Description != perfectionnementViewModel.Description)
-                proprietesModifiees.Add(new KeyValuePair<string, string>("Description", perfectionnementViewModel.Description));
-
-            return proprietesModifiees;
+            editionObjectGraphRepository.ChangerPropriete(
+                viewModelPropriete: () => perfectionnementViewModel.Description,
+                graphModelPropriete: () => perfectionnementObject.Description,
+                noeudModifie: graphObject);
         }
     }
 }

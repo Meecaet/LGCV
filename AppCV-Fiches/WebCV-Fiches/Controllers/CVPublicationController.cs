@@ -71,38 +71,39 @@ namespace WebCV_Fiches.Controllers
 
         public override ViewModel Map(GraphObject graphObject)
         {
-            var perfectionnement = (Formation)graphObject;
+            var publication = (Formation)graphObject;
             return new PublicationViewModel
             {
-                Annee = perfectionnement.AnAcquisition,
-                Description = perfectionnement.Description,
-                GraphId = perfectionnement.GraphKey,
-                GraphIdGenre = perfectionnement.Type.GraphKey,
+                Annee = publication.AnAcquisition,
+                Description = publication.Description,
+                GraphId = publication.GraphKey,
+                GraphIdGenre = publication.Type.GraphKey,
             };
         }
 
         public override void UpdateGraphObject(GraphObject graphObject, ViewModel viewModel)
         {
-            var perfectionnementObject = (Formation)graphObject;
-            var perfectionnementViewModel = (PublicationViewModel)viewModel;
-            perfectionnementObject.AnAcquisition = perfectionnementViewModel.Annee;
-            perfectionnementObject.Description = perfectionnementViewModel.Description;
-            formationGraphRepository.Update(perfectionnementObject);
+            var publicationObject = (Formation)graphObject;
+            var publicationViewModel = (PublicationViewModel)viewModel;
+            publicationObject.AnAcquisition = publicationViewModel.Annee;
+            publicationObject.Description = publicationViewModel.Description;
+            formationGraphRepository.Update(publicationObject);
         }
 
-        public override List<KeyValuePair<string, string>> VerifierProprietesModifiees(GraphObject graphObject, ViewModel viewModel)
+        public override void VerifierProprietesModifiees(GraphObject graphObject, ViewModel viewModel)
         {
-            var proprietesModifiees = new List<KeyValuePair<string, string>>();
-            var perfectionnementObject = (Formation)graphObject;
-            var perfectionnementViewModel = (PublicationViewModel)viewModel;
+            var publicationObject = (Formation)graphObject;
+            var publicationViewModel = (PublicationViewModel)viewModel;
 
-            if (perfectionnementObject.AnAcquisition != perfectionnementViewModel.Annee)
-                proprietesModifiees.Add(new KeyValuePair<string, string>("Annee", perfectionnementViewModel.Annee.ToString()));
+            editionObjectGraphRepository.ChangerPropriete(
+                viewModelPropriete: () => publicationViewModel.Annee,
+                graphModelPropriete: () => publicationObject.AnAcquisition,
+                noeudModifie: graphObject);
 
-            if (perfectionnementObject.Description != perfectionnementViewModel.Description)
-                proprietesModifiees.Add(new KeyValuePair<string, string>("Description", perfectionnementViewModel.Description));
-
-            return proprietesModifiees;
+            editionObjectGraphRepository.ChangerPropriete(
+                viewModelPropriete: () => publicationViewModel.Description,
+                graphModelPropriete: () => publicationObject.Description,
+                noeudModifie: graphObject);
         }
     }
 }

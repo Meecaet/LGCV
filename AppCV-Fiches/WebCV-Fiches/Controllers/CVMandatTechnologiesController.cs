@@ -35,7 +35,7 @@ namespace WebCV_Fiches.Controllers
             var mandatModel = mandatGraphRepository.GetOne(mandatId);
 
             var technologieModel = technologieGraphRepository.GetOne(technologie.GraphId);
-            editionObjectGraphRepository.AjouterNoeud(objetAjoute: technologieModel, noeudModifiePropriete: "Technologies", noeudModifie: mandatModel);
+            editionObjectGraphRepository.AjouterNoeud(objetAjoute: technologieModel, viewModelProprieteNom: "Technologies", noeudModifie: mandatModel);
 
             technologie.GraphId = technologieModel.GraphKey;
             return Json(technologie);

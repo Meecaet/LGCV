@@ -6,6 +6,7 @@ using Microsoft.Azure.Graphs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
 
@@ -21,33 +22,63 @@ namespace DAL_CV_Fiches.Repositories.Graph
 
         public EditionObjectGraphRepository(string Endpoint, string Key, string Database, string Graph) : base(Endpoint, Key, Database, Graph) { }
 
-        public List<EditionObject> CreateOrUpdateProprieteEdition(List<KeyValuePair<string, string>> proprietes, GraphObject noeudModifie)
+        public void ChangerPropriete(GraphObject noeudModifie, Expression<Func<object>> viewModelPropriete, Expression<Func<object>> graphModelPropriete, string graphModelProprieteNom = null)
         {
-            List<EditionObject> editions = new List<EditionObject>();
-            EditionObject edition = new EditionObject();
-
-            foreach (KeyValuePair<string, string> prop in proprietes)
+            //var viewModelProprieteNom = ((MemberExpression)viewModelPropriete.Body).Member.Name;
+            string viewModelProprieteNom;
+            var viewModelProprieteMemberEx = viewModelPropriete.Body as MemberExpression;
+            if (viewModelProprieteMemberEx != null)
+                viewModelProprieteNom = viewModelProprieteMemberEx.Member.Name;
+            else
             {
-                edition = FindEditionObjectOfType(proprieteNom: prop.Key, graphnoeud: noeudModifie, type: EditionObjectType.ChangementPropriete, editionEtat: EditionObjectEtat.Modifie);
-                if (edition != null)
+                dynamic viewModelProprieteEx = viewModelPropriete.Body;
+                viewModelProprieteNom = viewModelProprieteEx.Operand.Member.Name;
+            }
+
+            var nouvelleValeur = viewModelPropriete.Compile()()?.ToString();
+
+            if (graphModelProprieteNom == null)
+            {
+                //graphModelProprieteNom = ((MemberExpression)graphModelPropriete.Body).Member.Name;
+                var graphModelProprieteMemberEx = graphModelPropriete.Body as MemberExpression;
+                if (graphModelProprieteMemberEx != null)
+                    graphModelProprieteNom = graphModelProprieteMemberEx.Member.Name;
+                else
                 {
-                    edition.ProprieteValeur = prop.Value;
-                    Update(edition);
+                    dynamic graphModelProprieteEx = graphModelPropriete.Body;
+                    graphModelProprieteNom = graphModelProprieteEx.Operand.Member.Name;
+                }
+
+            }
+
+            var actuelleValeur = graphModelPropriete.Compile()()?.ToString();
+
+            EditionObject edition = FindEditionObjectOfType(viewModelProprieteNom: viewModelProprieteNom, graphnoeud: noeudModifie, type: EditionObjectType.ChangementPropriete, editionEtat: EditionObjectEtat.Modifie);
+            if (edition != null)
+            {
+                if (nouvelleValeur == actuelleValeur)
+                {
+                    Delete(edition);
                 }
                 else
                 {
-                    edition = CreateEditionObject(proprieteNom: prop.Key, proprieteValuer: prop.Value, noeudModifie: noeudModifie);
+                    edition.ProprieteValeur = nouvelleValeur;
+                    Update(edition);
                 }
-                editions.Add(edition);
             }
-
-            return editions;
+            else
+            {
+                edition = CreateEditionObject(
+                    viewModelProprieteNom: viewModelProprieteNom,
+                    graphModelProprieteNom: graphModelProprieteNom,
+                    proprieteValuer: nouvelleValeur,
+                    noeudModifie: noeudModifie);
+            }
         }
-
-        public EditionObject ChangerNoeud(GraphObject objetAjoute, string objetsupprimeGraphKey, string noeudModifiePropriete, GraphObject noeudModifie)
+        public EditionObject ChangerNoeud(GraphObject objetAjoute, string objetsupprimeGraphKey, string ViewModelProprieteNom, string graphModelProprieteNom, GraphObject noeudModifie)
         {
             var edition = FindEditionObjectOfType(
-                proprieteNom: noeudModifiePropriete,
+                viewModelProprieteNom: ViewModelProprieteNom,
                 graphnoeud: noeudModifie,
                 type: EditionObjectType.ChangementRelation,
                 editionEtat: EditionObjectEtat.Modifie);
@@ -68,7 +99,8 @@ namespace DAL_CV_Fiches.Repositories.Graph
             else
             {
                 edition = CreateEditionObject(
-                    proprieteNom: noeudModifiePropriete,
+                    viewModelProprieteNom: ViewModelProprieteNom,
+                    graphModelProprieteNom: graphModelProprieteNom,
                     objetAjoute: objetAjoute,
                     objetSupprimeId: objetsupprimeGraphKey,
                     noeudModifie: noeudModifie);
@@ -76,14 +108,18 @@ namespace DAL_CV_Fiches.Repositories.Graph
             return edition;
         }
 
-        public EditionObject AjouterNoeud(GraphObject objetAjoute, string noeudModifiePropriete, GraphObject noeudModifie)
+        public EditionObject AjouterNoeud(GraphObject objetAjoute, string viewModelProprieteNom, GraphObject noeudModifie)
         {
-            return CreateEditionObject(proprieteNom: noeudModifiePropriete, objetAjoute: objetAjoute, noeudModifie: noeudModifie);
+            return CreateEditionObject(viewModelProprieteNom: viewModelProprieteNom, graphModelProprieteNom: viewModelProprieteNom, objetAjoute: objetAjoute, noeudModifie: noeudModifie);
         }
 
-        public EditionObject SupprimerNoeud(GraphObject objetsupprime, string noeudModifiePropriete, GraphObject noeudModifie)
+        public EditionObject SupprimerNoeud(GraphObject objetsupprime, string viewModelProprieteNom, GraphObject noeudModifie)
         {
-            return CreateEditionObject(proprieteNom: noeudModifiePropriete, objetSupprimeId: objetsupprime.GraphKey, noeudModifie: noeudModifie);
+            return CreateEditionObject(
+                viewModelProprieteNom: viewModelProprieteNom,
+                graphModelProprieteNom: viewModelProprieteNom,
+                objetSupprimeId: objetsupprime.GraphKey,
+                noeudModifie: noeudModifie);
         }
 
         public override void Delete(EditionObject obj)
@@ -101,13 +137,12 @@ namespace DAL_CV_Fiches.Repositories.Graph
         }
 
 
-
-
-        private EditionObject CreateEditionObject(string proprieteNom, GraphObject noeudModifie, string proprieteValuer = null, GraphObject objetAjoute = null, string objetSupprimeId = null)
+        private EditionObject CreateEditionObject(string viewModelProprieteNom, string graphModelProprieteNom, GraphObject noeudModifie, string proprieteValuer = null, GraphObject objetAjoute = null, string objetSupprimeId = null)
         {
             var edition = new EditionObject();
             edition.NoeudModifie = noeudModifie;
-            edition.ViewModelProprieteNom = proprieteNom;
+            edition.ViewModelProprieteNom = viewModelProprieteNom;
+            edition.GraphModelProprieteNom = graphModelProprieteNom;
             if (proprieteValuer != null)
             {
                 edition.Type = EditionObjectType.ChangementPropriete;
@@ -130,9 +165,9 @@ namespace DAL_CV_Fiches.Repositories.Graph
             return edition;
         }
 
-        private EditionObject FindEditionObjectOfType(string proprieteNom, GraphObject graphnoeud, string type, string editionEtat)
+        private EditionObject FindEditionObjectOfType(string viewModelProprieteNom, GraphObject graphnoeud, string type, string editionEtat)
         {
-            return graphnoeud.EditionObjects.Find(x => x.ViewModelProprieteNom == proprieteNom && x.Type == type && x.Etat == editionEtat);
+            return graphnoeud.EditionObjects.Find(x => x.ViewModelProprieteNom == viewModelProprieteNom && x.Type == type && x.Etat == editionEtat);
         }
 
         private void CreateRelation(GraphObject noeudModifie, EditionObject edition)

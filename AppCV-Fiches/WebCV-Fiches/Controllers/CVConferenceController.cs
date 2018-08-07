@@ -90,20 +90,21 @@ namespace WebCV_Fiches.Controllers
             conferenceObject.Description = conferenceViewModel.Description;
             formationGraphRepository.Update(conferenceObject);
         }
-        
-        public override List<KeyValuePair<string, string>> VerifierProprietesModifiees(GraphObject graphObject, ViewModel viewModel)
+
+        public override void VerifierProprietesModifiees(GraphObject graphObject, ViewModel viewModel)
         {
-            var proprietesModifiees = new List<KeyValuePair<string, string>>();
             var conferenceObject = (Formation)graphObject;
             var conferenceViewModel = (ConferenceViewModel)viewModel;
 
-            if (conferenceObject.AnAcquisition != conferenceViewModel.Annee)
-                proprietesModifiees.Add(new KeyValuePair<string, string>("Annee", conferenceViewModel.Annee.ToString()));
+            editionObjectGraphRepository.ChangerPropriete(
+                viewModelPropriete: () => conferenceViewModel.Annee,
+                graphModelPropriete: () => conferenceObject.AnAcquisition,
+                noeudModifie: graphObject);
 
-            if (conferenceObject.Description != conferenceViewModel.Description)
-                proprietesModifiees.Add(new KeyValuePair<string, string>("Description", conferenceViewModel.Description));
-
-            return proprietesModifiees;
+            editionObjectGraphRepository.ChangerPropriete(
+                viewModelPropriete: () => conferenceViewModel.Description,
+                graphModelPropriete: () => conferenceObject.Description,
+                noeudModifie: graphObject);
         }
     }
 }

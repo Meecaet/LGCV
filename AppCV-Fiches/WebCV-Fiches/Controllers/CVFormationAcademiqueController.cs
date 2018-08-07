@@ -36,7 +36,7 @@ namespace WebCV_Fiches.Controllers
 
             var utilisateur = utilisateurGraphRepository.GetOne(utilisateurId);
             var formations = utilisateur.Conseiller?.FormationsScolaires?.Cast<GraphObject>().ToList(); ;
-            if(formations == null)    
+            if (formations == null)
                 return Json(new List<FormationAcademiqueViewModel>());
             var noeudModifie = new List<GraphObject>();
             noeudModifie.Add(utilisateur.Conseiller);
@@ -87,7 +87,10 @@ namespace WebCV_Fiches.Controllers
                 );
 
             formationScolaireGraphRepository.Add(formationAcademiqueModel);
-            editionObjectGraphRepository.AjouterNoeud(objetAjoute: formationAcademiqueModel, noeudModifiePropriete: "FormationsScolaires", noeudModifie: utilisateur.Conseiller);
+            editionObjectGraphRepository.AjouterNoeud(
+                objetAjoute: formationAcademiqueModel,
+                viewModelProprieteNom: "FormationsScolaires",
+                noeudModifie: utilisateur.Conseiller);
 
             formationAcademique.GraphId = formationAcademiqueModel.GraphKey;
             formationAcademique.GraphIdEtablissement = formationAcademiqueModel.Ecole.GraphKey;
@@ -108,16 +111,15 @@ namespace WebCV_Fiches.Controllers
             if (formationsAcademiques.Any(x => x.GraphKey == formationAcademique.GraphId))
             {
 
-                var proprietesModifiees = new List<KeyValuePair<string, string>>();
+                editionObjectGraphRepository.ChangerPropriete(
+                    viewModelPropriete: () => formationAcademique.Annee, 
+                    graphModelPropriete: () => formationScolaireModel.DateConclusion, 
+                    noeudModifie: formationScolaireModel);
 
-                if (formationScolaireModel.DateConclusion != formationAcademique.Annee)
-                    proprietesModifiees.Add(new KeyValuePair<string, string>("Annee", formationAcademique.Annee.ToString()));
-
-                if (formationScolaireModel.Diplome != formationAcademique.Diplome)
-                    proprietesModifiees.Add(new KeyValuePair<string, string>("Diplome", formationAcademique.Diplome));
-
-                if (proprietesModifiees.Count() > 0)
-                    editionObjectGraphRepository.CreateOrUpdateProprieteEdition(proprietesModifiees, formationScolaireModel);
+                editionObjectGraphRepository.ChangerPropriete(
+                    viewModelPropriete: () => formationAcademique.Diplome, 
+                    graphModelPropriete: () => formationScolaireModel.Diplome, 
+                    noeudModifie: formationScolaireModel);
             }
             else
             {
@@ -126,7 +128,7 @@ namespace WebCV_Fiches.Controllers
                 formationScolaireGraphRepository.Update(formationScolaireModel);
             }
 
-            return Json(formationsAcademiques);
+            return Json(formationAcademique);
         }
 
         // POST: Mandat/Delete/5

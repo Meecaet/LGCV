@@ -36,7 +36,7 @@ namespace WebCV_Fiches.Controllers
 
             var tacheModel = new Tache { Description = tache.Description };
             tacheGraphRepository.Add(tacheModel);
-            editionObjectGraphRepository.AjouterNoeud(objetAjoute: tacheModel, noeudModifiePropriete: "Taches", noeudModifie: mandatModel);
+            editionObjectGraphRepository.AjouterNoeud(objetAjoute: tacheModel, viewModelProprieteNom: "Taches", noeudModifie: mandatModel);
 
             tache.GraphId = tacheModel.GraphKey;
             return Json(tache);

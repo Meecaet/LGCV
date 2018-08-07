@@ -86,10 +86,10 @@ namespace WebCV_Fiches.Controllers
             mandatViewModel.editionObjecViewModels = editions.GetEditions(mandat, projet, client, societeDeConseil);
 
 
-            
+
             var jsonSettings = new Newtonsoft.Json.JsonSerializerSettings();
             jsonSettings.DateFormatString = "yyyy/MM/dd";
-            jsonSettings.ContractResolver = new   Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver();
+            jsonSettings.ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver();
             return Json(mandatViewModel, jsonSettings);
         }
 
@@ -187,7 +187,7 @@ namespace WebCV_Fiches.Controllers
             conseiller.Mandats.Add(mandatModel);
             mandatGraphRepository.Add(mandatModel);
 
-            editionObjectGraphRepository.AjouterNoeud(objetAjoute: mandatModel, noeudModifiePropriete: "Mandats", noeudModifie: utilisateur.Conseiller);
+            editionObjectGraphRepository.AjouterNoeud(objetAjoute: mandatModel, viewModelProprieteNom: "Mandats", noeudModifie: utilisateur.Conseiller);
 
             mandat.GraphId = mandatModel.GraphKey;
 
@@ -208,85 +208,97 @@ namespace WebCV_Fiches.Controllers
             var client = projet.Client;
             var societeDeConseil = projet.SocieteDeConseil;
 
-            var proprietesModifiees = new List<KeyValuePair<string, string>>();
+            editionObjectGraphRepository.ChangerPropriete(
+                viewModelPropriete: () => mandat.DebutMandat,
+                graphModelPropriete: () => mandatModel.DateDebut,
+                noeudModifie: mandatModel);
 
-            if (mandatModel.DateDebut != mandat.DebutMandat)
-                proprietesModifiees.Add(new KeyValuePair<string, string>("DebutMandat", mandat.DebutMandat.ToString()));
+            editionObjectGraphRepository.ChangerPropriete(
+                viewModelPropriete: () => mandat.Efforts,
+                graphModelPropriete: () => mandatModel.Efforts,
+                noeudModifie: mandatModel);
 
-            if (mandatModel.Efforts != mandat.Efforts)
-                proprietesModifiees.Add(new KeyValuePair<string, string>("Efforts", mandat.Efforts.ToString()));
+            editionObjectGraphRepository.ChangerPropriete(
+                viewModelPropriete: () => mandat.FinMandat,
+                graphModelPropriete: () => mandatModel.DateFin,
+                noeudModifie: mandatModel);
 
-            if (mandatModel.DateFin != mandat.FinMandat)
-                proprietesModifiees.Add(new KeyValuePair<string, string>("FinMandat", mandat.FinMandat.ToString()));
+            editionObjectGraphRepository.ChangerPropriete(
+                viewModelPropriete: () => mandat.NumeroMandat,
+                graphModelPropriete: () => mandatModel.Numero,
+                noeudModifie: mandatModel);
 
-            if (mandatModel.Numero != mandat.NumeroMandat.ToString())
-                proprietesModifiees.Add(new KeyValuePair<string, string>("NumeroMandat", mandat.NumeroMandat.ToString()));
+            editionObjectGraphRepository.ChangerPropriete(
+                viewModelPropriete: () => mandat.PorteeDesTravaux,
+                graphModelPropriete: () => mandatModel.Description,
+                noeudModifie: mandatModel);
 
-            if (mandatModel.Description != mandat.PorteeDesTravaux)
-                proprietesModifiees.Add(new KeyValuePair<string, string>("PorteeeDesTravaux", mandat.PorteeDesTravaux));
+            editionObjectGraphRepository.ChangerPropriete(
+                viewModelPropriete: () => mandat.TitreMandat,
+                graphModelPropriete: () => mandatModel.Titre,
+                noeudModifie: mandatModel);
 
-            if (mandatModel.Titre != mandat.TitreMandat)
-                proprietesModifiees.Add(new KeyValuePair<string, string>("TitreMandat", mandat.TitreMandat));
 
-            if (proprietesModifiees.Count() > 0)
-                editionObjectGraphRepository.CreateOrUpdateProprieteEdition(proprietesModifiees, mandatModel);
+            editionObjectGraphRepository.ChangerPropriete( 
+                viewModelPropriete: () => mandat.GraphIdFonction,
+                graphModelPropriete: () => mandatModel.Fonction.GraphKey,
+                graphModelProprieteNom: "Fonction", noeudModifie: mandatModel);
 
-            var conseiller = utilisateur.Conseiller;
-            if (conseiller.Fonction.GraphKey != mandat.GraphIdFonction)
-            {
-                var newFonction = fonctionGraphRepository.GetOne(mandat.GraphIdFonction);
-                editionObjectGraphRepository.ChangerNoeud(
-                    objetAjoute: newFonction,
-                    objetsupprimeGraphKey: conseiller.Fonction.GraphKey,
-                    noeudModifiePropriete: "GraphIdFonction",
-                    noeudModifie: mandatModel);
-            }
+            editionObjectGraphRepository.ChangerPropriete(
+                viewModelPropriete: () => mandat.CellulaireReference,
+                graphModelPropriete: () => projet.CellulaireReference,
+                noeudModifie: projet);
 
-            proprietesModifiees = new List<KeyValuePair<string, string>>();
+            editionObjectGraphRepository.ChangerPropriete(
+                viewModelPropriete: () => mandat.ContexteProjet,
+                graphModelPropriete: () => projet.Description,
+                noeudModifie: projet);
 
-            if (projet.CellulaireReference != mandat.CellulaireReference)
-                proprietesModifiees.Add(new KeyValuePair<string, string>("CellulaireReference", mandat.CellulaireReference));
+            editionObjectGraphRepository.ChangerPropriete(
+                viewModelPropriete: () => mandat.ContexteProjet,
+                graphModelPropriete: () => projet.Description,
+                noeudModifie: projet);
 
-            if (projet.Description != mandat.ContexteProjet)
-                proprietesModifiees.Add(new KeyValuePair<string, string>("ContexteProjet", mandat.ContexteProjet));
+            editionObjectGraphRepository.ChangerPropriete(
+                viewModelPropriete: () => mandat.Envergure,
+                graphModelPropriete: () => projet.Envergure,
+                noeudModifie: projet);
 
-            if (projet.CellulaireReference != mandat.CellulaireReference)
-                proprietesModifiees.Add(new KeyValuePair<string, string>("CellulaireReference", mandat.CellulaireReference));
+            editionObjectGraphRepository.ChangerPropriete(
+                viewModelPropriete: () => mandat.FinProjet,
+                graphModelPropriete: () => projet.DateFin,
+                noeudModifie: projet);
 
-            if (projet.Envergure != mandat.Envergure)
-                proprietesModifiees.Add(new KeyValuePair<string, string>("Envergure", mandat.Envergure.ToString()));
+            editionObjectGraphRepository.ChangerPropriete(
+                viewModelPropriete: () => mandat.FonctionReference,
+                graphModelPropriete: () => projet.FonctionReference,
+                noeudModifie: projet);
 
-            if (projet.DateFin != mandat.FinProjet)
-                proprietesModifiees.Add(new KeyValuePair<string, string>("FinProjet", mandat.FinProjet.ToString()));
+            editionObjectGraphRepository.ChangerPropriete(
+                viewModelPropriete: () => mandat.NomReference,
+                graphModelPropriete: () => projet.NomReference,
+                noeudModifie: projet);
 
-            if (projet.FonctionReference != mandat.FonctionReference)
-                proprietesModifiees.Add(new KeyValuePair<string, string>("FonctionReference", mandat.FonctionReference));
+            editionObjectGraphRepository.ChangerPropriete(
+                viewModelPropriete: () => mandat.TelephoneReference,
+                graphModelPropriete: () => projet.TelephoneReference,
+                noeudModifie: projet);
 
-            if (projet.NomReference != mandat.NomReference)
-                proprietesModifiees.Add(new KeyValuePair<string, string>("NomReference", mandat.NomReference));
+            editionObjectGraphRepository.ChangerPropriete(
+                viewModelPropriete: () => mandat.TitreProjet,
+                graphModelPropriete: () => projet.Nom,
+                noeudModifie: projet);
 
-            if (projet.TelephoneReference != mandat.TelephoneReference)
-                proprietesModifiees.Add(new KeyValuePair<string, string>("TelephoneReference", mandat.TelephoneReference));
 
-            if (projet.Nom != mandat.TitreProjet)
-                proprietesModifiees.Add(new KeyValuePair<string, string>("TitreProjet", mandat.TelephoneReference));
+            editionObjectGraphRepository.ChangerPropriete(
+                viewModelPropriete: () => mandat.NomEntreprise,
+                graphModelPropriete: () => projet.SocieteDeConseil.Nom,
+                noeudModifie: societeDeConseil);
 
-            if (proprietesModifiees.Count() > 0)
-                editionObjectGraphRepository.CreateOrUpdateProprieteEdition(proprietesModifiees, projet);
-
-            if (projet.SocieteDeConseil.Nom != mandat.NomEntreprise)
-            {
-                proprietesModifiees = new List<KeyValuePair<string, string>>();
-                proprietesModifiees.Add(new KeyValuePair<string, string>("NomEntreprise", mandat.NomEntreprise));
-                editionObjectGraphRepository.CreateOrUpdateProprieteEdition(proprietesModifiees, societeDeConseil);
-            }
-
-            if (projet.Client.Nom != mandat.NomClient)
-            {
-                proprietesModifiees = new List<KeyValuePair<string, string>>();
-                proprietesModifiees.Add(new KeyValuePair<string, string>("NomClient", mandat.NomClient));
-                editionObjectGraphRepository.CreateOrUpdateProprieteEdition(proprietesModifiees, client);
-            }
+            editionObjectGraphRepository.ChangerPropriete(
+                viewModelPropriete: () => mandat.NomClient,
+                graphModelPropriete: () => projet.Client.Nom,
+                noeudModifie: client);
 
             return Json(mandat);
         }

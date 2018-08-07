@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
 using System.Threading.Tasks;
 using DAL_CV_Fiches.Models.Graph;
 using DAL_CV_Fiches.Repositories.Graph;
@@ -28,7 +30,7 @@ namespace WebCV_Fiches.Controllers
         }
 
         [Route("Detail/{utilisateurId}")]
-	   // [Authorize("Bearer")]
+        // [Authorize("Bearer")]
         public ActionResult Detail(string utilisateurId)
         {
             var bioViewModel = new BioViewModel();
@@ -54,7 +56,7 @@ namespace WebCV_Fiches.Controllers
             var returnJon = new
             {
             };
-            
+
             return Json(bioViewModel);
         }
 
@@ -64,40 +66,15 @@ namespace WebCV_Fiches.Controllers
         public ActionResult Edit(string utilisateurId, [FromBody]BioViewModel bio)
         {
             var utilisateur = utilisateurGraphRepository.GetOne(utilisateurId);
-            var proprietesModifiees = new List<KeyValuePair<string, string>>();
 
-            if (utilisateur.Prenom != bio.Prenom)
-                proprietesModifiees.Add(new KeyValuePair<string, string>("Prenom", bio.Prenom));
-
-            if (utilisateur.Nom != bio.Nom)
-                proprietesModifiees.Add(new KeyValuePair<string, string>("Nom", bio.Nom));
-
-            if (proprietesModifiees.Count() > 0)
-                editionObjectGraphRepository.CreateOrUpdateProprieteEdition(proprietesModifiees, utilisateur);
+            editionObjectGraphRepository.ChangerPropriete( viewModelPropriete: () => bio.Nom,graphModelPropriete: () => utilisateur.Nom,noeudModifie: utilisateur);
+            editionObjectGraphRepository.ChangerPropriete( viewModelPropriete: () => bio.Prenom,graphModelPropriete: () => utilisateur.Prenom,noeudModifie: utilisateur);
 
             var cv = utilisateur.Conseiller.CVs.First();
-            if (cv.ResumeExperience != bio.ResumeExperience)
-            {
-                proprietesModifiees.Clear();
-                proprietesModifiees.Add(new KeyValuePair<string, string>("ResumeExperience", bio.ResumeExperience));
-                editionObjectGraphRepository.CreateOrUpdateProprieteEdition(proprietesModifiees, cv);
-            }
+            editionObjectGraphRepository.ChangerPropriete( viewModelPropriete: () => bio.ResumeExperience,graphModelPropriete: () => cv.ResumeExperience,noeudModifie: cv);
 
             var conseiller = utilisateur.Conseiller;
-            if (conseiller.Fonction.GraphKey != bio.Fonction)
-            {
-                var newFonction = fonctionGraphRepository.GetOne(bio.Fonction);
-                editionObjectGraphRepository.ChangerNoeud(
-                    objetAjoute: newFonction,
-                    objetsupprimeGraphKey: conseiller.Fonction.GraphKey,
-                    noeudModifiePropriete: "Fonction",
-                    noeudModifie: conseiller);
-            }
-            else
-            {
-                var edition = utilisateur.Conseiller.EditionObjects.Find(x => x.ViewModelProprieteNom == "Fonction");
-                editionObjectGraphRepository.Delete(edition);
-            }
+            editionObjectGraphRepository.ChangerPropriete( viewModelPropriete: () => bio.Fonction,graphModelPropriete: () => conseiller.Fonction.GraphKey,graphModelProprieteNom: "Fonction", noeudModifie: cv);
 
             return Json(new { Status = "OK", Message = "ResumeExperience modifiée" });
         }

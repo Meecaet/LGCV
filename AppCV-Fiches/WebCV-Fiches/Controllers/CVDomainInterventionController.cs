@@ -62,7 +62,10 @@ namespace WebCV_Fiches.Controllers
 
             var domainModel = new DomaineDIntervention() { Description = domain.Description };
             var savedDomainModel = domaineDInterventionGraphRepository.CreateIfNotExists(domainModel);
-            editionObjectGraphRepository.AjouterNoeud(objetAjoute: savedDomainModel, noeudModifiePropriete: "DomaineDInterventions", noeudModifie: utilisateur.Conseiller);
+            editionObjectGraphRepository.AjouterNoeud(
+                objetAjoute: savedDomainModel, 
+                viewModelProprieteNom: "DomaineDInterventions", 
+                noeudModifie: utilisateur.Conseiller);
 
             domain.GraphId = savedDomainModel.GraphKey;
             return Json(domain);

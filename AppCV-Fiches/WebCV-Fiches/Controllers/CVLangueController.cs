@@ -73,7 +73,7 @@ namespace WebCV_Fiches.Controllers
 
             editionObjectGraphRepository.AjouterNoeud(
                 objetAjoute: langueModel,
-                noeudModifiePropriete: "Langues",
+                viewModelProprieteNom: "Langues",
                 noeudModifie: utilisateur.Conseiller);
 
             langue.GraphId = langueModel.GraphKey;
@@ -92,20 +92,20 @@ namespace WebCV_Fiches.Controllers
 
             if (langues.Any(x => x.GraphKey == langue.GraphId))
             {
+                editionObjectGraphRepository.ChangerPropriete(
+                    viewModelPropriete: () => langue.NiveauLu, 
+                    graphModelPropriete: () => langueModel.Lu, 
+                    noeudModifie: langueModel);
 
-                var proprietesModifiees = new List<KeyValuePair<string, string>>();
+                editionObjectGraphRepository.ChangerPropriete(
+                    viewModelPropriete: () => langue.NiveauParle, 
+                    graphModelPropriete: () => langueModel.Parle, 
+                    noeudModifie: langueModel);
 
-                if (langueModel.Lu.ToString() != langue.NiveauLu)
-                    proprietesModifiees.Add(new KeyValuePair<string, string>("NiveauLu", langue.NiveauLu));
-
-                if (langueModel.Parle.ToString() != langue.NiveauParle)
-                    proprietesModifiees.Add(new KeyValuePair<string, string>("NiveauParle", langue.NiveauParle));
-
-                if (langueModel.Ecrit.ToString() != langue.NiveauEcrit)
-                    proprietesModifiees.Add(new KeyValuePair<string, string>("NiveauEcrit", langue.NiveauEcrit));
-
-                if (proprietesModifiees.Count() > 0)
-                    editionObjectGraphRepository.CreateOrUpdateProprieteEdition(proprietesModifiees, langueModel);
+                editionObjectGraphRepository.ChangerPropriete(
+                    viewModelPropriete: () => langue.NiveauEcrit, 
+                    graphModelPropriete: () => langueModel.Ecrit, 
+                    noeudModifie: langueModel);
             }
             else
             {

@@ -49,7 +49,10 @@ namespace WebCV_Fiches.Controllers
             var utilisateur = utilisateurGraphRepository.GetOne(utilisateurId);
 
             var graphObject = CreateGraphObject(viewModel);
-            editionObjectGraphRepository.AjouterNoeud(objetAjoute: graphObject, noeudModifiePropriete: GetProprieteModifiee(), noeudModifie: utilisateur.Conseiller);
+            editionObjectGraphRepository.AjouterNoeud(
+                objetAjoute: graphObject,
+                viewModelProprieteNom: GetProprieteModifiee(),
+                noeudModifie: utilisateur.Conseiller);
 
             viewModel.GraphId = graphObject.GraphKey;
 
@@ -68,10 +71,7 @@ namespace WebCV_Fiches.Controllers
             if (graphObjects.Any(x => x.GraphKey == viewModel.GraphId))
             {
 
-                var proprietesModifiees = VerifierProprietesModifiees(graphObject, viewModel);
-
-                if (proprietesModifiees.Count() > 0)
-                    editionObjectGraphRepository.CreateOrUpdateProprieteEdition(proprietesModifiees, graphObject);
+                VerifierProprietesModifiees(graphObject, viewModel);
             }
             else
             {
@@ -124,7 +124,7 @@ namespace WebCV_Fiches.Controllers
 
         public abstract GraphObject CreateGraphObject(ViewModel viewModel);
 
-        public abstract  List<KeyValuePair<string, string>> VerifierProprietesModifiees(GraphObject graphObject, ViewModel viewModel);
+        public abstract void VerifierProprietesModifiees(GraphObject graphObject, ViewModel viewModel);
 
         public abstract void UpdateGraphObject(GraphObject graphObject, ViewModel viewModel);
     }

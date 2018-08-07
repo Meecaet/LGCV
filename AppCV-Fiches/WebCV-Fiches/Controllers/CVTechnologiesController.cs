@@ -62,7 +62,10 @@ namespace WebCV_Fiches.Controllers
             var technologieModel = technologieGraphRepository.GetOne(technologie.GraphId);
             technologieModel.MoisDExperience = technologie.Mois;
 
-            editionObjectGraphRepository.AjouterNoeud(objetAjoute: technologieModel, noeudModifiePropriete: "Technologies", noeudModifie: utilisateur.Conseiller);
+            editionObjectGraphRepository.AjouterNoeud(
+                objetAjoute: technologieModel, 
+                viewModelProprieteNom: "Technologies", 
+                noeudModifie: utilisateur.Conseiller);
 
             technologie.GraphId = technologieModel.GraphKey;
 
@@ -75,22 +78,20 @@ namespace WebCV_Fiches.Controllers
         public ActionResult Edit(string utilisateurId, [FromBody]TechnologieViewModel technologie)
         {
             var utilisateur = utilisateurGraphRepository.GetOne(utilisateurId);
-            var technologieModel = technologieGraphRepository.GetOne(technologie.GraphId);
 
             var Technologies = utilisateur.Conseiller.Technologies;
 
             if (Technologies.Any(x => x.GraphKey == technologie.GraphId))
             {
-                var proprietesModifiees = new List<KeyValuePair<string, string>>();
-                
-                if (technologieModel.MoisDExperience != technologie.Mois)
-                    proprietesModifiees.Add(new KeyValuePair<string, string>("Mois", technologie.Mois.ToString()));
-
-                if (proprietesModifiees.Count() > 0)
-                    editionObjectGraphRepository.CreateOrUpdateProprieteEdition(proprietesModifiees, technologieModel);
+                var technologieModel = Technologies.Find(x => x.GraphKey == technologie.GraphId);
+                editionObjectGraphRepository.ChangerPropriete(
+                    viewModelPropriete: () => technologie.Mois, 
+                    graphModelPropriete: () => technologieModel.MoisDExperience, 
+                    noeudModifie: technologieModel);
             }
             else
             {
+            var technologieModel = technologieGraphRepository.GetOne(technologie.GraphId);
                 technologieModel.MoisDExperience = technologie.Mois;
                 technologieModel.Nom = technologie.Description;
 
