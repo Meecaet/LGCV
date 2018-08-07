@@ -95,7 +95,7 @@ namespace WebCV_Fiches.Controllers
             }
             else
             {
-                var edition = utilisateur.Conseiller.EditionObjects.Find(x => x.ProprieteNom == "Fonction");
+                var edition = utilisateur.Conseiller.EditionObjects.Find(x => x.ViewModelProprieteNom == "Fonction");
                 editionObjectGraphRepository.Delete(edition);
             }
 

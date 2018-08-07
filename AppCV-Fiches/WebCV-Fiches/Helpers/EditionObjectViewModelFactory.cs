@@ -56,7 +56,7 @@ namespace WebCV_Fiches.Helpers
                   EditionId = GetEditionid(x),
                   Etat = x.Etat,
                   Observacao = x.Observacao,
-                  ProprieteNom = CamelCase(x.ProprieteNom),
+                  ProprieteNom = CamelCase(x.ViewModelProprieteNom),
                   ProprieteValeur =x.ProprieteValeur,
                   Type = GetTypeFrom(x)
               }

@@ -12,7 +12,7 @@ namespace WebCV_Fiches.Models.CVViewModels
 
         public override bool HasEdtion(EditionObject edition)
         {
-            return edition.ProprieteNom == "DomaineDInterventions";
+            return edition.ViewModelProprieteNom == "DomaineDInterventions";
         }
     }
 }

@@ -12,7 +12,7 @@ namespace WebCV_Fiches.Models.CVViewModels
 
         public override bool HasEdtion(EditionObject edition)
         {
-            if(edition.ProprieteNom == "Taches")
+            if(edition.ViewModelProprieteNom == "Taches")
                 return true;
 
             return false;

@@ -51,11 +51,11 @@ namespace WebCV_Fiches.Models.CVViewModels
 
         public override bool HasEdtion(EditionObject edition)
         {
-            if (edition.ProprieteNom == "Mandats")
+            if (edition.ViewModelProprieteNom == "Mandats")
                 return true;
 
             var propreties = MethodBase.GetCurrentMethod().DeclaringType.GetProperties().ToList();
-            return propreties.Any(x => x.Name == edition.ProprieteNom);
+            return propreties.Any(x => x.Name == edition.ViewModelProprieteNom);
         }
     }
 }

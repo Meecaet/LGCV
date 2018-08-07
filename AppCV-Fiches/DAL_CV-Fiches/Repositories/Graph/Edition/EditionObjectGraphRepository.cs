@@ -107,7 +107,7 @@ namespace DAL_CV_Fiches.Repositories.Graph
         {
             var edition = new EditionObject();
             edition.NoeudModifie = noeudModifie;
-            edition.ProprieteNom = proprieteNom;
+            edition.ViewModelProprieteNom = proprieteNom;
             if (proprieteValuer != null)
             {
                 edition.Type = EditionObjectType.ChangementPropriete;
@@ -132,7 +132,7 @@ namespace DAL_CV_Fiches.Repositories.Graph
 
         private EditionObject FindEditionObjectOfType(string proprieteNom, GraphObject graphnoeud, string type, string editionEtat)
         {
-            return graphnoeud.EditionObjects.Find(x => x.ProprieteNom == proprieteNom && x.Type == type && x.Etat == editionEtat);
+            return graphnoeud.EditionObjects.Find(x => x.ViewModelProprieteNom == proprieteNom && x.Type == type && x.Etat == editionEtat);
         }
 
         private void CreateRelation(GraphObject noeudModifie, EditionObject edition)

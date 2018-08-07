@@ -16,7 +16,7 @@ namespace DAL_CV_Fiches.Models.Graph
         public string Etat { get; set; }
         public string Observacao { get; set; }
         public string Type { get; set; }
-        public string ProprieteNom { get; set; } 
+        public string ViewModelProprieteNom { get; set; } 
         public string ProprieteValeur { get; set; } 
 
         [Edge("Modifier", lazyLoad: true)]
