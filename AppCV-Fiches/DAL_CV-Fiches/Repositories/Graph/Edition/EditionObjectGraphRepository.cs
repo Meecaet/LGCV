@@ -57,6 +57,13 @@ namespace DAL_CV_Fiches.Repositories.Graph
                 edition.ObjetAjoute = objetAjoute;
                 edition.ObjetSupprimeId = objetsupprimeGraphKey;
                 Update(edition);
+                if (edition.ObjetAjoute != null)
+                {
+                    string deleteAjouteEdgeQuery = $"g.V('{edition.GraphKey}').outE('Ajoute').drop()";
+                    ExecuteCommandQueryVertex(deleteAjouteEdgeQuery);
+                    var att = (Edge)edition.GetType().GetProperty("ObjetAjoute").GetCustomAttribute(typeof(Edge));
+                    CreateEdge(edition, edition.ObjetAjoute, att);
+                }
             }
             else
             {

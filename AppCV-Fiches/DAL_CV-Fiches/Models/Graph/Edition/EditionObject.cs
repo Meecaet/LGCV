@@ -8,7 +8,7 @@ using System.Text;
 
 namespace DAL_CV_Fiches.Models.Graph
 {
-    public class EditionObject : GraphObject, IChangementRelation
+    public class EditionObject : GraphObject
     {
         [Edge("Ajoute", lazyLoad: true)]
         public GraphObject ObjetAjoute { get => (GraphObject)LoadProperty("ObjetAjoute"); set => SetProperty("ObjetAjoute", value); }

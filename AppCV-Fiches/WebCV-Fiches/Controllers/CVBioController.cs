@@ -93,6 +93,11 @@ namespace WebCV_Fiches.Controllers
                     noeudModifiePropriete: "Fonction",
                     noeudModifie: conseiller);
             }
+            else
+            {
+                var edition = utilisateur.Conseiller.EditionObjects.Find(x => x.ProprieteNom == "Fonction");
+                editionObjectGraphRepository.Delete(edition);
+            }
 
             return Json(new { Status = "OK", Message = "ResumeExperience modifiée" });
         }
