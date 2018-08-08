@@ -1192,10 +1192,7 @@ namespace WebCV_Fiches.Helpers
                 });
 
                 currentCell.Append(cellProperties);
-
-
-                currentCell.Append(GetNewParagraph(employeur.Key.Nom.ToUpper(), fontName: "Arial Gras", fontSize: 20, isBold: true, before:40));
-
+                currentCell.Append(GetNewParagraph(employeur.Key.Nom.ToUpper(), fontName: "Arial Gras", fontSize: 20, isBold: true, before:40, after: 40));
                 employeurRowModele.Append(currentCell);
 
                 tableResumeIntervention.Append(employeurRowModele);
@@ -1222,7 +1219,7 @@ namespace WebCV_Fiches.Helpers
                     .ToList().ForEach(x =>
                     {
                         mandatParagraphModele = new Paragraph();
-                        AddSpacingToElement(mandatParagraphModele, 40, 40, 0);
+                        AddSpacingToElement(mandatParagraphModele, 40, 40, spaceSimple);
                         AddAligmentToParagrah(mandatParagraphModele, ParagraphAligment.Centre);
 
                         mandatRunModele = new Run();
@@ -1232,7 +1229,8 @@ namespace WebCV_Fiches.Helpers
                         currentCell = new TableCell();
                         cellProperties = GetCellProperty("White", x.Value, TableRowAlignmentValues.Center, TableVerticalAlignmentValues.Center);
 
-                        if (x.Value == "2262") { // mandat.Projet.Client.Nom
+                        if (x.Value == "2262")
+                        { // mandat.Projet.Client.Nom
                             verticalMerge = new VerticalMerge()
                             {
                                 Val = x.Key.Equals(previousClient) ? MergedCellValues.Continue : MergedCellValues.Restart
@@ -1289,6 +1287,7 @@ namespace WebCV_Fiches.Helpers
                 paragraphProperties = new ParagraphProperties();
 
                 paragraphProperties.ParagraphStyleId = new ParagraphStyleId { Val = "Titre1" };
+                AddSpacingToElement(paragraphProperties, 0, 0, spaceSimple);
                 employeurParagraphModele.Append(paragraphProperties);
                 employeurParagraphModele.Append(new Run(new Text(employeur.Key)));
 
@@ -1308,11 +1307,16 @@ namespace WebCV_Fiches.Helpers
                         tableProperties = new TableProperties();
                         tableProperties.Append(new TableWidth { Width = "10418", Type = new EnumValue<TableWidthUnitValues>(TableWidthUnitValues.Dxa) });
                         tableProperties.Append(new TableLayout { Type = new EnumValue<TableLayoutValues>(TableLayoutValues.Fixed) });
-                        tableProperties.Append(new TableCellMargin
-                            (
-                                new LeftMargin { Width = "70", Type = new EnumValue<TableWidthUnitValues>(TableWidthUnitValues.Dxa) },
-                                new RightMargin { Width = "70", Type = new EnumValue<TableWidthUnitValues>(TableWidthUnitValues.Dxa) }
-                            ));
+                        tableProperties.Append(new TableCellMarginDefault
+                        {
+                            TableCellRightMargin = new TableCellRightMargin { Width = 70, Type = new EnumValue<TableWidthValues>(TableWidthValues.Dxa) },
+                            TableCellLeftMargin = new TableCellLeftMargin { Width = 70, Type = new EnumValue<TableWidthValues>(TableWidthValues.Dxa) }
+                        },
+                        new TableIndentation
+                        {
+                            Width = 0,
+                            Type = TableWidthUnitValues.Dxa
+                        });
 
                         tableInfoMandat.Append(tableProperties);
 
@@ -1379,7 +1383,6 @@ namespace WebCV_Fiches.Helpers
                         tableInfoMandat.Append(tableRow);
 
                         docBody.Append(tableInfoMandat);
-                        docBody.Append(new Paragraph());
 
                         currentParagraph = new Paragraph();
                         paragraphProperties = new ParagraphProperties();
@@ -1394,7 +1397,7 @@ namespace WebCV_Fiches.Helpers
 
                         currentParagraph.Append(paragraphProperties.CloneNode(true));
 
-                        currentRun = new Run(GetRunProperties("Arial", "Black", "21", false, false));
+                        currentRun = new Run(GetRunProperties("Arial", "Black", "20", false, false));
                         currentRun.Append(new Text(mandat.Projet.Description));
                         currentParagraph.Append(currentRun);
 
@@ -1406,7 +1409,7 @@ namespace WebCV_Fiches.Helpers
                         currentParagraph = new Paragraph();
                         currentParagraph.Append(paragraphProperties.CloneNode(true));
 
-                        currentRun = new Run(GetRunProperties("Arial", "Black", "21", false, false));
+                        currentRun = new Run(GetRunProperties("Arial", "Black", "20", false, false));
                         currentRun.Append(new Text($"M. {utilisateur.Nom} a effectué les tâches suivantes :"));
                         currentParagraph.Append(currentRun);
 
