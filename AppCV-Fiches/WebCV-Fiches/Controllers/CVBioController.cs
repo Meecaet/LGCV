@@ -10,12 +10,14 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
+using WebCV_Fiches.Filters;
 using WebCV_Fiches.Helpers;
 using WebCV_Fiches.Models.CVViewModels;
 
 namespace WebCV_Fiches.Controllers
 {
     [Route("api/Bio")]
+    [AuthorizeRoleFilter("Administrateur", "Conseiller")]
     public class CVBioController : Controller
     {
         public EditionObjectGraphRepository editionObjectGraphRepository;
@@ -30,7 +32,7 @@ namespace WebCV_Fiches.Controllers
         }
 
         [Route("Detail/{utilisateurId}")]
-        // [Authorize("Bearer")]
+        [Authorize("Bearer")]
         public ActionResult Detail(string utilisateurId)
         {
             var bioViewModel = new BioViewModel();
@@ -67,14 +69,14 @@ namespace WebCV_Fiches.Controllers
         {
             var utilisateur = utilisateurGraphRepository.GetOne(utilisateurId);
 
-            editionObjectGraphRepository.ChangerPropriete( viewModelPropriete: () => bio.Nom,graphModelPropriete: () => utilisateur.Nom,noeudModifie: utilisateur);
-            editionObjectGraphRepository.ChangerPropriete( viewModelPropriete: () => bio.Prenom,graphModelPropriete: () => utilisateur.Prenom,noeudModifie: utilisateur);
+            editionObjectGraphRepository.ChangerPropriete(viewModelPropriete: () => bio.Nom, graphModelPropriete: () => utilisateur.Nom, noeudModifie: utilisateur);
+            editionObjectGraphRepository.ChangerPropriete(viewModelPropriete: () => bio.Prenom, graphModelPropriete: () => utilisateur.Prenom, noeudModifie: utilisateur);
 
             var cv = utilisateur.Conseiller.CVs.First();
-            editionObjectGraphRepository.ChangerPropriete( viewModelPropriete: () => bio.ResumeExperience,graphModelPropriete: () => cv.ResumeExperience,noeudModifie: cv);
+            editionObjectGraphRepository.ChangerPropriete(viewModelPropriete: () => bio.ResumeExperience, graphModelPropriete: () => cv.ResumeExperience, noeudModifie: cv);
 
             var conseiller = utilisateur.Conseiller;
-            editionObjectGraphRepository.ChangerPropriete( viewModelPropriete: () => bio.Fonction,graphModelPropriete: () => conseiller.Fonction.GraphKey,graphModelProprieteNom: "Fonction", noeudModifie: cv);
+            editionObjectGraphRepository.ChangerPropriete(viewModelPropriete: () => bio.Fonction, graphModelPropriete: () => conseiller.Fonction.GraphKey, graphModelProprieteNom: "Fonction", noeudModifie: cv);
 
             return Json(new { Status = "OK", Message = "ResumeExperience modifiée" });
         }

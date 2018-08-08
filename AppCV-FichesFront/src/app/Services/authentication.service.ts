@@ -1,3 +1,4 @@
+import { ConfirmEmailModel } from './../Models/ConfirmEmail-model';
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
@@ -17,8 +18,7 @@ export class AuthenticationService {
 
     this.apiBaseUrl = environment.apiUrl;
   }
-  Login(model:LoginModel): Observable<Credential> {
-
+  Login(model: LoginModel): Observable<Credential> {
     return this._http.post<Credential>(this.apiBaseUrl + "/AccountApi/DoLogin",{Email:model.email,Password:model.password,RemeberMe:model.rememberMe})
   }
 
@@ -28,5 +28,9 @@ export class AuthenticationService {
 
  ResetPassword(model: ResetPasswordModel) {
     return this._http.post(this.apiBaseUrl + "/AccountApi/ResetPassword", model);
+  }
+
+ ConfirmEmail(model: ConfirmEmailModel) {
+    return this._http.post(this.apiBaseUrl + "/AccountApi/ConfirmEmail", model);
   }
 }

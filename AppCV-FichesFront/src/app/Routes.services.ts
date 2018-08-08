@@ -1,3 +1,4 @@
+import { ConfirmEmailComponent } from './components/confirm-email/confirm-email.component';
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
 //
@@ -26,7 +27,8 @@ const routes: Routes = [
       { path: "login", component: LoginComponent },
       { path: "register", component: RegisterComponent },
       { path: "forgotpassword", component: ForgotPasswordComponent },
-      { path: "resetpassword", component: ResetPasswordComponent ,},
+      { path: "resetpassword", component: ResetPasswordComponent },
+      { path: "confirmemail", component: ConfirmEmailComponent },
     ]
   },
   {

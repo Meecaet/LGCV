@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using DAL_CV_Fiches.Models.Graph;
+using DAL_CV_Fiches.Repositories.Graph;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Migrations;
 using System;
 using System.Collections.Generic;
@@ -63,7 +65,7 @@ namespace WebCV_Fiches.Data.Migrations
                 AdminRoleId,
                 Guid.NewGuid().ToString(),
                 "Administrateur",
-                "ADMINISTRATEUR"                
+                "ADMINISTRATEUR"
             },
             "dbo");
 
@@ -110,6 +112,14 @@ namespace WebCV_Fiches.Data.Migrations
                 "APPROBATEUR"
             },
             "dbo");
+
+            var utilisateurGraphRepository = new UtilisateurGraphRepository();
+            var utilisateur = new Utilisateur()
+            {
+                Prenom = "Admin",
+                AdresseCourriel = "admin@lgs.com"
+            };
+            utilisateurGraphRepository.CreateIfNotExists(utilisateur);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

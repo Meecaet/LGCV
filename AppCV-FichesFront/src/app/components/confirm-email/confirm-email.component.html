@@ -1,0 +1,17 @@
+<div id="identification" [ngClass]="classValidator('divrelativeOn form-inline ','divrelativeOff form-inline')">
+  <div [ngClass]="classValidator('divloadingOn','divloadingOff')" class="divloading">
+    <div style="margin-left: auto;margin-right: 65px;width: 1px">
+      <img [ngClass]="classValidator('imgloading','imgloadingHidden')">
+    </div>
+  </div>
+  <div class="alert alert-success" *ngIf="!showLoadingConfirmEmail && IsSuccess">
+    <p>
+       Merci de confirmer votre email.
+     </p>
+   </div>
+  <div class="alert alert-danger" *ngIf="!showLoadingConfirmEmail && !IsSuccess">
+    <p>
+      I ly a eu une erreur lors de la confirmation de votre courrier électronique.
+     </p>
+   </div>
+</div>

@@ -1,3 +1,4 @@
+import { ConfirmEmailComponent } from './components/confirm-email/confirm-email.component';
 import { InlineEditorModule } from "./qontu/ngx-inline-editor";
 import { NgModule } from "@angular/core";
 import { BrowserModule } from "@angular/platform-browser";
@@ -67,6 +68,7 @@ import { FonctionPipe } from "./Services/fonction.pipe";
     PageNotFoundComponent,
     ForgotPasswordComponent,
     ResetPasswordComponent,
+    ConfirmEmailComponent,
     FonctionPipe,
     ResumeInterventionsComponent,
     LangueService,

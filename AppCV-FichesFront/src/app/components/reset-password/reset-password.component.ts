@@ -22,7 +22,6 @@ export class ResetPasswordComponent implements OnInit {
     private auth: AuthenticationService
   ) {
     this.route.queryParams.subscribe(params => {
-      debugger;
       this.model.code = params.code;
     });
   }

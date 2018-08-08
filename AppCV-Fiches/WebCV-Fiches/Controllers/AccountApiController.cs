@@ -14,6 +14,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using WebCV_Fiches.Extensions;
+using WebCV_Fiches.Filters;
 using WebCV_Fiches.Models;
 using WebCV_Fiches.Models.AccountApiModels;
 using WebCV_Fiches.Models.AccountViewModels;
@@ -53,7 +54,8 @@ namespace WebCV_Fiches.Controllers
         }
 
         [HttpGet]
-        //[Authorize("Bearer")]
+        [Authorize("Bearer")]
+        [AuthorizeRoleFilter("Administrateur", "Conseiller", "Approbateur")]
         [Route("IsTokenValid")]
         public IActionResult IsTokenValid()
         {
@@ -70,6 +72,7 @@ namespace WebCV_Fiches.Controllers
           [FromServices]TokenConfigurationExtentions tokenConfigurations)
         {
             bool credenciaisValidas = false;
+            apiCredential = new ApiCredential();
             if (userLogin == null || userLogin.Email == null)
             {
                 apiCredential.authenticated = false;
@@ -78,7 +81,13 @@ namespace WebCV_Fiches.Controllers
             }
 
             var user = _userManager.FindByEmailAsync(userLogin.Email).Result;
-            apiCredential = login.Find(userLogin, $"{user.Prenom} {user.Nom}");
+            if (user == null)
+            {
+                apiCredential.authenticated = false;
+                apiCredential.message = "User not found";
+                return apiCredential;
+            }
+            apiCredential = login.Find(user, userLogin, $"{user.Prenom} {user.Nom}");
             credenciaisValidas = (apiCredential != null);
 
             if (credenciaisValidas)
@@ -137,15 +146,19 @@ namespace WebCV_Fiches.Controllers
         [Route("Register")]
         public async Task<ActionResult> Register([FromBody]RegisterViewModel model)
         {
-            var user = new ApplicationUser { UserName = model.Email, Email = model.Email, Nom = model.Nom, Prenom = model.Prenom };
+            var user = new ApplicationUser { UserName = model.Email, Email = $"{model.Email}@lgs.com", Nom = model.Nom, Prenom = model.Prenom };
             var result = await _userManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
             {
+                ApplicationRole role = _roleManager.FindByNameAsync("Conseiller").Result;
+                await _userManager.AddToRoleAsync(user, role.Name);
+
                 _logger.LogInformation("User created a new account with password.");
 
                 var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                //var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
-                //await _emailSender.SendEmailConfirmationAsync(model.Email, callbackUrl);
+                code = System.Net.WebUtility.UrlEncode(code);
+                var callbackUrl = $"{_configuration["FrontendBaseUrl"]}/account/confirmemail?userId={user.Id}&code={code}";
+                await _emailSender.SendEmailConfirmationAsync(model.Email, callbackUrl);
 
                 await _signInManager.SignInAsync(user, isPersistent: false);
                 _logger.LogInformation("User created a new account with password.");
@@ -175,7 +188,7 @@ namespace WebCV_Fiches.Controllers
         public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordViewModel model)
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
-            if (user == null)
+            if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
             {
                 // Don't reveal that the user does not exist or is not confirmed
                 return Ok();
@@ -185,7 +198,7 @@ namespace WebCV_Fiches.Controllers
             // visit https://go.microsoft.com/fwlink/?LinkID=532713
             var code = await _userManager.GeneratePasswordResetTokenAsync(user);
             code = System.Net.WebUtility.UrlEncode(code);
-            var callbackUrl = $"{_configuration["FrontendResetPasswordBaseUrl"]}?code={code}";
+            var callbackUrl = $"{_configuration["FrontendBaseUrl"]}/account/resetpassword?code={code}";
             await _emailSender.SendEmailAsync(model.Email, "Reset Password",
                $"Please reset your password by clicking here: <a href='{callbackUrl}'>link</a>");
             return Ok();
@@ -213,6 +226,28 @@ namespace WebCV_Fiches.Controllers
             }
             return StatusCode(500, result);
         }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [Route("ConfirmEmail")]
+        public async Task<IActionResult> ConfirmEmail([FromBody] ConfirmEmail confirmEmail)
+        {
+            if (confirmEmail.Code == null)
+            {
+                return StatusCode(500, new { message = "Invalid Code" });
+            }
+            var user = await _userManager.FindByIdAsync(confirmEmail.UserId);
+            if (user == null)
+            {
+                return StatusCode(500, $"Unable to load user with ID '{confirmEmail.UserId}'.");
+            }
+            var result = await _userManager.ConfirmEmailAsync(user, confirmEmail.Code);
+            if (result.Succeeded)
+                return Ok();
+            else
+                return StatusCode(500);
+        }
+
     }
 }
 

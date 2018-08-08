@@ -1,62 +1,64 @@
 <div class="container body-content">
 
-  <h2>Register</h2>
+    <h2>Register</h2>
 
-  <div class="row">
-    <div class="col-md-4">
-      <form method="post" action="/Account/Register" novalidate="novalidate">
-        <h4>Create a new account.</h4>
-        <hr>
-        <div class="form-group">
-          <label for="Email">Email</label>
-          <input class="form-control" (keyup)="IsValid(model.email, IsValidEmail, IsValidEmailRegex)" [(ngModel)]="model.email" type="email" name="Email" value="">
-          <div #IsValidEmail class="alert alert-danger" isTouched="false" hidden="isTouched?false:true">
-            This field is required
-          </div>
-          <div #IsValidEmailRegex class="alert alert-danger" isTouched="false" hidden="isTouched?false:true">
-            The email format is incorrect
-          </div>
+    <div class="row">
+        <div class="col-md-4">
+            <form method="post" action="/Account/Register" novalidate="novalidate">
+                <h4>Create a new account.</h4>
+                <hr>
+                <div class="form-group">
+                    <label for="Email">Email</label>
+                    <div class="form-inline">
+                        <input class="form-control" [(ngModel)]="model.email" type="email" name="Email" value="">
+                        <div class="d-inline"> @lgs.com</div>
+                    </div>
+                    <div #IsValidEmail class="alert alert-danger" isTouched="false" hidden="isTouched?false:true">
+                        This field is required
+                    </div>
+                    <div #IsValidEmailRegex class="alert alert-danger" isTouched="false" hidden="isTouched?false:true">
+                        The email format is incorrect
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="Prenom">Prenom</label>
+                    <input class="form-control" type="text" (keyup)="IsValid(model.prenom, IsValidPrenom, null)" name="Prenom" [(ngModel)]="model.prenom">
+                    <div #IsValidPrenom class="alert alert-danger" isTouched="false" hidden="isTouched?false:true">
+                        This field is required
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="Nom">Nom</label>
+                    <input class="form-control" type="text" name="Nom" (keyup)="IsValid(model.nom,IsValidNom,null)" [(ngModel)]="model.nom">
+                    <div #IsValidNom class="alert alert-danger" isTouched="false" hidden="isTouched?false:true">
+                        This field is required
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="Password">Password</label>
+                    <input class="form-control" (keyup)="IsValidPassword(model.password,IsValidPassWord,IsValidPassWordRegex)" [(ngModel)]="model.password" type="password" name="Password">
+                    <div #IsValidPassWord class="alert alert-danger" isTouched="false" hidden="isTouched?false:true">
+                        This field is required
+                    </div>
+                    <div #IsValidPassWordRegex class="alert alert-danger" isTouched="false" hidden="isTouched?false:true">
+                        The password must contain at least 8 characters, including UPPER/lowercase and numbers
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="ConfirmPassword">Confirm password</label>
+                    <input class="form-control" type="password" [(ngModel)]="ConfirmPassword" name="ConfirmPassword">
+                    <div *ngIf="ConfirmPassword==model.password?false:true" class="alert alert-danger">
+                        The password and confirmation password do not match.
+                    </div>
+                </div>
+
+                <button type="button" class="btn btn-default" (click)="Registre()">Register</button>
+            </form>
         </div>
-
-        <div class="form-group">
-          <label for="Prenom">Prenom</label>
-          <input class="form-control" type="text" (keyup)="IsValid(model.prenom, IsValidPrenom, null)" name="Prenom" [(ngModel)]="model.prenom">
-          <div #IsValidPrenom class="alert alert-danger" isTouched="false" hidden="isTouched?false:true">
-            This field is required
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="Nom">Nom</label>
-          <input class="form-control" type="text" name="Nom" (keyup)="IsValid(model.nom,IsValidNom,null)" [(ngModel)]="model.nom">
-          <div #IsValidNom class="alert alert-danger" isTouched="false" hidden="isTouched?false:true">
-            This field is required
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="Password">Password</label>
-          <input class="form-control" (keyup)="IsValidPassword(model.password,IsValidPassWord,IsValidPassWordRegex)" [(ngModel)]="model.password"
-            type="password" name="Password">
-          <div #IsValidPassWord class="alert alert-danger" isTouched="false" hidden="isTouched?false:true">
-            This field is required
-          </div>
-          <div #IsValidPassWordRegex class="alert alert-danger" isTouched="false" hidden="isTouched?false:true">
-            The password must contain at least 8 characters, including UPPER/lowercase and numbers
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="ConfirmPassword">Confirm password</label>
-          <input class="form-control" type="password" [(ngModel)]="ConfirmPassword" name="ConfirmPassword">
-          <div *ngIf="ConfirmPassword==model.password?false:true" class="alert alert-danger">
-            The password and confirmation password do not match.
-          </div>
-        </div>
-
-        <button type="button" class="btn btn-default" (click)="Registre()">Register</button>
-      </form>
     </div>
-  </div>
 
 </div>

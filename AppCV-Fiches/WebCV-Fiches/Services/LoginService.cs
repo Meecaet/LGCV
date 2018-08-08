@@ -1,6 +1,7 @@
 ﻿using DAL_CV_Fiches.Models.Graph;
 using DAL_CV_Fiches.Repositories.Graph;
 using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using WebCV_Fiches.Models;
@@ -19,11 +20,11 @@ namespace WebCV_Fiches.Services
             _signInManager = signInManager;
         }
 
-        public ApiCredential Find(LoginModel loginModel, string NomeComplet)
+        public ApiCredential Find(ApplicationUser user, LoginModel loginModel, string NomeComplet)
         {
             ApiCredential credential = new ApiCredential();
 
-            var result = _signInManager.PasswordSignInAsync(loginModel.Email, loginModel.Password, loginModel.RemeberMe, lockoutOnFailure: false);
+            var result = _signInManager.CheckPasswordSignInAsync(user, loginModel.Password, lockoutOnFailure: false);
 
             if (result.Result == SignInResult.Success)
             {
@@ -38,8 +39,7 @@ namespace WebCV_Fiches.Services
 
                     if (utilisateur == null)
                     {
-                        utilisateur = new Utilisateur();
-                        UtilisateurDepot.Add(utilisateur);
+                        throw new Exception("Utilisateur not found");
                     }
 
                     utilisateur.AdresseCourriel = loginModel.Email;

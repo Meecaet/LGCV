@@ -24,7 +24,6 @@ namespace DAL_CV_Fiches.Repositories.Graph
 
         public void ChangerPropriete(GraphObject noeudModifie, Expression<Func<object>> viewModelPropriete, Expression<Func<object>> graphModelPropriete, string graphModelProprieteNom = null)
         {
-            //var viewModelProprieteNom = ((MemberExpression)viewModelPropriete.Body).Member.Name;
             string viewModelProprieteNom;
             var viewModelProprieteMemberEx = viewModelPropriete.Body as MemberExpression;
             if (viewModelProprieteMemberEx != null)
@@ -39,7 +38,6 @@ namespace DAL_CV_Fiches.Repositories.Graph
 
             if (graphModelProprieteNom == null)
             {
-                //graphModelProprieteNom = ((MemberExpression)graphModelPropriete.Body).Member.Name;
                 var graphModelProprieteMemberEx = graphModelPropriete.Body as MemberExpression;
                 if (graphModelProprieteMemberEx != null)
                     graphModelProprieteNom = graphModelProprieteMemberEx.Member.Name;
