@@ -1280,14 +1280,13 @@ namespace WebCV_Fiches.Helpers
                                      group data by data.Projet.SocieteDeConseil.Nom into g
                                      select g;
 
-
             foreach (var employeur in mandatsByEmployeur)
             {
                 employeurParagraphModele = new Paragraph();
                 paragraphProperties = new ParagraphProperties();
 
                 paragraphProperties.ParagraphStyleId = new ParagraphStyleId { Val = "Titre1" };
-                AddSpacingToElement(paragraphProperties, 0, 0, spaceSimple);
+                AddSpacingToElement(paragraphProperties, 240, 240, spaceSimple);
                 employeurParagraphModele.Append(paragraphProperties);
                 employeurParagraphModele.Append(new Run(new Text(employeur.Key)));
 
@@ -1299,10 +1298,10 @@ namespace WebCV_Fiches.Helpers
 
                 foreach (var client in mandatsByClientsOfAnEmployeur)
                 {
-                    docBody.Append(GetTitre(client.Key, style: "Titre2"));
-
                     foreach (var mandat in client)
                     {
+                        docBody.Append(GetTitre(client.Key, style: "Titre2"));
+
                         tableInfoMandat = new Table();
                         tableProperties = new TableProperties();
                         tableProperties.Append(new TableWidth { Width = "10418", Type = new EnumValue<TableWidthUnitValues>(TableWidthUnitValues.Dxa) });
@@ -1388,9 +1387,9 @@ namespace WebCV_Fiches.Helpers
                         paragraphProperties = new ParagraphProperties();
                         paragraphProperties.Append(new SpacingBetweenLines
                         {
-                            After = "60",
-                            Before = "60",
-                            Line = "233"
+                            After = "0",
+                            Before = "120",
+                            Line = spaceSimple.ToString()
                         });
 
                         paragraphProperties.Append(new Justification { Val = new EnumValue<JustificationValues>(JustificationValues.Both) });
@@ -1407,6 +1406,15 @@ namespace WebCV_Fiches.Helpers
                         //Tâches
 
                         currentParagraph = new Paragraph();
+                        paragraphProperties = new ParagraphProperties();
+                        paragraphProperties.Append(new SpacingBetweenLines
+                        {
+                            After = "60",
+                            Before = "120",
+                            Line = spaceSimple.ToString()
+                        });
+
+                        paragraphProperties.Append(new Justification { Val = new EnumValue<JustificationValues>(JustificationValues.Both) });
                         currentParagraph.Append(paragraphProperties.CloneNode(true));
 
                         currentRun = new Run(GetRunProperties("Arial", "Black", "20", false, false));
@@ -1422,11 +1430,11 @@ namespace WebCV_Fiches.Helpers
                             {
                                 After = "0",
                                 Before = "0",
-                                Line = "233"
+                                Line = spaceSimple.ToString()
                             })
                             { ParagraphStyleId = new ParagraphStyleId { Val = "Puce1" } });
 
-                            currentRun = new Run(GetRunProperties("Arial", "Black", "21", false, false));
+                            currentRun = new Run(GetRunProperties("Arial", "Black", "20", false, false));
                             currentRun.Append(new Text(tache.Description));
                             currentParagraph.Append(currentRun);
                             docBody.Append(currentParagraph);
@@ -1437,6 +1445,15 @@ namespace WebCV_Fiches.Helpers
                         if (mandat.Projet.Technologies != null)
                         {
                             currentParagraph = new Paragraph();
+                            paragraphProperties = new ParagraphProperties();
+                            paragraphProperties.Append(new SpacingBetweenLines
+                            {
+                                After = "0",
+                                Before = "120",
+                                Line = spaceSimple.ToString()
+                            });
+
+                            paragraphProperties.Append(new Justification { Val = new EnumValue<JustificationValues>(JustificationValues.Both) });
                             currentParagraph.Append(paragraphProperties.CloneNode(true));
 
                             currentRun = new Run(GetRunProperties("Arial", "Black", "20", false, false));
@@ -1445,8 +1462,6 @@ namespace WebCV_Fiches.Helpers
 
                             docBody.Append(currentParagraph);
                         }
-
-                        docBody.Append(new Paragraph());
                     }
 
                 }
@@ -1719,25 +1734,37 @@ namespace WebCV_Fiches.Helpers
             MainDocumentPart mainDocPart = document.MainDocumentPart;
             mainDocPart.DeleteParts(mainDocPart.FooterParts);
 
+
+            Paragraph paragraph = new Paragraph();
+            Run paragraphRun = new Run();
+
+            AddSpacingToElement(paragraph, 840, 0, spaceSimple);
+            AddIndentationToElement(paragraph, 0, -2);
+            paragraphRun.Append(GetRunProperties("Arial", "969696", "16", false, false));
+            paragraphRun.Append(new Text($"{utilisateur.Prenom} {utilisateur.Nom} {"PAGE"}"));
+
+            paragraphRun.Append(new TabChar());
+            paragraphRun.Append(new TabChar());
+            paragraphRun.Append(new SimpleField() { Instruction = "PAGE NUMPAGESS" });
+            paragraph.Append(paragraphRun);
+            AddAligmentToParagrah(paragraph, ParagraphAligment.Justifie);
+
             FooterPart footerPart1 = mainDocPart.AddNewPart<FooterPart>("footer1");
             FooterPart footerPartEven = mainDocPart.AddNewPart<FooterPart>("footerEven");
             FooterPart footerPartOdd = mainDocPart.AddNewPart<FooterPart>("footerOdd");
 
             Footer footer1 = new Footer();
-            Paragraph paragraph = new Paragraph();
-            AddAligmentToParagrah(paragraph, ParagraphAligment.Centre);
-            paragraph.Append(new Run(GetFooterImage(@"images\footer.png", footerPart1)));
-            footer1.Append(paragraph);
+            Paragraph paragraph2 = new Paragraph();
+            AddAligmentToParagrah(paragraph2, ParagraphAligment.Centre);
+            paragraph2.Append(new Run(GetFooterImage(@"images\footer.png", footerPart1)));
+            footer1.Append(paragraph2);
             footerPart1.Footer = footer1;
 
             Footer footerEven = new Footer();
             footerEven.Append(GetNewParagraph("Footer1"));
             footerPartEven.Footer = footerEven;
 
-            Footer footerOdd = new Footer();
-            footerOdd.Append(GetNewParagraph("Footer2"));
-            footerPartOdd.Footer = footerOdd;
-
+            footerPartOdd.Footer = CreateFooter1();
 
             SectionProperties sectionProperties1 = mainDocPart.Document.Body.Descendants<SectionProperties>().FirstOrDefault();
             if (sectionProperties1 == null)
@@ -1745,14 +1772,85 @@ namespace WebCV_Fiches.Helpers
                 sectionProperties1 = new SectionProperties() { };
                 mainDocPart.Document.Body.Append(sectionProperties1);
             }
-            FooterReference footerReference1 = new FooterReference() { Type = HeaderFooterValues.Default, Id = "footer1" };
+            FooterReference footerReference1 = new FooterReference() { Type = HeaderFooterValues.First, Id = "footer1" };
             FooterReference footerReferenceEven = new FooterReference() { Type = HeaderFooterValues.Even, Id = "footerEven" };
-            FooterReference footerReferenceOdd = new FooterReference() { Type = HeaderFooterValues.First, Id = "footerOdd" };
+            FooterReference footerReferenceOdd = new FooterReference() { Type = HeaderFooterValues.Default, Id = "footerOdd" };
 
             sectionProperties1.Append(footerReference1);
             sectionProperties1.Append(footerReferenceEven);
             sectionProperties1.Append(footerReferenceOdd);
 
+        }
+
+        private Footer CreateFooter1()
+        {
+            var element =
+                new Footer(
+                    new Paragraph(
+                        new ParagraphProperties(
+                            new ParagraphStyleId() { Val = "Footer" },
+                            new Tabs(
+                                new TabStop() { Val = TabStopValues.Center, Position = 5103 },
+                                new TabStop() { Val = TabStopValues.Right, Position = 10206 }),
+                            new SpacingBetweenLines
+                            {
+                                Before = "840",
+                                After = "0",
+                                BeforeAutoSpacing = new OnOffValue(false),
+                                AfterAutoSpacing = new OnOffValue(false),
+                                Line = spaceSimple.ToString()
+                            }),
+                        new Run(
+                            new RunProperties(GetRunProperties("Arial", "969696", "16", false, false)),
+                            new Text($"{utilisateur.Prenom} {utilisateur.Nom}"),
+                            new TabChar(),
+                            new TabChar(),
+                            new SimpleField() { Instruction = " PAGE   \\* MERGEFORMAT " },
+                            new Text(" / "),
+                            new SimpleField() { Instruction = " NUMPAGES \\* Arabic \\* MERGEFORMAT" })
+                ));
+
+            return element;
+        }
+
+        private static Footer GenerateFooter()
+        {
+            var element =
+                new Footer(
+                    new SdtBlock(
+                        new SdtProperties(
+                            new SdtId() { Val = 317275692 }),
+                        new SdtContentBlock(
+                            new Paragraph(
+                                new ParagraphProperties(
+                                    new ParagraphStyleId() { Val = "Footer" },
+                                    new Justification() { Val = JustificationValues.Center }),
+                                new Run(
+                                    new RunProperties(
+                                        new NoProof(),
+                                        new Languages() { EastAsia = "en-NZ" })),
+                                new SimpleField(
+                                    new Run(
+                                        new RunProperties(
+                                            new NoProof()),
+                                        new Text("1")
+                                    )
+                                    { RsidRunAddition = "001F06F5" }
+                                )
+                                { Instruction = " PAGE   \\* MERGEFORMAT " }
+                            )
+                            { RsidParagraphAddition = "00F1559F", RsidParagraphProperties = "00F1559F", RsidRunAdditionDefault = "00F1559F" })),
+                    new Paragraph(
+                        new ParagraphProperties(
+                            new ParagraphStyleId() { Val = "Footer" },
+                            new Tabs(
+                                new TabStop() { Val = TabStopValues.Clear, Position = 4320 },
+                                new TabStop() { Val = TabStopValues.Clear, Position = 8640 },
+                                new TabStop() { Val = TabStopValues.Center, Position = 4820 },
+                                new TabStop() { Val = TabStopValues.Right, Position = 9639 }))
+                    )
+                    { RsidParagraphMarkRevision = "005D2110", RsidParagraphAddition = "002D26D8", RsidParagraphProperties = "007F0645", RsidRunAdditionDefault = "002D26D8" });
+            return element;
         }
 
         private Drawing GetFooterImage(string imagePath, FooterPart footerPart)
