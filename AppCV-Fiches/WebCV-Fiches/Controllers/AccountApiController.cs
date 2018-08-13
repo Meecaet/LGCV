@@ -200,8 +200,8 @@ namespace WebCV_Fiches.Controllers
             var code = await _userManager.GeneratePasswordResetTokenAsync(user);
             code = System.Net.WebUtility.UrlEncode(code);
             var callbackUrl = $"{_configuration["FrontendBaseUrl"]}/account/resetpassword?code={code}";
-            await _emailSender.SendEmailAsync(model.Email, "Reset Password",
-               $"Please reset your password by clicking here: <a href='{callbackUrl}'>link</a>");
+            await _emailSender.SendEmailAsync(model.Email, "Réinitialiser le mot de passe",
+               $"Veuillez réinitialiser votre mot de passe en cliquant ici: <a href='{callbackUrl}'>link</a>");
             return Ok();
         }
 
