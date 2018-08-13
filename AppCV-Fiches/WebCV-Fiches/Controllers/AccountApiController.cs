@@ -146,7 +146,8 @@ namespace WebCV_Fiches.Controllers
         [Route("Register")]
         public async Task<ActionResult> Register([FromBody]RegisterViewModel model)
         {
-            var user = new ApplicationUser { UserName = model.Email, Email = $"{model.Email}@lgs.com", Nom = model.Nom, Prenom = model.Prenom };
+            var email = $"{model.Email}@lgs.com";
+            var user = new ApplicationUser { UserName = email, Email = email, Nom = model.Nom, Prenom = model.Prenom };
             var result = await _userManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
             {
@@ -158,7 +159,7 @@ namespace WebCV_Fiches.Controllers
                 var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                 code = System.Net.WebUtility.UrlEncode(code);
                 var callbackUrl = $"{_configuration["FrontendBaseUrl"]}/account/confirmemail?userId={user.Id}&code={code}";
-                await _emailSender.SendEmailConfirmationAsync(model.Email, callbackUrl);
+                await _emailSender.SendEmailConfirmationAsync(email, callbackUrl);
 
                 await _signInManager.SignInAsync(user, isPersistent: false);
                 _logger.LogInformation("User created a new account with password.");
