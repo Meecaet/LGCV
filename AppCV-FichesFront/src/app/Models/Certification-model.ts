@@ -6,7 +6,7 @@ export class CertificationViewModel {
   graphIdGenre: string;
   description?: string;
   annee?: number;
-  certificationHighlight:CertificationHighlight = new CertificationHighlight();
+
   editionObjecViewModels: Array<EditionObjecViewModel>;
 }
 

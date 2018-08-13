@@ -10,6 +10,11 @@ import { DomaineDInterventionViewModel } from "../Models/DomaineDIntervention-mo
 import { FormationAcademiqueViewModel } from "../Models/FormationAcademique-model";
 import { MandatViewModel } from "../Models/Mandat-model";
 import { environment } from "../../environments/environment";
+import { TechnologieViewModel } from "../Models/Technologie-model";
+import { TechnologieByCategorieViewModel } from "../Models/TechlogieByCategorie-model";
+import { PerfectionnementViewModel } from "../Models/Perfectionnement-model";
+import { ConferenceViewModel } from "../Models/Conference-model";
+import { PublicationViewModel } from "../Models/Publication-model";
 
 @Injectable({
   providedIn: "root"
@@ -37,7 +42,7 @@ export class CVService {
     }
   }
 
-  IsTokenValid() : Observable<boolean> {
+  IsTokenValid(): Observable<boolean> {
     const url = this.rootPath + "/AccountApi/IsTokenValid";
     return this._http.get<boolean>(url);
   }
@@ -76,7 +81,10 @@ export class CVService {
   }
 
   public DownloadCV(id: string) {
-    return this._http.get(`${this.rootPath}/FichierWord/${id}`, { observe: 'response' , responseType: 'arraybuffer'});
+    return this._http.get(`${this.rootPath}/FichierWord/${id}`, {
+      observe: "response",
+      responseType: "arraybuffer"
+    });
   }
 
   public EditBio(utilisateurId: any, model: any) {
@@ -103,6 +111,104 @@ export class CVService {
     return this.doRequest("CV/Save");
   }
 
+  /**
+   * UtilizateurPublication
+   */
+  public UtilizateurPublication(
+    idUtilisateur: string
+  ): Observable<Array<PublicationViewModel>> {
+    const url = this.rootPath + "/Publication/" + idUtilisateur + "/All";
+    return this._http.get<Array<PublicationViewModel>>(url);
+  }
+  public AddPublication(
+    modelToSave: ConferenceViewModel,
+    idUtilisateur: string
+  ): Observable<ConferenceViewModel> {
+    const url = this.rootPath + "/Publication/" + idUtilisateur + "/add";
+    return this._http.post<ConferenceViewModel>(url, modelToSave);
+  }
+  DeletePublication(
+    idUtilisateur: string,
+    graphId: string
+  ): Observable<PublicationViewModel> {
+    const url = "Publication/" + idUtilisateur + "/Delete/" + graphId;
+    return this.doRequest<PublicationViewModel>(url, "post");
+  }
+
+  /**
+   * UtilizateurConference
+   */
+  public UtilizateurConference(
+    idUtilisateur: string
+  ): Observable<Array<ConferenceViewModel>> {
+    const url = this.rootPath + "/Conference/" + idUtilisateur + "/All";
+    return this._http.get<Array<ConferenceViewModel>>(url);
+  }
+  public AddConference(
+    modelToSave: ConferenceViewModel,
+    idUtilisateur: string
+  ): Observable<ConferenceViewModel> {
+    const url = this.rootPath + "/Conference/" + idUtilisateur + "/add";
+    return this._http.post<ConferenceViewModel>(url, modelToSave);
+  }
+  DeleteConference(
+    idUtilisateur: string,
+    graphId: string
+  ): Observable<ConferenceViewModel> {
+    const url = "Conference/" + idUtilisateur + "/Delete/" + graphId;
+    return this.doRequest<ConferenceViewModel>(url, "post");
+  }
+
+  /**
+   *   Technologie
+   */
+  public UtilizateurTechnologie(
+    idUtilisateur: string
+  ): Observable<Array<TechnologieByCategorieViewModel>> {
+    const url = this.rootPath + "/Technologies/" + idUtilisateur + "/All";
+    return this._http.get<Array<TechnologieByCategorieViewModel>>(url);
+  }
+
+  public LoadTechnologie(): Observable<Array<TechnologieViewModel>> {
+    const url = this.rootPath + "/FrontEndLoadData/GetAllTechnologies";
+    return this._http.get<Array<TechnologieViewModel>>(url);
+  }
+  AddTechnologies(
+    modelToSave: Array<TechnologieViewModel>,
+    idUtilisateur: string
+  ) {
+    const url = this.rootPath + "/Technologies/" + idUtilisateur + "/add";
+    return this._http.post(url, modelToSave);
+  }
+
+  DeleteTechnologie(
+    idUtilisateur: string,
+    graphId: string
+  ): Observable<ConferenceViewModel> {
+    const url = "Technologies/" + idUtilisateur + "/Delete/" + graphId;
+    return this.doRequest<ConferenceViewModel>(url, "post");
+  }
+
+  /**
+   *  Perfectionement
+   */
+  public UtilizateurPerfectionement(
+    idUtilisateur: string
+  ): Observable<Array<PerfectionnementViewModel>> {
+    const url = this.rootPath + "/Perfectionnement/" + idUtilisateur + "/All";
+    return this._http.get<Array<PerfectionnementViewModel>>(url);
+  }
+
+  DeletePerfectionnement(
+    idUtilisateur: string,
+    graphId: string
+  ): Observable<PerfectionnementViewModel> {
+    const url = "Perfectionnement/" + idUtilisateur + "/Delete/" + graphId;
+    return this.doRequest<PerfectionnementViewModel>(url, "post");
+  }
+  ///
+  // Fonction
+  //
   public LoadFonction(): Observable<Array<FonctionViewModel>> {
     const url = this.rootPath + "/FrontEndLoadData/GetAllFonctions";
     return this._http.get<Array<FonctionViewModel>>(url);
@@ -123,12 +229,19 @@ export class CVService {
     return this.doRequest<FormationAcademiqueViewModel>(url, "post", domain);
   }
 
+  DeleteFormationAcademique(
+    idUtilisateur: string,
+    graphId: string
+  ): Observable<FormationAcademiqueViewModel> {
+    const url = "FormationAcademique/" + idUtilisateur + "/Delete/" + graphId;
+    return this.doRequest<FormationAcademiqueViewModel>(url, "post");
+  }
+
   ///
   //ResumeIntervention
   ///
 
   LoadResumeIntervention(idUtilisateur: string) {
-
     const url = this.AllActionUrl(idUtilisateur, "ResumeIntervention");
     return this.doRequest<Array<ResumeInterventionViewModel>>(url, "post");
   }
@@ -153,6 +266,14 @@ export class CVService {
     const url = this.AddActionUrl(idUtilisateur, "CVDomainIntervention");
     return this.doRequest<DomaineDInterventionViewModel>(url, "post", domain);
   }
+
+  DeleteDomain(
+    idUtilisateur: string,
+    graphId: string
+  ): Observable<DomaineDInterventionViewModel> {
+    const url = "CVDomainIntervention/" + idUtilisateur + "/Delete/" + graphId;
+    return this.doRequest<DomaineDInterventionViewModel>(url, "post");
+  }
   ///
   // Certifications
   ///
@@ -167,22 +288,35 @@ export class CVService {
     const url = this.AddActionUrl(idUtilisateur, "Certification");
     return this.doRequest<CertificationViewModel>(url, "post", certification);
   }
+
+  DeleteCertification(
+    idUtilisateur: string,
+    graphId: string
+  ): Observable<CertificationViewModel> {
+    const url = "Certification/" + idUtilisateur + "/Delete/" + graphId;
+    return this.doRequest<CertificationViewModel>(url, "post");
+  }
   ///
   // Mandat
   ///
-  LoadMandat(idUtilisateur: string,idMandat :string) {
-
-    const url = this.LoadMandatActionUrl(idUtilisateur,idMandat);
+  LoadMandat(idUtilisateur: string, idMandat: string) {
+    const url = this.LoadMandatActionUrl(idUtilisateur, idMandat);
     return this.doRequest<MandatViewModel>(url, "get");
   }
   /// Langue
-  public UtilizaterLangue(idUtilisateur: string  ): Observable<Array<LangueViewModel>> {
-    const url = this.rootPath + "/Langue/"+idUtilisateur+"/All";
+  public UtilizaterLangue(
+    idUtilisateur: string
+  ): Observable<Array<LangueViewModel>> {
+    const url = this.rootPath + "/Langue/" + idUtilisateur + "/All";
     return this._http.get<Array<LangueViewModel>>(url);
   }
 
   public LoadLangue(): Observable<Array<LangueViewModel>> {
     const url = this.rootPath + "/FrontEndLoadData/GetAllLangues";
     return this._http.get<Array<LangueViewModel>>(url);
+  }
+  DeleteLangue(idUtilisateur, graphId): Observable<LangueViewModel> {
+    const url = "Langue/" + idUtilisateur + "/Delete/" + graphId;
+    return this.doRequest<LangueViewModel>(url, "post");
   }
 }

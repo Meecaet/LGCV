@@ -29,12 +29,23 @@ export class ChipDomainComponent implements OnInit {
     this.LoadUserData();
   }
   private LoadUserData() {
+ this.showLoadingDomain  = true;
+
     this.CVserv.LoadDomain(this.UtilisateurId).subscribe(
       (data: Array<DomaineDInterventionViewModel>) => {
-        this.domains = data;
+        this.domains = data.filter((x: DomaineDInterventionViewModel) => {
+         if(x.editionObjecViewModels.length < 1)
+         {
+           return x;
+         }
+         else if(!x.editionObjecViewModels.some(x=> {return x.etat=="Modifie" && x.type=="Enlever"}))
+         {
+           return x;
+         }
+        });
         this.showLoadingDomain = false;
       },
-      this.Error
+     (error)=> {this.Error(error)}
     );
   }
   addDomain(event: MatChipInputEvent): void {
@@ -59,12 +70,13 @@ export class ChipDomainComponent implements OnInit {
     this.servError.ErrorHandle(error.status);
   }
   removeDomain(domain: DomaineDInterventionViewModel): void {
-    const index = this.domains.findIndex(
-      x => x.description == domain.description
+    this.showLoadingDomain  = true;
+    this.CVserv.DeleteDomain(this.UtilisateurId, domain.graphId).subscribe(
+      s => {
+        this.LoadUserData();
+      },
+      errr => this.Error(errr)
     );
-    if (index >= 0) {
-      this.domains.splice(index, 1);
-    }
   }
   classValidator(cssClass: string, optionCssClass): string {
     if (this.showLoadingDomain) {
@@ -74,3 +86,8 @@ export class ChipDomainComponent implements OnInit {
     }
   }
 }
+
+
+
+
+

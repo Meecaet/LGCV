@@ -14,21 +14,26 @@ import { NiveauLangue } from "../../Models/niveau-langue.enum";
 export class TableLangueComponent implements OnInit {
   langues: Array<LangueViewModel>;
   languesAutoComplete: Array<LangueViewModel>;
-  niveauLangue = new NiveauLangue;
+  opt: LangueViewModel;
+  niveauLangue = new NiveauLangue();
   LangueControl = new FormControl();
-  @Input() UtilisateurId: string;
-  showLoadingLangue:boolean = false;
+  @Input()
+  UtilisateurId: string;
+  showLoadingLangue: boolean = false;
   constructor(
     private cvService: CVService,
     private errorService: ErrorService
   ) {
-  this.  niveauLangue =   new NiveauLangue();
-    this.languesAutoComplete = new  Array<LangueViewModel>();
+    this.niveauLangue = new NiveauLangue();
+    this.languesAutoComplete = new Array<LangueViewModel>();
     this.langues = new Array<LangueViewModel>();
+
+    this.opt = new LangueViewModel();
+    this.opt.LangueControl = new FormControl();
   }
 
   ngOnInit() {
-    this.showLoadingLangue =  true;
+    this.showLoadingLangue = true;
     this.DataLoad();
   }
   AddLangue(): void {
@@ -37,24 +42,21 @@ export class TableLangueComponent implements OnInit {
     this.langues.push(lan);
   }
   removeLange(ele: LangueViewModel) {
-    const index = this.langues.findIndex(
-      x =>
-        x.niveauEcrit == ele.niveauEcrit &&
-        x.niveauLu== ele.niveauLu &&
-        x.niveauParle == ele.niveauParle &&
-        x.nom == ele.nom
+    this.cvService.DeleteLangue(this.UtilisateurId, ele.graphId).subscribe(
+      obs => {
+        this.DataLoad();
+      },
+      error => this.Error(error)
     );
-    if (index >= 0) {
-      this.langues.splice(index, 1);
-    }
   }
-
+  Error(error: HttpErrorResponse) {
+    this.errorService.ErrorHandle(error.status);
+  }
   DataLoad() {
     this.cvService.LoadLangue().subscribe(
       (data: Array<LangueViewModel>) => {
         this.languesAutoComplete = data;
         this.UserDataLoad();
-
       },
       (error: HttpErrorResponse) => {
         this.errorService.ErrorHandle(error.status);
@@ -62,14 +64,27 @@ export class TableLangueComponent implements OnInit {
     );
   }
   UserDataLoad() {
-    this.cvService
-      .UtilizaterLangue(this.UtilisateurId)
-      .subscribe((data: Array<LangueViewModel>) => {
-        for (let index = 0; index < data.length; index++) {
-          this.langues.push(this.SetValue(data[index]));
+    this.showLoadingLangue = true;
+    this.cvService.UtilizaterLangue(this.UtilisateurId).subscribe(
+      (data: Array<LangueViewModel>) => {
+        var temData = data.filter((x: LangueViewModel) => {
+          if (x.editionObjecViewModels.length < 1) {
+            return x;
+          } else if (
+            !x.editionObjecViewModels.some(x => {
+              return x.etat == "Modifie" && x.type == "Enlever";
+            })
+          ) {
+            return x;
+          }
+        });
+        for (let index = 0; index < temData.length; index++) {
+          this.langues.push(this.SetValue(temData[index]));
         }
-        this.showLoadingLangue =  false;
-      });
+        this.showLoadingLangue = false;
+      },
+      error => this.Error(error)
+    );
   }
   SetValue(data: LangueViewModel): LangueViewModel {
     let returnValue = data;
@@ -83,6 +98,33 @@ export class TableLangueComponent implements OnInit {
   }
   SetValueFromControl(formControl: any) {
     return formControl.value.nom;
+  }
+  SaveFormation(value, whoCalls, index: number, args?: any) {
+    debugger;
+    switch (whoCalls) {
+      case "niveauLu":
+        this.langues[index].niveauLu = value;
+        break;
+      case "niveauEcrit":
+        this.langues[index].niveauEcrit = value;
+        break;
+      case "niveauParle":
+        this.langues[index].niveauParle = value;
+        break;
+      case "graphId":
+        if (
+          !this.langues.filter(x => {
+            return x.graphId == value;
+          })
+        ) {
+          this.langues[index].graphId = value;
+        } else {
+          this.langues[index].graphId =   null;
+          value = null;
+          args = null;
+        }
+        break;
+    }
   }
   classValidator(cssClass: string, optionCssClass): string {
     if (this.showLoadingLangue) {

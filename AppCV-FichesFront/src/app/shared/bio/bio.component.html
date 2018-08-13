@@ -15,27 +15,25 @@
           <div>
             <h2 class="form-inline">
               <div class="form-inline">
-                <div class="{{bio.bioHighlight.prenom}}" style="margin-right:10px">
-                  <img    *ngIf="IsShowInformations('prenom')"   (click)="openDialog(originalBio.prenom,'prenom')" style="float: left;cursor: pointer;" class="form-inline" src="../../../assets/information.png">
+                <div style="margin-right:10px">
                   <inline-editor class="form-inline" type="text" empty="Prenom" (onSave)="saveBio(bio)" [(ngModel)]="bio.prenom" name="prenom"
                     [cols]="250"></inline-editor>
                 </div>
-                <div class="{{bio.bioHighlight.nom}}">
-                  <img   *ngIf="IsShowInformations('nom')"  (click)="openDialog(originalBio.nom,'Nom')" style="float: left;cursor: pointer;" class="form-inline" src="../../../assets/information.png">
+                <div>
                   <inline-editor class="form-inline" type="text" (onSave)="saveBio(bio)" empty="Nom" [(ngModel)]="bio.nom" name="nom"></inline-editor>
                 </div>
               </div>
             </h2>
-            <div class="form-inline   {{bio.bioHighlight.fonction}}">
-                <img *ngIf="IsShowInformations('fonction')" (click)="openDialogDropDown(originalBio.fonction,'fonction')"   style="float: left;cursor: pointer;" class="form-inline" src="../../../assets/information.png">
-              <app-drop-down-fonction  (onChange)="onChange($event)"  [functonGraphID]="bio.fonction"   (onSave)="saveBio(bio)" class="form-inline"  [UtilisateurId]="UtilisateurId"></app-drop-down-fonction>
+            <div class="form-inline  ">
+              <app-drop-down-fonction (onChange)="onChange($event)" [functonGraphID]="bio.fonction" (onSave)="saveBio(bio)" class="form-inline"
+                [UtilisateurId]="UtilisateurId"></app-drop-down-fonction>
             </div>
           </div>
           <b> </b>
         </div>
-        <div class="col-lg-12  {{bio.bioHighlight.resumeExperience}}">
-            <img  *ngIf="IsShowInformations('resumeExperience')"  (click)="openDialog(originalBio.resumeExperience,'resume Experience')" style="float: left;cursor: pointer;" class="form-inline" src="../../../assets/information.png">
-             <inline-editor   class="form-inline"   type="textarea" (onSave)="saveBio(bio)" empty="Biographie" [(ngModel)]="bio.resumeExperience" name="biographie">
+        <div class="col-lg-12  ">
+          <inline-editor class="form-inline" type="textarea" (onSave)="saveBio(bio)" empty="Biographie" [(ngModel)]="bio.resumeExperience"
+            name="biographie">
           </inline-editor>
         </div>
       </div>

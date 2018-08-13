@@ -1,5 +1,8 @@
 import { Component, OnInit, Input } from "@angular/core";
 import { PerfectionnementViewModel } from "../../Models/Perfectionnement-model";
+import { CVService } from "../../Services/cv.service";
+import { HttpErrorResponse } from "../../../../node_modules/@angular/common/http";
+import { ErrorService } from "../../Services/error.service";
 
 @Component({
   selector: "app-table-perfectionnements",
@@ -8,50 +11,57 @@ import { PerfectionnementViewModel } from "../../Models/Perfectionnement-model";
 })
 export class TablePerfectionnementsComponent implements OnInit {
   perfectionnement: Array<PerfectionnementViewModel>;
+  @Input() UtilisateurId: string;
 
-  constructor() {
+  showLoadingPerfectionnement: boolean = true;
+  constructor(private cvServ: CVService,private servError : ErrorService) {
     this.perfectionnement = new Array<PerfectionnementViewModel>();
   }
 
-  ngOnInit() {}
-
+  ngOnInit() {
+  this.  LoadUserData();
+  }
+  LoadUserData():void{
+    this.showLoadingPerfectionnement = true;
+    this.cvServ
+      .UtilizateurPerfectionement(this.UtilisateurId)
+      .subscribe(obs => {
+  this.perfectionnement = obs.filter((x: PerfectionnementViewModel) => {
+          if (x.editionObjecViewModels.length < 1) {
+            return x;
+          } else if (
+            !x.editionObjecViewModels.some(x => {
+              return x.etat == "Modifie" && x.type == "Enlever";
+            })
+          ) {
+            return x;
+          }
+        });
+        this.showLoadingPerfectionnement = false;
+      }, (error)=> this.Error(error));
+  }
+  Error(error: HttpErrorResponse) {
+    debugger;
+    this.servError.ErrorHandle(error.status);
+  }
   AddPerfectionnement(): void {
     this.perfectionnement.push(new PerfectionnementViewModel());
   }
-  removePerfectionnement(
-    ele: any,
-    button: any,
-    perc: PerfectionnementViewModel
-  ) {
-    var eleStyle = document.getElementById(ele);
-    if (confirm("Vous voulez supprime ?")) {
-      perc.highlight = "highlighterror";
-      document.getElementById(button).remove();
-      this.deleteFromDatabase(perc);
+  removePerfectionnement(perc: PerfectionnementViewModel) {
+       if (confirm("Vous voulez supprime ?")) {
+      this.showLoadingPerfectionnement = true;
+      this.cvServ
+        .DeletePerfectionnement(this.UtilisateurId, perc.graphId)
+        .subscribe(sub => {
+          this.LoadUserData();
+        });
     }
   }
-  deleteFromDatabase(form: PerfectionnementViewModel) {
-    alert("to implement");
-  }
-  OrderBy(): void {
-    this.perfectionnement = Array.from(this.perfectionnement).sort(
-      (item1: any, item2: any) => {
-        return this.orderByComparator(item2["annee"], item1["annee"]);
-      }
-    );
-  }
-  private orderByComparator(a: any, b: any): number {
-    if (
-      isNaN(parseFloat(a)) ||
-      !isFinite(a) ||
-      (isNaN(parseFloat(b)) || !isFinite(b))
-    ) {
-      if (a < b) return -1;
-      if (a > b) return 1;
+  classValidator(cssClass: string, optionCssClass): string {
+    if (this.showLoadingPerfectionnement) {
+      return cssClass;
     } else {
-      if (parseFloat(a) < parseFloat(b)) return -1;
-      if (parseFloat(a) > parseFloat(b)) return 1;
+      return optionCssClass;
     }
-    return 0;
   }
 }

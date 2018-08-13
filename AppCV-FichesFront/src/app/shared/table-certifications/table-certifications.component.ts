@@ -11,7 +11,7 @@ import { ErrorService } from "../../Services/error.service";
 })
 export class TableCertificationsComponent implements OnInit {
   certifications: Array<CertificationViewModel>;
-  certification: CertificationViewModel;
+
   highlight: string;
   @Input() UtilisateurId: string;
   showLoadingCertification: boolean = true;
@@ -20,44 +20,49 @@ export class TableCertificationsComponent implements OnInit {
     this.LoadUserData();
   }
   LoadUserData() {
+    this.certifications = new Array<CertificationViewModel>();
     this.showLoadingCertification = true;
     this.serv
       .LoadCertification(this.UtilisateurId)
       .subscribe((obs: Array<CertificationViewModel>) => {
-        this.certifications = new Array<CertificationViewModel>();
-        for (const data of obs) {
-          this.certifications.push(this.SetData(data));
-        }
 
+        this.certifications = obs.filter((x: CertificationViewModel) => {
+          if (x.editionObjecViewModels.length < 1) {
+            return x;
+          } else if (
+            !x.editionObjecViewModels.some(x => {
+              return x.etat == "Modifie" && x.type == "Enlever";
+            })
+          ) {
+            return x;
+          }
+        });
         this.showLoadingCertification = false;
-      }, this.Error);
+      }, (error)=> this.Error(error));
   }
 
   AddCertifications(): void {
     this.certifications.push(new CertificationViewModel());
   }
 
-  removeCertification(
-    ele: any,
-    button: any,
-    certification: CertificationViewModel
-  ) {
+  removeCertification(certification: CertificationViewModel) {
     if (confirm("Vous voulez supprime ?")) {
-      certification.certificationHighlight.annee = "highlighterror";
-      certification.certificationHighlight.description = "highlighterror";
-      document.getElementById(button).remove();
-      this.deleteFromDatabase(certification);
+      this.showLoadingCertification = true;
+      this.serv
+        .DeleteCertification(this.UtilisateurId, certification.graphId)
+        .subscribe(sub => {
+          this.LoadUserData();
+        });
     }
   }
   SaveCertification(model: CertificationViewModel) {
-
     if (
       model.annee != null &&
       model.annee.toString().trim() != "" &&
       model.description != null &&
-      model.description.toString().trim() != ""
+      model.description.toString().trim() != "" &&
+      model.graphId === undefined
     )
-
       this.serv
         .AddCertifications(model, this.UtilisateurId)
         .subscribe((obs: CertificationViewModel) => {
@@ -71,46 +76,11 @@ export class TableCertificationsComponent implements OnInit {
     alert("to implement");
   }
 
-  private SetData(data: CertificationViewModel) {
-    this.certification = new CertificationViewModel();
-
-    if (data.editionObjecViewModels != null) {
-      for (const key in data.editionObjecViewModels) {
-        if (data.editionObjecViewModels[key]["etat"] == "Modifie") {
-          this.certification[data.editionObjecViewModels[key]["proprieteNom"]] =
-            data.editionObjecViewModels[key]["proprieteValeur"];
-          //Set color
-          this.certification.certificationHighlight[
-            data.editionObjecViewModels[key]["proprieteNom"]
-          ] =
-            data.editionObjecViewModels[key]["type"];
-        }
-      }
-    }
-    if (this.certification.annee == null) {
-      this.certification.annee = data.annee;
-    }
-    if (this.certification.description == null) {
-      this.certification.description = data.description;
-    }
-    this.certification.graphId = data.graphId;
-    this.certification.graphIdGenre = data.graphIdGenre;
-
-    if (
-      this.certification.graphId == null &&
-      this.certification.graphIdGenre == null
-    ) {
-      this.certification = new CertificationViewModel();
-    }
-
-    return this.certification;
-  }
   classValidator(cssClass: string, optionCssClass): string {
     if (this.showLoadingCertification) {
       return cssClass;
     } else {
       return optionCssClass;
     }
-
   }
 }

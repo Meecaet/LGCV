@@ -40,20 +40,23 @@ namespace WebCV_Fiches.Controllers
         [HttpGet]
         public ActionResult GetAllTechnologies()
         {
-            List<TechnologieViewModel> langues = new List<TechnologieViewModel>();
-            var lang = (List<Technologie>)cache.Get("Technologies");
-            if (lang != null)
+            List<TechnologieViewModel> technologieViewModels = new List<TechnologieViewModel>();
+            var tecnologies = (List<Technologie>)cache.Get("Technologies");
+            if (tecnologies != null)
             {
-                lang.OrderBy(o => o.Nom).ToList().ForEach(x =>
+                tecnologies.OrderBy(o => o.Nom).ToList().ForEach(x =>
             {
-                langues.Add(new TechnologieViewModel { GraphId = x.GraphKey, Description = x.Nom });
+                if (x.Categorie!=null)
+                {
+                    technologieViewModels.Add(new TechnologieViewModel { GraphId = x.GraphKey, Description = x.Nom, Categorie = x.Categorie.Nom });
+                }
             });
             }
-            return Json(langues);
+            return Json(technologieViewModels);
         }
         [HttpGet]
         public ActionResult GetAllFonctions()
-            {
+        {
             List<FonctionViewModel> fonctions = new List<FonctionViewModel>();
             var fonction = (List<Fonction>)cache.Get("Fonctions");
             if (fonction != null)

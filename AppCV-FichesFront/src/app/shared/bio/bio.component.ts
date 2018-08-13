@@ -143,7 +143,7 @@ export class BioComponent implements OnInit {
    * *MODAL*MODAL*MODAL*MODAL*MODAL*MODAL*MODAL*MODAL*MODAL*MODAL*MODAL*MODAL*MODAL**
    * *********************************************************************************/
   openDialogDropDown(graphId, OriginalChamp){
-    debugger
+
     let label = this.fonctionAutoComplete.filter(x=> x.graphId == graphId) ;
      this.openDialog(label[0].nom,OriginalChamp);
 
@@ -155,6 +155,8 @@ export class BioComponent implements OnInit {
         ModalMessage: ModalMessage,
         OriginalChamp: OriginalChamp
       }
+    }).backdropClick().subscribe(obs=>{
+
     });
   }
 }

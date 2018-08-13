@@ -10,9 +10,11 @@ export class ErrorService {
         switch (errorStatus) {
       case 401:
         sessionStorage.removeItem('token');
+
         this.route.navigate(['/account/login'])
         break;
       case 403:
+        sessionStorage.removeItem('token');
         this.route.navigate(['/accessdenied']);
         break;
       case 404:
@@ -21,6 +23,7 @@ export class ErrorService {
         break;
 
       default:
+        sessionStorage.removeItem('token');
         break;
     }
   }

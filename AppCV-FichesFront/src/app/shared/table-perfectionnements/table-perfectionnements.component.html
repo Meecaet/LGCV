@@ -1,7 +1,17 @@
 <div>
+    <div [ngClass]="classValidator('divrelativeOn form-inline ','divrelativeOff form-inline')">
+        <div [ngClass]="classValidator('divloadingOn','divloadingOff')" class="divloading">
+          <div style="margin-left: auto;margin-right: 300px;width: 1px">
+            <img [ngClass]="classValidator('imgloading','imgloadingHidden')">
+          </div>
+        </div>
 
   <div class="lgs-label">Perfectionnements </div>
-  <label (click)="AddPerfectionnement()">+</label>
+  <label (click)="AddPerfectionnement()">
+
+      <img src="../../../assets/add+1.png" style="width: 20px;float: right;margin-right: 10px;">
+
+  </label>
   <div class="lgs-floatLeftButtons">
     <button type="button" class="btn btn-link"></button>
   </div>
@@ -26,11 +36,12 @@
             [cols]="250"></inline-editor>
         </td>
         <td id="bt{{i}}" style="width: 30px;">
-          <label (click)="removePerfectionnement('tr'+i,'bt'+i,perf)" class="XCancel">
+          <label (click)="removePerfectionnement(perf)" class="XCancel">
             X
           </label>
         </td>
       </tr>
     </tbody>
   </table>
+</div>
 </div>

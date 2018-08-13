@@ -1,0 +1,46 @@
+<div>
+  <div class="lgs-label">
+    Expériences Technologiques
+
+  </div>
+  <label (click)="addTechnologie()">
+
+
+    <img src="../../../assets/add+1.png" style="width: 20px;float: right;margin-right: 10px;">
+
+  </label>
+  <img src="../../../assets/if_update_172618.ico" (click)="SaveData(tecnologieToAdd)" style="width: 20px;float: right;margin-right: 10px;">
+  <div class="lgs-floatLeftButtons">
+    <button type="button" class="btn btn-link"></button>
+  </div>
+
+
+  <table class="table table-hover small">
+    <thead>
+      <tr class="lgs-backgroundColor">
+        <th scope="col">Categorie</th>
+        <th scope="col">Technologie</th>
+        <th scope="col">Mois</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of tecnologieToAdd" style="margin-bottom: 0px;padding-bottom: 0px;padding-top: 0px;">
+        <td style="margin-bottom: 0px;padding-bottom: 0px;padding-top: 0px;">
+          <input class="form-control" type="text" readonly [(ngModel)]="item.categorie" />
+        </td>
+        <td style="margin-bottom: 0px;padding-bottom: 0px;padding-top: 0px;">
+          <mat-form-field style="width: 100%;">
+            <mat-select (valueChange)="SelecteValue(item,$event)" [(ngModel)]="item.graphId" placeholder="Select">
+              <mat-option *ngFor="let tech of tecnologie" [value]="tech.graphId">
+                {{tech.description}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </td>
+        <td style="margin-bottom: 0px;padding-bottom: 0px;padding-top: 0px;">
+          <input class="form-control" type="number" [(ngModel)]="item.mois">
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

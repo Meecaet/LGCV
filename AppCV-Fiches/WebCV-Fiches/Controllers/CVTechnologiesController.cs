@@ -31,7 +31,7 @@ namespace WebCV_Fiches.Controllers
         {
             var utilisateur = utilisateurGraphRepository.GetOne(utilisateurId);
             var tecnologies = utilisateur.Conseiller?.Technologies?.Cast<GraphObject>().ToList();
-            if(tecnologies == null)    
+            if (tecnologies == null)
                 return Json(new List<TechnologieViewModel>());
             var noeudModifie = new List<GraphObject>();
             noeudModifie.Add(utilisateur.Conseiller);
@@ -42,34 +42,61 @@ namespace WebCV_Fiches.Controllers
                 graphObjects: tecnologies,
                 map: Map);
 
-            return Json(tecnologiesViewModel);
+            if (tecnologiesViewModel.Count > 0)
+            {
+
+                List<object> newJson = new List<object>();
+
+                var allCategories = tecnologiesViewModel.Select(s => (s as TechnologieViewModel).Categorie).Distinct().OrderBy(o => o).ToList();
+
+                allCategories.ForEach(f =>
+                {
+                    newJson.Add(new
+                    {
+                        categorie = f,
+                        dataByCategorie = tecnologiesViewModel.Where(w => (w as TechnologieViewModel).Categorie == f).ToList()
+                    });
+                });
+
+                return Json(newJson);
+            }
+            else
+            {
+                return Json(new List<TechnologieViewModel>());
+            }
         }
 
         [HttpPost]
         [AllowAnonymous]
         [Route("{utilisateurId}/Add")]
-        public ActionResult Add(string utilisateurId, [FromBody]TechnologieViewModel technologie)
+        public ActionResult Add(string utilisateurId, [FromBody] List<TechnologieViewModel> technologies)
         {
-            var utilisateur = utilisateurGraphRepository.GetOne(utilisateurId);
-            var technologies = utilisateur.Conseiller.Technologies;
+            try
+            {
+                foreach (var technologie in technologies)
+                {
+                    var utilisateur = utilisateurGraphRepository.GetOne(utilisateurId);
+                    var _technologies = utilisateur.Conseiller.Technologies;
 
-            if (technologies.Any(x => x.GraphKey == technologie.GraphId))
-                return Json(technologie);
+                    if (_technologies.Any(x => x.GraphKey == technologie.GraphId))
+                        continue;
 
-            if (utilisateur.Conseiller.EditionObjects.Any(x => x.ObjetAjoute?.GraphKey == technologie.GraphId))
-                return Json(technologie);
+                    if (utilisateur.Conseiller.EditionObjects.Any(x => x.ObjetAjoute?.GraphKey == technologie.GraphId))
+                        continue;
 
-            var technologieModel = technologieGraphRepository.GetOne(technologie.GraphId);
-            technologieModel.MoisDExperience = technologie.Mois;
+                    var technologieModel = technologieGraphRepository.GetOne(technologie.GraphId);
+                    technologieModel.MoisDExperience = technologie.Mois;
 
-            editionObjectGraphRepository.AjouterNoeud(
-                objetAjoute: technologieModel, 
-                viewModelProprieteNom: "Technologies", 
-                noeudModifie: utilisateur.Conseiller);
+                    editionObjectGraphRepository.AjouterNoeud(objetAjoute: technologieModel, noeudModifiePropriete: "Technologies", noeudModifie: utilisateur.Conseiller);
 
-            technologie.GraphId = technologieModel.GraphKey;
-
-            return Json(technologieModel);
+                    technologie.GraphId = technologieModel.GraphKey;
+                }
+                return Json(new { ok = true });
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
 
         [HttpPost]

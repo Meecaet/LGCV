@@ -19,7 +19,8 @@ namespace WebCV_Fiches.Controllers
         [Route("{utilisateurId}/All")]
         public new ActionResult All(string utilisateurId)
         {
-            return Json(base.All(utilisateurId));
+            var orderBy = base.All(utilisateurId).Cast<PerfectionnementViewModel>().OrderBy(o => o.Annee);
+            return Json(orderBy);
         }
 
         [HttpPost]

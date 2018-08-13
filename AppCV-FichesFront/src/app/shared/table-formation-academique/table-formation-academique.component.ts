@@ -16,7 +16,6 @@ export class TableFormationAcademiqueComponent implements OnInit {
   @Input() UtilisateurId: string;
   showLoadingFormationAcademique: boolean = true;
   constructor(private serv: CVService, private servError: ErrorService) {
-
     this.formationAcademique = new Array<FormationAcademiqueViewModel>();
   }
 
@@ -31,35 +30,43 @@ export class TableFormationAcademiqueComponent implements OnInit {
     this.serv
       .LoadFormationAcademique(this.UtilisateurId)
       .subscribe((obs: Array<FormationAcademiqueViewModel>) => {
-        this.formationAcademique = obs;
+        this.formationAcademique = obs.filter((x: FormationAcademiqueViewModel) => {
+          if (x.editionObjecViewModels.length < 1) {
+            return x;
+          } else if (
+            !x.editionObjecViewModels.some(x => {
+              return x.etat == "Modifie" && x.type == "Enlever";
+            })
+          ) {
+            return x;
+          }
+        });
         this.showLoadingFormationAcademique = false;
-      }, this.Error);
+      }, (error)=> this.Error(error));
   }
   Error(error: HttpErrorResponse) {
     debugger;
     this.servError.ErrorHandle(error.status);
   }
   removeFormationAcademique(
-    ele: any,
-    button: any,
-    form: FormationAcademiqueViewModel
+    model: FormationAcademiqueViewModel
   ) {
     if (confirm("Vous voulez supprime ?")) {
-      form.highlight = "highlighterror";
-      document.getElementById(button).remove();
-      this.deleteFromDatabase(form);
+      this.showLoadingFormationAcademique = true;
+     this.serv.DeleteFormationAcademique(this.UtilisateurId,model.graphId).subscribe(data=>{
+       this.LoadUserData()
+     })
     }
   }
-  deleteFromDatabase(form: FormationAcademiqueViewModel) {
-    alert("to implement");
-  }
+
 
   SaveFormation(model: FormationAcademiqueViewModel) {
     if (
       model.annee !== undefined &&
       model.diplome !== undefined &&
       model.etablissement !== undefined &&
-      model.niveau !== undefined
+      model.niveau !== undefined &&
+      model.graphId === undefined
     ) {
       this.showLoadingFormationAcademique = true;
       this.serv

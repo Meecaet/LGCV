@@ -10,7 +10,7 @@
 
 
 
-        [routerLink]="['/cv/edit/'+utilisateurId]" src="../../../assets/cv-image.png" style="width: 50px">
+        [routerLink]="['/cv/edit/'+utilisateurId]" src="../../../assets/cv-image.png" style="width: 50px; cursor:pointer;">
       </div>
       <div>
         <label> CV</label>
@@ -25,11 +25,11 @@
         <label> Fiches de Projets</label>
       </div>
     </div>
-    <div *ngIf="isAdministrateur" href="role/admin" class="col-md-3" style="text-align: center;">
+    <div *ngIf="isAdministrateur" class="col-md-3" style="text-align: center;">
       <div>
         <div>
           <div>
-            <img style="width: 50px" title="Administration et Pilotage" src="../../../assets/pilotage.png" alt="Image">
+            <img style="width: 50px ; cursor:pointer;" [routerLink]="['/role/admin']" title="Administration et Pilotage" src="../../../assets/pilotage.png" alt="Image">
           </div>
           <div>
             <label> Administration et Pilotage</label>

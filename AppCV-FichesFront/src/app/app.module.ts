@@ -3,8 +3,8 @@ import { InlineEditorModule } from "./qontu/ngx-inline-editor";
 import { NgModule } from "@angular/core";
 import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import {  ReactiveFormsModule,  FormsModule,  FormBuilder} from "@angular/forms";
-import {  HttpClientModule,  HTTP_INTERCEPTORS} from "@angular/common/http";
+import { ReactiveFormsModule, FormsModule, FormBuilder } from "@angular/forms";
+import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import {
   MatButtonModule,
   MatCheckboxModule,
@@ -18,15 +18,16 @@ import {
   MatDialog
 } from "@angular/material";
 
+import { MatExpansionModule } from "@angular/material/expansion";
 import { AppComponent } from "./app.component";
 //Components
 import { ResumeInterventionsComponent } from "./components/CV/resume-interventions/resume-interventions.component";
-import { CvEditComponent } from './components/cv-edit/cv-edit.component';
-import { RoleAdminComponent} from "./components/role-admin/role-admin.component";
-import { RoleCreateComponent} from "./components/role-create/role-create.component";
-import { RoleDetailComponent } from './components/role-detail/role-detail.component';
-import { RoleEditComponent } from './components/role-edit/role-edit.component';
-import { AccessDeniedComponent } from './components/access-denied/access-denied.component';
+import { CvEditComponent } from "./components/cv-edit/cv-edit.component";
+import { RoleAdminComponent } from "./components/role-admin/role-admin.component";
+import { RoleCreateComponent } from "./components/role-create/role-create.component";
+import { RoleDetailComponent } from "./components/role-detail/role-detail.component";
+import { RoleEditComponent } from "./components/role-edit/role-edit.component";
+import { AccessDeniedComponent } from "./components/access-denied/access-denied.component";
 import { NavbarComponent } from "./components/navbar/navbar.component";
 import { HomeComponent } from "./components/home/home.component";
 import { RegisterComponent } from "./components/register/register.component";
@@ -40,14 +41,14 @@ import { TablePerfectionnementsComponent } from "./shared/table-perfectionnement
 import { TableFormationAcademiqueComponent } from "./shared/table-formation-academique/table-formation-academique.component";
 import { TableCertificationsComponent } from "./shared/table-certifications/table-certifications.component";
 import { ChipDomainComponent } from "./shared/chip-domain/chip-domain.component";
-import { ModalOldInformationComponent } from './shared/modal-old-information/modal-old-information.component';
+import { ModalOldInformationComponent } from "./shared/modal-old-information/modal-old-information.component";
 import { TableTechnologieComponent } from "./shared/table-technologie/table-technologie.component";
 import { TableMandatComponent } from "./shared/table-mandat/table-mandat.component";
-import { TablePublicationComponent } from './shared/table-publication/table-publication.component';
-import { TableConferenceComponent } from './shared/table-conference/table-conference.component';
+import { TablePublicationComponent } from "./shared/table-publication/table-publication.component";
+import { TableConferenceComponent } from "./shared/table-conference/table-conference.component";
 import { BioComponent } from "./shared/bio/bio.component";
-import { CarouselComponent } from './shared/carousel/carousel.component';
-import { DropDownFonctionComponent } from './shared/drop-down-fonction/drop-down-fonction.component';
+import { CarouselComponent } from "./shared/carousel/carousel.component";
+import { DropDownFonctionComponent } from "./shared/drop-down-fonction/drop-down-fonction.component";
 //Services
 import { ServiceRoutingModule } from "./Routes.services";
 import { ValidatorService } from "./validator.services";
@@ -56,6 +57,8 @@ import { CVService } from "./Services/cv.service";
 import { AdminService } from "./Services/admin.service";
 import { LangueService } from "./Services/langue.service";
 import { FonctionPipe } from "./Services/fonction.pipe";
+import { ModalTechnologieComponent } from "./shared/modal-technologie/modal-technologie.component";
+import { LanguesFilterPipe } from './Services/langues-filter.pipe';
 
 @NgModule({
   declarations: [
@@ -84,7 +87,6 @@ import { FonctionPipe } from "./Services/fonction.pipe";
     CarouselComponent,
     DropDownFonctionComponent,
 
-
     RoleAdminComponent,
     RoleCreateComponent,
     RoleDetailComponent,
@@ -92,9 +94,12 @@ import { FonctionPipe } from "./Services/fonction.pipe";
     AccessDeniedComponent,
     TablePublicationComponent,
     TableConferenceComponent,
-    ModalOldInformationComponent
+    ModalOldInformationComponent,
+    ModalTechnologieComponent,
+    LanguesFilterPipe
   ],
   imports: [
+    MatExpansionModule,
     MatAutocompleteModule,
     BrowserModule,
     BrowserAnimationsModule,
@@ -132,11 +137,9 @@ import { FonctionPipe } from "./Services/fonction.pipe";
       multi: true
     }
   ],
-  entryComponents:[
-    ModalOldInformationComponent
-  ],
+  entryComponents: [ModalOldInformationComponent, ModalTechnologieComponent],
 
-  exports: [LangueService ,FonctionPipe],
+  exports: [LangueService, FonctionPipe],
 
   bootstrap: [AppComponent]
 })

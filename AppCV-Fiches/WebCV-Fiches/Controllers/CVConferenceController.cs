@@ -19,7 +19,11 @@ namespace WebCV_Fiches.Controllers
         [Route("{utilisateurId}/All")]
         public new ActionResult All(string utilisateurId)
         {
-            return Json(base.All(utilisateurId));
+            var temp = base.All(utilisateurId);
+            var orderBy = temp.Cast<ConferenceViewModel>().ToList().Where(f =>
+                                            f.GraphId != null
+                                             ).OrderByDescending(x => x.Annee);
+            return Json(orderBy);
         }
 
 

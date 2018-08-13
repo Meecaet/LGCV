@@ -1,3 +1,5 @@
+import { EditionObjecViewModel } from "./EditionObjec-model";
+
 export class PerfectionnementViewModel{
      graphId :string;
      graphIdGenre  :string;
@@ -5,5 +7,5 @@ export class PerfectionnementViewModel{
       annee  :Number;
 
       highlight:string;
-
+      editionObjecViewModels: Array<EditionObjecViewModel>;
 }

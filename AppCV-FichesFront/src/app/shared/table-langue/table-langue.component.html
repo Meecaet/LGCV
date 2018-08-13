@@ -8,7 +8,10 @@
     </div>
 
     <div class="lgs-label">Langues</div>
-    <label (click)="AddLangue()">+</label>
+    <label>
+      <img  (click)="AddLangue()" src="../../../assets/add+1.png" style="width: 20px;float: right;margin-right: 10px;">
+
+    </label>
     <div class="lgs-floatLeftButtons">
       <button type="button" class="btn btn-link"></button>
     </div>
@@ -24,31 +27,38 @@
       </thead>
       <tbody>
 
-        <tr  style="width: 100%;" *ngFor="let langue of langues">
-          <td  style="width: 25%;">
+        <tr style="width: 100%;" *ngFor="let langue of langues;let i = index">
+          <td style="width: 25%;">
+            <!-- <select (change)="SaveFormation(langue,'graphId',i)" [(ngModel)]="langue.graphId" placeholder="Select">
+                  <option   *ngFor="let option of languesAutoComplete" [value]="option.graphId">{{option.nom}}</option>
+                </select> -->
+
             <mat-form-field style="width: 100%;">
-              <mat-select [(ngModel)]="langue.graphId" placeholder="Select">
-                <mat-option *ngFor="let option of languesAutoComplete" [value]="option.graphId">{{option.nom}}</mat-option>
+
+
+              <mat-select (valueChange)="SaveFormation($event,'graphId',i,Opt)" [(ngModel)]="langue.graphId" placeholder="Select">
+                <mat-option #Opt *ngFor="let option of languesAutoComplete" [value]="option.graphId">{{option.nom}}
+                </mat-option>
               </mat-select>
             </mat-form-field>
           </td>
           <td style="width: 25%;">
             <mat-form-field style="width: 100%;">
-              <mat-select [(ngModel)]="langue.niveauEcrit" placeholder="Select">
+              <mat-select (valueChange)="SaveFormation($event,'niveauEcrit',i)" [(ngModel)]="langue.niveauEcrit" placeholder="Select">
                 <mat-option *ngFor="let niveauEcrit of niveauLangue.Collection" [value]="niveauEcrit.label">{{niveauEcrit.label}}</mat-option>
               </mat-select>
             </mat-form-field>
           </td>
           <td style="width: 25%;">
             <mat-form-field style="width: 100%;">
-              <mat-select [(ngModel)]="langue.niveauLu" placeholder="Select">
+              <mat-select (valueChange)="SaveFormation($event,'niveauLu',i)" [(ngModel)]="langue.niveauLu" placeholder="Select">
                 <mat-option *ngFor="let niveauLu of niveauLangue.Collection" [value]="niveauLu.label">{{niveauLu.label}}</mat-option>
               </mat-select>
             </mat-form-field>
           </td>
           <td style="width: 25%;">
             <mat-form-field style="width: 100%;">
-              <mat-select [(ngModel)]="langue.niveauParle" placeholder="Select">
+              <mat-select (valueChange)="SaveFormation($event,'niveauParle',i)" [(ngModel)]="langue.niveauParle" placeholder="Select">
                 <mat-option *ngFor="let niveauParle of niveauLangue.Collection" [value]="niveauParle.label">{{niveauParle.label}}</mat-option>
               </mat-select>
             </mat-form-field>
