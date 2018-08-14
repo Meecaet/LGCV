@@ -751,6 +751,10 @@ namespace WebCV_Fiches.Helpers
             CreatePublications(doc.Body);
             CreateConferences(doc.Body);
             CreateLangues(doc.Body);
+
+            string currentDate = DateTime.Now.ToString("Le dd MMMM yyyy");
+            doc.Body.Append(new Paragraph(), new Paragraph(), new Paragraph(), new Paragraph());
+            doc.Body.Append(GetNewParagraph(currentDate, aligment: ParagraphAligment.Droite));
             
             document.Save();
         }
@@ -1634,24 +1638,6 @@ namespace WebCV_Fiches.Helpers
             var count = 0;
             var isFirts = true;
 
-            /*foreach (var categorie in technologisByCategorie)
-            {
-                AddTechnologieCell(tableTechnologies, categorie.Key, null, count, isFirts);
-                isFirts = isFirts && count < gauche;
-                count = count == 0 ? count : count + 1;
-                count = count >= gauche ? 0 : count+1;
-                
-                var technologies = from data in categorie
-                                   select data;
-
-                foreach (Technologie technologie in technologies)
-                {
-                    AddTechnologieCell(tableTechnologies, categorie.Key, technologie, count, isFirts);
-                    isFirts = isFirts && count < gauche;
-                    count = count >= gauche ? 0 : count+1;
-                }
-            }*/
-
             foreach (var categorie in technologisByCategorie)
             {
                 AddTechnologieCell(tableTechnologies, categorie.Key, null, count, isFirts);
@@ -1670,10 +1656,11 @@ namespace WebCV_Fiches.Helpers
                     count = count == gauche ? 0 : count;
                 }
 
-                count = count > 0 ? count+1: 0;
+                count = count > 0 ? count+1 : 0;
             }
 
             docBody.Append(tableTechnologies);
+            docBody.Append(new Paragraph(new Run(new Break { Type = new EnumValue<BreakValues>(BreakValues.Page) })));
         }
 
         private void AddTechnologieCell(Table tableTechnologies, string categorie, Technologie technologie, int possition, bool isFirts)
