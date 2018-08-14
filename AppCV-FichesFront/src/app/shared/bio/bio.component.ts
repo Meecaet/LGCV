@@ -39,7 +39,7 @@ export class BioComponent implements OnInit {
       this.fonctionAutoComplete = data;
     });
   }
-  saveBio(model: BioViewModel): void {
+  saveBio(model: BioViewModel,quem): void {
     this.cvService.EditBio(this.UtilisateurId, model).subscribe(
       (data: BioViewModel) => {
         this.UserDataLoad();
@@ -49,6 +49,7 @@ export class BioComponent implements OnInit {
       }
     );
   }
+
   IsDataValid(value: any): any {
     if (value == null) {
       return "";
@@ -95,7 +96,7 @@ export class BioComponent implements OnInit {
   }
   onChange(data:any){
      this.bio.fonction = data;
-     this.saveBio(this.bio)
+    //  this.saveBio(this.bio)
   }
   SetData(data: BioViewModel) {
     if (data.editionObjecViewModels != null) {

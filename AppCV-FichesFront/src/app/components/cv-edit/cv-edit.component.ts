@@ -4,11 +4,14 @@ import { MandatViewModel } from "../../Models/Mandat-model";
 import { ENTER, COMMA } from "@angular/cdk/keycodes";
 import { CVService } from "../../Services/cv.service";
 import { Observable } from "../../../../node_modules/rxjs";
-import { saveAs } from 'file-saver/FileSaver';
+import { saveAs } from "file-saver/FileSaver";
+
 @Component({
   selector: "app-cv-edit",
   templateUrl: "./cv-edit.component.html",
-  styleUrls: ["./cv-edit.component.css"]
+  styleUrls: ["./cv-edit.component.css"],
+
+
 })
 export class CvEditComponent implements OnInit {
   UtilisateurId: string;
@@ -18,10 +21,14 @@ export class CvEditComponent implements OnInit {
   lastPage: number;
   showMandat: boolean = false;
   hiddenButton: string;
-  showLoadingCarousel: boolean = true;
+  showLoadingCarousel: boolean;
   showDownloadFile: boolean = false;
   IsSuccess: boolean = true;
-  constructor(private route: ActivatedRoute, private CVserv: CVService) {
+  constructor(
+    private route: ActivatedRoute,
+    private CVserv: CVService,
+
+  ) {
     this.mandatCollection = new Array<MandatViewModel>();
     this.route.params.subscribe(params => {
       this.UtilisateurId = params["id"];
@@ -29,21 +36,28 @@ export class CvEditComponent implements OnInit {
   }
   ngOnInit() {}
   setToMandat(event: MandatViewModel): void {
-    document.getElementById("anchor").scrollIntoView();
+    document.getElementById("anchor-table-mandat").scrollIntoView();
     this.showMandat = false;
     this.mandatSeleted = new MandatViewModel();
 
-    this.mandatCollection.push(event);
-    this.lastPage = this.mandatCollection.length;
+    this.showDownloadFile = true;
+
+    this.CVserv.AddMandat(this.UtilisateurId, event).subscribe((sub:MandatViewModel) => {
+      debugger
+      this.mandatCollection.push(sub)
+    });
   }
+
   addNewMandatFromList(arg: any): void {
     // this.InputMandatCarousel = arg.newMandat;
+
     this.numberPage = arg.numberPage;
     this.showMandat = true;
     this.lastPage = this.mandatCollection.length;
     this.mandatSeleted = new MandatViewModel();
-
     this.hiddenButton = this.mandatSeleted.mandatStatus;
+
+    this.showDownloadFile = false;
   }
   onChangePage(changeTo: number): void {
     const newValue = this.mandatCollection[changeTo];
@@ -85,22 +99,30 @@ export class CvEditComponent implements OnInit {
   private DownloadFile() {
     this.showDownloadFile = true;
     this.IsSuccess = true;
-    this.CVserv.DownloadCV(this.UtilisateurId)
-    .subscribe(response => {
-      const fileName = response.headers.get('Content-Disposition').split(';')[1].split('filename')[1].split('=')[1].trim().replace(/"/g, '');;
-      const b: any = new Blob([response.body], { type: 'application/vnd.ms-word' });
-      saveAs(b, fileName);
-      this.showDownloadFile = false;
-      this.IsSuccess = true;
-       },
-       erro => {
-         this.IsSuccess = false;
-         this.showDownloadFile = false;
-       }
-  );
+    this.CVserv.DownloadCV(this.UtilisateurId).subscribe(
+      response => {
+        const fileName = response.headers
+          .get("Content-Disposition")
+          .split(";")[1]
+          .split("filename")[1]
+          .split("=")[1]
+          .trim()
+          .replace(/"/g, "");
+        const b: any = new Blob([response.body], {
+          type: "application/vnd.ms-word"
+        });
+        saveAs(b, fileName);
+        this.showDownloadFile = false;
+        this.IsSuccess = true;
+      },
+      erro => {
+        this.IsSuccess = false;
+        this.showDownloadFile = false;
+      }
+    );
   }
 
-classValidator(cssClass: string, optionCssClass): string {
+  classValidator(cssClass: string, optionCssClass): string {
     if (this.showDownloadFile) {
       return cssClass;
     } else {

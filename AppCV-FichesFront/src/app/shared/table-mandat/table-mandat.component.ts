@@ -10,6 +10,7 @@ import { MandatViewModel } from "../../Models/Mandat-model";
 import { CVService } from "../../Services/cv.service";
 import { ResumeInterventionViewModel } from "../../Models/CV/ResumeInterventionViewModel";
 import { CarouselComponent } from "../carousel/carousel.component";
+import { ErrorService } from "../../Services/error.service";
 
 @Component({
   selector: "app-table-mandat",
@@ -22,16 +23,20 @@ export class TableMandatComponent implements OnInit {
 
   resume: Array<ResumeInterventionViewModel>;
 
-  @Input("mandatCollection") mandatCollection: Array<MandatViewModel>;
-  @Input("numberPage") numberPage: number = 0;
-  @Output("AddNewMandat") AddNewMandat = new EventEmitter();
+  @Input("mandatCollection")
+  mandatCollection: Array<MandatViewModel>;
+  @Input("numberPage")
+  numberPage: number = 0;
+  @Output("AddNewMandat")
+  AddNewMandat = new EventEmitter();
 
-  @Input("UtilisateurId") UtilisateurId: string;
+  @Input("UtilisateurId")
+  UtilisateurId: string;
 
   @Output("onChangeMandatFromTableMandat")
   onChangeMandatFromTableMandat = new EventEmitter();
 
-  constructor(private serv: CVService) {
+  constructor(private serv: CVService,private errorServ : ErrorService) {
     this.mandatCollection = new Array<MandatViewModel>();
     this.resume = new Array<ResumeInterventionViewModel>();
   }
@@ -49,7 +54,6 @@ export class TableMandatComponent implements OnInit {
   }
 
   SelectedLine(mand: ResumeInterventionViewModel): void {
-    debugger;
     this.SetHighLight("lineSeleted", mand);
     this.onChangeMandatFromTableMandat.emit(mand);
   }
@@ -82,17 +86,17 @@ export class TableMandatComponent implements OnInit {
       status: "ajouter"
     });
   }
-  removeMandat(ele: any, button: any, mand: MandatViewModel) {
-    var eleStyle = document.getElementById(ele);
+  removeMandat(mand: MandatViewModel) {
     if (confirm("Vous voulez supprime ?")) {
-      mand.highlight = "highlighterror";
-      document.getElementById(button).remove();
-      this.deleteFromDatabase(mand);
+      this.showLoadingMandat = true;
+      this.serv
+        .DeleteMandat(this.UtilisateurId, mand.graphId)
+        .subscribe(sub => {
+          this.showLoadingMandat = false;
+        },(error)=> this.errorServ.ErrorHandle(error.status));
     }
   }
-  deleteFromDatabase(form: MandatViewModel) {
-    alert("to implement");
-  }
+
   classValidator(cssClass: string, optionCssClass): string {
     if (this.showLoadingMandat) {
       return cssClass;

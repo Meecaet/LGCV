@@ -32,7 +32,7 @@
           <b> </b>
         </div>
         <div class="col-lg-12  ">
-          <inline-editor class="form-inline" type="textarea" (onSave)="saveBio(bio)" empty="Biographie" [(ngModel)]="bio.resumeExperience"
+          <inline-editor class="form-inline" type="textarea"   [cols]="100" (onSave)="saveBio(bio)" empty="Biographie" [(ngModel)]="bio.resumeExperience"
             name="biographie">
           </inline-editor>
         </div>

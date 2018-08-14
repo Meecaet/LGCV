@@ -5,14 +5,9 @@
             <img [ngClass]="classValidator('imgloading','imgloadingHidden')">
           </div>
         </div>
-
-
     <div class="lgs-label">Certifications </div>
     <label (click)="AddCertifications()">
-
       <img src="../../../assets/add+1.png" style="width: 20px;float: right;margin-right: 10px;">
-
-
     </label>
     <div class="lgs-floatLeftButtons">
       <button type="button" class="btn btn-link"></button>
@@ -30,12 +25,12 @@
         <tbody>
           <tr id="tr{{i}}" *ngFor=" let certif of certifications; let i = index">
             <td  >
-              <inline-editor [(ngModel)]="certif.description" empty="Description" (onSave)="SaveCertification(certif)" [ngModelOptions]="{standalone: true}"
-                [name]="certif.description" [cols]="250"></inline-editor>
+              <inline-editor   [(ngModel)]="certif.description" empty="Description"  (onEnter)="NoSave()"    (onSave)="SaveCertification(certif)" [ngModelOptions]="{standalone: true}"
+               name="certifDescription" [cols]="250"></inline-editor>
             </td>
             <td   style="width: 20px;">
               <inline-editor type="number" empty="Annee" [(ngModel)]="certif.annee" (onSave)="SaveCertification(certif)" [ngModelOptions]="{standalone: true}"
-                [name]="certif.annee" [cols]="250"></inline-editor>
+                name="certifAnnee" [cols]="250"></inline-editor>
             </td>
             <td style="width: 30px;">
               <label id="bt{{i}}" (click)="removeCertification(  certif)" class="XCancel"> X</label>

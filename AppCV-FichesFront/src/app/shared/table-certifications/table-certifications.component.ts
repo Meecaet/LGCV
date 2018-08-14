@@ -44,7 +44,9 @@ export class TableCertificationsComponent implements OnInit {
   AddCertifications(): void {
     this.certifications.push(new CertificationViewModel());
   }
+  NoSave():void{
 
+  }
   removeCertification(certification: CertificationViewModel) {
     if (confirm("Vous voulez supprime ?")) {
       this.showLoadingCertification = true;

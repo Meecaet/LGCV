@@ -17,7 +17,7 @@ export class TableConferenceComponent implements OnInit {
 
   ngOnInit() {
     this.conferenceses = new Array<ConferenceViewModel>();
-   this. LoadUserData();
+     this. LoadUserData();
   }
   AddConference(): void {
     this.conferenceses.push(new ConferenceViewModel());

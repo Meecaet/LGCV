@@ -41,7 +41,7 @@ export class TablePerfectionnementsComponent implements OnInit {
       }, (error)=> this.Error(error));
   }
   Error(error: HttpErrorResponse) {
-    debugger;
+
     this.servError.ErrorHandle(error.status);
   }
   AddPerfectionnement(): void {
@@ -57,6 +57,22 @@ export class TablePerfectionnementsComponent implements OnInit {
         });
     }
   }
+
+  SavePerfectionement(model: PerfectionnementViewModel) {
+    if (
+      model.annee !== undefined &&
+      model.description !== undefined &&
+      model.graphId === undefined
+    ) {
+      this.showLoadingPerfectionnement = true;
+      this.cvServ
+        .AddPerfectionnement(model, this.UtilisateurId)
+        .subscribe((obs: PerfectionnementViewModel) => {
+          this.LoadUserData();
+        }, (error)=> this.Error(error));
+    }
+  }
+
   classValidator(cssClass: string, optionCssClass): string {
     if (this.showLoadingPerfectionnement) {
       return cssClass;

@@ -59,7 +59,7 @@
              {{ intervention.effors }}
               </td>
               <td id="bt{{i}}" style="width: 30px;">
-                <label  class="XCancel"> X</label>
+                <label (click)="removeMandat(intervention)"  class="XCancel"> X</label>
               </td>
             </tr>
           </tbody>

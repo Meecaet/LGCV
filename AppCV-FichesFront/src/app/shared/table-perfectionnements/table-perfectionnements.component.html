@@ -28,11 +28,11 @@
     <tbody>
       <tr class="{{perf.highlight}}" id="tr{{i}}" *ngFor="let perf of perfectionnement ; let i = index">
         <td>
-          <inline-editor [(ngModel)]="perf.description" (onSave)="OrderBy()" [ngModelOptions]="{standalone: true}" [name]="perf.description"
+          <inline-editor [(ngModel)]="perf.description" (onSave)="SavePerfectionement(perf)" [ngModelOptions]="{standalone: true}" [name]="perf.description"
             [cols]="250"></inline-editor>
         </td>
         <td style="width: 20px;">
-          <inline-editor type="number" [(ngModel)]="perf.annee" (onSave)="OrderBy()" [ngModelOptions]="{standalone: true}" [name]="perf.annee"
+          <inline-editor type="number" [(ngModel)]="perf.annee" (onSave)="SavePerfectionement(perf)" [ngModelOptions]="{standalone: true}" [name]="perf.annee"
             [cols]="250"></inline-editor>
         </td>
         <td id="bt{{i}}" style="width: 30px;">

@@ -5,6 +5,9 @@ import { ENTER, COMMA } from "@angular/cdk/keycodes";
 import { MatChipInputEvent } from "@angular/material";
 import { Router } from "@angular/router";
 import { Observable } from "../../../../node_modules/rxjs";
+import { CVService } from "../../Services/cv.service";
+import { TechnologieViewModel } from "../../Models/Technologie-model";
+import { FormControl } from "../../../../node_modules/@angular/forms";
 
 @Component({
   selector: "app-carousel",
@@ -13,14 +16,23 @@ import { Observable } from "../../../../node_modules/rxjs";
 })
 export class CarouselComponent implements OnInit {
   //Inputs
-  @Input("ngModelMandat") mandat: MandatViewModel;
-  @Input("lastPage") lastPage: number;
-  @Input("numberPage") numberPage: number;
-  @Input("hiddenButton") hiddenButton: string;
-  @Input("showLoadingCarousel") showLoadingCarousel: boolean = true;
+  @Input("ngModelMandat")
+  mandat: MandatViewModel;
+  @Input("lastPage")
+  lastPage: number;
+  @Input("numberPage")
+  numberPage: number;
+  @Input("hiddenButton")
+  hiddenButton: string;
+  @Input("showLoadingCarousel")
+  showLoadingCarousel: boolean = true;
   //Outputs
-  @Output("OutPutMandatCarousel") OutPutMandatCarousel = new EventEmitter();
-  @Output("onChangePage") onChangePage = new EventEmitter();
+  @Output("OutPutMandatCarousel")
+  OutPutMandatCarousel = new EventEmitter();
+  @Output("onChangePage")
+  onChangePage = new EventEmitter();
+  myControl: FormControl = new FormControl();
+  techs: Observable<Array<TechnologieViewModel>>;
 
   public watchTest;
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
@@ -29,22 +41,29 @@ export class CarouselComponent implements OnInit {
   removable = true;
   addOnBlur = true;
 
-  ngOnInit() {}
-  constructor(private route: Router) {
+  ngOnInit() {
+
+  }
+  constructor(private route: Router, private cvServ: CVService) {
+
     this.mandat = new MandatViewModel();
+    this.techs = this.cvServ.LoadTechnologie();
+    this.techs.subscribe(sub => {
+      return sub;
+    });
   }
 
-   calcMonth(init: Date, fin: Date, eleHtml: string) {
-    debugger;
+  calcMonth(init: Date, fin: Date, eleHtml: string) {
+
     if (init != null && fin != null) {
       var date1: any = new Date(init);
       var date2: any = new Date(fin);
       var diffDays = Math.round((date2 - date1) / (1000 * 60 * 60 * 24 * 30));
 
-      if ("moisMandat"==eleHtml) {
-        this.mandat.moisMandat= diffDays;
-      }else{
-        this.mandat.moisProjet= diffDays;
+      if ("moisMandat" == eleHtml) {
+        this.mandat.moisMandat = diffDays;
+      } else {
+        this.mandat.moisProjet = diffDays;
       }
     }
   }
@@ -77,8 +96,6 @@ export class CarouselComponent implements OnInit {
     }
   }
   previous(currentPage: number) {
-    debugger;
-
     const newpage = currentPage - 2;
     this.onChangePage.emit(newpage);
   }
@@ -88,16 +105,33 @@ export class CarouselComponent implements OnInit {
   }
 
   SendMandatCarousel(mandat: MandatViewModel): void {
+    debugger
     this.OutPutMandatCarousel.emit(mandat);
   }
   ModifierMandatCarousel(mandat: MandatViewModel): void {
     alert("to implement");
   }
+  AddTechno(selected: FormControl): void {
+    this.techs.subscribe((tec: Array<TechnologieViewModel>) => {
+      let newValue = tec.filter(f => {
+        return f.description  == selected.value
+      })[0];
+      this.mandat.technologies.push(newValue)
+    });
+
+  }
+
+  RemoveTech(item:TechnologieViewModel):void{
+  let index =  this.mandat.technologies.findIndex(x=> x.graphId == item.graphId);
+  this.mandat.technologies.splice(index,1);
+  }
   classValidator(cssClass: string, optionCssClass): string {
     if (this.showLoadingCarousel) {
       return cssClass;
     } else {
+      document.getElementById("anchor-carousel").scrollIntoView();
       return optionCssClass;
     }
+
   }
 }

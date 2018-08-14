@@ -24,11 +24,7 @@ export class CVService {
     this.rootPath = environment.apiUrl;
   }
   private rootPath = "";
-  private doRequest<T>(
-    path: string,
-    method: string = "get",
-    body: any = null
-  ): Observable<T> {
+  private doRequest<T>(path: string,method: string = "get",    body: any = null): Observable<T> {
     const url = `${this.rootPath}/${path}`;
     switch (method) {
       case "put":
@@ -206,6 +202,17 @@ export class CVService {
     const url = "Perfectionnement/" + idUtilisateur + "/Delete/" + graphId;
     return this.doRequest<PerfectionnementViewModel>(url, "post");
   }
+
+  AddPerfectionnement(
+    modelToSave:  PerfectionnementViewModel,
+    idUtilisateur: string
+  ) {
+    const url = this.rootPath + "/Perfectionnement/" + idUtilisateur + "/add";
+    return this._http.post(url, modelToSave);
+  }
+
+
+
   ///
   // Fonction
   //
@@ -303,6 +310,16 @@ export class CVService {
     const url = this.LoadMandatActionUrl(idUtilisateur, idMandat);
     return this.doRequest<MandatViewModel>(url, "get");
   }
+  AddMandat(idUtilisateur: string, modelToSave: MandatViewModel) {
+    const url = this.rootPath + "/Mandat/" + idUtilisateur + "/add";
+    return this._http.post(url, modelToSave);
+  }
+ DeleteMandat(idUtilisateur, graphId) {
+    const url = "Mandat/" + idUtilisateur + "/Delete/" + graphId;
+    return this.doRequest<MandatViewModel>(url, "post");
+  }
+
+
   /// Langue
   public UtilizaterLangue(
     idUtilisateur: string
