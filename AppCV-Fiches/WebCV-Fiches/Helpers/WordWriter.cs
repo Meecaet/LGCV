@@ -7,6 +7,8 @@ using A = DocumentFormat.OpenXml.Drawing;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
+using DocumentFormat.OpenXml.Vml;
+using DocumentFormat.OpenXml.Vml.Office;
 using DAL_CV_Fiches.Models.Graph;
 using System.IO;
 
@@ -54,6 +56,33 @@ namespace WebCV_Fiches.Helpers
             else
             {
                 paragraphProperties.Append(spacing);
+            }
+        }
+
+        private void AddCharacterSpacingToElement(OpenXmlCompositeElement element, int space)
+        {
+            Spacing spacing = new Spacing
+            {
+                Val = space
+            };
+
+            Run run = element.GetFirstChild<Run>();
+            if (run == null)
+            {
+                run = new Run();
+                element.Append(run);
+            }
+
+            RunProperties runProperties = run.GetFirstChild<RunProperties>();
+            if (runProperties == null)
+            {
+                runProperties = new RunProperties();
+                runProperties.Append(spacing);
+                run.Append(runProperties);
+            }
+            else
+            {
+                runProperties.Append(spacing);
             }
         }
 
@@ -428,12 +457,6 @@ namespace WebCV_Fiches.Helpers
                             DistanceFromLeft = (UInt32Value)0U,
                             DistanceFromRight = (UInt32Value)0U,
                             EditId = "50D07946"
-                            //AllowOverlap = new BooleanValue(true),
-                            //LayoutInCell = new BooleanValue(true),
-                            //Locked = new BooleanValue(false),
-                            //BehindDoc = new BooleanValue(false),
-                            //SimplePos = new BooleanValue(false)
-
                         });
 
             return element;
@@ -552,7 +575,7 @@ namespace WebCV_Fiches.Helpers
             {
                 BottomBorder = new BottomBorder { Val = new EnumValue<BorderValues>(BorderValues.Single), Size = 4, Space = 1, Color = mauveCode }
             });
-            paragraphProperties.Append(new SpacingBetweenLines { Before = "240", After = "120", Line = "240"});
+            paragraphProperties.Append(new SpacingBetweenLines { Before = "240", After = "120", Line = spaceSimple.ToString()});
             paragraphProperties.Append(new OutlineLevel { Val = 0 });
 
             RunProperties runProperties = new RunProperties();
@@ -714,7 +737,6 @@ namespace WebCV_Fiches.Helpers
             
             AddBulletToStyles(38, 0, "Puce1");
             ApplyFooter();
-            ApplyHeader();
 
             CreateBioSection(doc.Body);
             CreateDomainesDInterventionSection(doc.Body);
@@ -741,7 +763,7 @@ namespace WebCV_Fiches.Helpers
             TableCell nomEtFonctionCell = new TableCell();
             TableCellProperties tableCellProperties;
 
-            Paragraph nomEtFonctionParagraph, bioParagraph;
+            Paragraph nomEtFonctionParagraph;
 
             Style bioParagraphStyle = GetNewParagraphStyle("BioP1", "BioParagraph");
             AddSpacingToStyle(bioParagraphStyle, 240, 240, 0);
@@ -800,17 +822,86 @@ namespace WebCV_Fiches.Helpers
             tableRow.Append(imageCell, nomEtFonctionCell);
             table.Append(tableRow);
             docBody.Append(table);
-            
-            bioParagraph = new Paragraph();
-            AddIndentationToElement(bioParagraph, 992, 0);
-            AddSpacingToElement(bioParagraph, 240, 0, spaceSimple);
-            AddAligmentToParagrah(bioParagraph, ParagraphAligment.Justifie);
 
-            Run bioRun = new Run();
-            bioRun.Append(GetRunProperties("Arial", "Black", "20", false, false));
-            bioRun.Append(new Text(utilisateur.Conseiller.CVs.First().ResumeExperience));
-            bioParagraph.Append(bioRun);
-            docBody.Append(bioParagraph);
+            docBody.Append(GetNewParagraph(utilisateur.Conseiller.CVs.First().ResumeExperience, before: 240, left: 992, aligment: ParagraphAligment.Justifie));
+
+            Paragraph paragraph = new Paragraph();
+            PlaceTextAtCoordinate(paragraph, "CURRICULUM VITAE", -45.57, 72.57);
+            docBody.Append(paragraph);
+        }
+
+        
+
+        private void PlaceTextAtCoordinate(Paragraph para, string text, double xCoordinate, double uCoordinate)
+        {
+            var picRun = para.AppendChild(new Run());
+
+            Picture picture1 = picRun.AppendChild(new Picture());
+
+            Shapetype shapetype1 = new Shapetype() { Id = "_x0000_t202", CoordinateSize = "21600,21600", OptionalNumber = 202, EdgePath = "m,l,21600r21600,l21600,xe" };
+            Stroke stroke1 = new Stroke() { JoinStyle = StrokeJoinStyleValues.Miter };
+            DocumentFormat.OpenXml.Vml.Path path1 = new DocumentFormat.OpenXml.Vml.Path() { AllowGradientShape = true, ConnectionPointType = ConnectValues.Rectangle };
+
+            shapetype1.Append(stroke1);
+            shapetype1.Append(path1);
+
+            Shape shape1 = new Shape() { Id = "Text Box 2", Style = string.Format("position:absolute;margin-left:{0:F1}pt;margin-top:{1:F1}pt;width:39.52pt;height:399.4pt;z-index:251657216;visibility:visible;mso-wrap-style:square;mso-wrap-distance-left:9pt;mso-wrap-distance-top:3.6pt;mso-wrap-distance-right:9pt;mso-wrap-distance-bottom:3.6pt;mso-position-horizontal-relative:text;mso-position-vertical-relative:text;mso-width-relative:margin;mso-height-relative:margin;v-text-anchor:top", xCoordinate, uCoordinate), Stroked = false };
+
+            TextBox textBox1 = new TextBox() { Style = "layout-flow:vertical;mso-layout-flow-alt:bottom-to-top;mso-fit-shape-to-text:t" };
+
+            TextBoxContent textBoxContent1 = new TextBoxContent();
+            Paragraph textParagraph = GetNewParagraph(text, fontName: "Arial", fontSize: 28, fontColor: "BF96DE");
+            AddCharacterSpacingToElement(textParagraph, 240);
+            textBoxContent1.Append(textParagraph);
+
+            textBox1.Append(textBoxContent1);
+            DocumentFormat.OpenXml.Vml.Wordprocessing.TextWrap textWrap1 = new DocumentFormat.OpenXml.Vml.Wordprocessing.TextWrap() { Type = DocumentFormat.OpenXml.Vml.Wordprocessing.WrapValues.Square };
+
+            shape1.Append(textBox1);
+            shape1.Append(textWrap1);
+
+            picture1.Append(shapetype1);
+            picture1.Append(shape1);
+        }
+
+        private static Footer GenerateFooter()
+        {
+            var element =
+                new Footer(
+                    new SdtBlock(
+                        new SdtProperties(
+                            new SdtId() { Val = 317275692 }),
+                        new SdtContentBlock(
+                            new Paragraph(
+                                new ParagraphProperties(
+                                    new ParagraphStyleId() { Val = "Footer" },
+                                    new Justification() { Val = JustificationValues.Center }),
+                                new Run(
+                                    new RunProperties(
+                                        new NoProof(),
+                                        new Languages() { EastAsia = "en-NZ" })),
+                                new SimpleField(
+                                    new Run(
+                                        new RunProperties(
+                                            new NoProof()),
+                                        new Text("1")
+                                    )
+                                    { RsidRunAddition = "001F06F5" }
+                                )
+                                { Instruction = " PAGE   \\* MERGEFORMAT " }
+                            )
+                            { RsidParagraphAddition = "00F1559F", RsidParagraphProperties = "00F1559F", RsidRunAdditionDefault = "00F1559F" })),
+                    new Paragraph(
+                        new ParagraphProperties(
+                            new ParagraphStyleId() { Val = "Footer" },
+                            new Tabs(
+                                new TabStop() { Val = TabStopValues.Clear, Position = 4320 },
+                                new TabStop() { Val = TabStopValues.Clear, Position = 8640 },
+                                new TabStop() { Val = TabStopValues.Center, Position = 4820 },
+                                new TabStop() { Val = TabStopValues.Right, Position = 9639 }))
+                    )
+                    { RsidParagraphMarkRevision = "005D2110", RsidParagraphAddition = "002D26D8", RsidParagraphProperties = "007F0645", RsidRunAdditionDefault = "002D26D8" });
+            return element;
         }
 
         private Border GenerateBorder(string color, bool showTop, bool showBottom, bool showLeft, bool showRight)
@@ -851,7 +942,7 @@ namespace WebCV_Fiches.Helpers
             return border;
         }
 
-        public void CreateDomainesDInterventionSection(Body docBody)
+        private void CreateDomainesDInterventionSection(Body docBody)
         {
             Table tableItems;
             TableRow domainesRow;
@@ -951,7 +1042,7 @@ namespace WebCV_Fiches.Helpers
             docBody.Append(titreParagraph, tableItems);
         }
 
-        public void CreateFormationAcademiqueEtCertificationSection(Body docBody)
+        private void CreateFormationAcademiqueEtCertificationSection(Body docBody)
         {
             bool HasCertification = utilisateur.Conseiller.Formations.Any(x => x.Type != null && x.Type.Description == "Certification" && !String.IsNullOrEmpty(x.Description));
 
@@ -1092,7 +1183,7 @@ namespace WebCV_Fiches.Helpers
             docBody.Append(tableFormationAcademiqueEtCertification);
         }
 
-        public void CreateResumeDIntervention(Body docBody)
+        private void CreateResumeDIntervention(Body docBody)
         {
             Table tableResumeIntervention;
             TableProperties tableProperties;
@@ -1282,7 +1373,7 @@ namespace WebCV_Fiches.Helpers
             docBody.Append(tableResumeIntervention);
         }
 
-        public void CreateMandats(Body docBody)
+        private void CreateMandats(Body docBody)
         {
             Paragraph employeurParagraphModele, currentParagraph;
             ParagraphProperties paragraphProperties;
@@ -1293,6 +1384,20 @@ namespace WebCV_Fiches.Helpers
             TableProperties tableProperties;
             TableRow tableRow;
 
+            TableGrid tableGrid = new TableGrid();
+                        tableGrid.Append(new GridColumn { Width = "1600" });
+                        tableGrid.Append(new GridColumn { Width = "8818" });
+
+            TableLook tableLook = new TableLook
+            {
+                FirstRow = new OnOffValue(false),
+                LastRow = new OnOffValue(false),
+                FirstColumn = new OnOffValue(false),
+                LastColumn = new OnOffValue(false),
+                NoHorizontalBand = new OnOffValue(false),
+                NoVerticalBand = new OnOffValue(false)
+            };
+
             docBody.Append(new Paragraph(new Run(new Break { Type = new EnumValue<BreakValues>(BreakValues.Page) })));
 
             var mandatsByEmployeur = from data in utilisateur.Conseiller.Mandats.OrderByDescending(x => x.DateDebut)
@@ -1302,9 +1407,10 @@ namespace WebCV_Fiches.Helpers
             foreach (var employeur in mandatsByEmployeur)
             {
                 employeurParagraphModele = new Paragraph();
-                paragraphProperties = new ParagraphProperties();
-
-                paragraphProperties.ParagraphStyleId = new ParagraphStyleId { Val = "Titre1" };
+                paragraphProperties = new ParagraphProperties
+                {
+                    ParagraphStyleId = new ParagraphStyleId { Val = "Titre1" }
+                };
                 AddSpacingToElement(paragraphProperties, 240, 240, spaceSimple);
                 employeurParagraphModele.Append(paragraphProperties);
                 employeurParagraphModele.Append(new Run(new Text(employeur.Key)));
@@ -1338,22 +1444,9 @@ namespace WebCV_Fiches.Helpers
 
                         tableInfoMandat.Append(tableProperties);
 
-                        TableGrid tableGrid = new TableGrid();
-                        tableGrid.Append(new GridColumn { Width = "1600" });
-                        tableGrid.Append(new GridColumn { Width = "8818" });
-                        tableInfoMandat.Append(tableGrid);
+                        tableInfoMandat.Append(tableGrid.CloneNode(true));
 
-                        TableLook tableLook = new TableLook
-                        {
-                            FirstRow = new OnOffValue(false),
-                            LastRow = new OnOffValue(false),
-                            FirstColumn = new OnOffValue(false),
-                            LastColumn = new OnOffValue(false),
-                            NoHorizontalBand = new OnOffValue(false),
-                            NoVerticalBand = new OnOffValue(false)
-                        };
-
-                        tableInfoMandat.Append(tableLook);
+                        tableInfoMandat.Append(tableLook.CloneNode(true));
 
                         paragraphProperties = new ParagraphProperties();
                         paragraphProperties.Append(new SpacingBetweenLines
@@ -1476,7 +1569,7 @@ namespace WebCV_Fiches.Helpers
                             currentParagraph.Append(paragraphProperties.CloneNode(true));
 
                             currentRun = new Run(GetRunProperties("Arial", "Black", "20", false, false));
-                            currentRun.Append(new Text("Environnement technologique: " + String.Join(',', mandat.Projet.Technologies.Select(x => x.Nom.ToUpper()))));
+                            currentRun.Append(new Text("Environnement technologique: " + String.Join(", ", mandat.Projet.Technologies.Select(x => x.Nom.ToUpper()))));
                             currentParagraph.Append(currentRun);
 
                             docBody.Append(currentParagraph);
@@ -1541,7 +1634,7 @@ namespace WebCV_Fiches.Helpers
             var count = 0;
             var isFirts = true;
 
-            foreach (var categorie in technologisByCategorie)
+            /*foreach (var categorie in technologisByCategorie)
             {
                 AddTechnologieCell(tableTechnologies, categorie.Key, null, count, isFirts);
                 isFirts = isFirts && count < gauche;
@@ -1557,6 +1650,27 @@ namespace WebCV_Fiches.Helpers
                     isFirts = isFirts && count < gauche;
                     count = count >= gauche ? 0 : count+1;
                 }
+            }*/
+
+            foreach (var categorie in technologisByCategorie)
+            {
+                AddTechnologieCell(tableTechnologies, categorie.Key, null, count, isFirts);
+                count++;
+                isFirts = isFirts && count < gauche;
+                count = count == gauche ? 0 : count;
+
+                var technologies = from data in categorie
+                                   select data;
+
+                foreach (Technologie technologie in technologies)
+                {
+                    AddTechnologieCell(tableTechnologies, categorie.Key, technologie, count, isFirts);
+                    count++;
+                    isFirts = isFirts && count < gauche;
+                    count = count == gauche ? 0 : count;
+                }
+
+                count = count > 0 ? count+1: 0;
             }
 
             docBody.Append(tableTechnologies);
@@ -1585,7 +1699,7 @@ namespace WebCV_Fiches.Helpers
                 }
                 else
                 {
-                    tableRow = tableTechnologies.Elements<TableRow>().ElementAt(possition+2);
+                    tableRow = tableTechnologies.Elements<TableRow>().ElementAt(possition+1);
                     tableRow.Append(GetCell(GetNewParagraph(categorie, fontSize: 18, isBold: true, isItalic: true), isTop: possition != 0, borderColor: mauveCode, borderValue: BorderValues.Dotted));
                     tableRow.Append(GetCell(GetNewParagraph(""), isTop: possition != 0, borderColor: mauveCode, borderValue: BorderValues.Dotted));
                 }                
@@ -1745,47 +1859,18 @@ namespace WebCV_Fiches.Helpers
             }
         }
 
-        private void ApplyHeader()
+        private Settings GenerateDocumentSettingsPart()
         {
-            MainDocumentPart mainDocPart = document.MainDocumentPart;
-            mainDocPart.DeleteParts(mainDocPart.HeaderParts);
-
-            HeaderPart headerPart1 = mainDocPart.AddNewPart<HeaderPart>("header1");
-            HeaderPart headerPartEven = mainDocPart.AddNewPart<HeaderPart>("headerEven");
-            HeaderPart headerPartOdd = mainDocPart.AddNewPart<HeaderPart>("headerOdd");
-
-            Header header1 = new Header();
-            header1.Append(new Paragraph());
-            headerPart1.Header = header1;
-
-            Header headerEven = new Header();
-            headerEven.Append(new Paragraph());
-            headerPartEven.Header = headerEven;
-
-            Header headerOdd = new Header();
-            headerOdd.Append(new Paragraph());
-            headerPartOdd.Header = headerOdd;
-
-            SectionProperties sectionProperties = mainDocPart.Document.Body.Descendants<SectionProperties>().FirstOrDefault();
-            if (sectionProperties == null)
-            {
-                sectionProperties = new SectionProperties() { };
-                mainDocPart.Document.Body.Append(sectionProperties);
-            }
-            sectionProperties.AppendChild(new TitlePage { Val = true });
-            //EvenAndOddHeaders
-
-            HeaderReference headerReference1 = new HeaderReference() { Type = HeaderFooterValues.First, Id = "header1" };
-            HeaderReference headerReferenceEven = new HeaderReference() { Type = HeaderFooterValues.Even, Id = "headerEven" };
-            HeaderReference headerReferenceOdd = new HeaderReference() { Type = HeaderFooterValues.Default, Id = "headerOdd" };
-
-            sectionProperties.Append(headerReference1, headerReferenceEven, headerReferenceOdd);
+            var element = new Settings(new EvenAndOddHeaders());
+            return element;
         }
 
         private void ApplyFooter()
         {
             MainDocumentPart mainDocPart = document.MainDocumentPart;
-            mainDocPart.DeleteParts(mainDocPart.FooterParts);
+
+            var documentSettingsPart = mainDocPart.AddNewPart<DocumentSettingsPart>("rId1");
+            GenerateDocumentSettingsPart().Save(documentSettingsPart);
 
             FooterPart footerPart1 = mainDocPart.AddNewPart<FooterPart>("footer1");
             FooterPart footerPartEven = mainDocPart.AddNewPart<FooterPart>("footerEven");
@@ -1805,7 +1890,6 @@ namespace WebCV_Fiches.Helpers
                 mainDocPart.Document.Body.Append(sectionProperties);
             }
             sectionProperties.AppendChild(new TitlePage { Val = true });
-            //EvenAndOddHeaders
 
             FooterReference footerReference1 = new FooterReference() { Type = HeaderFooterValues.First, Id = "footer1" };
             FooterReference footerReferenceEven = new FooterReference() { Type = HeaderFooterValues.Even, Id = "footerEven" };
@@ -1830,8 +1914,11 @@ namespace WebCV_Fiches.Helpers
                             new Text($"{utilisateur.Prenom} {utilisateur.Nom}"),
                             new TabChar(),
                             new TabChar(),
-                            new SimpleField() { Instruction = " PAGE   \\* MERGEFORMAT "},
-                            new Text(" / "),
+                            new SimpleField() { Instruction = " PAGE \\* MERGEFORMAT " },
+                            new Text {
+                                Text = " / ",
+                                Space =SpaceProcessingModeValues.Preserve
+                            },
                             new SimpleField() { Instruction = " NUMPAGES \\* Arabic \\* MERGEFORMAT" })
                 ));
 
@@ -1851,8 +1938,12 @@ namespace WebCV_Fiches.Helpers
                                 ),
                         new Run(
                             GetFooterImage(@"images\footer.png", footerPart),
-                            new SimpleField() { Instruction = " PAGE   \\* MERGEFORMAT " },
-                            new Text(" / "),
+                            new SimpleField() { Instruction = " PAGE \\* MERGEFORMAT " },
+                            new Text
+                            {
+                                Text = " / ",
+                                Space = SpaceProcessingModeValues.Preserve
+                            },
                             new SimpleField() { Instruction = " NUMPAGES \\* Arabic \\* MERGEFORMAT" },
                             new TabChar(),
                             new TabChar(),
