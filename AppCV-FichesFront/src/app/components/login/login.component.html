@@ -41,10 +41,17 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <button type="button" [disabled]="(IsValidPassWordRegex.hidden==false ||
-            IsValidPassWord.hidden==false)  ||
-            (IsValidEmail.hidden==false  ||
-            IsValidEmailRegex.hidden==false)?true:false" (click)="Login()" class="btn btn-default">Log in</button>
+                        <div id="identification" [ngClass]="classValidator('divrelativeOn form-inline ','divrelativeOff form-inline')">
+                            <div [ngClass]="classValidator('divloadingOn','divloadingOff')" class="divloading">
+                                <div style="margin-left: auto;margin-right: 65px;width: 1px">
+                                    <img [ngClass]="classValidator('imgloading','imgloadingHidden')">
+                                </div>
+                            </div>
+                                <button type="button" *ngIf="!showLoadingLogin" [disabled]="(IsValidPassWordRegex.hidden==false ||
+                                                                IsValidPassWord.hidden==false)  ||
+                                                                (IsValidEmail.hidden==false  ||
+                                                                IsValidEmailRegex.hidden==false)?true:false" (click)="Login()" class="btn btn-default">Log in</button>
+                        </div>
                     </div>
                     <div class="form-group">
                         <p>

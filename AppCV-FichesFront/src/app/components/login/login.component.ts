@@ -18,6 +18,7 @@ export class LoginComponent implements OnInit {
   ) {}
   Model: LoginModel = new LoginModel();
   MsgError: string="";
+  showLoadingLogin: boolean = false;
   ngOnInit() {}
   IsValid(value, errorEmpty, errorRegex) {
     this.validator.ValidateEmpty(value, errorEmpty);
@@ -28,8 +29,10 @@ export class LoginComponent implements OnInit {
     this.validator.ValidadePassword(value, errorRegex);
   }
   Login(): void {
+    this.showLoadingLogin = true;
     this.auth.Login(this.Model).subscribe(
       (x: Credential) => {
+        this.showLoadingLogin = false;
         if (x.authenticated) {
           this.MsgError = "";
           localStorage.setItem("token", x.token);
@@ -50,7 +53,17 @@ export class LoginComponent implements OnInit {
           this.MsgError = "User or Password is wrong!!";
         }
       },
-      (error: any) => {}
+      (error: any) => {
+        this.showLoadingLogin = false;
+      }
     );
+  }
+
+  classValidator(cssClass: string, optionCssClass): string {
+    if (this.showLoadingLogin) {
+      return cssClass;
+    } else {
+      return optionCssClass;
+    }
   }
 }
