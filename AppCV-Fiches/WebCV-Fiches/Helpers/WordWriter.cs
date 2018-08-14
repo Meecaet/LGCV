@@ -1283,8 +1283,12 @@ namespace WebCV_Fiches.Helpers
             });
 
             tableResumeIntervention.Append(headerRow);
-
-            var mandatsByEmployeur = from data in utilisateur.Conseiller.Mandats.OrderByDescending(x => Convert.ToInt32(x.Numero))
+            var sss = utilisateur.Conseiller.Mandats;
+            
+            var mandatsByEmployeur = from data in utilisateur.Conseiller.Mandats.OrderByDescending(x => { int v = 0;
+                Int32.TryParse(x.Numero, out v);
+                return v;
+            })
                                      group data by new { data.Projet.SocieteDeConseil.Nom } into g
                                      select g;
 
@@ -1551,7 +1555,7 @@ namespace WebCV_Fiches.Helpers
                             { ParagraphStyleId = new ParagraphStyleId { Val = "Puce1" } });
 
                             currentRun = new Run(GetRunProperties("Arial", "Black", "20", false, false));
-                            currentRun.Append(new Text(tache.Description));
+                            currentRun.Append(new Text(tache.Description ?? ""));
                             currentParagraph.Append(currentRun);
                             docBody.Append(currentParagraph);
                         }
