@@ -54,6 +54,7 @@ export class LoginComponent implements OnInit {
         }
       },
       (error: any) => {
+        this.MsgError = "User or Password is wrong!!";
         this.showLoadingLogin = false;
       }
     );
