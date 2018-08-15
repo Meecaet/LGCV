@@ -22,7 +22,7 @@ namespace WebCV_Fiches.Helpers
         private const string mauveCode = "7030A0";
         private const string grisCode = "969696";
         private const int spaceSimple = 240;
-        private const string seperateur = ";";
+        private const string seperateur = ";;;";
 
         private RunProperties GetRunProperties(string fontName, string colorName, string size, bool bold, bool italic)
         {
@@ -1662,10 +1662,7 @@ namespace WebCV_Fiches.Helpers
                 isFirts = isFirts && count < gauche;
                 count = count == gauche ? 0 : count;
 
-                var technologies = from data in categorie
-                                   select data;
-
-                foreach (Technologie technologie in technologies)
+                foreach (Technologie technologie in categorie)
                 {
                     AddTechnologieCell(tableTechnologies, categorie.Key, technologie, count, isFirts);
                     count++;
