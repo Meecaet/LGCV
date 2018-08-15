@@ -8,6 +8,7 @@ using DAL_CV_Fiches.Repositories.Graph;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 using WebCV_Fiches.Helpers;
 using WebCV_Fiches.Models.CVViewModels;
 
@@ -45,6 +46,8 @@ namespace WebCV_Fiches.Controllers
         [AllowAnonymous]
         public ActionResult Detail(string utilisateurId, string mandatId)
         {
+          
+
             var mandatViewModel = new MandatViewModel();
 
             var mandat = mandatGraphRepository.GetOne(mandatId);
@@ -192,6 +195,19 @@ namespace WebCV_Fiches.Controllers
             mandat.GraphId = mandatModel.GraphKey;
 
 
+
+            RedirectToAction("All", "CVResumeInterventions");
+
+
+            var resuklt = RedirectToAction("All", new RouteValueDictionary
+            (
+                                  new
+                                  {
+                                      controller = "CVResumeInterventions",
+                                      action = "All",
+                                      utilisateurId = utilisateurId
+                                  }));
+
             return Json(mandat);
         }
 
@@ -239,7 +255,7 @@ namespace WebCV_Fiches.Controllers
                 noeudModifie: mandatModel);
 
 
-            editionObjectGraphRepository.ChangerPropriete( 
+            editionObjectGraphRepository.ChangerPropriete(
                 viewModelPropriete: () => mandat.GraphIdFonction,
                 graphModelPropriete: () => mandatModel.Fonction.GraphKey,
                 graphModelProprieteNom: "Fonction", noeudModifie: mandatModel);
@@ -300,7 +316,10 @@ namespace WebCV_Fiches.Controllers
                 graphModelPropriete: () => projet.Client.Nom,
                 noeudModifie: client);
 
-            return Json(mandat);
+
+           
+ 
+         return Json(mandat);
         }
 
         // POST: Mandat/Delete/5

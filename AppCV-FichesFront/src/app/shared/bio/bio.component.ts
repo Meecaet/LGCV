@@ -8,7 +8,6 @@ import { MatDialog } from "../../../../node_modules/@angular/material";
 import { ModalOldInformationComponent } from "../modal-old-information/modal-old-information.component";
 import { FonctionViewModel } from "../../Models/Fonction-model";
 
-
 @Component({
   selector: "app-bio",
   templateUrl: "./bio.component.html",
@@ -17,9 +16,10 @@ import { FonctionViewModel } from "../../Models/Fonction-model";
 export class BioComponent implements OnInit {
   bio: BioViewModel;
   originalBio: BioViewModel;
-  @Input() UtilisateurId: string;
+  @Input()
+  UtilisateurId: string;
   showLoadingBio: boolean = true;
-  fonctionAutoComplete :Array<FonctionViewModel>;
+  fonctionAutoComplete: Array<FonctionViewModel>;
   constructor(
     private cvService: CVService,
     private errorService: ErrorService,
@@ -34,12 +34,12 @@ export class BioComponent implements OnInit {
     this.UserDataLoad();
 
     this.cvService
-    .LoadFonction()
-    .subscribe((data: Array<FonctionViewModel>) => {
-      this.fonctionAutoComplete = data;
-    });
+      .LoadFonction()
+      .subscribe((data: Array<FonctionViewModel>) => {
+        this.fonctionAutoComplete = data;
+      });
   }
-  saveBio(model: BioViewModel,quem): void {
+  saveBio(model: BioViewModel): void {
     this.cvService.EditBio(this.UtilisateurId, model).subscribe(
       (data: BioViewModel) => {
         this.UserDataLoad();
@@ -61,9 +61,7 @@ export class BioComponent implements OnInit {
     this.showLoadingBio = true;
     this.cvService.GetBio(this.UtilisateurId).subscribe(
       (data: BioViewModel) => {
-
         this.originalBio = data;
-
         this.SetData(data);
         this.showLoadingBio = !this.showLoadingBio;
       },
@@ -82,7 +80,6 @@ export class BioComponent implements OnInit {
   IsShowInformations(fieldName): boolean {
     try {
       if (this.originalBio.editionObjecViewModels.length > 0) {
-
         var teste = this.originalBio.editionObjecViewModels.some(
           x => x.proprieteNom === fieldName
         );
@@ -90,33 +87,32 @@ export class BioComponent implements OnInit {
       } else {
         return false;
       }
-    } catch (error) {
-
-    }
+    } catch (error) {}
   }
-  onChange(data:any){
-     this.bio.fonction = data;
+  onChange(data: any) {
+    this.bio.fonction = data;
     //  this.saveBio(this.bio)
   }
   SetData(data: BioViewModel) {
     if (data.editionObjecViewModels != null) {
-
       for (const key in data.editionObjecViewModels) {
         if (data.editionObjecViewModels[key]["etat"] == "Modifie") {
-
-          if(data.editionObjecViewModels[key]["type"]=="ChangementRelation"){
+          if (
+            data.editionObjecViewModels[key]["type"] == "ChangementRelation"
+          ) {
             this.bio[data.editionObjecViewModels[key]["proprieteNom"]] =
-            data.editionObjecViewModels[key]["editionId"];
-          //Set color
-          this.bio.bioHighlight[data.editionObjecViewModels[key]["proprieteNom"]          ] =
-            data.editionObjecViewModels[key]["type"];
-
-          }else{
-          this.bio[data.editionObjecViewModels[key]["proprieteNom"]] =
-            data.editionObjecViewModels[key]["proprieteValeur"];
-          //Set color
-          this.bio.bioHighlight[data.editionObjecViewModels[key]["proprieteNom"]          ] =
-            data.editionObjecViewModels[key]["type"];
+              data.editionObjecViewModels[key]["editionId"];
+            //Set color
+            this.bio.bioHighlight[
+              data.editionObjecViewModels[key]["proprieteNom"]
+            ] = data.editionObjecViewModels[key]["type"];
+          } else {
+            this.bio[data.editionObjecViewModels[key]["proprieteNom"]] =
+              data.editionObjecViewModels[key]["proprieteValeur"];
+            //Set color
+            this.bio.bioHighlight[
+              data.editionObjecViewModels[key]["proprieteNom"]
+            ] = data.editionObjecViewModels[key]["type"];
           }
         }
       }
@@ -143,21 +139,19 @@ export class BioComponent implements OnInit {
   /**********************************************************************************
    * *MODAL*MODAL*MODAL*MODAL*MODAL*MODAL*MODAL*MODAL*MODAL*MODAL*MODAL*MODAL*MODAL**
    * *********************************************************************************/
-  openDialogDropDown(graphId, OriginalChamp){
-
-    let label = this.fonctionAutoComplete.filter(x=> x.graphId == graphId) ;
-     this.openDialog(label[0].nom,OriginalChamp);
-
+  openDialogDropDown(graphId, OriginalChamp) {
+    let label = this.fonctionAutoComplete.filter(x => x.graphId == graphId);
+    this.openDialog(label[0].nom, OriginalChamp);
   }
   openDialog(ModalMessage, OriginalChamp) {
-
-    this.dialog.open(ModalOldInformationComponent, {
-      data: {
-        ModalMessage: ModalMessage,
-        OriginalChamp: OriginalChamp
-      }
-    }).backdropClick().subscribe(obs=>{
-
-    });
+    this.dialog
+      .open(ModalOldInformationComponent, {
+        data: {
+          ModalMessage: ModalMessage,
+          OriginalChamp: OriginalChamp
+        }
+      })
+      .backdropClick()
+      .subscribe(obs => {});
   }
 }

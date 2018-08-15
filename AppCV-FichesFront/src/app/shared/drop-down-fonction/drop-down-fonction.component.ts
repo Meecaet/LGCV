@@ -15,6 +15,7 @@ export class DropDownFonctionComponent implements OnInit {
   fonction: FonctionViewModel;
 
   @Output("onChange") onChange = new EventEmitter();
+
   constructor(private cvServices: CVService) {
     this.fonction = new FonctionViewModel();
     this.fonctionAutoComplete = new Array<FonctionViewModel>();

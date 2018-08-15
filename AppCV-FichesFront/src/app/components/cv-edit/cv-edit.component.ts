@@ -19,7 +19,7 @@ export class CvEditComponent implements OnInit {
   mandatSeleted = new MandatViewModel();
   numberPage: number;
   lastPage: number;
-  showMandat: boolean = false;
+  public showMandat: boolean = false;
   hiddenButton: string;
   showLoadingCarousel: boolean;
   showDownloadFile: boolean = false;
@@ -39,15 +39,14 @@ export class CvEditComponent implements OnInit {
     document.getElementById("anchor-table-mandat").scrollIntoView();
     this.showMandat = false;
     this.mandatSeleted = new MandatViewModel();
-
     this.showDownloadFile = true;
-
-    this.CVserv.AddMandat(this.UtilisateurId, event).subscribe((sub:MandatViewModel) => {
-      debugger
-      this.mandatCollection.push(sub)
-    });
   }
-
+  UpdateData(event: MandatViewModel):void{
+    document.getElementById("anchor-table-mandat").scrollIntoView();
+    this.showMandat = false;
+    this.mandatSeleted = new MandatViewModel();
+    this.showDownloadFile = true;
+  }
   addNewMandatFromList(arg: any): void {
     // this.InputMandatCarousel = arg.newMandat;
 

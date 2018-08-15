@@ -30,6 +30,11 @@ namespace WebCV_Fiches.Controllers
              var utilisateur = utilisateurGraphRepository.GetOne(utilisateurId);
             var mandats = utilisateur.Conseiller?.Mandats?.Cast<GraphObject>().ToList();
 
+         
+
+
+
+
             if (mandats == null)
                 return Json(new List<ResumeInterventionViewModel>());
 

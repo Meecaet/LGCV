@@ -17,6 +17,7 @@ using WebCV_Fiches.Models.CVViewModels;
 namespace WebCV_Fiches.Controllers
 {
     [Route("api/Bio")]
+    [Authorize("Bearer")]
     [AuthorizeRoleFilter("Administrateur", "Conseiller")]
     public class CVBioController : Controller
     {
@@ -32,7 +33,6 @@ namespace WebCV_Fiches.Controllers
         }
 
         [Route("Detail/{utilisateurId}")]
-        [Authorize("Bearer")]
         public ActionResult Detail(string utilisateurId)
         {
             var bioViewModel = new BioViewModel();
@@ -63,7 +63,6 @@ namespace WebCV_Fiches.Controllers
         }
 
         [HttpPost]
-        [AllowAnonymous]
         [Route("{utilisateurId}/Edit")]
         public ActionResult Edit(string utilisateurId, [FromBody]BioViewModel bio)
         {

@@ -11,6 +11,7 @@ import { CVService } from "../../Services/cv.service";
 import { ResumeInterventionViewModel } from "../../Models/CV/ResumeInterventionViewModel";
 import { CarouselComponent } from "../carousel/carousel.component";
 import { ErrorService } from "../../Services/error.service";
+import { CvEditComponent } from "../../components/cv-edit/cv-edit.component";
 
 @Component({
   selector: "app-table-mandat",
@@ -36,7 +37,10 @@ export class TableMandatComponent implements OnInit {
   @Output("onChangeMandatFromTableMandat")
   onChangeMandatFromTableMandat = new EventEmitter();
 
-  constructor(private serv: CVService,private errorServ : ErrorService) {
+  @Input("eventCaousel")
+  eventCaousel: CarouselComponent;
+
+  constructor(private serv: CVService, private errorServ: ErrorService,private parentComponent: CvEditComponent) {
     this.mandatCollection = new Array<MandatViewModel>();
     this.resume = new Array<ResumeInterventionViewModel>();
   }
@@ -48,8 +52,19 @@ export class TableMandatComponent implements OnInit {
     this.serv
       .LoadResumeIntervention(this.UtilisateurId)
       .subscribe((data: Array<ResumeInterventionViewModel>) => {
+        // this.resume = data;
+        this.resume = data.filter((x: ResumeInterventionViewModel) => {
+          if (x.editionObjecViewModels.length < 1) {
+            return x;
+          } else if (
+            !x.editionObjecViewModels.some(x => {
+              return x.etat == "Modifie" && x.type == "Enlever";
+            })
+          ) {
+            return x;
+          }
+        });
         this.showLoadingMandat = false;
-        this.resume = data;
       });
   }
 
@@ -87,16 +102,20 @@ export class TableMandatComponent implements OnInit {
     });
   }
   removeMandat(mand: MandatViewModel) {
-    if (confirm("Vous voulez supprime ?")) {
-      this.showLoadingMandat = true;
-      this.serv
-        .DeleteMandat(this.UtilisateurId, mand.graphId)
-        .subscribe(sub => {
-          this.showLoadingMandat = false;
-        },(error)=> this.errorServ.ErrorHandle(error.status));
-    }
+     this.eventCaousel.showLoadingCarousel = false;
+      if (confirm("Vous voulez supprime ?")) {
+        this.showLoadingMandat = true;
+        this.eventCaousel.showLoadingCarousel = false;
+        this.serv.DeleteMandat(this.UtilisateurId, mand.graphId)
+          .subscribe(sub => {
+            debugger
+             this.showLoadingMandat = false;
+             this.eventCaousel.showLoadingCarousel = false;
+             this.parentComponent.showMandat =false;
+             this.LoadData();
+            },(error)=> this.errorServ.ErrorHandle(error.status));
+      }
   }
-
   classValidator(cssClass: string, optionCssClass): string {
     if (this.showLoadingMandat) {
       return cssClass;
