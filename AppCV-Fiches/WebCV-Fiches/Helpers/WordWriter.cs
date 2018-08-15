@@ -21,6 +21,7 @@ namespace WebCV_Fiches.Helpers
         private const string mauveCode = "7030A0";
         private const string grisCode = "969696";
         private const int spaceSimple = 240;
+        private const string seperateur = ";;;";
 
         private RunProperties GetRunProperties(string fontName, string colorName, string size, bool bold, bool italic)
         {
@@ -827,7 +828,13 @@ namespace WebCV_Fiches.Helpers
             table.Append(tableRow);
             docBody.Append(table);
 
-            docBody.Append(GetNewParagraph(utilisateur.Conseiller.CVs.First().ResumeExperience, before: 240, left: 992, aligment: ParagraphAligment.Justifie));
+            string[] phraseDiviser = utilisateur.Conseiller.CVs.First().ResumeExperience.Split(seperateur);
+
+            foreach (string phrase in phraseDiviser)
+            {
+                docBody.Append(GetNewParagraph(phrase, before: 240, left: 992, aligment: ParagraphAligment.Justifie));
+            }
+            
 
             Paragraph paragraph = new Paragraph();
             PlaceTextAtCoordinate(paragraph, "CURRICULUM VITAE", -45.57, 72.57);
@@ -1285,10 +1292,7 @@ namespace WebCV_Fiches.Helpers
             tableResumeIntervention.Append(headerRow);
             var sss = utilisateur.Conseiller.Mandats;
             
-            var mandatsByEmployeur = from data in utilisateur.Conseiller.Mandats.OrderByDescending(x => { int v = 0;
-                Int32.TryParse(x.Numero, out v);
-                return v;
-            })
+            var mandatsByEmployeur = from data in utilisateur.Conseiller.Mandats.OrderByDescending(x => Int32.TryParse(x.Numero, out int numero))
                                      group data by new { data.Projet.SocieteDeConseil.Nom } into g
                                      select g;
 
@@ -1408,7 +1412,7 @@ namespace WebCV_Fiches.Helpers
 
             docBody.Append(new Paragraph(new Run(new Break { Type = new EnumValue<BreakValues>(BreakValues.Page) })));
 
-            var mandatsByEmployeur = from data in utilisateur.Conseiller.Mandats.OrderByDescending(x => x.DateDebut)
+            var mandatsByEmployeur = from data in utilisateur.Conseiller.Mandats.OrderByDescending(x => Int32.TryParse(x.Numero, out int numero))
                                      group data by data.Projet.SocieteDeConseil.Nom into g
                                      select g;
 
@@ -1425,84 +1429,141 @@ namespace WebCV_Fiches.Helpers
 
                 docBody.Append(employeurParagraphModele);
 
-                var mandatsByClientsOfAnEmployeur = from data in employeur
-                                                    group data by data.Projet.Client.Nom into g
-                                                    select g;
+                var mandatsByClientsOfAnEmployeur = employeur.OrderByDescending(x => Int32.TryParse(x.Numero, out int numero));
 
-                foreach (var client in mandatsByClientsOfAnEmployeur)
+                foreach (var mandat in mandatsByClientsOfAnEmployeur)
                 {
-                    foreach (var mandat in client)
+                    docBody.Append(GetTitre(mandat.Projet.Client.Nom, style: "Titre2"));
+
+                    tableInfoMandat = new Table();
+                    tableProperties = new TableProperties();
+                    tableProperties.Append(new TableWidth { Width = "10418", Type = new EnumValue<TableWidthUnitValues>(TableWidthUnitValues.Dxa) });
+                    tableProperties.Append(new TableLayout { Type = new EnumValue<TableLayoutValues>(TableLayoutValues.Fixed) });
+                    tableProperties.Append(new TableCellMarginDefault
                     {
-                        docBody.Append(GetTitre(client.Key, style: "Titre2"));
+                        TableCellRightMargin = new TableCellRightMargin { Width = 70, Type = new EnumValue<TableWidthValues>(TableWidthValues.Dxa) },
+                        TableCellLeftMargin = new TableCellLeftMargin { Width = 70, Type = new EnumValue<TableWidthValues>(TableWidthValues.Dxa) }
+                    },
+                    new TableIndentation
+                    {
+                        Width = 0,
+                        Type = TableWidthUnitValues.Dxa
+                    });
 
-                        tableInfoMandat = new Table();
-                        tableProperties = new TableProperties();
-                        tableProperties.Append(new TableWidth { Width = "10418", Type = new EnumValue<TableWidthUnitValues>(TableWidthUnitValues.Dxa) });
-                        tableProperties.Append(new TableLayout { Type = new EnumValue<TableLayoutValues>(TableLayoutValues.Fixed) });
-                        tableProperties.Append(new TableCellMarginDefault
+                    tableInfoMandat.Append(tableProperties);
+
+                    tableInfoMandat.Append(tableGrid.CloneNode(true));
+
+                    tableInfoMandat.Append(tableLook.CloneNode(true));
+
+                    paragraphProperties = new ParagraphProperties();
+                    paragraphProperties.Append(new SpacingBetweenLines
+                    {
+                        Before = "0",
+                        After = "0",
+                        BeforeAutoSpacing = new OnOffValue(false),
+                        AfterAutoSpacing = new OnOffValue(false),
+                        Line = "233"
+                    });
+
+                    tableRow = new TableRow();
+                    tableRow.Append(new TableCell(new Paragraph(paragraphProperties.CloneNode(true), new Run(GetRunProperties("Arial", "Black", "20", false, false), new Text("Mandat no:")))));
+                    tableRow.Append(new TableCell(new Paragraph(paragraphProperties.CloneNode(true), new Run(GetRunProperties("Arial", "Black", "20", false, false), new Text(mandat.Numero)))));
+                    tableInfoMandat.Append(tableRow);
+
+                    tableRow = new TableRow();
+                    tableRow.Append(new TableCell(new Paragraph(paragraphProperties.CloneNode(true), new Run(GetRunProperties("Arial", "Black", "20", true, false), new Text("Projet:")))));
+                    tableRow.Append(new TableCell(new Paragraph(paragraphProperties.CloneNode(true), new Run(GetRunProperties("Arial", "Black", "20", true, false), new Text(mandat.Projet.Nom)))));
+                    tableInfoMandat.Append(tableRow);
+
+                    tableRow = new TableRow();
+                    tableRow.Append(new TableCell(new Paragraph(paragraphProperties.CloneNode(true), new Run(GetRunProperties("Arial", "Black", "20", false, false), new Text("Envergure:")))));
+                    tableRow.Append(new TableCell(new Paragraph(paragraphProperties.CloneNode(true), new Run(GetRunProperties("Arial", "Black", "20", false, false), new Text(mandat.Projet.Envergure.ToString())))));
+                    tableInfoMandat.Append(tableRow);
+
+                    tableRow = new TableRow();
+                    tableRow.Append(new TableCell(new Paragraph(paragraphProperties.CloneNode(true), new Run(GetRunProperties("Arial", "Black", "20", false, false), new Text("Fonction:")))));
+                    tableRow.Append(new TableCell(new Paragraph(paragraphProperties.CloneNode(true), new Run(GetRunProperties("Arial", "Black", "20", false, false), new Text(mandat.Fonction.Description)))));
+                    tableInfoMandat.Append(tableRow);
+
+                    tableRow = new TableRow();
+                    tableRow.Append(new TableCell(new Paragraph(paragraphProperties.CloneNode(true), new Run(GetRunProperties("Arial", "Black", "20", false, false), new Text("Période:")))));
+                    tableRow.Append(new TableCell(new Paragraph(paragraphProperties.CloneNode(true), new Run(GetRunProperties("Arial", "Black", "20", false, false), new Text($"{mandat.DateDebut.ToString("MMMM")} de {mandat.DateDebut.Year} à {mandat.DateFin.ToString("MMMM")} de {mandat.DateFin.Year}")))));
+                    tableInfoMandat.Append(tableRow);
+
+                    tableRow = new TableRow();
+                    tableRow.Append(new TableCell(new Paragraph(paragraphProperties.CloneNode(true), new Run(GetRunProperties("Arial", "Black", "20", false, false), new Text("Efforts:")))));
+                    tableRow.Append(new TableCell(new Paragraph(paragraphProperties.CloneNode(true), new Run(GetRunProperties("Arial", "Black", "20", false, false), new Text(mandat.Efforts.ToString())))));
+                    tableInfoMandat.Append(tableRow);
+
+                    tableRow = new TableRow();
+                    tableRow.Append(new TableCell(new Paragraph(paragraphProperties.CloneNode(true), new Run(GetRunProperties("Arial", "Black", "20", false, false), new Text("Référence:")))));
+                    tableRow.Append(new TableCell(new Paragraph(paragraphProperties.CloneNode(true), new Run(GetRunProperties("Arial", "Black", "20", false, false), new Text(mandat.Projet.NomReference)))));
+                    tableInfoMandat.Append(tableRow);
+
+                    docBody.Append(tableInfoMandat);
+
+                    currentParagraph = new Paragraph();
+                    paragraphProperties = new ParagraphProperties();
+                    paragraphProperties.Append(new SpacingBetweenLines
+                    {
+                        After = "0",
+                        Before = "120",
+                        Line = spaceSimple.ToString()
+                    });
+
+                    paragraphProperties.Append(new Justification { Val = new EnumValue<JustificationValues>(JustificationValues.Both) });
+
+                    currentParagraph.Append(paragraphProperties.CloneNode(true));
+
+                    currentRun = new Run(GetRunProperties("Arial", "Black", "20", false, false));
+                    currentRun.Append(new Text(mandat.Projet.Description));
+                    currentParagraph.Append(currentRun);
+
+                    docBody.Append(currentParagraph);
+
+
+                    //Tâches
+
+                    currentParagraph = new Paragraph();
+                    paragraphProperties = new ParagraphProperties();
+                    paragraphProperties.Append(new SpacingBetweenLines
+                    {
+                        After = "60",
+                        Before = "120",
+                        Line = spaceSimple.ToString()
+                    });
+
+                    paragraphProperties.Append(new Justification { Val = new EnumValue<JustificationValues>(JustificationValues.Both) });
+                    currentParagraph.Append(paragraphProperties.CloneNode(true));
+
+                    currentRun = new Run(GetRunProperties("Arial", "Black", "20", false, false));
+                    currentRun.Append(new Text($"M. {utilisateur.Nom} a effectué les tâches suivantes :"));
+                    currentParagraph.Append(currentRun);
+
+                    docBody.Append(currentParagraph);
+
+                    foreach (var tache in mandat.Taches)
+                    {
+                        currentParagraph = new Paragraph();
+                        currentParagraph.Append(new ParagraphProperties(new Justification { Val = new EnumValue<JustificationValues>(JustificationValues.Both) }, new SpacingBetweenLines
                         {
-                            TableCellRightMargin = new TableCellRightMargin { Width = 70, Type = new EnumValue<TableWidthValues>(TableWidthValues.Dxa) },
-                            TableCellLeftMargin = new TableCellLeftMargin { Width = 70, Type = new EnumValue<TableWidthValues>(TableWidthValues.Dxa) }
-                        },
-                        new TableIndentation
-                        {
-                            Width = 0,
-                            Type = TableWidthUnitValues.Dxa
-                        });
-
-                        tableInfoMandat.Append(tableProperties);
-
-                        tableInfoMandat.Append(tableGrid.CloneNode(true));
-
-                        tableInfoMandat.Append(tableLook.CloneNode(true));
-
-                        paragraphProperties = new ParagraphProperties();
-                        paragraphProperties.Append(new SpacingBetweenLines
-                        {
+                            After = "0",
                             Before = "0",
-                            After = "0",
-                            BeforeAutoSpacing = new OnOffValue(false),
-                            AfterAutoSpacing = new OnOffValue(false),
-                            Line = "233"
-                        });
+                            Line = spaceSimple.ToString()
+                        })
+                        { ParagraphStyleId = new ParagraphStyleId { Val = "Puce1" } });
 
-                        tableRow = new TableRow();
-                        tableRow.Append(new TableCell(new Paragraph(paragraphProperties.CloneNode(true), new Run(GetRunProperties("Arial", "Black", "20", false, false), new Text("Mandat no:")))));
-                        tableRow.Append(new TableCell(new Paragraph(paragraphProperties.CloneNode(true), new Run(GetRunProperties("Arial", "Black", "20", false, false), new Text(mandat.Numero)))));
-                        tableInfoMandat.Append(tableRow);
+                        currentRun = new Run(GetRunProperties("Arial", "Black", "20", false, false));
+                        currentRun.Append(new Text(tache.Description ?? ""));
+                        currentParagraph.Append(currentRun);
+                        docBody.Append(currentParagraph);
+                    }
 
-                        tableRow = new TableRow();
-                        tableRow.Append(new TableCell(new Paragraph(paragraphProperties.CloneNode(true), new Run(GetRunProperties("Arial", "Black", "20", true, false), new Text("Projet:")))));
-                        tableRow.Append(new TableCell(new Paragraph(paragraphProperties.CloneNode(true), new Run(GetRunProperties("Arial", "Black", "20", true, false), new Text(mandat.Projet.Nom)))));
-                        tableInfoMandat.Append(tableRow);
+                    //End tâches
 
-                        tableRow = new TableRow();
-                        tableRow.Append(new TableCell(new Paragraph(paragraphProperties.CloneNode(true), new Run(GetRunProperties("Arial", "Black", "20", false, false), new Text("Envergure:")))));
-                        tableRow.Append(new TableCell(new Paragraph(paragraphProperties.CloneNode(true), new Run(GetRunProperties("Arial", "Black", "20", false, false), new Text(mandat.Projet.Envergure.ToString())))));
-                        tableInfoMandat.Append(tableRow);
-
-                        tableRow = new TableRow();
-                        tableRow.Append(new TableCell(new Paragraph(paragraphProperties.CloneNode(true), new Run(GetRunProperties("Arial", "Black", "20", false, false), new Text("Fonction:")))));
-                        tableRow.Append(new TableCell(new Paragraph(paragraphProperties.CloneNode(true), new Run(GetRunProperties("Arial", "Black", "20", false, false), new Text(mandat.Fonction.Description)))));
-                        tableInfoMandat.Append(tableRow);
-
-                        tableRow = new TableRow();
-                        tableRow.Append(new TableCell(new Paragraph(paragraphProperties.CloneNode(true), new Run(GetRunProperties("Arial", "Black", "20", false, false), new Text("Période:")))));
-                        tableRow.Append(new TableCell(new Paragraph(paragraphProperties.CloneNode(true), new Run(GetRunProperties("Arial", "Black", "20", false, false), new Text($"{mandat.DateDebut.ToString("MMMM")} de {mandat.DateDebut.Year} à {mandat.DateFin.ToString("MMMM")} de {mandat.DateFin.Year}")))));
-                        tableInfoMandat.Append(tableRow);
-
-                        tableRow = new TableRow();
-                        tableRow.Append(new TableCell(new Paragraph(paragraphProperties.CloneNode(true), new Run(GetRunProperties("Arial", "Black", "20", false, false), new Text("Efforts:")))));
-                        tableRow.Append(new TableCell(new Paragraph(paragraphProperties.CloneNode(true), new Run(GetRunProperties("Arial", "Black", "20", false, false), new Text(mandat.Efforts.ToString())))));
-                        tableInfoMandat.Append(tableRow);
-
-                        tableRow = new TableRow();
-                        tableRow.Append(new TableCell(new Paragraph(paragraphProperties.CloneNode(true), new Run(GetRunProperties("Arial", "Black", "20", false, false), new Text("Référence:")))));
-                        tableRow.Append(new TableCell(new Paragraph(paragraphProperties.CloneNode(true), new Run(GetRunProperties("Arial", "Black", "20", false, false), new Text(mandat.Projet.NomReference)))));
-                        tableInfoMandat.Append(tableRow);
-
-                        docBody.Append(tableInfoMandat);
-
+                    if (mandat.Projet.Technologies != null)
+                    {
                         currentParagraph = new Paragraph();
                         paragraphProperties = new ParagraphProperties();
                         paragraphProperties.Append(new SpacingBetweenLines
@@ -1513,75 +1574,13 @@ namespace WebCV_Fiches.Helpers
                         });
 
                         paragraphProperties.Append(new Justification { Val = new EnumValue<JustificationValues>(JustificationValues.Both) });
-
                         currentParagraph.Append(paragraphProperties.CloneNode(true));
 
                         currentRun = new Run(GetRunProperties("Arial", "Black", "20", false, false));
-                        currentRun.Append(new Text(mandat.Projet.Description));
+                        currentRun.Append(new Text("Environnement technologique: " + String.Join(", ", mandat.Projet.Technologies.Select(x => x.Nom.ToUpper()))));
                         currentParagraph.Append(currentRun);
 
                         docBody.Append(currentParagraph);
-
-
-                        //Tâches
-
-                        currentParagraph = new Paragraph();
-                        paragraphProperties = new ParagraphProperties();
-                        paragraphProperties.Append(new SpacingBetweenLines
-                        {
-                            After = "60",
-                            Before = "120",
-                            Line = spaceSimple.ToString()
-                        });
-
-                        paragraphProperties.Append(new Justification { Val = new EnumValue<JustificationValues>(JustificationValues.Both) });
-                        currentParagraph.Append(paragraphProperties.CloneNode(true));
-
-                        currentRun = new Run(GetRunProperties("Arial", "Black", "20", false, false));
-                        currentRun.Append(new Text($"M. {utilisateur.Nom} a effectué les tâches suivantes :"));
-                        currentParagraph.Append(currentRun);
-
-                        docBody.Append(currentParagraph);
-
-                        foreach (var tache in mandat.Taches)
-                        {
-                            currentParagraph = new Paragraph();
-                            currentParagraph.Append(new ParagraphProperties(new Justification { Val = new EnumValue<JustificationValues>(JustificationValues.Both) }, new SpacingBetweenLines
-                            {
-                                After = "0",
-                                Before = "0",
-                                Line = spaceSimple.ToString()
-                            })
-                            { ParagraphStyleId = new ParagraphStyleId { Val = "Puce1" } });
-
-                            currentRun = new Run(GetRunProperties("Arial", "Black", "20", false, false));
-                            currentRun.Append(new Text(tache.Description ?? ""));
-                            currentParagraph.Append(currentRun);
-                            docBody.Append(currentParagraph);
-                        }
-
-                        //End tâches
-
-                        if (mandat.Projet.Technologies != null)
-                        {
-                            currentParagraph = new Paragraph();
-                            paragraphProperties = new ParagraphProperties();
-                            paragraphProperties.Append(new SpacingBetweenLines
-                            {
-                                After = "0",
-                                Before = "120",
-                                Line = spaceSimple.ToString()
-                            });
-
-                            paragraphProperties.Append(new Justification { Val = new EnumValue<JustificationValues>(JustificationValues.Both) });
-                            currentParagraph.Append(paragraphProperties.CloneNode(true));
-
-                            currentRun = new Run(GetRunProperties("Arial", "Black", "20", false, false));
-                            currentRun.Append(new Text("Environnement technologique: " + String.Join(", ", mandat.Projet.Technologies.Select(x => x.Nom.ToUpper()))));
-                            currentParagraph.Append(currentRun);
-
-                            docBody.Append(currentParagraph);
-                        }
                     }
                 }
             }
