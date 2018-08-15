@@ -18,10 +18,11 @@ namespace WebCV_Fiches.Helpers
     {
         private Utilisateur utilisateur;
         private WordprocessingDocument document;
+
         private const string mauveCode = "7030A0";
         private const string grisCode = "969696";
         private const int spaceSimple = 240;
-        private const string seperateur = ";;;";
+        private const string seperateur = ";";
 
         private RunProperties GetRunProperties(string fontName, string colorName, string size, bool bold, bool italic)
         {
@@ -89,9 +90,11 @@ namespace WebCV_Fiches.Helpers
 
         private void AddIndentationToElement(OpenXmlCompositeElement element, int left, int right)
         {
-            Indentation indentation = new Indentation();
-            indentation.Right = new StringValue(right.ToString());
-            indentation.Left = new StringValue(left.ToString());
+            Indentation indentation = new Indentation
+            {
+                Right = new StringValue(right.ToString()),
+                Left = new StringValue(left.ToString())
+            };
 
             ParagraphProperties paragraphProperties = element.GetFirstChild<ParagraphProperties>();
             if (paragraphProperties == null)
@@ -201,8 +204,10 @@ namespace WebCV_Fiches.Helpers
 
             if (!string.IsNullOrEmpty(styleId))
             {
-                ParagraphProperties paragraphProperties = new ParagraphProperties();
-                paragraphProperties.ParagraphStyleId = new ParagraphStyleId { Val = styleId };
+                ParagraphProperties paragraphProperties = new ParagraphProperties
+                {
+                    ParagraphStyleId = new ParagraphStyleId { Val = styleId }
+                };
 
                 paragraph.Append(paragraphProperties);
             }
@@ -219,8 +224,10 @@ namespace WebCV_Fiches.Helpers
 
             if (!string.IsNullOrEmpty(styleId))
             {
-                ParagraphProperties paragraphProperties = new ParagraphProperties();
-                paragraphProperties.ParagraphStyleId = new ParagraphStyleId { Val = styleId };
+                ParagraphProperties paragraphProperties = new ParagraphProperties
+                {
+                    ParagraphStyleId = new ParagraphStyleId { Val = styleId }
+                };
 
                 paragraph.Append(paragraphProperties);
             }
@@ -528,9 +535,11 @@ namespace WebCV_Fiches.Helpers
             numElement.Save(numberingPart);
 
             Style bulletStyle = GetNewParagraphStyle(bulletName, bulletName);
-            NumberingProperties numberingProperties = new NumberingProperties();
-            numberingProperties.NumberingLevelReference = new NumberingLevelReference { Val = new Int32Value(level) };
-            numberingProperties.NumberingId = new NumberingId { Val = new Int32Value(bulletId) };
+            NumberingProperties numberingProperties = new NumberingProperties
+            {
+                NumberingLevelReference = new NumberingLevelReference { Val = new Int32Value(level) },
+                NumberingId = new NumberingId { Val = new Int32Value(bulletId) }
+            };
 
             bulletStyle.Append(numberingProperties);
             document.MainDocumentPart.StyleDefinitionsPart.Styles.Append(bulletStyle);
@@ -641,8 +650,10 @@ namespace WebCV_Fiches.Helpers
             Paragraph titreParagraph;
             ParagraphProperties paragraphProperties;
             titreParagraph = new Paragraph();
-            paragraphProperties = new ParagraphProperties();
-            paragraphProperties.ParagraphStyleId = new ParagraphStyleId { Val = style };
+            paragraphProperties = new ParagraphProperties
+            {
+                ParagraphStyleId = new ParagraphStyleId { Val = style }
+            };
             titreParagraph.Append(paragraphProperties);
             titreParagraph.Append(new Run(new Text(titre)));
             AddSpacingToElement(titreParagraph, espaceAvant, espaceApres, spaceSimple);
@@ -658,9 +669,11 @@ namespace WebCV_Fiches.Helpers
             puceRun = new Run();
             puceRun.Append(GetRunProperties("Arial", "Black", "20", false, false), new Text(texte));
 
-            ParagraphProperties paragraphProperties = new ParagraphProperties();
-            paragraphProperties.ParagraphStyleId = new ParagraphStyleId { Val = "Puce1" };
-            paragraphProperties.Justification = new Justification { Val = new EnumValue<JustificationValues>(JustificationValues.Left) };
+            ParagraphProperties paragraphProperties = new ParagraphProperties
+            {
+                ParagraphStyleId = new ParagraphStyleId { Val = "Puce1" },
+                Justification = new Justification { Val = new EnumValue<JustificationValues>(JustificationValues.Left) }
+            };
 
             puceParagraph.Append(paragraphProperties, puceRun);
             AddSpacingToElement(puceParagraph, espaceAvant, espaceApres, spaceSimple);
@@ -834,7 +847,6 @@ namespace WebCV_Fiches.Helpers
             {
                 docBody.Append(GetNewParagraph(phrase, before: 240, left: 992, aligment: ParagraphAligment.Justifie));
             }
-            
 
             Paragraph paragraph = new Paragraph();
             PlaceTextAtCoordinate(paragraph, "CURRICULUM VITAE", -45.57, 72.57);
@@ -1013,10 +1025,11 @@ namespace WebCV_Fiches.Helpers
             secondColumn = new TableCell();
 
             itemParagraphModele = new Paragraph();
-            ParagraphProperties paragraphProperties = new ParagraphProperties();
-            
-            paragraphProperties.ParagraphStyleId = new ParagraphStyleId { Val = "Puce1" };
-            paragraphProperties.Justification = new Justification { Val = new EnumValue<JustificationValues>(JustificationValues.Left) };
+            ParagraphProperties paragraphProperties = new ParagraphProperties
+            {
+                ParagraphStyleId = new ParagraphStyleId { Val = "Puce1" },
+                Justification = new Justification { Val = new EnumValue<JustificationValues>(JustificationValues.Left) }
+            };
 
             itemParagraphModele.Append(paragraphProperties);
 
@@ -1174,10 +1187,11 @@ namespace WebCV_Fiches.Helpers
                     certificationItemRun = new Run();
                     certificationItemRun.Append(GetRunProperties("Arial", "Black", "20", false, false), new Text(formation.Description));
 
-                    paragraphProperties = new ParagraphProperties();
-                    paragraphProperties.ParagraphStyleId = new ParagraphStyleId { Val = "Puce1" };
-                    paragraphProperties.Justification = new Justification { Val = new EnumValue<JustificationValues>(JustificationValues.Left) };
-
+                    paragraphProperties = new ParagraphProperties
+                    {
+                        ParagraphStyleId = new ParagraphStyleId { Val = "Puce1" },
+                        Justification = new Justification { Val = new EnumValue<JustificationValues>(JustificationValues.Left) }
+                    };
                     certificationItemParagraphModele.Append(paragraphProperties, certificationItemRun);
                     certificationCell.Append(certificationItemParagraphModele);
                     AddIndentationToElement(certificationItemParagraphModele, 743, 0);
