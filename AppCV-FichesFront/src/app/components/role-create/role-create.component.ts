@@ -19,25 +19,25 @@ export class RoleCreateComponent implements OnInit {
     private router: Router,
     private location: Location
   ) {}
-  
+
   model: RoleViewModel = new RoleViewModel();
 
   ngOnInit() {}
-  
+
   IsValid(value, errorEmpty) {
     errorEmpty.presse = true;
     this.validator.ValidateEmpty(value, errorEmpty);
   }
-  
+
   Create(): void {
     this.adminService.CreateRole(this.model).subscribe(
       (data: RoleViewModel) => {
         this.location.replaceState('/');
         this.router.navigate(['role/admin']);
-      }, 
+      },
       (error: HttpErrorResponse) => {
         // TODO
-        debugger;
+
       }
     );
   }

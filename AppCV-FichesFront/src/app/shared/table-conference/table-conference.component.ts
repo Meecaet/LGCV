@@ -59,7 +59,7 @@ export class TableConferenceComponent implements OnInit {
 
 
   Error(error: HttpErrorResponse) {
-    debugger;
+
     this.servError.ErrorHandle(error.status);
   }
 

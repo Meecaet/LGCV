@@ -63,7 +63,6 @@ namespace WebCV_Fiches.Controllers
         }
 
         [HttpPost]
-        [AllowAnonymous]
         [Route("{utilisateurId}/Edit")]
         public ActionResult Edit(string utilisateurId, [FromBody]BioViewModel bio)
         {

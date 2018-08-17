@@ -34,7 +34,7 @@ export class RoleDetailComponent implements OnInit {
       },
       (error: HttpErrorResponse) => {
         // TODO
-        debugger;
+
       }
     );
   }

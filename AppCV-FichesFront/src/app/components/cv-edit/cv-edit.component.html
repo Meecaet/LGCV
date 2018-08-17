@@ -1,4 +1,4 @@
-<div class="container-fluid" style="padding-top:30px">
+<div    class="container-fluid" style="padding-top:30px">
   <div *ngIf="!IsSuccess">
     <div class="alert alert-danger">
       Échec du téléchargement du fichier veuillez réessayer
@@ -43,14 +43,23 @@
       <div id="anchor-table-mandat" class="lgs-section">
         <div class="form-group row">
           <div class="col-lg-12">
-            <app-table-mandat [UtilisateurId]="UtilisateurId" (onChangeMandatFromTableMandat)="onChangeMandatFromTableMandat($event)"
+            <app-table-mandat
+              #tablemandat
+              [eventCaousel]="carousel"
+              [UtilisateurId]="UtilisateurId"      (onChangeMandatFromTableMandat)="onChangeMandatFromTableMandat($event)"
               [numberPage]="numberPage" (AddNewMandat)="addNewMandatFromList($event)" [mandatCollection]="mandatCollection"></app-table-mandat>
           </div>
         </div>
       </div>
-      <div id="anchor-carousel" class="lgs-section">
-        <app-carousel [hidden]="showMandat==true?false:true" [hiddenButton]="hiddenButton" [lastPage]="lastPage" [ngModelMandat]="mandatSeleted"
+
+      <div   [hidden]="showMandat==true?false:true"   class="lgs-section">
+        <app-carousel
+        #carousel
+        [eventMandat]="tablemandat"
+
+         [hiddenButton]="hiddenButton" [lastPage]="lastPage" [ngModelMandat]="mandatSeleted"
           [showLoadingCarousel]="showLoadingCarousel" [numberPage]="numberPage" (OutPutMandatCarousel)="setToMandat($event)"
+        (OutPutMandatCarouselEdit)="UpdateData($event)"
           (onChangePage)="onChangePage($event)">
 
         </app-carousel>

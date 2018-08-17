@@ -19,7 +19,7 @@ export class CvEditComponent implements OnInit {
   mandatSeleted = new MandatViewModel();
   numberPage: number;
   lastPage: number;
-  showMandat: boolean = false;
+  public showMandat: boolean = false;
   hiddenButton: string;
   showLoadingCarousel: boolean;
   showDownloadFile: boolean = false;
@@ -39,15 +39,14 @@ export class CvEditComponent implements OnInit {
     document.getElementById("anchor-table-mandat").scrollIntoView();
     this.showMandat = false;
     this.mandatSeleted = new MandatViewModel();
-
     this.showDownloadFile = true;
-
-    this.CVserv.AddMandat(this.UtilisateurId, event).subscribe((sub:MandatViewModel) => {
-      debugger
-      this.mandatCollection.push(sub)
-    });
   }
-
+  UpdateData(event: MandatViewModel):void{
+    document.getElementById("anchor-table-mandat").scrollIntoView();
+    this.showMandat = false;
+    this.mandatSeleted = new MandatViewModel();
+    this.showDownloadFile = true;
+  }
   addNewMandatFromList(arg: any): void {
     // this.InputMandatCarousel = arg.newMandat;
 
@@ -70,7 +69,8 @@ export class CvEditComponent implements OnInit {
     this.showLoadingCarousel = true;
     this.CVserv.LoadMandat(this.UtilisateurId, arg.graphId).subscribe(
       (valeu: MandatViewModel) => {
-        this.mandatSeleted = valeu;
+
+        this.mandatSeleted =this.SetData(valeu);
 
         this.calcMonth(valeu.debutMandat, valeu.finMandat, "moisMandat");
         this.calcMonth(valeu.debutProjet, valeu.finProjet, "moisProjet");
@@ -82,7 +82,37 @@ export class CvEditComponent implements OnInit {
       }
     );
   }
+ private SetData(data: MandatViewModel) :MandatViewModel {
+  let valueToReturn = data;
+  let taches = data.taches;
+  let tecnhologie = data.technologies;
+  let listToDelete =[];
+  for (let index = 0; index < data.technologies.length; index++) {
+       if(data.technologies[index].editionObjecViewModels.length>0){
+         listToDelete.push(index)
+      }
+  }
+  listToDelete.reverse().forEach(function(value,index,){
+    tecnhologie.splice(index,1);
 
+  })
+
+  if (data.editionObjecViewModels != null) {
+      for (const key in data.editionObjecViewModels) {
+        if (data.editionObjecViewModels[key]["etat"] == "Modifie") {
+          valueToReturn[data.editionObjecViewModels[key]["proprieteNom"]] = data.editionObjecViewModels[key]["proprieteValeur"];
+        }
+      }
+    }
+    if(valueToReturn.taches==null){
+      valueToReturn.taches = taches;
+    }
+    if(valueToReturn.technologies==null){
+      valueToReturn.technologies=tecnhologie;
+    }
+    return valueToReturn;
+    //
+  }
   private calcMonth(init: Date, fin: Date, eleHtml: string) {
     if (init != null && fin != null) {
       var date1: any = new Date(init);

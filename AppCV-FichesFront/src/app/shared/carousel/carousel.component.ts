@@ -8,6 +8,7 @@ import { Observable } from "../../../../node_modules/rxjs";
 import { CVService } from "../../Services/cv.service";
 import { TechnologieViewModel } from "../../Models/Technologie-model";
 import { FormControl } from "../../../../node_modules/@angular/forms";
+import { TableMandatComponent } from "../table-mandat/table-mandat.component";
 
 @Component({
   selector: "app-carousel",
@@ -16,8 +17,7 @@ import { FormControl } from "../../../../node_modules/@angular/forms";
 })
 export class CarouselComponent implements OnInit {
   //Inputs
-  @Input("ngModelMandat")
-  mandat: MandatViewModel;
+  @Input("ngModelMandat")  mandat: MandatViewModel;
   @Input("lastPage")
   lastPage: number;
   @Input("numberPage")
@@ -29,8 +29,16 @@ export class CarouselComponent implements OnInit {
   //Outputs
   @Output("OutPutMandatCarousel")
   OutPutMandatCarousel = new EventEmitter();
+  @Output("OutPutMandatCarouselEdit")
+  OutPutMandatCarouselEdit = new EventEmitter();
   @Output("onChangePage")
   onChangePage = new EventEmitter();
+
+  @Input("eventMandat")
+  eventMandat: TableMandatComponent;
+  @Input("utilizateurId")
+  utilizateurId: string;
+
   myControl: FormControl = new FormControl();
   techs: Observable<Array<TechnologieViewModel>>;
 
@@ -40,21 +48,15 @@ export class CarouselComponent implements OnInit {
   selectable = true;
   removable = true;
   addOnBlur = true;
-
-  ngOnInit() {
-
-  }
+  ngOnInit() {}
   constructor(private route: Router, private cvServ: CVService) {
-
     this.mandat = new MandatViewModel();
     this.techs = this.cvServ.LoadTechnologie();
     this.techs.subscribe(sub => {
       return sub;
     });
   }
-
   calcMonth(init: Date, fin: Date, eleHtml: string) {
-
     if (init != null && fin != null) {
       var date1: any = new Date(init);
       var date2: any = new Date(fin);
@@ -67,34 +69,45 @@ export class CarouselComponent implements OnInit {
       }
     }
   }
-
   LoadMandat(utilizateurId: string, mandat: MandatViewModel) {
     this.showLoadingCarousel = true;
   }
+
+  //#region Tache
   addTache(event: MatChipInputEvent): void {
     const input = event.input;
     const value = event.value;
-
-    // Add our fruit
     if ((value || "").trim()) {
       let d = new TacheViewModel();
       d.description = value.trim();
       this.mandat.taches.push(d);
-    }
+      if (this.hiddenButton !== "ajouter") {
+        debugger
+         this.cvServ.AddTache(this.eventMandat.UtilisateurId,   this.mandat.graphId,d).subscribe(()=>{},
+         (erro)=>{
+debugger
+         })
+      }
 
-    // Reset the input value
+    }
     if (input) {
       input.value = "";
     }
   }
-  removeTache(domain: TacheViewModel): void {
+  removeTache(tache: TacheViewModel): void {
+    if (tache.graphId !== undefined) {
+      this.cvServ.DeleteTache(this.eventMandat.UtilisateurId,  this.mandat.graphId, tache.graphId);
+    }
+
     const index = this.mandat.taches.findIndex(
-      x => x.description == domain.description
+      x => x.description == tache.description
     );
     if (index >= 0) {
       this.mandat.taches.splice(index, 1);
     }
   }
+  //#endregion
+
   previous(currentPage: number) {
     const newpage = currentPage - 2;
     this.onChangePage.emit(newpage);
@@ -103,35 +116,67 @@ export class CarouselComponent implements OnInit {
     const newpage = currentPage + 1;
     this.onChangePage.emit(newpage);
   }
-
   SendMandatCarousel(mandat: MandatViewModel): void {
-    debugger
     this.OutPutMandatCarousel.emit(mandat);
+    this.cvServ
+      .AddMandat(this.eventMandat.UtilisateurId, mandat)
+      .subscribe((sub: MandatViewModel) => {
+        this.eventMandat.LoadData();
+      });
   }
+
   ModifierMandatCarousel(mandat: MandatViewModel): void {
-    alert("to implement");
+    this.OutPutMandatCarouselEdit.emit(mandat);
+    this.cvServ
+      .EditMandat(this.eventMandat.UtilisateurId, mandat)
+      .subscribe((sub: MandatViewModel) => {
+        this.eventMandat.LoadData();
+      });
   }
+
+  //#region Technologie
   AddTechno(selected: FormControl): void {
     this.techs.subscribe((tec: Array<TechnologieViewModel>) => {
       let newValue = tec.filter(f => {
-        return f.description  == selected.value
+        return f.description == selected.value;
       })[0];
-      this.mandat.technologies.push(newValue)
+      if (this.hiddenButton !== "ajouter") {
+        this.cvServ.AddMandatTechnologie(
+          this.eventMandat.UtilisateurId,
+          this.mandat.graphId,
+          newValue
+        );
+      }
+      this.mandat.technologies.push(newValue);
     });
-
   }
+  RemoveTech(item: TechnologieViewModel): void {
+    if (this.hiddenButton !== "ajouter") {
+      this.cvServ
+        .DeleteMandatTechnologie(
+          this.eventMandat.UtilisateurId,
+          this.mandat.graphId,
+          item
+        )
+        .subscribe(s => {});
+    }
 
-  RemoveTech(item:TechnologieViewModel):void{
-  let index =  this.mandat.technologies.findIndex(x=> x.graphId == item.graphId);
-  this.mandat.technologies.splice(index,1);
+    let index = this.mandat.technologies.findIndex(
+      x => x.graphId == item.graphId
+    );
+    this.mandat.technologies.splice(index, 1);
+  }
+  //#endregion
+
+  SelectedFonction(graphIdFonction: string) {
+    this.mandat.graphIdFonction = graphIdFonction;
   }
   classValidator(cssClass: string, optionCssClass): string {
     if (this.showLoadingCarousel) {
       return cssClass;
     } else {
-      document.getElementById("anchor-carousel").scrollIntoView();
       return optionCssClass;
     }
-
   }
+
 }

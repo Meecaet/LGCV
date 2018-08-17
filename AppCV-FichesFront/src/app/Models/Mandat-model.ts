@@ -1,5 +1,6 @@
 import { TacheViewModel } from "./Tache-model";
 import { TechnologieViewModel } from "./Technologie-model";
+import { EditionObjecViewModel } from "./EditionObjec-model";
 
 export class MandatViewModel {
   graphId: string;
@@ -39,8 +40,12 @@ export class MandatViewModel {
 
   moisMandat: number = 0;
   moisProjet: number = 0;
+
+  editionObjecViewModels: Array<EditionObjecViewModel>;
   constructor() {
     this.taches = new Array<TacheViewModel>();
     this.technologies = new Array<TechnologieViewModel>();
+    this.editionObjecViewModels = new Array<EditionObjecViewModel>();
+
   }
 }

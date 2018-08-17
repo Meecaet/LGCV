@@ -5,14 +5,8 @@
     </div>
   </div>
   <div class="lgs-section" style=" width: 100%;">
-
-
-
-
     <div class="card border-dark mb-3 mandat-fiche">
-
       <div class="card-header lgs-backgroundColor">
-
         <!-- <div [hidden]="numberPage == 1 ?true:false" (click)="previous(numberPage)" style="float: left;position: relative">
           <button class="btn btn-link">
             <b class="text-white">
@@ -30,7 +24,7 @@
         </div> -->
 
         <h3 style="margin-left:20px">
-          {{numberPage}} - {{mandat.titreMandat}}
+          {{numberPage}} - {{mandat.nomClient}}
 
         </h3>
       </div>
@@ -50,9 +44,16 @@
 
           <div class="lgs-section">
             <div class="form-inline">
+              <label class="lgs-champLabel">Nom Client:</label>
+
+              <inline-editor empty="Mandat" [(ngModel)]="mandat.nomClient" [ngModelOptions]="{standalone: true}" [name]="mandat.nomClient"
+                [cols]="250"></inline-editor>
+
+            </div>
+            <div class="form-inline">
               <label class="lgs-champLabel">Mandat:</label>
               <b id="mandat">
-                <inline-editor empty="Mandat"   [(ngModel)]="mandat.titreMandat" [ngModelOptions]="{standalone: true}" [name]="mandat.titreMandat"
+                <inline-editor empty="Mandat" [(ngModel)]="mandat.titreMandat" [ngModelOptions]="{standalone: true}" [name]="mandat.titreMandat"
                   [cols]="250"></inline-editor>
               </b>
             </div>
@@ -88,7 +89,7 @@
               <label class="lgs-champLabel">Fonctions du conseiller sur le mandat:</label>
               <b>
 
-                <app-drop-down-fonction></app-drop-down-fonction>
+                <app-drop-down-fonction   [functonGraphID]="mandat.graphIdFonction"   (onChange)="SelectedFonction($event)"></app-drop-down-fonction>
 
               </b>
             </div>
@@ -106,16 +107,6 @@
             </b>
             <span style="margin-left: 10px;">({{mandat.moisProjet}} - mois )</span>
           </div>
-
-          <div class="card border-dark mb-3" style="margin-top:10px">
-            <div class="card-header">
-              <b>contexte du projet ou du sous projet</b> (provient de la fiche) NON MODIFIABLE</div>
-            <div class="card-body">
-              {{mandat.contexteProjet}}
-
-            </div>
-          </div>
-
           <div class="card border-dark mb-3 lgs-section">
             <div class="card-header">
               <b>Portée des travaux du conseiller sur le mandat</b>
@@ -150,7 +141,7 @@
 
                     </div>
                     <ul>
-                      <li   *ngFor="let item of mandat.technologies">{{item.description}}
+                      <li *ngFor="let item of mandat.technologies">{{item.description}}
                         <label (click)="RemoveTech(item)" style="margin-left: 10px;float: right;" class="XCancel">X</label>
 
                       </li>

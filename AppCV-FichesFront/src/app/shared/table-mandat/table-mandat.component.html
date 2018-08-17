@@ -32,30 +32,30 @@
 
           </thead>
 
-         <tbody class="{{intervention.highlight}}" (click)="SelectedLine(intervention)"  id="tr{{i}}"   *ngFor="let intervention of resume; let i = index">
+         <tbody class="{{intervention.highlight}}"  id="tr{{i}}"   *ngFor="let intervention of resume; let i = index">
             <tr >
-              <th  scope="row">
+              <th  (click)="SelectedLine(intervention)"  scope="row">
                 {{intervention.nombre}}
               </th>
 
-              <th scope="row">
+              <th (click)="SelectedLine(intervention)"  scope="row">
                 {{intervention.client}}
               </th>
-              <td>
+              <td (click)="SelectedLine(intervention)"  >
                 {{intervention.projet}}
               </td>
 
-              <td>
+              <td (click)="SelectedLine(intervention)"  >
                 {{ intervention.envergure}}
 
               </td>
-              <td>
+              <td (click)="SelectedLine(intervention)"  >
                 {{ intervention.fonction}}
               </td>
-              <td>
+              <td (click)="SelectedLine(intervention)"  >
                 {{ intervention.annee}}
               </td>
-              <td>
+              <td (click)="SelectedLine(intervention)"  >
              {{ intervention.effors }}
               </td>
               <td id="bt{{i}}" style="width: 30px;">

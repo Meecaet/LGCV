@@ -46,7 +46,7 @@ export class TableTechnologieComponent implements OnInit {
     });
   }
   Error(error: HttpErrorResponse) {
-    debugger;
+
     this.servError.ErrorHandle(error.status);
   }
   addTechnologie(): void {
