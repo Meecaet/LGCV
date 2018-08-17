@@ -19,6 +19,15 @@ namespace XmlHandler.XmlEntities
             return xmlNode.InnerText.Trim();
         }
 
+        public string GetText()
+        {
+            List<string> lines = new List<string>();
+            var nodeLines = xmlNode.SelectNodes("./w:r/w:t", this.namespaceManager);
+            foreach (XmlNode node in nodeLines)
+                lines.Add(node.InnerText);
+            return String.Join("",lines.ToArray());
+        }
+
         public string[] GetLinesText()
         {
             List<string> lines = new List<string>();
