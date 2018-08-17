@@ -164,7 +164,7 @@ namespace XmlHandler.Services
 
             string description = string.Empty;
             List<XmlDocParagraph> descriptionParagraphs = sectionIdentification.Nodes.Skip(2).Cast<XmlDocParagraph>().ToList();
-            descriptionParagraphs.ForEach(x => description = string.Concat(description, x.GetParagraphText()));
+            descriptionParagraphs.ForEach(x => description = $"{description}\n{x.GetText()}");
 
             cv.ResumeExperience = description;
             cv.Status = StatusCV.Nouveau;

@@ -22,7 +22,7 @@ namespace WebCV_Fiches.Helpers
         private const string mauveCode = "7030A0";
         private const string grisCode = "969696";
         private const int spaceSimple = 240;
-        private const string seperateur = ";;;";
+        private const string seperateur = "\n";
 
         private RunProperties GetRunProperties(string fontName, string colorName, string size, bool bold, bool italic)
         {
