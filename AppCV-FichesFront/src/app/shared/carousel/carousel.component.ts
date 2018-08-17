@@ -17,8 +17,7 @@ import { TableMandatComponent } from "../table-mandat/table-mandat.component";
 })
 export class CarouselComponent implements OnInit {
   //Inputs
-  @Input("ngModelMandat")
-  mandat: MandatViewModel;
+  @Input("ngModelMandat")  mandat: MandatViewModel;
   @Input("lastPage")
   lastPage: number;
   @Input("numberPage")
@@ -28,11 +27,17 @@ export class CarouselComponent implements OnInit {
   @Input("showLoadingCarousel")
   showLoadingCarousel: boolean = true;
   //Outputs
-  @Output("OutPutMandatCarousel")  OutPutMandatCarousel = new EventEmitter();
-  @Output("OutPutMandatCarouselEdit")  OutPutMandatCarouselEdit = new EventEmitter();
-  @Output("onChangePage")  onChangePage = new EventEmitter();
+  @Output("OutPutMandatCarousel")
+  OutPutMandatCarousel = new EventEmitter();
+  @Output("OutPutMandatCarouselEdit")
+  OutPutMandatCarouselEdit = new EventEmitter();
+  @Output("onChangePage")
+  onChangePage = new EventEmitter();
 
-  @Input("eventMandat")eventMandat : TableMandatComponent;
+  @Input("eventMandat")
+  eventMandat: TableMandatComponent;
+  @Input("utilizateurId")
+  utilizateurId: string;
 
   myControl: FormControl = new FormControl();
   techs: Observable<Array<TechnologieViewModel>>;
@@ -67,6 +72,8 @@ export class CarouselComponent implements OnInit {
   LoadMandat(utilizateurId: string, mandat: MandatViewModel) {
     this.showLoadingCarousel = true;
   }
+
+  //#region Tache
   addTache(event: MatChipInputEvent): void {
     const input = event.input;
     const value = event.value;
@@ -74,19 +81,33 @@ export class CarouselComponent implements OnInit {
       let d = new TacheViewModel();
       d.description = value.trim();
       this.mandat.taches.push(d);
+      if (this.hiddenButton !== "ajouter") {
+        debugger
+         this.cvServ.AddTache(this.eventMandat.UtilisateurId,   this.mandat.graphId,d).subscribe(()=>{},
+         (erro)=>{
+debugger
+         })
+      }
+
     }
     if (input) {
       input.value = "";
     }
   }
-  removeTache(domain: TacheViewModel): void {
+  removeTache(tache: TacheViewModel): void {
+    if (tache.graphId !== undefined) {
+      this.cvServ.DeleteTache(this.eventMandat.UtilisateurId,  this.mandat.graphId, tache.graphId);
+    }
+
     const index = this.mandat.taches.findIndex(
-      x => x.description == domain.description
+      x => x.description == tache.description
     );
     if (index >= 0) {
       this.mandat.taches.splice(index, 1);
     }
   }
+  //#endregion
+
   previous(currentPage: number) {
     const newpage = currentPage - 2;
     this.onChangePage.emit(newpage);
@@ -96,37 +117,57 @@ export class CarouselComponent implements OnInit {
     this.onChangePage.emit(newpage);
   }
   SendMandatCarousel(mandat: MandatViewModel): void {
-    debugger;
     this.OutPutMandatCarousel.emit(mandat);
-    this.cvServ.AddMandat(this. eventMandat.UtilisateurId, mandat).subscribe((sub:MandatViewModel) => {
-      this. eventMandat.LoadData()
-    });
+    this.cvServ
+      .AddMandat(this.eventMandat.UtilisateurId, mandat)
+      .subscribe((sub: MandatViewModel) => {
+        this.eventMandat.LoadData();
+      });
   }
+
   ModifierMandatCarousel(mandat: MandatViewModel): void {
-   this.OutPutMandatCarouselEdit.emit(mandat)
-
-   this.cvServ.EditMandat(this. eventMandat.UtilisateurId, mandat).subscribe((sub:MandatViewModel) => {
-    this. eventMandat.LoadData()
-  });
-
+    this.OutPutMandatCarouselEdit.emit(mandat);
+    this.cvServ
+      .EditMandat(this.eventMandat.UtilisateurId, mandat)
+      .subscribe((sub: MandatViewModel) => {
+        this.eventMandat.LoadData();
+      });
   }
 
-
-
+  //#region Technologie
   AddTechno(selected: FormControl): void {
     this.techs.subscribe((tec: Array<TechnologieViewModel>) => {
       let newValue = tec.filter(f => {
         return f.description == selected.value;
       })[0];
+      if (this.hiddenButton !== "ajouter") {
+        this.cvServ.AddMandatTechnologie(
+          this.eventMandat.UtilisateurId,
+          this.mandat.graphId,
+          newValue
+        );
+      }
       this.mandat.technologies.push(newValue);
     });
   }
   RemoveTech(item: TechnologieViewModel): void {
+    if (this.hiddenButton !== "ajouter") {
+      this.cvServ
+        .DeleteMandatTechnologie(
+          this.eventMandat.UtilisateurId,
+          this.mandat.graphId,
+          item
+        )
+        .subscribe(s => {});
+    }
+
     let index = this.mandat.technologies.findIndex(
       x => x.graphId == item.graphId
     );
     this.mandat.technologies.splice(index, 1);
   }
+  //#endregion
+
   SelectedFonction(graphIdFonction: string) {
     this.mandat.graphIdFonction = graphIdFonction;
   }
@@ -137,4 +178,5 @@ export class CarouselComponent implements OnInit {
       return optionCssClass;
     }
   }
+
 }

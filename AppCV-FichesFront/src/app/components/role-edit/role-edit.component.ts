@@ -47,7 +47,7 @@ export class RoleEditComponent implements OnInit {
       },
       (error: HttpErrorResponse) => {
         // TODO
-        debugger;
+
       }
     );
   }
@@ -59,7 +59,7 @@ export class RoleEditComponent implements OnInit {
       },
       (error: HttpErrorResponse) => {
         // TODO
-        debugger;
+
       }
     );
   }
@@ -71,7 +71,7 @@ export class RoleEditComponent implements OnInit {
       },
       (error: HttpErrorResponse) => {
         // TODO
-        debugger;
+
       }
     );
   }
@@ -83,7 +83,7 @@ export class RoleEditComponent implements OnInit {
       },
       (error: HttpErrorResponse) => {
         // TODO
-        debugger;
+
       }
     );
   }
@@ -100,7 +100,7 @@ export class RoleEditComponent implements OnInit {
       },
       (error: HttpErrorResponse) => {
         // TODO
-        debugger;
+
       }
     );
   }

@@ -100,7 +100,7 @@ export class TableLangueComponent implements OnInit {
     return formControl.value.nom;
   }
   SaveFormation(value, whoCalls, index: number, args?: any) {
-    debugger;
+
     switch (whoCalls) {
       case "niveauLu":
         this.langues[index].niveauLu = value;

@@ -45,7 +45,7 @@ export class TableFormationAcademiqueComponent implements OnInit {
       }, (error)=> this.Error(error));
   }
   Error(error: HttpErrorResponse) {
-    debugger;
+
     this.servError.ErrorHandle(error.status);
   }
   removeFormationAcademique(

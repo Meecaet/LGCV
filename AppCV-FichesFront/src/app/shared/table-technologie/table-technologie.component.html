@@ -27,7 +27,7 @@
         </tr>
       </thead>
       <tbody *ngFor="let tech of techByCategorie">
-        <td    *ngIf="GetTechnologies(tech).length>0"   colspan="3" (click)="ShowDetails(tech,techByCategorie)" style="background:#c7bed8;font-size: larger;color: white;font-weight: bolder;">
+        <td    *ngIf="GetTechnologies(tech).length>0"   colspan="3" (click)="ShowDetails(tech,techByCategorie)" style="cursor: pointer;background:#c7bed8;font-size: larger;color: white;font-weight: bolder;">
           {{tech.categorie}}
         </td>
         <tr  [hidden]="tech.hidden==null?true:tech.hidden" *ngFor="let item of GetTechnologies(tech)">

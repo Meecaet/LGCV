@@ -194,20 +194,6 @@ namespace WebCV_Fiches.Controllers
 
             mandat.GraphId = mandatModel.GraphKey;
 
-
-
-            RedirectToAction("All", "CVResumeInterventions");
-
-
-            var resuklt = RedirectToAction("All", new RouteValueDictionary
-            (
-                                  new
-                                  {
-                                      controller = "CVResumeInterventions",
-                                      action = "All",
-                                      utilisateurId = utilisateurId
-                                  }));
-
             return Json(mandat);
         }
 

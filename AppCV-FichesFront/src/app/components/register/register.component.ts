@@ -18,7 +18,7 @@ export class RegisterComponent implements OnInit {
   ConfirmPassword: string = null;
   Prenom: string = null;
   Nom: string = null;
-  
+
   constructor(
     private validator: ValidatorService,
     private adminService: AdminService,
@@ -50,10 +50,10 @@ export class RegisterComponent implements OnInit {
       (data) => {
         this.location.replaceState('/');
         this.router.navigate(['account/login']);
-      }, 
+      },
       (error: HttpErrorResponse) => {
         // TODO
-        debugger;
+
       }
     );
   }
@@ -65,7 +65,7 @@ export class RegisterComponent implements OnInit {
     IsValidPassWord,
     IsValidPassWordRegex
   ): boolean {
-    debugger
+
     if (
       IsValidEmail.hidden == true &&
       IsValidEmailRegex.hidden == true &&

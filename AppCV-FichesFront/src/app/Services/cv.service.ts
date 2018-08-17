@@ -15,6 +15,7 @@ import { TechnologieByCategorieViewModel } from "../Models/TechlogieByCategorie-
 import { PerfectionnementViewModel } from "../Models/Perfectionnement-model";
 import { ConferenceViewModel } from "../Models/Conference-model";
 import { PublicationViewModel } from "../Models/Publication-model";
+import { TacheViewModel } from "../Models/Tache-model";
 
 @Injectable({
   providedIn: "root"
@@ -173,18 +174,12 @@ export class CVService {
     const url = this.rootPath + "/FrontEndLoadData/GetAllTechnologies";
     return this._http.get<Array<TechnologieViewModel>>(url);
   }
-  AddTechnologies(
-    modelToSave: Array<TechnologieViewModel>,
-    idUtilisateur: string
-  ) {
+  AddTechnologies(    modelToSave: Array<TechnologieViewModel>,    idUtilisateur: string  ) {
     const url = this.rootPath + "/Technologies/" + idUtilisateur + "/add";
     return this._http.post(url, modelToSave);
   }
 
-  DeleteTechnologie(
-    idUtilisateur: string,
-    graphId: string
-  ): Observable<ConferenceViewModel> {
+  DeleteTechnologie(    idUtilisateur: string,    graphId: string  ): Observable<ConferenceViewModel> {
     const url = "Technologies/" + idUtilisateur + "/Delete/" + graphId;
     return this.doRequest<ConferenceViewModel>(url, "post");
   }
@@ -340,5 +335,25 @@ export class CVService {
   DeleteLangue(idUtilisateur, graphId): Observable<LangueViewModel> {
     const url = "Langue/" + idUtilisateur + "/Delete/" + graphId;
     return this.doRequest<LangueViewModel>(url, "post");
+  }
+  ///Tache
+  DeleteTache(idUtilisateur,mandatId, model): Observable<TacheViewModel> {
+    const url =   this.rootPath+    "/Tache/" + idUtilisateur + "/Mandat/" + mandatId+"/DeleteTache";
+    return this._http.post<TacheViewModel>(url,model)
+  }
+  AddTache(idUtilisateur,mandatId, model): Observable<TacheViewModel> {
+    const url =   this.rootPath+  "/Tache/" + idUtilisateur + "/Mandat/" + mandatId+"/AddTache";
+    return this._http.post<TacheViewModel>(url,model)
+  }
+  /**
+   * MandatTechnologie
+   */
+  AddMandatTechnologie(idUtilisateur,mandatId, technologie:TechnologieViewModel): Observable<TechnologieViewModel> {
+    const url =     "MandatTechnologie/" + idUtilisateur + "/Mandat/" + mandatId+"/AddTechnologie";
+    return this.doRequest<TechnologieViewModel>(url, "post",technologie);
+  }
+  DeleteMandatTechnologie(idUtilisateur,mandatId, technologie:TechnologieViewModel): Observable<TechnologieViewModel> {
+    const url =     "MandatTechnologie/" + idUtilisateur + "/Mandat/" + mandatId+"/DeleteTechnologie";
+    return this.doRequest<TechnologieViewModel>(url, "post",technologie);
   }
 }

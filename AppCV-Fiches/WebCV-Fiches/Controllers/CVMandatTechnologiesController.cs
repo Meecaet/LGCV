@@ -10,7 +10,7 @@ using WebCV_Fiches.Models.CVViewModels;
 
 namespace WebCV_Fiches.Controllers
 {
-    [Route("api/Technologie")]
+    [Route("api/MandatTechnologie")]
     public class CVMandatTechnologiesController : Controller
     {
         public EditionObjectGraphRepository editionObjectGraphRepository;

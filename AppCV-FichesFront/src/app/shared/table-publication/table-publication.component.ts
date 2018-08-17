@@ -38,7 +38,7 @@ export class TablePublicationComponent implements OnInit {
     }, (error)=> this.Error(error));
   }
   Error(error: HttpErrorResponse) {
-    debugger;
+
     this.errorService.ErrorHandle(error.status);
   }
   AddPublication(): void {

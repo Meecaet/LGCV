@@ -1,11 +1,4 @@
-import {
-  Component,
-  OnInit,
-  Input,
-  Output,
-  EventEmitter,
-  ViewChild
-} from "@angular/core";
+import {  Component,  OnInit,  Input,  Output,  EventEmitter} from "@angular/core";
 import { MandatViewModel } from "../../Models/Mandat-model";
 import { CVService } from "../../Services/cv.service";
 import { ResumeInterventionViewModel } from "../../Models/CV/ResumeInterventionViewModel";
@@ -24,8 +17,7 @@ export class TableMandatComponent implements OnInit {
 
   resume: Array<ResumeInterventionViewModel>;
 
-  @Input("mandatCollection")
-  mandatCollection: Array<MandatViewModel>;
+  @Input("mandatCollection")  mandatCollection: Array<MandatViewModel>;
   @Input("numberPage")
   numberPage: number = 0;
   @Output("AddNewMandat")
@@ -52,22 +44,32 @@ export class TableMandatComponent implements OnInit {
     this.serv
       .LoadResumeIntervention(this.UtilisateurId)
       .subscribe((data: Array<ResumeInterventionViewModel>) => {
-        // this.resume = data;
-        this.resume = data.filter((x: ResumeInterventionViewModel) => {
+
+        this.resume  =  data.filter((x: ResumeInterventionViewModel) => {
           if (x.editionObjecViewModels.length < 1) {
-            return x;
+            return   this.SetData(x);
           } else if (
             !x.editionObjecViewModels.some(x => {
               return x.etat == "Modifie" && x.type == "Enlever";
             })
           ) {
-            return x;
+            return  this.SetData(x);
           }
         });
         this.showLoadingMandat = false;
       });
   }
-
+  private SetData(data: ResumeInterventionViewModel) :ResumeInterventionViewModel {
+    if (data.editionObjecViewModels != null) {
+      for (const key in data.editionObjecViewModels) {
+        if (data.editionObjecViewModels[key]["etat"] == "Modifie") {
+          data[data.editionObjecViewModels[key]["proprieteNom"]] = data.editionObjecViewModels[key]["proprieteValeur"];
+        }
+      }
+    }
+    return data;
+    //
+  }
   SelectedLine(mand: ResumeInterventionViewModel): void {
     this.SetHighLight("lineSeleted", mand);
     this.onChangeMandatFromTableMandat.emit(mand);
@@ -108,7 +110,7 @@ export class TableMandatComponent implements OnInit {
         this.eventCaousel.showLoadingCarousel = false;
         this.serv.DeleteMandat(this.UtilisateurId, mand.graphId)
           .subscribe(sub => {
-            debugger
+
              this.showLoadingMandat = false;
              this.eventCaousel.showLoadingCarousel = false;
              this.parentComponent.showMandat =false;
@@ -123,4 +125,5 @@ export class TableMandatComponent implements OnInit {
       return optionCssClass;
     }
   }
+
 }
